@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
 /**
@@ -68,7 +69,13 @@ public class MyAppliction extends Application {
         initDownFile();
         initOkGo();
         initOkHttp();
+        initJPush();
 
+    }
+
+    private void initJPush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     private void initPolyCilent() {

@@ -10,8 +10,8 @@
     <LinearLayout style="@style/TitleBar">
 
         <TextView
-            android:text="河南省"
-            android:maxEms="5"
+            android:text="河南省是阿斯顿"
+            android:maxEms="6"
             android:singleLine="true"
             android:id="@+id/tv_address"
             android:textColor="@color/white"
