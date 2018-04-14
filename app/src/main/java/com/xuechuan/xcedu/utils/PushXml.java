@@ -1,11 +1,14 @@
 package com.xuechuan.xcedu.utils;
 
 import android.content.Context;
+
 import com.xuechuan.xcedu.vo.ProvincesVo;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,11 +33,15 @@ public class PushXml {
     private static PushXml pushXml;
     //要解析的xml名字
     private String XML = "province.xml";
+
     public PushXml() {
         if (mProvinces == null) {
             mProvinces = new ArrayList<>();
+        } else {
+            mProvinces.clear();
         }
     }
+
     public static PushXml getInstance() {
         if (pushXml == null) {
             pushXml = new PushXml();
@@ -43,6 +50,9 @@ public class PushXml {
     }
 
     public ArrayList<ProvincesVo> pushXml(Context mContext) {
+        if (mProvinces.size() > 0) {
+            mProvinces.clear();
+        }
         SAXReader reader = new SAXReader();
         try {
             InputStream inputStream = mContext.getResources().getAssets().open(XML);
@@ -62,8 +72,6 @@ public class PushXml {
                 }
                 mProvinces.add(provinces);
             }
-
-
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (IOException e) {

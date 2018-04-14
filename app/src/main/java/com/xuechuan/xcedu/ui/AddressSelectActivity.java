@@ -31,7 +31,6 @@ public class AddressSelectActivity extends BaseActivity {
 
     private RecyclerView mRlvSelAdress;
     private Context mContext;
-    private ArrayList<ProvincesVo> mVos;
     /**
      * 地区
      */
@@ -42,6 +41,7 @@ public class AddressSelectActivity extends BaseActivity {
      * 位标
      */
     private static String POSITON = "position";
+    private ArrayList<ProvincesVo> list;
 
     public static Intent newInstance(Context context, String address) {
         Intent intent = new Intent(context, AddressSelectActivity.class);
@@ -62,7 +62,9 @@ public class AddressSelectActivity extends BaseActivity {
     }
 
     private void initData() {
-        mVos = PushXml.getInstance().pushXml(mContext);
+        if (list == null) {
+            list = PushXml.getInstance().pushXml(mContext);
+        }
     }
 
     private void initView() {
@@ -71,14 +73,13 @@ public class AddressSelectActivity extends BaseActivity {
     }
 
     private void bingView() {
-        ArrayList<ProvincesVo> list = PushXml.getInstance().pushXml(mContext);
         AddressAdapter addressAdapter = new AddressAdapter(mContext, list);
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvSelAdress.setLayoutManager(gridLayoutManager);
         mRlvSelAdress.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvSelAdress.setAdapter(addressAdapter);
-        int  mPosition = getPersionPosition(mAddress, list);
+        int mPosition = getPersionPosition(mAddress, list);
         addressAdapter.setSelectItem(mAddress, mPosition);
         RecyclerSelectItem.MoveToPostion(gridLayoutManager, mRlvSelAdress, mPosition);
         addressAdapter.setOnClickListener(new AddressAdapter.AddressOnClickListener() {

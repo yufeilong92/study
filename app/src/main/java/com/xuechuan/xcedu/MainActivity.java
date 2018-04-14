@@ -58,10 +58,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     protected void initData() {
-        //获取省份
-        ArrayList<ProvincesVo> list = PushXml.getInstance().pushXml(this);
-        String a = "2";
-        ProvincesVo vo = new ProvincesVo();
     }
 
 

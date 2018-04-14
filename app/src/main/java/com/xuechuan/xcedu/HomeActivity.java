@@ -147,7 +147,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUESTCODE && resultCode == RESULT_OK) {
+        if (requestCode == REQUESTCODE && resultCode ==REQUESTRESULT) {
             if (data != null) {
                 mProvice = data.getStringExtra(STR_INT_PROVINCE);
                 mCode = data.getStringExtra(STR_INT_CODE);
