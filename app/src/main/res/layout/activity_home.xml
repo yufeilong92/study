@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HomeActivity">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <TextView
+            android:text="郑州"
+            android:id="@+id/tv_address"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            style="@style/TitleBarAction"
+          />
+
+        <ImageView
+            style="@style/TitleBarText"
+            android:text="" />
+
+        <ImageView
+            style="@style/TitleBarAction"
+            android:clickable="false" />
+    </LinearLayout>
+  <FrameLayout
+      android:layout_weight="1"
+      android:id="@+id/fl_content"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"/>
+<LinearLayout
+    android:id="@+id/ll_btns"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:text="首页"
+        android:id="@+id/btn_home_home"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="题库"
+        android:id="@+id/btn_home_bank"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="网课"
+        android:id="@+id/btn_home_net"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:text="我的"
+        android:id="@+id/btn_home_personal"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+</LinearLayout>

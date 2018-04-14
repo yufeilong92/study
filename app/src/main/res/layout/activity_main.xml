@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+     <LinearLayout style="@style/TitleBar">
+
+          <ImageView
+              style="@style/TitleBarAction"
+              android:onClick="onHomeClick"
+              tools:ignore="OnClick" />
+
+          <TextView
+              style="@style/TitleBarText"
+              android:text="asdadsads" />
+
+          <ImageView
+              style="@style/TitleBarAction"
+              android:clickable="false" />
+     </LinearLayout>
+     <Button
+         android:text="百度定位"
+         android:id="@+id/btn_location"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content" />
+     <Button
+         android:text="测试请求Token"
+         android:id="@+id/btn_play"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />
+     <Button
+         android:text="测试Get请求"
+         android:id="@+id/btn_play_get"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />
+     <Button
+         android:text="测试Post请求"
+         android:id="@+id/btn_play_post"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />
+     <Button
+         android:text="保利视频"
+         android:id="@+id/btn_baoli"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />
+     <Button
+         android:text="跳转主页"
+         android:id="@+id/btn_home"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content" />
+     <Button
+         android:text="测试请求okToken"
+         android:id="@+id/btn_getToken"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />
+</LinearLayout>

@@ -1,0 +1,60 @@
+package com.xuechuan.xcedu.base;
+
+import android.app.ActionBar;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
+
+import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.StringUtil;
+
+/**
+ * @version V 1.0 xxxxxxxx
+ * @Title: xcedu
+ * @Package com.xuechuan.xcedu.base
+ * @Description: 基类
+ * @author: L-BackPacker
+ * @date: 2018/4/10 10:08
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
+ * @Copyright: 2018
+ */
+public abstract class BaseActivity extends AppCompatActivity {
+    /**
+     * 传入参数-标题
+     */
+    public static final String CSTR_EXTRA_TITLE_STR = "title";
+    private String mBaseTitle;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        mBaseTitle = intent.getStringExtra(CSTR_EXTRA_TITLE_STR);
+        initContentView(savedInstanceState);
+        if (!StringUtil.isEmpty(mBaseTitle)) {
+            setTitle(mBaseTitle);
+        }
+
+    }
+
+    protected abstract void initContentView(Bundle savedInstanceState);
+
+
+    private void setTitle(String str) {
+        TextView title = (TextView) findViewById(R.id.activity_title_text);
+        title.setText(str);
+    }
+
+    public void onHomeClick(View view) {
+        finish();
+    }
+}
