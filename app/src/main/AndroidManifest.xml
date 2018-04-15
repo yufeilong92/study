@@ -37,8 +37,8 @@
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <!-- 极光推送 -->
 
+    <!-- 极光推送 -->
     <application
         android:name=".XceuAppliciton.MyAppliction"
         android:allowBackup="true"
@@ -97,7 +97,7 @@
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.xuechuan.xcedu.DataProvider"
             android:exported="true" />
-        <!--cn.jpush.android.service.DownloadProvide-->
+        <!-- cn.jpush.android.service.DownloadProvide -->
         <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
         <service
@@ -168,8 +168,7 @@
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
         <!-- Required SDK核心功能 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
 
@@ -218,7 +217,8 @@
             android:name="JPUSH_APPKEY"
             android:value="fca6f4a756cdd49632933b27" />
 
-        <activity android:name=".ui.AddressSelectActivity"></activity>
+        <activity android:name=".ui.AddressSelectActivity" />
+        <activity android:name=".ui.SearchActivity"></activity>
     </application>
 
 </manifest>

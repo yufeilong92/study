@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.fragment.BankFragment;
@@ -19,6 +18,7 @@ import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
 import com.xuechuan.xcedu.ui.AddressSelectActivity;
 import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.weight.AddressTextView;
 
 import java.util.ArrayList;
 
@@ -57,9 +57,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
      * 位标
      */
     public static String STR_INT_POSITION = "position";
-    private TextView mTvAddress;
+    private AddressTextView mTvAddress;
     private String mProvice;
     private String mCode;
+    private Button mBtnSearch;
+
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //        initView();
 //
 //    }
-
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
@@ -92,8 +93,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mBtnHomePersonal.setOnClickListener(this);
         mLlBtns = (LinearLayout) findViewById(R.id.ll_btns);
         mLlBtns.setOnClickListener(this);
-        mTvAddress = (TextView) findViewById(R.id.tv_address);
+        mTvAddress = (AddressTextView) findViewById(R.id.tv_address);
         mTvAddress.setOnClickListener(this);
+        mBtnSearch = (Button) findViewById(R.id.btn_search);
+        mBtnSearch.setOnClickListener(this);
     }
 
     protected void initData() {
@@ -141,13 +144,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 Intent intent = AddressSelectActivity.newInstance(mContext, mProvice);
                 startActivityForResult(intent, REQUESTCODE);
                 break;
+            case R.id.btn_search://搜素
+
+                break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUESTCODE && resultCode ==REQUESTRESULT) {
+        if (requestCode == REQUESTCODE && resultCode == REQUESTRESULT) {
             if (data != null) {
                 mProvice = data.getStringExtra(STR_INT_PROVINCE);
                 mCode = data.getStringExtra(STR_INT_CODE);

@@ -11,4 +11,6 @@
     <string name="stoplocation">停止定位</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="tv_search_history">历史记录</string>
+    <string name="host_nominate">热门推荐</string>
 </resources>

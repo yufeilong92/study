@@ -9,59 +9,70 @@
 
     <LinearLayout style="@style/TitleBar">
 
-        <TextView
-            android:text="河南省是阿斯顿"
+        <com.xuechuan.xcedu.weight.AddressTextView
+            android:id="@+id/tv_address"
+            style="@style/TitleBarAction"
+            android:gravity="center_vertical"
             android:maxEms="6"
             android:singleLine="true"
-            android:id="@+id/tv_address"
-            android:textColor="@color/white"
-            android:gravity="center_vertical"
-            style="@style/TitleBarAction"
-          />
+            android:layout_gravity="center"
+            android:text="河南省是阿斯顿"
+            android:textColor="@color/white" />
 
-    <!--    <ImageView
-            style="@style/TitleBarText"
-            android:text="" />
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_home_search_bg" />
+        <!--    <ImageView
+                style="@style/TitleBarText"
+                android:text="" />
 
-        <ImageView
-            style="@style/TitleBarAction"
-            android:clickable="false" />-->
+            <ImageView
+                style="@style/TitleBarAction"
+                android:clickable="false" />-->
     </LinearLayout>
-  <FrameLayout
-      android:layout_weight="1"
-      android:id="@+id/fl_content"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"/>
-<LinearLayout
-    android:id="@+id/ll_btns"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <Button
-        android:text="首页"
-        android:id="@+id/btn_home_home"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
-    <Button
-        android:text="题库"
-        android:id="@+id/btn_home_bank"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
-    <Button
-        android:text="网课"
-        android:id="@+id/btn_home_net"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
 
-    <Button
-        android:text="我的"
-        android:id="@+id/btn_home_personal"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_btns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_home_home"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="首页" />
+
+        <Button
+            android:id="@+id/btn_home_bank"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="题库" />
+
+        <Button
+            android:id="@+id/btn_home_net"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="网课" />
+
+        <Button
+            android:id="@+id/btn_home_personal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的" />
+
+    </LinearLayout>
 
 </LinearLayout>
