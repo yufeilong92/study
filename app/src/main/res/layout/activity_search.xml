@@ -61,11 +61,10 @@
 
     </RelativeLayout>
 
-    <com.xuechuan.xcedu.weight.NewLineViewGroup
-        android:id="@+id/vg_search_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+<com.xuechuan.xcedu.weight.FlowLayout
+    android:id="@+id/fl_search_history"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_48"
@@ -77,10 +76,10 @@
             android:gravity="center"
             android:text="@string/host_nominate" />
     </RelativeLayout>
-
-    <com.xuechuan.xcedu.weight.NewLineViewGroup
-        android:id="@+id/vg_search_host"
+    <com.xuechuan.xcedu.weight.FlowLayout
+        android:id="@+id/fl_search_host"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

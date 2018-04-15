@@ -14,7 +14,6 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.xuechuan.xcedu.baidu.LocationService;
-
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 
 import java.io.File;
@@ -59,11 +58,7 @@ public class MyAppliction extends Application {
     public void onCreate() {
         super.onCreate();
         mContext= this;
-        /***
-         * 初始化定位sdk，建议在Application中创建
-         */
-        locationService = new LocationService(getApplicationContext());
-        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+        initBaidu();
         //初始化播放器
         initPolyCilent();
         initDownFile();
@@ -71,6 +66,14 @@ public class MyAppliction extends Application {
         initOkHttp();
         initJPush();
 
+    }
+
+    private void initBaidu() {
+        /***
+         * 初始化定位sdk，建议在Application中创建
+         */
+        locationService = new LocationService(getApplicationContext());
+        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     private void initJPush() {

@@ -1,10 +1,8 @@
 package com.xuechuan.xcedu.weight;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  *
@@ -17,8 +15,7 @@ import android.widget.TextView;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/14 星期六
  */
-@SuppressLint("AppCompatCustomView")
-public class AddressTextView extends TextView {
+public class AddressTextView extends android.support.v7.widget.AppCompatTextView {
     public AddressTextView(Context context) {
         super(context);
     }

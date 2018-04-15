@@ -17,6 +17,7 @@ import com.xuechuan.xcedu.fragment.HomeFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
 import com.xuechuan.xcedu.ui.AddressSelectActivity;
+import com.xuechuan.xcedu.ui.SearchActivity;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.weight.AddressTextView;
 
@@ -63,7 +64,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Button mBtnSearch;
 
 
-//    @Override
+    //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_home);
@@ -145,7 +146,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 startActivityForResult(intent, REQUESTCODE);
                 break;
             case R.id.btn_search://搜素
-
+                Intent searchIntent = new Intent(HomeActivity.this, SearchActivity.class);
+                startActivity(searchIntent);
                 break;
         }
     }

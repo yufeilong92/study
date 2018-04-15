@@ -13,10 +13,6 @@ import com.xuechuan.xcedu.net.OkTextPostRequest;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.player.PolyvPlayerActivity;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.PushXml;
-import com.xuechuan.xcedu.vo.ProvincesVo;
-
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final String TAG = MainActivity.class.getSimpleName();
