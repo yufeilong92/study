@@ -4,11 +4,15 @@
     <string name="app_content_token">http://app1.xuechuanedu.com/api/Service/Get?staffId=121</string>
     <string name="app_content_get">http://app1.xuechuanedu.com/api/test/Get?id=2</string>
     <string name="app_content_post">http://app1.xuechuanedu.com/api/test/POST</string>
+    <string name="app_content_heat">http://app1.xuechuanedu.com</string>
+    <string name="http_url_weixin">/api/auth/login</string>
+    <style name="http_token">/api/Service/Refresh</style>
     <!--<string name="app_content_token">http://192.168.1.110/api/Service/Get?staffId=121</string>-->
     <!--<string name="app_content_get">http://192.168.1.110/api/test/Get?id=2</string>-->
     <!--<string name="app_content_post">http://192.168.1.110/api/test/POST</string>-->
     <string name="startlocation">开始定位</string>
     <string name="stoplocation">停止定位</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="tv_search_history">历史记录</string>

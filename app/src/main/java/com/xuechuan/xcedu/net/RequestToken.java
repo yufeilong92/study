@@ -49,7 +49,7 @@ public class RequestToken extends BaseHttpServcie {
         mInfomVo.setTimeStamp(String.valueOf(time));
         mInfomVo.setNonce(String.valueOf(random8));
         if (StringUtil.isEmpty(stffid)) {
-            stffid = "121";
+            stffid = "0";
         }
         mInfomVo.setStaffid(stffid);
         final String id = stffid;

@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.base;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -21,17 +22,17 @@ import okhttp3.RequestBody;
  * @Copyright: 2018
  */
 public class BaseHttpServcie {
-    private String mStaffId = "staffid";
-    private String mTimeStamp = "timeStamp";
-    private String mNonce = "nonce";
-    private String mSignature = "signature";
+
 
     protected void sendOkGoGetToken(String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
+        if (StringUtil.isEmpty(saffid)){
+            saffid="0";
+        }
         OkGo.<String>get(url)
-                .headers(mStaffId, StringUtil.isEmpty(saffid) ? null : saffid)
-                .headers(mTimeStamp, StringUtil.isEmpty(time) ? null : time)
-                .headers(mNonce, StringUtil.isEmpty(nonce) ? null : nonce)
-                .headers(mSignature, StringUtil.isEmpty(signature) ? null : signature)
+                .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
+                .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
+                .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
+                .headers(DataMessageVo.SIGNATURE, StringUtil.isEmpty(signature) ? null : signature)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -47,12 +48,15 @@ public class BaseHttpServcie {
     }
 
     protected void sendRequestPost(String url, String saffid, String time, String nonce, String signature, RequestBody requestBody, final StringCallBackView callBackView) {
-
+        if (StringUtil.isEmpty(saffid)){
+            saffid="0";
+        }
+        L.e(url+saffid+"=+saffid+"+"time"+time+"noce"+nonce+"sig"+signature);
         OkGo.<String>post(url)
-                .headers(mStaffId, StringUtil.isEmpty(saffid) ? null : saffid)
-                .headers(mTimeStamp, StringUtil.isEmpty(time) ? null : time)
-                .headers(mNonce, StringUtil.isEmpty(nonce) ? null : nonce)
-                .headers(mSignature, StringUtil.isEmpty(signature) ? null : signature)
+                .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
+                .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
+                .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
+                .headers(DataMessageVo.SIGNATURE, StringUtil.isEmpty(signature) ? null : signature)
                 .upRequestBody(requestBody)
                 .execute(new StringCallback() {
                     @Override
@@ -70,11 +74,14 @@ public class BaseHttpServcie {
     }
 
     protected void sendRequestGet(String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
+       if (StringUtil.isEmpty(saffid)){
+           saffid="0";
+       }
         OkGo.<String>get(url)
-                .headers(mStaffId, StringUtil.isEmpty(saffid) ? null : saffid)
-                .headers(mTimeStamp, StringUtil.isEmpty(time) ? null : time)
-                .headers(mNonce, StringUtil.isEmpty(nonce) ? null : nonce)
-                .headers(mSignature, StringUtil.isEmpty(signature) ? null : signature)
+                .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
+                .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
+                .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
+                .headers(DataMessageVo.SIGNATURE, StringUtil.isEmpty(signature) ? null : signature)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -89,4 +96,5 @@ public class BaseHttpServcie {
                     }
                 });
     }
+
 }

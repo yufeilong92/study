@@ -13,7 +13,10 @@ import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.xuechuan.xcedu.baidu.LocationService;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 
 import java.io.File;
@@ -67,7 +70,6 @@ public class MyAppliction extends Application {
         initJPush();
 
     }
-
     private void initBaidu() {
         /***
          * 初始化定位sdk，建议在Application中创建

@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
@@ -24,7 +25,6 @@ import com.xuechuan.xcedu.vo.HttpInfomVo;
  * @Copyright: 2018
  */
 public class OkTextGetRequest extends BaseHttpServcie {
-    public String ACITON = "com.xuechaun.action";
 
     private final HttpInfomVo infomVo;
     private static OkTextGetRequest okTextGetRequest;
@@ -43,11 +43,11 @@ public class OkTextGetRequest extends BaseHttpServcie {
 
     public void sendRequestGet(Context context, final String param, final StringCallBackView callBackView) {
         if (infomVo.getToken() == null) {
-            RequestToken.getInstance().requestToken(context, ACITON, null);
+            RequestToken.getInstance().requestToken(context, DataMessageVo.ACITON, null);
         }
         //解决延迟问题
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACITON);
+        intentFilter.addAction(DataMessageVo.ACITON);
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

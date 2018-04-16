@@ -30,6 +30,8 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.xuechuan.xcedu.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,6 +103,7 @@ public class Utils {
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         return intent;
     }
+
     /**
      * ti
      * 查某个包名的App是否已经安装
@@ -1025,7 +1028,8 @@ public class Utils {
     }
 
     /**
-     *  模式匹配
+     * 模式匹配
+     *
      * @param pattern
      * @param input
      * @return
@@ -1183,6 +1187,7 @@ public class Utils {
 
     /**
      * 汉语
+     *
      * @param str
      * @return
      */
@@ -1196,6 +1201,7 @@ public class Utils {
 
     /**
      * 带分数
+     *
      * @param str
      * @param length
      * @return
@@ -1219,6 +1225,7 @@ public class Utils {
 
     /**
      * 长度有外空间
+     *
      * @param s
      * @return
      */
@@ -1284,7 +1291,8 @@ public class Utils {
     }
 
     /**
-     *获取位置
+     * 获取位置
+     *
      * @param dis
      * @return
      */
@@ -1303,6 +1311,7 @@ public class Utils {
 
     /**
      * 有效时间
+     *
      * @param str
      * @return
      */
@@ -1325,6 +1334,7 @@ public class Utils {
 
     /**
      * 判读为空
+     *
      * @param str
      * @return
      */
@@ -1340,6 +1350,7 @@ public class Utils {
 
     /**
      * 获取随机数据
+     *
      * @return
      */
     public static long getRandom8() {
@@ -1352,6 +1363,7 @@ public class Utils {
 //将字符串转换为数字并输出
         return Integer.parseInt(str.toString());
     }
+
     private static final int MIN_CLICK_DELAY_TIME = 1000;
     private static long lastClickTime = 0;
 
@@ -1375,12 +1387,12 @@ public class Utils {
      * @param id     要显示的集合的fragment 的几个
      * @return
      */
-    public static void showSelectFragment(FragmentManager sfm, ArrayList<Fragment> list, int layout, int id){
-        if ((id+1) > list.size()) {
+    public static void showSelectFragment(FragmentManager sfm, ArrayList<Fragment> list, int layout, int id) {
+        if ((id + 1) > list.size()) {
             throw new IndexOutOfBoundsException("超出集合长度");
         }
-        if (sfm==null){
-            throw  new NullPointerException("FragmentManager不能为空");
+        if (sfm == null) {
+            throw new NullPointerException("FragmentManager不能为空");
         }
         FragmentTransaction transaction = sfm.beginTransaction();
         Fragment fragment = list.get(id);
@@ -1395,7 +1407,162 @@ public class Utils {
                 transaction.show(fragment);
             }
         }
-       transaction.commit();
+        transaction.commit();
+    }
+
+    public static int getNetWorkStatus(Context context) {
+        int netWorkType = Constants.NETWORK_CLASS_UNKNOWN;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            int type = networkInfo.getType();
+
+            if (type == ConnectivityManager.TYPE_WIFI) {
+                netWorkType = Constants.NETWORK_WIFI;
+            } else if (type == ConnectivityManager.TYPE_MOBILE) {
+                netWorkType = getNetWorkClass(context);
+            }
+        }
+
+        return netWorkType;
+    }
+
+    public static String getNewType(Context context) {
+        int status = getNetWorkStatus(context);
+        String netType = "";
+        switch (status) {
+            case Constants.NETWORK_CLASS_UNKNOWN:
+                netType = null;
+                break;
+            case Constants.NETWORK_CLASS_2_G:
+                netType = "2G";
+                break;
+            case Constants.NETWORK_CLASS_3_G:
+                netType = "3G";
+                break;
+            case Constants.NETWORK_CLASS_4_G:
+                netType = "4G";
+                break;
+            case Constants.NETWORK_WIFI:
+                netType = "wifi";
+                break;
+            default:
+
+        }
+        return netType;
+    }
+
+    private static int getNetWorkClass(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
+        switch (telephonyManager.getNetworkType()) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return Constants.NETWORK_CLASS_2_G;
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return Constants.NETWORK_CLASS_3_G;
+
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return Constants.NETWORK_CLASS_4_G;
+
+            default:
+                return Constants.NETWORK_CLASS_UNKNOWN;
+        }
+    }
+    /**
+     * 获取当前手机系统语言。
+     *
+     * @return 返回当前系统语言。例如：当前设置的是“中文-中国”，则返回“zh-CN”
+     */
+    public static String getSystemLanguage() {
+        return Locale.getDefault().getLanguage();
+    }
+
+    /**
+     * 获取当前系统上的语言列表(Locale列表)
+     *
+     * @return  语言列表
+     */
+    public static Locale[] getSystemLanguageList() {
+        return Locale.getAvailableLocales();
+    }
+
+    /**
+     * 获取当前手机系统版本号
+     *
+     * @return  系统版本号
+     */
+    public static String getSystemVersion() {
+        return android.os.Build.VERSION.RELEASE;
+    }
+
+    /**
+     * 获取手机型号
+     *
+     * @return  手机型号
+     */
+    public static String getSystemModel() {
+        return android.os.Build.MODEL;
+    }
+
+    /**
+     * 获取手机厂商
+     *
+     * @return  手机厂商
+     */
+    public static String getDeviceBrand() {
+        return android.os.Build.BRAND;
+    }
+
+    /**
+     * 获取手机IMEI(需要“android.permission.READ_PHONE_STATE”权限)
+     *
+     * @return  手机IMEI
+     */
+    @SuppressLint("MissingPermission")
+    public static String getIMEI(Context ctx) {
+        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Activity.TELEPHONY_SERVICE);
+        if (tm != null) {
+            return tm.getDeviceId();
+        }
+        return null;
+    }
+
+    /**
+     * 获取分辨率
+     * @return
+     */
+    public static String getdp(Context context){
+        DisplayMetrics metrics=new DisplayMetrics();
+        metrics=context.getApplicationContext().getResources().getDisplayMetrics();
+        int width=metrics.widthPixels;
+        int height=metrics.heightPixels;
+        String with = String.valueOf(width);
+        String heights = String.valueOf(height);
+        return with+"*"+heights;
+    }
+    /**
+     * 获取dpi
+     * @return
+     */
+    public static String getdpi(Context context){
+        DisplayMetrics metrics=new DisplayMetrics();
+        metrics=context.getApplicationContext().getResources().getDisplayMetrics();
+        return String.valueOf(metrics.densityDpi);
     }
 
 }
