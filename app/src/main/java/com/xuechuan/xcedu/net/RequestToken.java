@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.base.BaseHttp;
+import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -27,7 +27,7 @@ import java.util.Date;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class RequestToken extends BaseHttp {
+public class RequestToken extends BaseHttpServcie {
 
     private static RequestToken callBack;
     private final HttpInfomVo mInfomVo;

@@ -20,7 +20,7 @@ import okhttp3.RequestBody;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class BaseHttp {
+public class BaseHttpServcie {
     private String mStaffId = "staffid";
     private String mTimeStamp = "timeStamp";
     private String mNonce = "nonce";

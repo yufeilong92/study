@@ -5,17 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
-import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.base.BaseHttp;
+import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
-import com.xuechuan.xcedu.utils.StringUtil;
-import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 
 /**
@@ -28,7 +23,7 @@ import com.xuechuan.xcedu.vo.HttpInfomVo;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class OkTextGetRequest extends BaseHttp {
+public class OkTextGetRequest extends BaseHttpServcie {
     public String ACITON = "com.xuechaun.action";
 
     private final HttpInfomVo infomVo;

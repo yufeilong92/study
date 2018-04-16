@@ -12,6 +12,7 @@ import com.xuechuan.xcedu.net.OkTextGetRequest;
 import com.xuechuan.xcedu.net.OkTextPostRequest;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.player.PolyvPlayerActivity;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.L;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -25,6 +26,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button mBtnBaoli;
     private Button mBtnHome;
     private Button mBtnGetToken;
+    private Button mBtnLogin;
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mBtnHome.setOnClickListener(this);
         mBtnGetToken = (Button) findViewById(R.id.btn_getToken);
         mBtnGetToken.setOnClickListener(this);
+        mBtnLogin = findViewById(R.id.btn_login);
+        mBtnLogin.setOnClickListener(this);
 
     }
 
@@ -104,6 +108,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.btn_getToken:
 
+                break;
+            case R.id.btn_login:
+                Intent intent3 = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

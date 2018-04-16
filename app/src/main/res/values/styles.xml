@@ -144,4 +144,31 @@
         <item name="android:paddingTop">@dimen/talk_common_margin</item>
         <item name="android:paddingBottom">@dimen/talk_common_margin</item>
     </style>
+    <style name="space_8_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">8dp</item>
+    </style>
+    <style name="space_8_width">
+        <item name="android:layout_width">8dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="space_16_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">16dp</item>
+    </style>
+    <style name="space_16_width">
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="et_bg">
+        <item name="android:layout_margin">@dimen/space_8</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/space_48</item>
+        <item name="android:background">@drawable/bg_login_et</item>
+        <item name="android:paddingEnd">@dimen/space_24</item>
+        <item name="android:paddingRight">@dimen/space_24</item>
+        <item name="android:paddingStart">@dimen/space_24</item>
+        <item name="android:paddingLeft">@dimen/space_24</item>
+    </style>
 </resources>

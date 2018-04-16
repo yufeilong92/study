@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.RegisterActivity">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <ImageView style="@style/TitleBarAction"
+            android:src="@mipmap/ic_black"
+            android:onClick="onHomeClick"/>
+
+        <TextView
+            style="@style/TitleBarText"
+            android:text="@string/regist" />
+
+        <ImageView style="@style/TitleBarAction" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_8"
+        android:text="手机号验证" />
+
+    <EditText
+        android:id="@+id/et_register_phone"
+        style="@style/et_bg"
+        android:hint="手机号码" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_register_code"
+            android:hint="验证码"
+            style="@style/et_bg"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_marginRight="@dimen/space_8"
+            android:layout_gravity="center"
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送验证码" />
+    </LinearLayout>
+    <TextView
+        android:layout_margin="@dimen/space_8"
+        android:text="密码设置"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/et_register_paw"
+        android:hint="账户密码"
+        android:inputType="textPassword"
+       style="@style/et_bg"/>
+    <EditText
+        android:hint="确认密码"
+        android:inputType="textPassword"
+        android:id="@+id/et_register_paws"
+        style="@style/et_bg"/>
+    <Button
+        android:id="@+id/btn_register_login"
+        android:layout_margin="@dimen/space_8"
+        android:layout_width="match_parent"
+        android:text="注册"
+        android:textSize="@dimen/text_normal"
+        android:textColor="@color/white"
+        android:background="@drawable/select_login_btn_bg"
+        android:layout_height="@dimen/space_48" />
+</LinearLayout>

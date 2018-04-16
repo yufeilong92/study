@@ -6,7 +6,77 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.LoginActivity">
+
     <LinearLayout style="@style/TitleBar">
 
+        <ImageView style="@style/TitleBarAction" />
+
+        <TextView
+            style="@style/TitleBarText"
+            android:text="@string/login" />
+
+        <ImageView style="@style/TitleBarAction" />
+
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_56" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/space_24"
+        android:paddingRight="@dimen/space_24"
+        android:paddingStart="@dimen/space_24">
+
+        <EditText
+            android:id="@+id/et_login_username"
+            style="@style/et_bg"
+            android:hint="@string/please_username" />
+
+        <Space style="@style/space_8_height" />
+
+        <EditText
+            android:id="@+id/et_login_password"
+            style="@style/et_bg"
+            android:hint="@string/please_paw"
+            android:inputType="textPassword" />
+
+        <Space style="@style/space_8_height" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_login_login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_48"
+        android:layout_margin="@dimen/space_8"
+        android:background="@drawable/select_login_btn_bg"
+        android:text="@string/login"
+        android:textColor="@color/white" />
+
+    <Space style="@style/space_8_height" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_login_forgetpaw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/forget_password" />
+
+        <Button
+            android:id="@+id/btn_login_regist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/regist" />
+    </RelativeLayout>
 </LinearLayout>

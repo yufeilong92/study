@@ -63,13 +63,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_search);
         initView();
         initData();
-//        bindHistoryData();
+        bindHistoryData();
         bingHostData();
     }
 
     private void bindHistoryData() {
         ArrayList<String> list = mInstance.getHistoryList(mContext);
         if (list.size() > 0) {
+            bindTextViewData(mFlSearchHistory,list);
         }
     }
 
@@ -84,13 +85,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         for (int i = 0; i < a; i++) {
             list.add("测" + i);
         }
-         bindTextViewData(list);
+         bindTextViewData(mFlSearchHost,list);
     }
 
-    private void bindTextViewData(ArrayList<String> list) {
+    private void bindTextViewData(FlowLayout flowLayout,ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             TextView tv = (TextView) mInflater.inflate(R.layout.search_label_tv,
-                    mFlSearchHost, false);
+                    flowLayout, false);
             tv.setText(list.get(i));
             final String str = tv.getText().toString();
             //点击事件
@@ -101,7 +102,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     T.showToast(mContext,str);
                 }
             });
-            mFlSearchHost.addView(tv);
+            flowLayout.addView(tv);
         }
     }
 

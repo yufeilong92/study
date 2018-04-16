@@ -5,8 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
-<TextView
-    android:text="Home"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+<com.youth.banner.Banner
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/space_200">
+
+</com.youth.banner.Banner>
 </FrameLayout>

@@ -27,5 +27,5 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 ext{
-    appcompatVersion ="27.0.1"
+    appcompatVersion ="27.1.1"
 }

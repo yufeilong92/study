@@ -8,7 +8,7 @@ import android.content.IntentFilter;
 import com.lzy.okgo.model.HttpParams;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.base.BaseHttp;
+import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -31,7 +30,7 @@ import okhttp3.ResponseBody;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class OkTextPostRequest  extends BaseHttp{
+public class OkTextPostRequest  extends BaseHttpServcie {
     public String ACITON = "com.xuechaun.OkTextPostRequest";
 
     private final HttpInfomVo infomVo;

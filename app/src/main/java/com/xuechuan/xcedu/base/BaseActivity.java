@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
@@ -56,5 +58,21 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void onHomeClick(View view) {
         finish();
+    }
+
+    protected String getTextStr(View view) {
+        if (view instanceof TextView) {
+            TextView tv = (TextView) view;
+            return tv.getText().toString().trim();
+        }
+        if (view instanceof Button) {
+            Button btn = (Button) view;
+            return btn.getText().toString().trim();
+        }
+        if (view instanceof EditText) {
+            EditText et = (EditText) view;
+            return et.getText().toString().trim();
+        }
+        return null;
     }
 }
