@@ -56,7 +56,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     // 第三方应用发送到微信的请求处理后的响应结果，会回调到该方法
     @Override
     public void onResp(BaseResp resp) {
-        L.e(resp.errStr+"//"+resp.errCode+"//"+resp.transaction);
+//        L.e(resp.errStr+"//"+resp.errCode+"//"+resp.transaction);
         SendMessageToWX res;
         if (resp instanceof SendMessageToWX.Resp) {
             finish();
@@ -66,8 +66,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK://用户同意
                 SendAuth.Resp sendResp = (SendAuth.Resp) resp;
-                code = sendResp.code;
-                L.e(code);
+//                code = sendResp.code;
+//                L.e(code);
                 sendBroadcastData(sendResp);
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL://用户拒绝

@@ -13,11 +13,8 @@ import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.xuechuan.xcedu.baidu.LocationService;
-import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
+import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -37,45 +34,61 @@ import okhttp3.OkHttpClient;
  * @Copyright: 2018
  */
 public class MyAppliction extends Application {
-    public static final String TAG = "MyAppliction.class";
+    public  final String TAG = "MyAppliction.class";
     Context mContext;
-    public LocationService locationService;
-    public Vibrator mVibrator;
-    public static OkHttpClient client;
-    private static HttpInfomVo httpInfom;
+    public  OkHttpClient client;
+    private  HttpInfomVo httpInfom;
     private PolyvSDKClient mPolyclient;
+    private UserInfomVo infomVo;
+    private static MyAppliction application;
 
+    public static MyAppliction getInstance() {
+        if (application == null)
+            application = new MyAppliction();
+        return application;
+    }
 
+    /**
+     * 保存用户信息
+     * @param infomVo
+     */
+    public void setUserInfom(UserInfomVo infomVo) {
+        this.infomVo = infomVo;
+    }
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    public UserInfomVo getUserInfom() {
+        return this.infomVo;
+    }
     //初始化请求数据
-    public static HttpInfomVo getHttpInfomInstance() {
+    public HttpInfomVo getHttpInfomInstance() {
         return httpInfom;
     }
+
 
     public MyAppliction() {
         if (httpInfom == null) {
             httpInfom = new HttpInfomVo();
+        }
+        if (infomVo == null) {
+            new UserInfomVo();
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext= this;
-        initBaidu();
+        mContext = this;
         //初始化播放器
         initPolyCilent();
         initDownFile();
         initOkGo();
-        initOkHttp();
-        initJPush();
+//        initOkHttp();
+//        initJPush();
 
-    }
-    private void initBaidu() {
-        /***
-         * 初始化定位sdk，建议在Application中创建
-         */
-        locationService = new LocationService(getApplicationContext());
-        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     private void initJPush() {
@@ -104,10 +117,10 @@ public class MyAppliction extends Application {
         builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);      //全局的读取超时时间
         builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);     //全局的写入超时时间
         builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);   //全局的连接超时时间
-       OkGo.getInstance().init(this)
-               .setOkHttpClient(builder.build())
-               .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
-               .setRetryCount(3);                              //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
+        OkGo.getInstance().init(this)
+                .setOkHttpClient(builder.build())
+                .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
+                .setRetryCount(3);                              //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
 
     }
 
@@ -157,21 +170,21 @@ public class MyAppliction extends Application {
         PolyvDownloaderManager.setDownloadQueueCount(1);
     }
 
-    //初始化数请求
-    private static void initOkHttp() {
-        //请求超时
-        int HTTPTIMEOUT = 6000;
-        //读取超时
-        int HTTPTIMEREAD = 6000;
-        if (client == null) {
-            synchronized (OkHttpClient.class) {
-                if (client == null) {
-                    client = new OkHttpClient.Builder()
-                            .connectTimeout(HTTPTIMEOUT, TimeUnit.SECONDS)
-                            .readTimeout(HTTPTIMEREAD, TimeUnit.SECONDS)
-                            .build();
-                }
-            }
-        }
-    }
+//    //初始化数请求
+//    private  void initOkHttp() {
+//        //请求超时
+//        int HTTPTIMEOUT = 6000;
+//        //读取超时
+//        int HTTPTIMEREAD = 6000;
+//        if (client == null) {
+//            synchronized (OkHttpClient.class) {
+//                if (client == null) {
+//                    client = new OkHttpClient.Builder()
+//                            .connectTimeout(HTTPTIMEOUT, TimeUnit.SECONDS)
+//                            .readTimeout(HTTPTIMEREAD, TimeUnit.SECONDS)
+//                            .build();
+//                }
+//            }
+//        }
+//    }
 }

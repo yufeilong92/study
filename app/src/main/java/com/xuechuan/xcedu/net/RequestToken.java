@@ -33,7 +33,7 @@ public class RequestToken extends BaseHttpServcie {
     private final HttpInfomVo mInfomVo;
 
     public RequestToken() {
-        mInfomVo = MyAppliction.getHttpInfomInstance();
+        mInfomVo = MyAppliction.getInstance().getHttpInfomInstance();
     }
 
     public static RequestToken getInstance() {
@@ -42,8 +42,14 @@ public class RequestToken extends BaseHttpServcie {
         return callBack;
     }
 
+    /**
+     * 测试接口
+     * @param context
+     * @param aciton
+     * @param stffid
+     */
     public void requestToken(final Context context, final String aciton, String stffid) {
-        String url = context.getResources().getString(R.string.app_content_token);
+        String url = context.getResources().getString(R.string.app_content_token_text);
         String time = String.valueOf(new Date().getTime());
         String random8 = String.valueOf(Utils.getRandom8());
         mInfomVo.setTimeStamp(String.valueOf(time));
@@ -53,7 +59,7 @@ public class RequestToken extends BaseHttpServcie {
         }
         mInfomVo.setStaffid(stffid);
         final String id = stffid;
-        sendOkGoGetToken(url, stffid, time, random8, null, new StringCallBackView() {
+        sendOkGoGetTokenHttp(context,url, stffid, time, random8, null, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 Gson gson = new Gson();
@@ -74,4 +80,39 @@ public class RequestToken extends BaseHttpServcie {
         });
     }
 
+    /**
+     * 测试接口
+     * @param context
+     * @param aciton
+     * @param stffid
+     */
+    public void requestTokenA(final Context context, final String aciton, String stffid) {
+        String url = context.getResources().getString(R.string.app_content_heat);
+        String time = String.valueOf(new Date().getTime());
+        String random8 = String.valueOf(Utils.getRandom8());
+        mInfomVo.setTimeStamp(String.valueOf(time));
+        mInfomVo.setNonce(String.valueOf(random8));
+        if (StringUtil.isEmpty(stffid)) {
+            stffid = "0";
+        }
+        mInfomVo.setStaffid(stffid);
+        final String id = stffid;
+        sendOkGoGetTokenHttp(context, url, stffid, time, random8, null, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Gson gson = new Gson();
+                ResultBeanVo resultBeanVo = gson.fromJson(response.body().toString(), ResultBeanVo.class);
+                mInfomVo.setToken(resultBeanVo.getData().getSignToken());
+                Intent intent = new Intent();
+                intent.setAction(aciton);
+                context.sendBroadcast(intent);
+
+            }
+            @Override
+            public void onError(Response<String> response) {
+                L.d(response.message().toString());
+                requestToken(context,aciton, id);
+            }
+        });
+    }
 }

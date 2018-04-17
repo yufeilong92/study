@@ -1,14 +1,16 @@
 package com.xuechuan.xcedu.base;
 
+import android.content.Context;
+import android.support.v7.app.AlertDialog;
+
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
-import com.umeng.debug.log.D;
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 
-import okhttp3.Call;
 import okhttp3.RequestBody;
 
 /**
@@ -22,12 +24,32 @@ import okhttp3.RequestBody;
  * @Copyright: 2018
  */
 public class BaseHttpServcie {
+    private Context context;
+    private String title;
+    private String cont;
+    private ShowDialog instance;
+    private boolean isShow = false;
+    private AlertDialog dialog;
 
+    public  void setIsShowDialog(boolean show) {
+        this.isShow = show;
+    }
+    public void setDialogContext(Context context, String title, String cont) {
+        this.context = context;
+        this.title = title;
+        this.cont = cont;
+        instance = ShowDialog.getInstance(context);
+    }
 
-    protected void sendOkGoGetToken(String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
-        if (StringUtil.isEmpty(saffid)){
-            saffid="0";
+    protected void sendOkGoGetTokenHttp(Context context, String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
+        if (StringUtil.isEmpty(saffid)) {
+            saffid = "0";
         }
+        if (isShow) {
+            dialog = instance.showDialog(title, cont);
+        }
+        String hear = context.getResources().getString(R.string.app_content_heat);
+        url=hear.concat(url);
         OkGo.<String>get(url)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
@@ -36,22 +58,32 @@ public class BaseHttpServcie {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (isShow) {
+                            dialog.dismiss();
+                        }
                         callBackView.onSuccess(response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if (isShow) {
+                            dialog.dismiss();
+                        }
                         callBackView.onError(response);
                     }
                 });
     }
 
-    protected void sendRequestPost(String url, String saffid, String time, String nonce, String signature, RequestBody requestBody, final StringCallBackView callBackView) {
-        if (StringUtil.isEmpty(saffid)){
-            saffid="0";
+    protected void sendRequestPostHttp(Context context, String url, String saffid, String time, String nonce, String signature, RequestBody requestBody, final StringCallBackView callBackView) {
+        if (StringUtil.isEmpty(saffid)) {
+            saffid = "0";
         }
-        L.e(url+saffid+"=+saffid+"+"time"+time+"noce"+nonce+"sig"+signature);
+        if (isShow) {
+            dialog = instance.showDialog(title, cont);
+        }
+        String hear = context.getResources().getString(R.string.app_content_heat);
+        url=hear.concat(url);
         OkGo.<String>post(url)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
@@ -61,22 +93,33 @@ public class BaseHttpServcie {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (isShow) {
+                            dialog.dismiss();
+                        }
                         callBackView.onSuccess(response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if (isShow) {
+                            dialog.dismiss();
+                        }
                         callBackView.onError(response);
                     }
                 });
 
     }
 
-    protected void sendRequestGet(String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
-       if (StringUtil.isEmpty(saffid)){
-           saffid="0";
-       }
+    protected void sendRequestGetHttp(Context context, String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
+        if (StringUtil.isEmpty(saffid)) {
+            saffid = "0";
+        }
+        if (isShow) {
+            dialog = instance.showDialog(title, cont);
+        }
+        String hear = context.getResources().getString(R.string.app_content_heat);
+        url=hear.concat(url);
         OkGo.<String>get(url)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
@@ -85,13 +128,18 @@ public class BaseHttpServcie {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        L.e(response.body().toString());
+                        if (isShow) {
+                            dialog.dismiss();
+                        }
                         callBackView.onSuccess(response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if (isShow) {
+                            dialog.dismiss();
+                        }
                         callBackView.onError(response);
                     }
                 });

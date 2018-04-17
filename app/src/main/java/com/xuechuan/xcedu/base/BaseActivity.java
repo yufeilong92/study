@@ -75,4 +75,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    protected String getStringWithId(int id) {
+        return getResources().getString(id);
+    }
 }

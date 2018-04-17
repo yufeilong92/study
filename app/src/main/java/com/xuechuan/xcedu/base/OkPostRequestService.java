@@ -1,16 +1,13 @@
-package com.xuechuan.xcedu.net;
+package com.xuechuan.xcedu.base;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.lzy.okgo.model.HttpParams;
-import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.base.BaseHttpServcie;
-import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.net.RequestToken;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
@@ -35,31 +32,46 @@ import okhttp3.RequestBody;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class OkTextPostRequest extends BaseHttpServcie {
+public class OkPostRequestService extends BaseHttpServcie {
     public String ACITON = "com.xuechaun.OkTextPostRequest";
 
     private final HttpInfomVo infomVo;
-    private static OkTextPostRequest okTextPostRequest;
+    private static OkPostRequestService okTextPostRequest;
     private BroadcastReceiver receiver;
 
-    public OkTextPostRequest() {
-        infomVo = MyAppliction.getHttpInfomInstance();
+    public OkPostRequestService() {
+        infomVo = MyAppliction.getInstance().getHttpInfomInstance();
 
     }
 
-    public static OkTextPostRequest getInstance() {
+    public void setIsShowDialog(boolean show) {
+        super.setIsShowDialog(show);
+
+    }
+
+    public void setDialogContext(Context context, String title, String cont) {
+        super.setDialogContext(context, title, cont);
+    }
+
+    public static OkPostRequestService getInstance() {
         if (okTextPostRequest == null)
-            okTextPostRequest = new OkTextPostRequest();
+            okTextPostRequest = new OkPostRequestService();
         return okTextPostRequest;
     }
 
+
     /**
-     * 请求测试
+     * 测试
      * @param context
+     * @param url
+     * @param staffid
+     * @param timeStamp
+     * @param nonce
      * @param param
+     * @param requestBody
      * @param callBackView
      */
-    public void sendRequestPost(Context context, final String param, final StringCallBackView callBackView) {
+    public void sendRequestPost(Context context, String url, String staffid, String timeStamp, String nonce, final String param, RequestBody requestBody, final StringCallBackView callBackView) {
         if (infomVo.getToken() == null) {
             RequestToken.getInstance().requestToken(context, ACITON, null);
         }
@@ -83,7 +95,7 @@ public class OkTextPostRequest extends BaseHttpServcie {
      */
     private void requestPost(Context context, String param, final StringCallBackView callBackView) {
         context.unregisterReceiver(receiver);
-        String url = context.getResources().getString(R.string.app_content_post);
+        String url = context.getResources().getString(R.string.app_content_post_text);
 
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
         JSONObject object = new JSONObject();
@@ -99,19 +111,48 @@ public class OkTextPostRequest extends BaseHttpServcie {
         StringSort sort = new StringSort();
         String signature = sort.getOrderMd5Data(object);
         L.e(signature);
-        sendRequestPost(url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, requestBody, callBackView);
+        sendRequestPostHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, requestBody, callBackView);
+    }
+    /**
+     * POST请求
+     * @param context
+     * @param url
+     * @param callBackView
+     */
+
+    public void sendRequestPost(Context context,final String url,String sffid, final JSONObject params, final StringCallBackView callBackView) {
+
+        if (infomVo.getToken() == null) {
+            RequestToken.getInstance().requestTokenA(context, ACITON, sffid);
+        }
+        //解决延迟问题
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACITON);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                requestPostWithToken(context,url, params, callBackView);
+            }
+        };
+        context.registerReceiver(receiver, intentFilter);
     }
 
-    protected void requestPost(Context context, String url, JSONObject param, final StringCallBackView callBackView) {
+    /**
+     * 请求数据
+     * @param context
+     * @param url
+     * @param param
+     * @param callBackView
+     */
+    private void requestPostWithToken(Context context, String url, JSONObject param, final StringCallBackView callBackView) {
         context.unregisterReceiver(receiver);
         addParams(context, param);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
         RequestBody requestBody = RequestBody.create(parse, param.toString());
         StringSort sort = new StringSort();
-        String signature = sort.getOrderMd5Data(param);
-        L.e(signature);
 
-        sendRequestPost(url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, requestBody, callBackView);
+        String signature = sort.getOrderMd5Data(param);
+        sendRequestPostHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, requestBody, callBackView);
     }
 
     /***
@@ -127,7 +168,7 @@ public class OkTextPostRequest extends BaseHttpServcie {
         addParams(context, param);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
         RequestBody requestBody = RequestBody.create(parse, param.toString());
-        sendRequestPost(url, null,time,random8,null,requestBody, callBackView);
+        sendRequestPostHttp(context,url, null,time,random8,null,requestBody, callBackView);
     }
 
     /**

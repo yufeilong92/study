@@ -5,27 +5,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.ShowDialog;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.wxapi.WXEntryActivity;
+import com.xuechuan.xcedu.vo.WeiXinInfomVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -42,10 +46,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText mEtLoginUsername;
     private EditText mEtLoginPassword;
     private Button mBtnLoginLogin;
-    private Button mBtnLoginForgetpaw;
-    private Button mBtnLoginRegist;
+    private TextView mTvLoginForgetpaw;
+    private TextView mTvLoginRegist;
     private Context mContext;
     private ImageView mIvWeixinlogin;
+    private ShowDialog mdialog;
 
     private IWXAPI api;
     private BroadcastReceiver receiver;
@@ -57,6 +62,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //    }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         initView();
@@ -64,7 +75,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         initData();
     }
 
-
+    //注册微信
     private void regToWx() {
         api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID, true);
         api.registerApp(DataMessageVo.APP_ID);
@@ -74,12 +85,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mEtLoginUsername = (EditText) findViewById(R.id.et_login_username);
         mEtLoginPassword = (EditText) findViewById(R.id.et_login_password);
         mBtnLoginLogin = (Button) findViewById(R.id.btn_login_login);
-        mBtnLoginForgetpaw = (Button) findViewById(R.id.btn_login_forgetpaw);
-        mBtnLoginRegist = (Button) findViewById(R.id.btn_login_regist);
-
+        mTvLoginForgetpaw = (TextView) findViewById(R.id.tv_login_forgetpaw);
+        mTvLoginRegist = (TextView) findViewById(R.id.tv_login_regist);
         mBtnLoginLogin.setOnClickListener(this);
-        mBtnLoginForgetpaw.setOnClickListener(this);
-        mBtnLoginRegist.setOnClickListener(this);
+        mTvLoginForgetpaw.setOnClickListener(this);
+        mTvLoginRegist.setOnClickListener(this);
         mContext = this;
         mIvWeixinlogin = (ImageView) findViewById(R.id.iv_weixinlogin);
         mIvWeixinlogin.setOnClickListener(this);
@@ -88,45 +98,114 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_login_login:
+            case R.id.btn_login_login://登录
                 break;
-            case R.id.btn_login_forgetpaw:
+            case R.id.tv_login_forgetpaw://忘记密码
+                Intent intent1 = RegisterActivity.newInstance(mContext, RegisterActivity.CEX_INT_TYPE_PAW, null, null);
+                intent1.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.forget_password));
+                startActivity(intent1);
                 break;
-            case R.id.btn_login_regist:
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+            case R.id.tv_login_regist://手机注册
+                Intent intent2 = RegisterActivity.newInstance(mContext, RegisterActivity.CEX_INT_TYPE_REG, null, null);
+                startActivity(intent2);
                 break;
-            case R.id.iv_weixinlogin:
+            case R.id.iv_weixinlogin://微信登录
                 loginWeiXin();
                 break;
         }
     }
 
+    /**
+     * 处理微信登录回调
+     */
     private void initData() {
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataMessageVo.WEI_LOGIN_ACTION);
         receiver = new BroadcastReceiver() {
+
+
+
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent != null) {
+                    mdialog = ShowDialog.getInstance(mContext);
                     String extra = intent.getStringExtra(DataMessageVo.WEISTATE);
                     String code = intent.getStringExtra(DataMessageVo.WEICODE);
-                    L.d(code + "//" + extra);
                     requestLogin(extra, code);
                 }
             }
         };
         registerReceiver(receiver, filter);
+        mEtLoginUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    mBtnLoginLogin.setEnabled(false);
+                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg_point);
+                    return;
+                }
+                String trim = mEtLoginPassword.getText().toString().trim();
+                if (!StringUtil.isEmpty(trim)) {
+                    mBtnLoginLogin.setEnabled(true);
+                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg_normal);
+                }
+            }
 
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        mEtLoginPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    mBtnLoginLogin.setEnabled(false);
+                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg_point);
+                    return;
+                }
+                String trim = mEtLoginUsername.getText().toString().trim();
+                if (!StringUtil.isEmpty(trim)) {
+                    mBtnLoginLogin.setEnabled(true);
+                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg_normal);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     private void requestLogin(String extra, String code) {
-        WeiXinLoginSercvice instance = WeiXinLoginSercvice.getInstance();
-        instance.requestWeiCode(mContext, code, new StringCallBackView() {
+        WeiXinLoginSercvice instance = WeiXinLoginSercvice.getInstance(mContext);
+        instance.requestWeiCode(code, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
-               L.e(response.code()+"");
-                L.e(response.body().toString());
+                String infom = response.body().toString();
+                L.d(infom);
+                Gson gson = new Gson();
+                WeiXinInfomVo vo = gson.fromJson(infom, WeiXinInfomVo.class);
+                WeiXinInfomVo.DataBean voData = vo.getData();
+                if (vo.getStatus().getCode() != 200) {//失败情况
+                    T.showToast(mContext, vo.getStatus().getMessage());
+                    return;
+                }
+                if (voData.isIsbinduser()) {//已经绑定数据（手机）
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                } else {//没有绑定手机
+                    Intent intent = RegisterActivity.newInstance(mContext, voData.getOpenid(), RegisterActivity.CEX_INT_TYPE_BIND, voData.getUnionid());
+                    intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -137,6 +216,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
+    //调用微信
     private void loginWeiXin() {
         final SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
@@ -147,7 +227,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void submit() {
         String username = getTextStr(mEtLoginUsername);
         if (TextUtils.isEmpty(username)) {
-            T.showToast(mContext, R.string.please_username);
+            T.showToast(mContext, R.string.please_input_phone);
             return;
         }
         String password = getTextStr(mEtLoginPassword);
@@ -157,9 +237,4 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(receiver);
-    }
 }

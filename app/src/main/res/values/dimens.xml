@@ -43,7 +43,12 @@
     <dimen name="top_center_player_height">200dp</dimen>
     <dimen name="title_height">56dp</dimen>
     <dimen name="title_action_height">56dp</dimen>
-    <dimen name="text_size_mediumex">20sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size36">36px</dimen>
     <dimen name="top_hight">24dp</dimen>
     <dimen name="common_margin_tb">13.3dp</dimen>
     <dimen name="corners_common_m">9dp</dimen>
@@ -64,8 +69,14 @@
     <dimen name="space_16">16dp</dimen>
     <dimen name="space_24">24dp</dimen>
     <dimen name="space_32">32dp</dimen>
+    <dimen name="space_39">39dp</dimen>
     <dimen name="space_48">48dp</dimen>
     <dimen name="space_74">74dp</dimen>
     <dimen name="space_56">56dp</dimen>
     <dimen name="space_200">200dp</dimen>
+    <dimen name="space_120_wridth">120dp</dimen>
+    <dimen name="spance_25">25dp</dimen>
+    <dimen name="spance_50">50dp</dimen>
+    <dimen name="spance_36">36dp</dimen>
+    <dimen name="spance_120">120dp</dimen>
 </resources>

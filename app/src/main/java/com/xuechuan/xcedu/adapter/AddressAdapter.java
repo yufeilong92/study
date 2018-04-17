@@ -64,10 +64,13 @@ public class AddressAdapter extends BaseRecyclerAdapter<AddressAdapter.ViewHolde
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         ProvincesVo vo = mData.get(position);
+        if (vo == null) {
+            return;
+        }
         holder.mTvAddress.setText(vo.getName());
         holder.itemView.setTag(vo);
         holder.itemView.setId(position);
-        if (mAddress.equals(vo.getName())) {
+        if (mAddress != null && vo.getName() != null && mAddress.equals(vo.getName())) {
             holder.mTvAddress.setTextColor(Color.RED);
         } else {
             holder.mTvAddress.setTextColor(Color.BLACK);

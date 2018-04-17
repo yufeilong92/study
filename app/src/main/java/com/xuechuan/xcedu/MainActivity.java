@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.lzy.okgo.model.Response;
-import com.xuechuan.xcedu.baidu.LocationActivity;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.net.OkTextGetRequest;
-import com.xuechuan.xcedu.net.OkTextPostRequest;
+import com.xuechuan.xcedu.base.OkTextGetRequest;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.player.PolyvPlayerActivity;
 import com.xuechuan.xcedu.ui.LoginActivity;
@@ -38,7 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void initView() {
         mBtnPlay = (Button) findViewById(R.id.btn_play);
         mBtnPlay.setOnClickListener(this);
-        url = getResources().getString(R.string.app_content_token);
+        url = getResources().getString(R.string.app_content_token_text);
         mBtnPlayGet = (Button) findViewById(R.id.btn_play_get);
         mBtnPlayGet.setOnClickListener(this);
         mBtnPlayPost = (Button) findViewById(R.id.btn_play_post);
@@ -82,21 +80,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.btn_play_post:
-                OkTextPostRequest.getInstance().sendRequestPost(mContext, "id2", new StringCallBackView() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        L.e(response.body().toString());
-                    }
-
-                    @Override
-                    public void onError(Response<String> response) {
-
-                    }
-                });
                 break;
             case R.id.btn_location:
-                Intent intent = new Intent(MainActivity.this, LocationActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, LocationActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.btn_baoli:
                 Intent intent1 = new Intent(MainActivity.this, PolyvPlayerActivity.class);

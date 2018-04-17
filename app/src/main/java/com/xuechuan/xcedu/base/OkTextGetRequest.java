@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.net;
+package com.xuechuan.xcedu.base;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,8 +7,7 @@ import android.content.IntentFilter;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.base.BaseHttpServcie;
-import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.net.RequestToken;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
@@ -31,7 +30,7 @@ public class OkTextGetRequest extends BaseHttpServcie {
     private BroadcastReceiver receiver;
 
     public OkTextGetRequest() {
-        infomVo = MyAppliction.getHttpInfomInstance();
+        infomVo = MyAppliction.getInstance().getHttpInfomInstance();
 
     }
 
@@ -58,11 +57,11 @@ public class OkTextGetRequest extends BaseHttpServcie {
     }
     private void requestGet(Context context, String param, final StringCallBackView callBackView) {
         context.unregisterReceiver(receiver);
-        String url = context.getResources().getString(R.string.app_content_get);
+        String url = context.getResources().getString(R.string.app_content_get_text);
         StringSort sort = new StringSort();
         String signature = sort.getOrderMd5Data(param);
         L.e(signature);
-        sendRequestGet(url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, callBackView);
+        sendRequestGetHttp(context,url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, callBackView);
     }
 
 

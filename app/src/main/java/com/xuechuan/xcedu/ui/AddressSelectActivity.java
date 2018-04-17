@@ -10,7 +10,7 @@ import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AddressAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.utils.PushXml;
+import com.xuechuan.xcedu.utils.PushXmlUtil;
 import com.xuechuan.xcedu.utils.RecyclerSelectItem;
 import com.xuechuan.xcedu.vo.ProvincesVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
@@ -28,7 +28,6 @@ import java.util.ArrayList;
  * @Copyright: 2018/4/14
  */
 public class AddressSelectActivity extends BaseActivity {
-
     private RecyclerView mRlvSelAdress;
     private Context mContext;
     /**
@@ -49,7 +48,6 @@ public class AddressSelectActivity extends BaseActivity {
         return intent;
     }
 
-
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_address_select);
@@ -63,7 +61,10 @@ public class AddressSelectActivity extends BaseActivity {
 
     private void initData() {
         if (list == null) {
-            list = PushXml.getInstance().pushXml(mContext);
+            list = PushXmlUtil.getInstance().pushXml(mContext);
+        } else {
+            list.clear();
+            list = PushXmlUtil.getInstance().pushXml(mContext);
         }
     }
 

@@ -1,12 +1,20 @@
 <resources>
     <string name="app_name">学川教育</string>
 
-    <string name="app_content_token">http://app1.xuechuanedu.com/api/Service/Get?staffId=121</string>
-    <string name="app_content_get">http://app1.xuechuanedu.com/api/test/Get?id=2</string>
-    <string name="app_content_post">http://app1.xuechuanedu.com/api/test/POST</string>
+    <string name="app_content_token_text">http://app1.xuechuanedu.com/api/Service/Get?staffId=121</string>
+    <string name="app_content_get_text">http://app1.xuechuanedu.com/api/test/Get?id=2</string>
+    <string name="app_content_post_text">http://app1.xuechuanedu.com/api/test/POST</string>
+    <!--//请求头-->
     <string name="app_content_heat">http://app1.xuechuanedu.com</string>
+    <!--微信接口-->
     <string name="http_url_weixin">/api/auth/login</string>
-    <style name="http_token">/api/Service/Refresh</style>
+    <!--token刷新-->
+    <string name="http_token">/api/Service/Refresh</string>
+    <!--验证码-->
+    <string name="http_code">/api/SecurityCode/Send</string>
+    <!--注册-->
+    <string name="http_register">/api/user/userpost</string>
+
     <!--<string name="app_content_token">http://192.168.1.110/api/Service/Get?staffId=121</string>-->
     <!--<string name="app_content_get">http://192.168.1.110/api/test/Get?id=2</string>-->
     <!--<string name="app_content_post">http://192.168.1.110/api/test/POST</string>-->
@@ -18,8 +26,22 @@
     <string name="tv_search_history">历史记录</string>
     <string name="host_nominate">热门推荐</string>
     <string name="login">登录</string>
+    <string name="login_title">登录学川</string>
+    <string name="regist_phone">手机注册</string>
     <string name="regist">注册</string>
     <string name="forget_password">忘记密码</string>
-    <string name="please_username">请输入用户名</string>
     <string name="please_paw">请输入密码</string>
+    <string name="get_code">获取验证码中..</string>
+    <string name="please_input_phone">请输入手机号码</string>
+    <string name="please_input_code">请输入验证码</string>
+    <string name="please_input_pass">请输入用户密码</string>
+    <string name="login_loading">登陆中...</string>
+    <string name="registerOK">注册成功</string>
+    <string name="phone">手机号码</string>
+    <string name="user_password">账户密码</string>
+    <string name="or">或</string>
+    <string name="code">验证码</string>
+    <string name="sure_password">确认密码</string>
+    <string name="bingphone">绑定手机号</string>
+    <string name="reset_password">重置密码</string>
 </resources>

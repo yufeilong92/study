@@ -1,11 +1,13 @@
 package com.xuechuan.xcedu.utils;
 
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
 
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.ui.RegisterActivity;
 
 /**
@@ -20,6 +22,7 @@ import com.xuechuan.xcedu.ui.RegisterActivity;
  */
 public class CountdownUtil {
     int recLen = 0;
+    private Context mContext;
     Handler handler = new Handler();
     private static CountdownUtil util;
     private Button button;
@@ -31,18 +34,22 @@ public class CountdownUtil {
             if (recLen > 59) {
                 button.setText("重新发送");
                 button.setEnabled(true);
+                button.setTextColor(mContext.getResources().getColor(R.color.red_text));
                 recLen = 0;
                 return;
             }
-            button.setText("" + recLen);
-            handler.postDelayed(this, 1000);
+            button.setTextColor(mContext.getResources().getColor(R.color.gray_text));
+            button.setText("重发" + "(" + recLen + ")");
+            handler.postDelayed(this, 2000);
         }
     };
 
-    public void startTime(final Button button) {
-       this.button=button;
-       handler.postDelayed(runnable,1000);
+    public void startTime(Context context, final Button button) {
+        this.button = button;
+        this.mContext = context;
+        handler.postDelayed(runnable, 1000);
     }
+
     public static CountdownUtil getInstance() {
         if (util == null)
             util = new CountdownUtil();
@@ -50,6 +57,6 @@ public class CountdownUtil {
     }
 
     public void stop() {
-        handler.postDelayed(null,1000);
+        handler.postDelayed(null, 1000);
     }
 }

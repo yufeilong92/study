@@ -4,6 +4,11 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
+
+import com.xuechuan.xcedu.R;
+
+import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -56,7 +61,7 @@ public class ShowDialog {
                 .setTitle(title)
                 .setCancelable(cancelable)
                 .create();
-        if (mDialog == null||!mDialog.isShowing()) {
+        if (mDialog == null || !mDialog.isShowing()) {
             mDialog = builder.show();
         }
 
@@ -90,5 +95,52 @@ public class ShowDialog {
         }
     }
 
+    /**
+     * @param titel 标题
+     * @param cont  内容
+     * @return
+     */
+    public AlertDialog showDialog(String titel, String cont) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_show_dialog, null);
+        TextView tv_msg = view.findViewById(R.id.tv_msg);
+        TextView tv_title = view.findViewById(R.id.tv_dialog_title);
 
+        if (!StringUtil.isEmpty(titel)) {
+            tv_title.setVisibility(View.VISIBLE);
+            tv_title.setText(titel);
+        } else {
+            tv_title.setVisibility(View.GONE);
+        }
+        tv_msg.setText(cont);
+        builder.setView(view)
+                .setCancelable(false)
+                .create();
+        AlertDialog dialog = builder.show();
+        return dialog;
+    }
+//
+//    /**
+//     * @param titel 标题
+//     * @param cont  内容
+//     * @return
+//     */
+//    public MaterialDialog showDialog(String titel, String cont) {
+//        MaterialDialog dialog = new MaterialDialog(mContext);
+//        View view = LayoutInflater.from(mContext).inflate(R.layout.item_show_dialog, null);
+//        TextView tv_msg = view.findViewById(R.id.tv_msg);
+//        TextView tv_title = view.findViewById(R.id.tv_dialog_title);
+//
+//        if (!StringUtil.isEmpty(titel)) {
+//            tv_title.setVisibility(View.VISIBLE);
+//            tv_title.setText(titel);
+//        } else {
+//            tv_title.setVisibility(View.GONE);
+//        }
+//        tv_title.setText(cont);
+//        dialog.setContentView(view);
+//        dialog.setCanceledOnTouchOutside(true);
+//        dialog.show();
+//        return dialog;
+//    }
 }

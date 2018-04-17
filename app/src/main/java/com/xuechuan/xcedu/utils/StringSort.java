@@ -25,7 +25,7 @@ public class StringSort {
      * @return
      */
     public String getOrderMd5Data(String param) {
-        HttpInfomVo infom = MyAppliction.getHttpInfomInstance();
+        HttpInfomVo infom = MyAppliction.getInstance().getHttpInfomInstance();
         String time = infom.getTimeStamp();
         String random = infom.getNonce();
         String staffid = infom.getStaffid();
@@ -50,7 +50,7 @@ public class StringSort {
      * @return
      */
     public String getOrderMd5Data(JSONObject param) {
-        HttpInfomVo infom = MyAppliction.getHttpInfomInstance();
+        HttpInfomVo infom = MyAppliction.getInstance().getHttpInfomInstance();
         String time = infom.getTimeStamp();
         String random = infom.getNonce();
         String staffid = infom.getStaffid();

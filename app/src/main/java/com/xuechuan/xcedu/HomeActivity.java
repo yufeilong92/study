@@ -11,18 +11,37 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomeFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
 import com.xuechuan.xcedu.ui.AddressSelectActivity;
 import com.xuechuan.xcedu.ui.SearchActivity;
+import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.PushXmlUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.ProvincesVo;
 import com.xuechuan.xcedu.weight.AddressTextView;
 
 import java.util.ArrayList;
 
+/**
+ * @version V 1.0 xxxxxxxx
+ * @Title: HomeActivity
+ * @Package com.xuechuan.xcedu
+ * @Description: 主页
+ * @author: L-BackPacker
+ * @date: 2018/4/17 8:30
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
+ * @Copyright: 2018/4/17
+ */
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private FrameLayout mFlContent;
@@ -62,7 +81,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private String mProvice;
     private String mCode;
     private Button mBtnSearch;
-
+    private LocationClient mLocationClient;
 
     //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +93,39 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
-        mProvice = "河南省";
         initView();
         initData();
+        initBaiduLocation();
+    }
 
+    /**
+     * 初始百度
+     */
+    private void initBaiduLocation() {
+        mLocationClient = new LocationClient(getApplicationContext());
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("bd09ll");
+        option.setScanSpan(0);
+        option.setOpenGps(true);
+        option.setLocationNotify(false);
+        option.setIgnoreKillProcess(false);
+        option.SetIgnoreCacheException(false);
+        option.setWifiCacheTimeOut(5 * 60 * 1000);
+        option.setEnableSimulateGps(false);
+        option.setIsNeedAddress(true);
+        mLocationClient.setLocOption(option);
+        mLocationClient.registerLocationListener(locationListener);
+        mLocationClient.start();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (mLocationClient != null) {
+            mLocationClient.restart();
+        }
     }
 
     protected void initView() {
@@ -102,7 +150,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     protected void initData() {
         addFragmentData();
-
     }
 
     private void addFragmentData() {
@@ -129,10 +176,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.btn_home_home:
+            case R.id.btn_home_home://首页
                 Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 0);
                 break;
-            case R.id.btn_home_bank://首页
+            case R.id.btn_home_bank://题库
                 Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 1);
                 break;
             case R.id.btn_home_net://网课
@@ -153,15 +200,28 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUESTCODE && resultCode == REQUESTRESULT) {
-            if (data != null) {
-                mProvice = data.getStringExtra(STR_INT_PROVINCE);
-                mCode = data.getStringExtra(STR_INT_CODE);
-                mTvAddress.setText(mProvice);
-
-            }
-        }
+    protected void onStop() {
+        super.onStop();
+        mLocationClient.stop();
     }
+
+    private BDAbstractLocationListener locationListener = new BDAbstractLocationListener() {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (StringUtil.isEmpty(location.getProvince())) {
+                mLocationClient.restart();
+                return;
+            }
+            String addr = location.getAddrStr();    //获取详细地址信息
+            String country = location.getCountry();    //获取国家
+            String province = location.getProvince();    //获取省份
+            String adCode = location.getAdCode();
+            L.e(province + adCode);
+            mTvAddress.setText(province);
+            String city = location.getCity();    //获取城市
+            String district = location.getDistrict();    //获取区县
+            String street = location.getStreet();    //获取街道信息
+            L.e(addr + "\n" + country + "\n" + province + "\n" + city + "\n" + district + "\n" + street + "\n");
+        }
+    };
 }

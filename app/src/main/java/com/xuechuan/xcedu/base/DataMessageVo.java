@@ -49,5 +49,8 @@ public class DataMessageVo {
     public static final String HTTP_RESOLUTION="resolution";
     //dpi
     public static final String HTTP_DPI="dpi";
+    //定位信息
+    public static final  String LOCATIONACTION="com.xuechaun.loaction";
+
 
 }

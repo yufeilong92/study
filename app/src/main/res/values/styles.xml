@@ -2,19 +2,19 @@
 
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
 
     <!--</style>-->
 
     <style name="App_NOAction" parent="Theme.AppCompat.Light.NoActionBar">
         <!--//actionabr 颜色-->
         <item name="android:windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorPrimary1</item>
+        <item name="colorPrimary">@color/white</item>
         <!--状态栏-->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark1</item>
+        <item name="colorPrimaryDark">@color/transparent</item>
         <item name="colorAccent">@color/activity_topbar_bg</item>
         <item name="android:textColorPrimary">@android:color/black</item>
     </style>
@@ -24,7 +24,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/title_height</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@color/bg_color</item>
+        <item name="android:background">@color/white</item>
         <item name="android:gravity">bottom</item>
     </style>
 
@@ -40,20 +40,21 @@
         <item name="android:layout_height">@dimen/title_action_height</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">@dimen/text_size_mediumex</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
-        <item name="android:textColor">@color/activity_topbar_bg</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
-        <style name="iv_click_controller_port_bottom">
-            <item name="android:layout_width">@dimen/bottom_layout_height</item>
-            <item name="android:layout_height">@dimen/bottom_layout_height</item>
-            <item name="android:layout_centerVertical">true</item>
-            <item name="android:clickable">true</item>
-            <item name="android:background">@drawable/polyv_commom_click_color_gray</item>
-            <item name="android:scaleType">center</item>
+
+    <style name="iv_click_controller_port_bottom">
+        <item name="android:layout_width">@dimen/bottom_layout_height</item>
+        <item name="android:layout_height">@dimen/bottom_layout_height</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/polyv_commom_click_color_gray</item>
+        <item name="android:scaleType">center</item>
     </style>
 
     <style name="iv_click_controller_land_top">
@@ -144,31 +145,61 @@
         <item name="android:paddingTop">@dimen/talk_common_margin</item>
         <item name="android:paddingBottom">@dimen/talk_common_margin</item>
     </style>
+
     <style name="space_8_height">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">8dp</item>
     </style>
+
+    <style name="space_30_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
+    <style name="space_20_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+
+    <style name="space_100_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">100dp</item>
+    </style>
+
     <style name="space_8_width">
         <item name="android:layout_width">8dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
     <style name="space_16_height">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">16dp</item>
     </style>
+
     <style name="space_16_width">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="et_bg">
-        <item name="android:layout_margin">@dimen/space_8</item>
+    <style name="li_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/space_48</item>
-        <item name="android:background">@drawable/bg_login_et</item>
-        <item name="android:paddingEnd">@dimen/space_24</item>
-        <item name="android:paddingRight">@dimen/space_24</item>
-        <item name="android:paddingStart">@dimen/space_24</item>
-        <item name="android:paddingLeft">@dimen/space_24</item>
+        <item name="android:background">@drawable/bg_login_li</item>
+        <item name="android:paddingEnd">@dimen/space_8</item>
+        <item name="android:paddingRight">@dimen/space_8</item>
+        <item name="android:paddingStart">@dimen/space_8</item>
+        <item name="android:paddingLeft">@dimen/space_8</item>
+
+    </style>
+
+    <style name="et_style">
+        <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+        <item name="android:textColor">@color/login_text_color</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/space_8</item>
     </style>
 </resources>

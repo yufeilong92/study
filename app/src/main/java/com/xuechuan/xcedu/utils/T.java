@@ -30,7 +30,7 @@ public class T {
         } else {
             mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         }
-        mhandler.postDelayed(r, 500);
+        mhandler.postDelayed(r, 1000);
         mToast.show();
     }
 

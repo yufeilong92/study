@@ -4,75 +4,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context=".ui.RegisterActivity">
 
     <LinearLayout style="@style/TitleBar">
 
-        <ImageView style="@style/TitleBarAction"
-            android:src="@mipmap/ic_black"
-            android:onClick="onHomeClick"/>
+        <ImageView
+            style="@style/TitleBarAction"
+            android:onClick="onHomeClick"
+            android:src="@mipmap/back" />
 
         <TextView
             style="@style/TitleBarText"
-            android:text="@string/regist" />
+            android:text="@string/regist_phone" />
 
         <ImageView style="@style/TitleBarAction" />
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/space_8"
-        android:text="手机号验证" />
-
-    <EditText
-        android:id="@+id/et_register_phone"
-        style="@style/et_bg"
-        android:hint="手机号码" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <EditText
-            android:id="@+id/et_register_code"
-            android:hint="验证码"
-            style="@style/et_bg"
-            android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_marginRight="@dimen/space_8"
-            android:layout_gravity="center"
-            android:id="@+id/btn_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发送验证码" />
-    </LinearLayout>
-    <TextView
-        android:layout_margin="@dimen/space_8"
-        android:text="密码设置"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/et_register_paw"
-        android:hint="账户密码"
-        android:inputType="textPassword"
-       style="@style/et_bg"/>
-    <EditText
-        android:hint="确认密码"
-        android:inputType="textPassword"
-        android:id="@+id/et_register_paws"
-        style="@style/et_bg"/>
-    <Button
-        android:id="@+id/btn_register_login"
-        android:layout_margin="@dimen/space_8"
-        android:layout_width="match_parent"
-        android:text="注册"
-        android:textSize="@dimen/text_normal"
-        android:textColor="@color/white"
-        android:background="@drawable/select_login_btn_bg"
-        android:layout_height="@dimen/space_48" />
+
+            <Space style="@style/space_30_height" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="@dimen/spance_36"
+                android:text="手机号验证"
+                android:textSize="@dimen/text_size_14" />
+
+            <Space style="@style/space_20_height" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spance_36"
+                android:paddingRight="@dimen/spance_36">
+
+                <LinearLayout style="@style/li_style">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/login_icon_phone" />
+
+                    <EditText
+                        android:id="@+id/et_register_phone"
+                        style="@style/et_style"
+                        android:hint="手机号码"
+                        android:imeOptions="actionNext"
+                        android:inputType="text" />
+                </LinearLayout>
+
+                <Space style="@style/space_20_height" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_48"
+                    android:background="@drawable/bg_login_li"
+                    android:paddingLeft="8dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/login_icon_code" />
+
+                    <EditText
+                        android:id="@+id/et_register_code"
+                        style="@style/et_style"
+                        android:layout_weight="1"
+                        android:hint="@string/code"
+                        android:imeOptions="actionNext"
+                        android:inputType="text" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_marginTop="@dimen/space_8"
+                        android:layout_marginBottom="@dimen/space_8"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray_text" />
+                    <Button
+                        android:id="@+id/btn_send"
+                        android:layout_width="@dimen/spance_120"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textColor="@color/red_text"
+                        android:background="@android:color/transparent"
+                        android:text="发送验证码" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Space style="@style/space_30_height" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spance_36"
+                android:text="密码设置"
+                android:textSize="@dimen/text_size_14" />
+
+            <Space style="@style/space_20_height" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spance_36"
+                android:paddingRight="@dimen/spance_36">
+
+
+                <LinearLayout style="@style/li_style">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/login_icon_password" />
+
+                    <EditText
+                        android:id="@+id/et_register_paw"
+                        style="@style/et_style"
+                        android:layout_weight="1"
+                        android:hint="@string/user_password"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/login_icon_eyeable" />
+                </LinearLayout>
+
+                <Space style="@style/space_20_height" />
+
+                <LinearLayout style="@style/li_style">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/login_icon_password" />
+
+                    <EditText
+                        android:id="@+id/et_register_paws"
+                        style="@style/et_style"
+                        android:layout_weight="1"
+                        android:hint="@string/sure_password"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/login_icon_eyeable" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Space style="@style/space_20_height" />
+
+            <Button
+                android:id="@+id/btn_register_login"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_48"
+                android:layout_marginLeft="@dimen/spance_36"
+                android:layout_marginRight="@dimen/spance_36"
+                android:background="@drawable/btn_login_bg_normal"
+                android:text="@string/bingphone"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -24,29 +24,28 @@ import java.util.Iterator;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class PushXml {
+public class PushXmlUtil {
 
     /**
      * 解析后的数据集合
      */
     private ArrayList<ProvincesVo> mProvinces = null;
-    private static PushXml pushXml;
+    private static PushXmlUtil pushXmlUtil;
     //要解析的xml名字
     private String XML = "province.xml";
 
-    public PushXml() {
+    public PushXmlUtil() {
         if (mProvinces == null) {
             mProvinces = new ArrayList<>();
         } else {
             mProvinces.clear();
         }
     }
-
-    public static PushXml getInstance() {
-        if (pushXml == null) {
-            pushXml = new PushXml();
+    public static PushXmlUtil getInstance() {
+        if (pushXmlUtil == null) {
+            pushXmlUtil = new PushXmlUtil();
         }
-        return pushXml;
+        return pushXmlUtil;
     }
 
     public ArrayList<ProvincesVo> pushXml(Context mContext) {
@@ -79,5 +78,17 @@ public class PushXml {
         }
 
         return mProvinces;
+    }
+
+    public String getLocationCode(Context context, String province) {
+        ArrayList<ProvincesVo> vos = pushXml(context);
+        for (ProvincesVo vo : vos
+                ) {
+            if (vo.getName().contains(province)) {
+                return vo.getCode();
+            }
+        }
+        return null;
+
     }
 }
