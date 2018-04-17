@@ -1,11 +1,11 @@
 package com.xuechuan.xcedu.XceuAppliciton;
 
 import android.app.Application;
-import android.app.Service;
 import android.content.Context;
-import android.os.Vibrator;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.easefun.polyvsdk.PolyvDevMountInfo;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
@@ -13,6 +13,13 @@ import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
@@ -34,10 +41,10 @@ import okhttp3.OkHttpClient;
  * @Copyright: 2018
  */
 public class MyAppliction extends Application {
-    public  final String TAG = "MyAppliction.class";
+    public final String TAG = "MyAppliction.class";
     Context mContext;
-    public  OkHttpClient client;
-    private  HttpInfomVo httpInfom;
+    public OkHttpClient client;
+    private HttpInfomVo httpInfom;
     private PolyvSDKClient mPolyclient;
     private UserInfomVo infomVo;
     private static MyAppliction application;
@@ -50,6 +57,7 @@ public class MyAppliction extends Application {
 
     /**
      * 保存用户信息
+     *
      * @param infomVo
      */
     public void setUserInfom(UserInfomVo infomVo) {
@@ -58,11 +66,13 @@ public class MyAppliction extends Application {
 
     /**
      * 获取用户信息
+     *
      * @return
      */
     public UserInfomVo getUserInfom() {
         return this.infomVo;
     }
+
     //初始化请求数据
     public HttpInfomVo getHttpInfomInstance() {
         return httpInfom;
@@ -96,7 +106,38 @@ public class MyAppliction extends Application {
         JPushInterface.init(this);
     }
 
+    private static ImageLoader imageLoader = ImageLoader.getInstance();
+
+    /**
+     * 调用该方法下载图片
+     * 配置imageLoader图片选项
+     *
+     * @param iv          显示图片控件
+     * @param url         网络或本地图片地址
+     * @param defaultPic  默认图片
+     * @param isRound     true为圆形，false不处理
+     * @param cacheOnDisk true缓存到SD卡，false不缓存到SD卡
+     */
+    public static void displayImages(ImageView iv, String url, boolean isRound) {
+//配置一些图片选项
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.ic_show_erro)// 设置图片在下载期间显示的图片
+                .showImageForEmptyUri(R.mipmap.ic_show_erro)// 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.mipmap.ic_show_erro)// 设置图片加载/解码过程中错误时候显示的图片
+                .cacheInMemory(false)// 设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
+                .considerExifParams(true)//是否考虑JPEG图像EXIF参数（旋转，翻转）
+                .displayer(isRound ? new CircleBitmapDisplayer() : new SimpleBitmapDisplayer())//FadeInBitmapDisplayer(200)listview加载闪烁问题
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)//图片将降低2倍，直到下一减少步骤，使图像更小的目标大小
+                .bitmapConfig(Bitmap.Config.RGB_565)//图片色彩565
+                .build();
+        imageLoader.displayImage(url, iv, options);
+    }
+
     private void initPolyCilent() {
+        // 创建默认的ImageLoader配置参数
+        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
+        ImageLoader.getInstance().init(configuration);
         mPolyclient = PolyvSDKClient.getInstance();
         mPolyclient.initCrashReport(mContext);
         MessageData data = MessageData.getInstance();
