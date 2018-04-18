@@ -1,19 +1,15 @@
 package com.xuechuan.xcedu.base;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.net.RequestToken;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
+import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import org.json.JSONException;
@@ -59,8 +55,9 @@ public class OkPostRequestService extends BaseHttpServcie {
             okTextPostRequest = new OkPostRequestService();
         return okTextPostRequest;
     }
+
     /**
-     * POST请求
+     * POST请求 带有token
      *
      * @param context
      * @param url
@@ -73,29 +70,21 @@ public class OkPostRequestService extends BaseHttpServcie {
             T.showToast(context, context.getString(R.string.please_login));
             return;
         }
-
-    }
-
-    /**
-     * 请求数据
-     *
-     * @param context
-     * @param url
-     * @param param
-     * @param callBackView
-     */
-    private void requestPostWithToken(Context context, String url, JSONObject param, final StringCallBackView callBackView) {
-
-        addParams(context, param);
+        addParams(context,params);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
-        RequestBody requestBody = RequestBody.create(parse, param.toString());
+        UserBean user = vo.getData().getUser();
+        infomVo.setStaffid(String.valueOf(user.getId()));
+        infomVo.setToken(user.getToken());
         StringSort sort = new StringSort();
-        String signature = sort.getOrderMd5Data(param);
-        sendRequestPostHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, requestBody, callBackView);
+        String signature = sort.getOrderMd5Data(params);
+        HttpInfomVo infomVo = getInfomData();
+        RequestBody requestBody = RequestBody.create(parse, params.toString());
+//        sendRequestPostHttp(context,url,infomVo.getStaffid(),infomVo.getTimeStamp(),infomVo.getTimeStamp()
+//        ,signature,requestBody,callBackView);
     }
 
     /***
-     * 登陆请求
+     * 登陆请求 带有token
      * @param context
      * @param url
      * @param param
@@ -107,7 +96,7 @@ public class OkPostRequestService extends BaseHttpServcie {
         addParams(context, param);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
         RequestBody requestBody = RequestBody.create(parse, param.toString());
-        sendRequestPostHttp(context, url, null, time, random8, null, requestBody, callBackView);
+//        sendRequestPostHttp(context, url, null, time, random8, null, requestBody, callBackView);
     }
 
     /**

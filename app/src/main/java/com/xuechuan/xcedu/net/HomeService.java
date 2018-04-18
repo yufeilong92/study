@@ -1,11 +1,10 @@
 package com.xuechuan.xcedu.net;
 
 import android.content.Context;
-import android.view.View;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.base.OkGetHttpService;
+import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.GetParamVo;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class HomeService extends OkGetHttpService {
+public class HomeService extends BaseHttpServcie {
     private Context mContext;
     private static HomeService service;
     private ArrayList<GetParamVo> vos;
@@ -61,7 +60,7 @@ public class HomeService extends OkGetHttpService {
         vo.setValue(num);
         vos.add(vo);
         String url = getUrl(R.string.http_getHot);
-        sendRequestGetWithToken(mContext, url, vos,  callBackView);
+        requestHttpServiceGet(mContext, url, vos,true, callBackView);
     }
 
     /**
@@ -75,7 +74,7 @@ public class HomeService extends OkGetHttpService {
         vo.setValue(province);
         list.add(vo);
         String url = getUrl(R.string.http_infom);
-        sendRequestGetWithToken(mContext, url, list,  callBackView);
+        requestHttpServiceGet(mContext, url, list,true,  callBackView);
 
     }
 
@@ -92,7 +91,7 @@ public class HomeService extends OkGetHttpService {
         paramVo.setValue(staffid);
         list.add(paramVo);
         String url = getUrl(R.string.http_WenZhan);
-        sendRequestGetWithToken(mContext, url, list, callBackView);
+        requestHttpServiceGet(mContext, url, list,true, callBackView);
     }
 
     public void requestHomePager(String provice, StringCallBackView callBackView) {
@@ -112,7 +111,7 @@ public class HomeService extends OkGetHttpService {
         list.add(vo1);
         list.add(vo);
         String url = getUrl(R.string.http_HomePage);
-        sendRequestGetWithToken(mContext, url, list, callBackView);
+        requestHttpServiceGet(mContext, url, list,true, callBackView);
     }
 
     private GetParamVo getParamVo() {
