@@ -8,10 +8,6 @@
     tools:context=".HomeActivity">
 
     <LinearLayout style="@style/TitleBar">
-
-            <ImageView
-                style="@style/TitleBarAction"
-                android:src=""/>
             <ImageView
                 style="@style/TitleBarText"
                 android:text="" />
