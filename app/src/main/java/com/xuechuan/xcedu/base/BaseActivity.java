@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.StringUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
@@ -38,13 +40,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         mBaseTitle = intent.getStringExtra(CSTR_EXTRA_TITLE_STR);
         initContentView(savedInstanceState);
         if (!StringUtil.isEmpty(mBaseTitle)) {
             setTitle(mBaseTitle);
         }
+
 
     }
 
@@ -79,4 +81,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected String getStringWithId(int id) {
         return getResources().getString(id);
     }
+
+
 }

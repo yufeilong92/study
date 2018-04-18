@@ -7,9 +7,15 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.HttpInfomVo;
+
+import java.util.Date;
 
 import okhttp3.RequestBody;
 
@@ -31,9 +37,19 @@ public class BaseHttpServcie {
     private boolean isShow = false;
     private AlertDialog dialog;
 
-    public  void setIsShowDialog(boolean show) {
+    public HttpInfomVo getInfomData() {
+        HttpInfomVo infomVo = MyAppliction.getInstance().getHttpInfomInstance();
+        String time = String.valueOf(new Date().getTime());
+        final String random8 = String.valueOf(Utils.getRandom8());
+        infomVo.setTimeStamp(String.valueOf(time));
+        infomVo.setNonce(String.valueOf(random8));
+        return infomVo;
+    }
+
+    public void setIsShowDialog(boolean show) {
         this.isShow = show;
     }
+
     public void setDialogContext(Context context, String title, String cont) {
         this.context = context;
         this.title = title;
@@ -49,7 +65,7 @@ public class BaseHttpServcie {
             dialog = instance.showDialog(title, cont);
         }
         String hear = context.getResources().getString(R.string.app_content_heat);
-        url=hear.concat(url);
+        url = hear.concat(url);
         OkGo.<String>get(url)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
@@ -83,7 +99,7 @@ public class BaseHttpServcie {
             dialog = instance.showDialog(title, cont);
         }
         String hear = context.getResources().getString(R.string.app_content_heat);
-        url=hear.concat(url);
+        url = hear.concat(url);
         OkGo.<String>post(url)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
@@ -118,8 +134,9 @@ public class BaseHttpServcie {
         if (isShow) {
             dialog = instance.showDialog(title, cont);
         }
-        String hear = context.getResources().getString(R.string.app_content_heat);
-        url=hear.concat(url);
+        String  hear = context.getResources().getString(R.string.app_content_heat);
+        url = hear.concat(url);
+        L.d("请求地址",url);
         OkGo.<String>get(url)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)

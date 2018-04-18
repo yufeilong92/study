@@ -17,10 +17,7 @@ public class UserInfomVo extends BaseVo {
      * 用户数据
      */
     private DataBean data;
-    /**
-     * 状态码
-     */
-    private StatusBean status;
+
 
     public DataBean getData() {
         return data;
@@ -29,15 +26,6 @@ public class UserInfomVo extends BaseVo {
     public void setData(DataBean data) {
         this.data = data;
     }
-
-    public StatusBean getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusBean status) {
-        this.status = status;
-    }
-
     public static class DataBean {
 
         /**
@@ -208,34 +196,6 @@ public class UserInfomVo extends BaseVo {
             public void setUuid(String uuid) {
                 this.uuid = uuid;
             }
-        }
-    }
-
-    public static class StatusBean {
-
-        /**
-         * 成功码（200）
-         */
-        private int code;
-        /**
-         * 信息
-         */
-        private String message;
-
-        public int getCode() {
-            return code;
-        }
-
-        public void setCode(int code) {
-            this.code = code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
         }
     }
 }

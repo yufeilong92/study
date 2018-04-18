@@ -12,20 +12,23 @@
         <com.xuechuan.xcedu.weight.AddressTextView
             android:id="@+id/tv_address"
             android:layout_width="wrap_content"
-            android:padding="@dimen/space_8"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:padding="@dimen/space_8"
             android:text="河南省"
             android:textColor="@color/black" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_search"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
-            android:background="@drawable/btn_home_search_bg" />
+            android:layout_weight="1"
+            android:background="@drawable/btn_home_search_bg"
+            android:gravity="left|center_vertical"
+            android:hint="搜索文章、题库"
+            android:paddingLeft="@dimen/space_8" />
         <!--    <ImageView
                 style="@style/TitleBarText"
                 android:text="" />
@@ -41,39 +44,32 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <LinearLayout
+    <RadioGroup
         android:id="@+id/ll_btns"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_home_home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <RadioButton
+            android:id="@+id/rdb_home_home"
+            style="@style/radiobutton_style"
             android:text="首页" />
 
-        <Button
-            android:id="@+id/btn_home_bank"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <RadioButton
+            android:id="@+id/rdb_home_bank"
+            style="@style/radiobutton_style"
             android:text="题库" />
 
-        <Button
-            android:id="@+id/btn_home_net"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <RadioButton
+            android:id="@+id/rdb_home_net"
+            style="@style/radiobutton_style"
             android:text="网课" />
 
-        <Button
-            android:id="@+id/btn_home_personal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <RadioButton
+            android:id="@+id/rdb_home_personal"
+            style="@style/radiobutton_style"
             android:text="我的" />
 
-    </LinearLayout>
+    </RadioGroup>
 
 </LinearLayout>

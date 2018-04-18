@@ -116,8 +116,7 @@ public class ShowDialog {
         builder.setView(view)
                 .setCancelable(false)
                 .create();
-        AlertDialog dialog = builder.show();
-        return dialog;
+        return builder.show();
     }
 //
 //    /**

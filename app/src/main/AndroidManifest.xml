@@ -35,11 +35,7 @@
         android:supportsRtl="true"
         android:theme="@style/App_NOAction">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".player.PolyvPlayerActivity"
@@ -51,8 +47,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".baidu.LocationActivity" />
-
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="UAh9Ml4SK83z7DfdG9K15Xka3fUAOVUN" />
@@ -63,7 +57,13 @@
             android:process=":remote" />
 
         <activity android:name=".HomeActivity" />
-        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.LoginActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.AddressSelectActivity" />
         <activity android:name=".ui.SearchActivity" />
         <activity android:name=".ui.RegisterActivity"></activity>

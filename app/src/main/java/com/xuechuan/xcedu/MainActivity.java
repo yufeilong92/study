@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.base.OkTextGetRequest;
-import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.player.PolyvPlayerActivity;
 import com.xuechuan.xcedu.ui.LoginActivity;
-import com.xuechuan.xcedu.utils.L;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -66,17 +62,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.btn_play_get:
-                OkTextGetRequest.getInstance().sendRequestGet(mContext, "id2", new StringCallBackView() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        L.e(response.body().toString());
-                    }
-
-                    @Override
-                    public void onError(Response<String> response) {
-
-                    }
-                });
+//                OkTextGetRequest.getInstance().sendRequestGet(mContext, "id2", new StringCallBackView() {
+//                    @Override
+//                    public void onSuccess(Response<String> response) {
+//                        L.e(response.body().toString());
+//                    }
+//
+//                    @Override
+//                    public void onError(Response<String> response) {
+//
+//                    }
+//                });
 
                 break;
             case R.id.btn_play_post:

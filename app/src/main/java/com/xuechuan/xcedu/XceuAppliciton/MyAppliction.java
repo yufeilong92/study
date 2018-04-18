@@ -20,10 +20,12 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.io.File;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -82,6 +84,7 @@ public class MyAppliction extends Application {
     public MyAppliction() {
         if (httpInfom == null) {
             httpInfom = new HttpInfomVo();
+
         }
         if (infomVo == null) {
             new UserInfomVo();

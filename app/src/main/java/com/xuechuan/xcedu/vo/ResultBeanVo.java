@@ -15,15 +15,10 @@ import com.xuechuan.xcedu.base.BaseVo;
 public class ResultBeanVo extends BaseVo {
     private static final long serialVersionUID = -1187399594874356432L;
 
-    /**
-     * StatusCode : 200
-     * Info :
-     * Data : {"StaffId":121,"SignToken":"93d7da31-652d-4559-a16b-6289eac610be","ExpireTime":"2018-04-13 14:36:34"}
-     */
-
     private int StatusCode;
     private String Info;
     private DataBean Data;
+
 
     public int getStatusCode() {
         return StatusCode;
@@ -50,11 +45,6 @@ public class ResultBeanVo extends BaseVo {
     }
 
     public static class DataBean {
-        /**
-         * StaffId : 121
-         * SignToken : 93d7da31-652d-4559-a16b-6289eac610be
-         * ExpireTime : 2018-04-13 14:36:34
-         */
 
         private int StaffId;
         private String SignToken;

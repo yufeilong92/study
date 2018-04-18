@@ -15,12 +15,15 @@ import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ResultBeanVo;
+import com.xuechuan.xcedu.vo.SmsVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 /**
@@ -101,15 +104,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         initView();
         initData();
     }
-   //处理请求
+
+    //处理请求
     private void initData() {
         if (!StringUtil.isEmpty(mType)) {
             if (mType.equals(CEX_INT_TYPE_PAW)) {//找回密码
                 mBtnRegisterLogin.setText(R.string.reset_password);
             } else if (mType.equals(CEX_INT_TYPE_BIND)) {//绑定手机
-                 mBtnRegisterLogin.setText(R.string.bingphone);
+                mBtnRegisterLogin.setText(R.string.bingphone);
             } else if (mType.equals(CEX_INT_TYPE_REG)) {//注册
-               mBtnRegisterLogin.setText(R.string.regist);
+                mBtnRegisterLogin.setText(R.string.regist);
             }
         }
     }
@@ -137,7 +141,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.btn_send://发送验证码
                 String phone = getTextStr(mEtRegisterPhone);
                 if (!StringUtil.isEmpty(phone)) {
-                    CountdownUtil.getInstance().startTime(mContext,mBtnSend);
+                    CountdownUtil.getInstance().startTime(mContext, mBtnSend);
                     mBtnSend.setEnabled(false);
                     sendRequestCodeHttp(phone);
                 } else {
@@ -155,14 +159,34 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * 请求验证码
      */
     private void sendRequestCodeHttp(String phone) {
-        RegisterService service = RegisterService.getInstance(mContext);
+        final RegisterService service = RegisterService.getInstance(mContext);
         service.setIsShowDialog(false);
         service.setDialogContext(mContext, null, getString(R.string.get_code));
         service.requestRegisterCode(phone, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
-                L.d(response.body().toString());
-                T.showToast(mContext, "验证码已发送");
+                String message = response.body().toString();
+                Gson gson = new Gson();
+                SmsVo smsVo = gson.fromJson(message, SmsVo.class);
+                SmsVo.StatusBean status = smsVo.getStatus();
+                L.d("短信",message);
+                int code = status.getCode();
+                if (code == 200) {
+                    SmsVo.DataBean data = smsVo.getData();
+                    int status1 = data.getStatus();
+                    switch (status1) {
+                        case 1:
+                            T.showToast(mContext, getString(R.string.sms_ok));
+                            break;
+                        case -1:
+                            T.showToast(mContext, getString(R.string.sms_ok_repeat));
+                            break;
+                        case -2:
+                            T.showToast(mContext, getString(R.string.sms_fail));
+                            break;
+                        default:
+                    }
+                }
             }
 
             @Override
@@ -194,9 +218,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             T.showToast(mContext, getString(R.string.please_input_pass));
             return;
         }
+        if (paw.length() < 6) {
+            T.showToast(mContext, getString(R.string.passundersixt));
+            return;
+        }
         String paws = getTextStr(mEtRegisterPaws);
         if (TextUtils.isEmpty(paws)) {
             T.showToast(mContext, getString(R.string.please_input_pass));
+            return;
+        }
+        if (paws.length() < 6) {
+            T.showToast(mContext, getString(R.string.passundersixt));
             return;
         }
         if (!paw.equals(paws)) {
@@ -206,18 +238,36 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         RegisterService service = RegisterService.getInstance(mContext);
         service.setIsShowDialog(true);
         service.setDialogContext(null, getString(R.string.login_loading));
-        service.requestRegister(mType,phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
+        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 String message = response.body().toString();
                 Gson gson = new Gson();
                 UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
+                if (vo == null) {
+                    return;
+                }
                 int code1 = vo.getStatus().getCode();
                 if (code1 == 200) {//注册成功
-                    T.showToast(mContext, getString(R.string.registerOK));
-                    MyAppliction.getInstance().setUserInfom(vo);
-                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                    UserInfomVo.DataBean data = vo.getData();
+                    int status = data.getStatus();
+                    switch (status) {
+                        case 1:
+                            T.showToast(mContext, getString(R.string.registerOK));
+                            MyAppliction.getInstance().setUserInfom(vo);
+                            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            break;
+                        case -1:
+                            T.showToast(mContext, getString(R.string.phone_register));
+                            break;
+                        case -2:
+                            T.showToast(mContext, "验证码已过期或验证码不正确");
+                            break;
+                        default:
+
+                    }
+
                 } else {//失败
                     String message1 = vo.getStatus().getMessage();
                     T.showToast(mContext, message1);

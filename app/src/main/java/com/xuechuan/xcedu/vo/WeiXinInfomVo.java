@@ -13,22 +13,10 @@ import com.xuechuan.xcedu.base.BaseVo;
  * @Copyright: 2018
  */
 public class WeiXinInfomVo extends BaseVo{
-    /***
-     * 状态码
-     */
-    private StatusBean status;
     /**
      * 数据bean
      */
     private DataBean data;
-
-    public StatusBean getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusBean status) {
-        this.status = status;
-    }
 
     public DataBean getData() {
         return data;
@@ -38,32 +26,6 @@ public class WeiXinInfomVo extends BaseVo{
         this.data = data;
     }
 
-    public static class StatusBean {
-        /**
-         * 结果码 200(成功)
-         */
-        private int code;
-        /***
-         * 错误信息
-         */
-        private String message;
-
-        public int getCode() {
-            return code;
-        }
-
-        public void setCode(int code) {
-            this.code = code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-    }
 
     public static class DataBean {
         private int code;

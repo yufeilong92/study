@@ -19,7 +19,7 @@ public abstract class BaseFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(initInflateView(), container, false);
         initCreateView(savedInstanceState);
-        return  inflate;
+        return inflate;
     }
 
     @Override
@@ -27,8 +27,14 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initViewCreate(view, savedInstanceState);
     }
+
     protected abstract int initInflateView();
+
     protected abstract void initCreateView(Bundle savedInstanceState);
+
     protected abstract void initViewCreate(View view, Bundle savedInstanceState);
 
+    protected String getStrWithId(int str) {
+        return this.getResources().getString(str);
+    }
 }

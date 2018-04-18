@@ -86,4 +86,5 @@ dependencies {
     implementation files('libs/jcore-android-1.2.0.jar')
     implementation files('libs/jpush-android-3.1.2.jar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 }

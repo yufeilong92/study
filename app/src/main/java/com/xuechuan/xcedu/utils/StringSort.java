@@ -3,9 +3,12 @@ package com.xuechuan.xcedu.utils;
 import android.util.Log;
 
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -36,7 +39,38 @@ public class StringSort {
         }
         String sort = sort(data);
         String md5 = Md5.getMD5String(sort);
-       String md5String = md5.toUpperCase();
+        String md5String = md5.toUpperCase();
+        Log.i("yfl", "升序结果: " + sort);
+        Log.i("yfl", "getOrderMd5Data: " + md5);
+        Log.i("yfl", "大小写结果: " + md5String);
+        return md5String;
+    }
+
+    /**
+     * 获取升序后的数据
+     *
+     * @param obj 集合
+     * @return
+     */
+    public String getOrderMd5Data(ArrayList<GetParamVo> obj) {
+        HttpInfomVo infom = MyAppliction.getInstance().getHttpInfomInstance();
+        String time = infom.getTimeStamp();
+        String random = infom.getNonce();
+        String staffid = infom.getStaffid();
+        String token = infom.getToken();
+        String data = null;
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < obj.size(); i++) {
+            String str = obj.get(i).getParam() + obj.get(i).getValue();
+            buffer.append(str);
+        }
+        L.d("yfl",buffer.toString());
+        if (obj != null && !obj.isEmpty()) {
+            data = time + random + staffid + token + buffer.toString();
+        }
+        String sort = sort(data);
+        String md5 = Md5.getMD5String(sort);
+        String md5String = md5.toUpperCase();
         Log.i("yfl", "升序结果: " + sort);
         Log.i("yfl", "getOrderMd5Data: " + md5);
         Log.i("yfl", "大小写结果: " + md5String);
@@ -62,7 +96,7 @@ public class StringSort {
             data = time + random + staffid + token + param.toString();
         }
         String sort = sort(data);
-        String md5= Md5.getMD5String(sort);
+        String md5 = Md5.getMD5String(sort);
         String md5String = md5.toUpperCase();
         Log.i("yfl", "升序排序结果: " + sort);
         Log.i("yfl", "getOrderMd5Data: " + md5);
@@ -73,6 +107,7 @@ public class StringSort {
 
     /**
      * 升序排序
+     *
      * @param str
      * @return
      */

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,14 +22,17 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.net.LoginService;
 import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.vo.WeiXinInfomVo;
 
 /**
@@ -50,8 +54,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextView mTvLoginRegist;
     private Context mContext;
     private ImageView mIvWeixinlogin;
-    private ShowDialog mdialog;
-
+    private ShowDialog mDialog;
     private IWXAPI api;
     private BroadcastReceiver receiver;
     //    @Override
@@ -99,6 +102,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login_login://登录
+                submit();
                 break;
             case R.id.tv_login_forgetpaw://忘记密码
                 Intent intent1 = RegisterActivity.newInstance(mContext, RegisterActivity.CEX_INT_TYPE_PAW, null, null);
@@ -125,11 +129,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         receiver = new BroadcastReceiver() {
 
 
-
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent != null) {
-                    mdialog = ShowDialog.getInstance(mContext);
+
                     String extra = intent.getStringExtra(DataMessageVo.WEISTATE);
                     String code = intent.getStringExtra(DataMessageVo.WEICODE);
                     requestLogin(extra, code);
@@ -141,6 +144,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
@@ -185,7 +189,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void requestLogin(String extra, String code) {
+
         WeiXinLoginSercvice instance = WeiXinLoginSercvice.getInstance(mContext);
+        instance.setIsShowDialog(true);
+        instance.setDialogContext(mContext, null, getString(R.string.loading));
         instance.requestWeiCode(code, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
@@ -201,6 +208,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (voData.isIsbinduser()) {//已经绑定数据（手机）
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {//没有绑定手机
                     Intent intent = RegisterActivity.newInstance(mContext, voData.getOpenid(), RegisterActivity.CEX_INT_TYPE_BIND, voData.getUnionid());
                     intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
@@ -231,10 +239,69 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         String password = getTextStr(mEtLoginPassword);
+        if (password.length() < 6) {
+            T.showToast(mContext, getStringWithId(R.string.passundersixt));
+            return;
+        }
         if (TextUtils.isEmpty(password)) {
             T.showToast(mContext, R.string.please_paw);
             return;
         }
+        final LoginService service = LoginService.getInstance(mContext);
+        service.setIsShowDialog(true);
+        service.setDialogContext(null, getStringWithId(R.string.login_loading));
+        service.requestlogin(username, password, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                String message = response.body().toString();
+                L.d("登录成功", message);
+                Gson gson = new Gson();
+                UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
+                if (vo.getStatus().getCode() == 200) {
+                    UserInfomVo.DataBean voData = vo.getData();
+                    int status = voData.getStatus();
+                    if (status == -1) {
+                        T.showToast(mContext, "账号被禁用");
+                        return;
+                    }
+                    if (status == -2) {
+                        T.showToast(mContext, "账号密码错误");
+                        return;
+                    }
+                    if (status == -3) {
+                        T.showToast(mContext, "账号未注册");
+                        return;
+                    }
+                    MyAppliction.getInstance().setUserInfom(vo);
+                    HomeActivity.newInstance(mContext, null, null);
+                } else {
+                    T.showToast(mContext, vo.getStatus().getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+            }
+        });
+    }
+
+    // TODO: 2018/4/18 刷新token
+    private void refreshToken(UserInfomVo vo, LoginService service) {
+        //刷新token
+        LoginService loginService = LoginService.getInstance(mContext);
+        int id = vo.getData().getUser().getId();
+        String token = vo.getData().getUser().getToken();
+        loginService.requestRefeshToken(String.valueOf(id), token, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                L.e(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+
+            }
+        });
     }
 
 }

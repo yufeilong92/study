@@ -11,12 +11,12 @@
 
         <ImageView
             style="@style/TitleBarAction"
-            android:gravity="center_vertical"
-            android:textColor="@color/white" />
+            android:onClick="onHomeClick"
+            android:src="@mipmap/back" />
 
-        <ImageView
+        <TextView
             style="@style/TitleBarText"
-            android:text="" />
+            android:text="定位" />
 
         <ImageView
             style="@style/TitleBarAction"
