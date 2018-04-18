@@ -68,7 +68,8 @@
                         style="@style/et_style"
                         android:hint="手机号码"
                         android:imeOptions="actionNext"
-                        android:inputType="text" />
+                        android:inputType="number"
+                        android:maxLength="11" />
                 </LinearLayout>
 
                 <Space style="@style/space_20_height" />
@@ -90,22 +91,24 @@
                         android:layout_weight="1"
                         android:hint="@string/code"
                         android:imeOptions="actionNext"
-                        android:inputType="text" />
+                        android:inputType="number"
+                        android:maxLength="4" />
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_marginTop="@dimen/space_8"
-                        android:layout_marginBottom="@dimen/space_8"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/space_8"
+                        android:layout_marginTop="@dimen/space_8"
                         android:background="@color/gray_text" />
+
                     <Button
                         android:id="@+id/btn_send"
                         android:layout_width="@dimen/spance_120"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:textColor="@color/red_text"
                         android:background="@android:color/transparent"
-                        android:text="发送验证码" />
+                        android:text="发送验证码"
+                        android:textColor="@color/red_text" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -144,10 +147,9 @@
                         android:imeOptions="actionNext"
                         android:inputType="textPassword" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/login_icon_eyeable" />
+                    <CheckBox
+                        android:id="@+id/chb_show_pasw"
+                        style="@style/chb_paw" />
                 </LinearLayout>
 
                 <Space style="@style/space_20_height" />
@@ -167,11 +169,9 @@
                         android:imeOptions="actionDone"
                         android:inputType="textPassword" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/login_icon_eyeable" />
+                    <CheckBox
+                        android:id="@+id/chb_show_passw"
+                        style="@style/chb_paw" />
                 </LinearLayout>
             </LinearLayout>
 

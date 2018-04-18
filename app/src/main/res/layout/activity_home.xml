@@ -9,16 +9,17 @@
 
     <LinearLayout style="@style/TitleBar">
 
-            <ImageView
-                style="@style/TitleBarAction"
-                android:src=""/>
-            <ImageView
-                style="@style/TitleBarText"
-                android:text="" />
+        <ImageView
+            style="@style/TitleBarAction"
+            android:clickable="false" />
 
-            <ImageView
-                style="@style/TitleBarAction"
-                android:clickable="false" />
+        <TextView
+            style="@style/TitleBarText"
+            android:text="" />
+
+        <ImageView
+            style="@style/TitleBarAction"
+            android:clickable="false" />
     </LinearLayout>
 
     <FrameLayout
@@ -34,27 +35,27 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_home"
             style="@style/radiobutton_style"
+            android:drawableTop="@mipmap/back"
             android:text="首页" />
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_bank"
             style="@style/radiobutton_style"
+            android:drawableTop="@mipmap/back"
             android:text="题库" />
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_net"
             style="@style/radiobutton_style"
+            android:drawableTop="@mipmap/back"
             android:text="网课" />
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_personal"
             style="@style/radiobutton_style"
+            android:drawableTop="@mipmap/back"
             android:text="我的" />
 
     </RadioGroup>

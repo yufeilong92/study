@@ -22,15 +22,18 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import com.xuechuan.xcedu.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -1565,4 +1568,27 @@ public class Utils {
         return String.valueOf(metrics.densityDpi);
     }
 
+    public static void showPassWord(CheckBox mChbLoginEyable,final EditText editText) {
+        mChbLoginEyable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "onCheckedChanged: "+isChecked);
+                if(isChecked) {
+                    //选择状态 显示明文--设置为可见的密码
+                    //mEtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    /**
+                     * 第二种
+                     */
+                    editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    //默认状态显示密码--设置文本 要一起写才能起作用 InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    //mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    /**
+                     * 第二种
+                     */
+                    editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
+    }
 }

@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +32,7 @@ import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 /**
@@ -56,7 +57,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ShowDialog mDialog;
     private IWXAPI api;
     private BroadcastReceiver receiver;
-    //    @Override
+    private CheckBox mChbLoginEyable;
+
+//    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_login);
@@ -95,12 +98,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mContext = this;
         mIvWeixinlogin = (ImageView) findViewById(R.id.iv_weixinlogin);
         mIvWeixinlogin.setOnClickListener(this);
+        mChbLoginEyable = (CheckBox) findViewById(R.id.chb_login_eyable);
+        mChbLoginEyable.setOnClickListener(this);
+        Utils.showPassWord(mChbLoginEyable,mEtLoginPassword);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login_login://登录
+                Utils.hideInputMethod(LoginActivity.this);
                 submit();
                 break;
             case R.id.tv_login_forgetpaw://忘记密码
@@ -114,6 +121,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.iv_weixinlogin://微信登录
                 loginWeiXin();
+                break;
+            case R.id.chb_login_eyable:
+
                 break;
         }
     }

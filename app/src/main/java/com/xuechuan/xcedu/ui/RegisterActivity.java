@@ -3,10 +3,10 @@ package com.xuechuan.xcedu.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -15,14 +15,13 @@ import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.ResultBeanVo;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.SmsVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
@@ -47,6 +46,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText mEtRegisterCode;
     private Context mContext;
     private Button mBtnRegisterLogin;
+    private CheckBox mChbShowPasw;
+    private CheckBox mChbShowPassw;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 //        setContentView(R.layout.activity_register);
 //        initView();
 //    }
+
     /**
      * 微信
      */
@@ -132,6 +134,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mContext = this;
         mBtnRegisterLogin = (Button) findViewById(R.id.btn_register_login);
         mBtnRegisterLogin.setOnClickListener(this);
+        mChbShowPasw = (CheckBox) findViewById(R.id.chb_show_pasw);
+        mChbShowPasw.setOnClickListener(this);
+        mChbShowPassw = (CheckBox) findViewById(R.id.chb_show_passw);
+        mChbShowPassw.setOnClickListener(this);
     }
 
 
@@ -139,8 +145,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_send://发送验证码
+                Utils.hideInputMethod(RegisterActivity.this);
                 String phone = getTextStr(mEtRegisterPhone);
                 if (!StringUtil.isEmpty(phone)) {
+                    if (Utils.isPhoneNum(phone)) {
+                        T.showToast(mContext, getString(R.string.please_right_phone));
+                        return;
+                    }
                     CountdownUtil.getInstance().startTime(mContext, mBtnSend);
                     mBtnSend.setEnabled(false);
                     sendRequestCodeHttp(phone);
@@ -148,12 +159,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     T.showToast(mContext, getString(R.string.please_input_phone));
                 }
                 break;
-
             case R.id.btn_register_login://登录
+                Utils.hideInputMethod(RegisterActivity.this);
                 submit();
+                break;
+            case R.id.chb_show_pasw:
+                Utils.showPassWord(mChbShowPasw, mEtRegisterPaw);
+                break;
+            case R.id.chb_show_passw:
+                Utils. showPassWord(mChbShowPassw, mEtRegisterPaws);
                 break;
         }
     }
+
+
 
     /**
      * 请求验证码
@@ -169,7 +188,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Gson gson = new Gson();
                 SmsVo smsVo = gson.fromJson(message, SmsVo.class);
                 SmsVo.StatusBean status = smsVo.getStatus();
-                L.d("短信",message);
+                L.d("短信", message);
                 int code = status.getCode();
                 if (code == 200) {
                     SmsVo.DataBean data = smsVo.getData();
