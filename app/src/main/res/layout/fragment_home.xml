@@ -1,24 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mlns="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:mlns="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     tools:context=".fragment.HomeFragment">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <com.xuechuan.xcedu.weight.AddressTextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:padding="@dimen/space_8"
+            android:text="河南省"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/btn_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_home_search_bg"
+            android:gravity="left|center_vertical"
+            android:hint="搜索文章、题库"
+            android:paddingLeft="@dimen/space_8" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <com.youth.banner.Banner
             android:id="@+id/ban_home"
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_150" />
-       <LinearLayout
-           android:orientation="horizontal"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
 
-       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_56"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/space_8"
+                android:layout_marginLeft="@dimen/space_24"
+                android:layout_marginRight="@dimen/space_8"
+                android:layout_marginStart="@dimen/space_24"
+                android:layout_weight="1"
+                android:background="@drawable/select_home_rl_bg"
+                android:gravity="center"
+                android:padding="@dimen/space_8">
+
+                <ImageView
+                    android:id="@+id/iv_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher_round" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/iv_option"
+                    android:gravity="center_vertical"
+                    android:text="@string/home_teacherMateri"
+                    android:textSize="@dimen/text_size_20" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/space_24"
+                android:layout_marginLeft="@dimen/space_8"
+                android:layout_marginRight="@dimen/space_24"
+                android:layout_marginStart="@dimen/space_8"
+                android:layout_weight="1"
+                android:background="@drawable/select_home_rl_bg"
+                android:gravity="center"
+                android:padding="@dimen/space_8">
+
+                <ImageView
+                    android:id="@+id/iv_lift_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher_round" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/iv_lift_option"
+                    android:gravity="center_vertical"
+                    android:text="@string/home_specs"
+                    android:textSize="@dimen/text_size_20" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <include
+            layout="@layout/home_infom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </FrameLayout>

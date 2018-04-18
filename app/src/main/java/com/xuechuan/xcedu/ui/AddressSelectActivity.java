@@ -10,6 +10,7 @@ import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AddressAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.fragment.HomeFragment;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
 import com.xuechuan.xcedu.utils.RecyclerSelectItem;
 import com.xuechuan.xcedu.vo.ProvincesVo;
@@ -87,10 +88,10 @@ public class AddressSelectActivity extends BaseActivity {
             @Override
             public void onClickListener(ProvincesVo vo, int position) {
                 Intent intent = new Intent();
-                intent.putExtra(HomeActivity.STR_INT_PROVINCE, vo.getName());
-                intent.putExtra(HomeActivity.STR_INT_CODE, vo.getCode());
-                intent.putExtra(HomeActivity.STR_INT_POSITION, position);
-                setResult(HomeActivity.REQUESTRESULT, intent);
+                intent.putExtra(HomeFragment.STR_INT_PROVINCE, vo.getName());
+                intent.putExtra(HomeFragment.STR_INT_CODE, vo.getCode());
+                intent.putExtra(HomeFragment.STR_INT_POSITION, position);
+                setResult(HomeFragment.REQUESTRESULT, intent);
                 finish();
             }
         });

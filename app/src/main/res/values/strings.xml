@@ -68,4 +68,8 @@
     <string name="sms_fail">短信发送失败</string>
     <string name="phone_register">该手机号已注册</string>
     <string name="location">定位</string>
+    <string name="home_teacherMateri">教材</string>
+    <string name="home_specs">规范</string>
+    <string name="home_infom">推荐资讯</string>
+    <string name="home_infom_all">推荐文章</string>
 </resources>

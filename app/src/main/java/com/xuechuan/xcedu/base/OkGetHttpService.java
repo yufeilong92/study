@@ -15,6 +15,7 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
+import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import org.json.JSONException;
@@ -62,7 +63,8 @@ public class OkGetHttpService extends BaseHttpServcie {
             return;
         }
 
-        UserInfomVo.DataBean.UserBean user = userInfomVo.getData().getUser();
+        UserBean user = userInfomVo.getData().getUser();
+
         int id = user.getId();
         infomVo.setStaffid(String.valueOf(id));
         String token = user.getToken();

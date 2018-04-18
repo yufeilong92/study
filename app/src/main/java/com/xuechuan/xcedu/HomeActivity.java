@@ -79,10 +79,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
      */
     public static String STR_INT_POSITION = "position";
     private AddressTextView mTvAddress;
-    private String mProvice;
-    private String mCode;
     private TextView mTvSearch;
-    private LocationClient mLocationClient;
+
     private static HomeActivity service;
 
     private static String Params = "Params";
@@ -106,39 +104,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
         initView();
-        initBaiduLocation();
         initData();
     }
 
-    /**
-     * 初始百度
-     */
-    private void initBaiduLocation() {
-        mLocationClient = new LocationClient(getApplicationContext());
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-        option.setScanSpan(0);
-        option.setOpenGps(true);
-        option.setLocationNotify(false);
-        option.setIgnoreKillProcess(false);
-        option.SetIgnoreCacheException(false);
-        option.setWifiCacheTimeOut(5 * 60 * 1000);
-        option.setEnableSimulateGps(false);
-        option.setIsNeedAddress(true);
-        mLocationClient.setLocOption(option);
-        mLocationClient.registerLocationListener(locationListener);
-        mLocationClient.start();
 
-    }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (mLocationClient != null) {
-            mLocationClient.restart();
-        }
-    }
 
     protected void initView() {
         mContext = this;
@@ -201,9 +171,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 3);
                 break;
             case R.id.tv_address://地址
-                Intent intent = AddressSelectActivity.newInstance(mContext, mProvice);
-                intent.putExtra(AddressSelectActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.location));
-                startActivityForResult(intent, REQUESTCODE);
+//                Intent intent = AddressSelectActivity.newInstance(mContext, mProvice);
+//                intent.putExtra(AddressSelectActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.location));
+//                startActivityForResult(intent, REQUESTCODE);
                 break;
             case R.id.btn_search://搜素
                 Intent searchIntent = new Intent(HomeActivity.this, SearchActivity.class);
@@ -212,28 +182,5 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mLocationClient.stop();
-    }
 
-    private BDAbstractLocationListener locationListener = new BDAbstractLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            if (StringUtil.isEmpty(location.getProvince())) {
-                mLocationClient.restart();
-                return;
-            }
-            String province = location.getProvince();    //获取省份
-            mTvAddress.setText(province);
-            L.d("定位位置",province);
-            EventBus.getDefault().post(new ProvinceEvent(province));
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

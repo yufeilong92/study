@@ -33,7 +33,6 @@ import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.UserInfomVo;
-import com.xuechuan.xcedu.vo.WeiXinInfomVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -199,8 +198,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String infom = response.body().toString();
                 L.d(infom);
                 Gson gson = new Gson();
-                WeiXinInfomVo vo = gson.fromJson(infom, WeiXinInfomVo.class);
-                WeiXinInfomVo.DataBean voData = vo.getData();
+                UserInfomVo vo = gson.fromJson(infom, UserInfomVo.class);
+                UserInfomVo.DataBean voData = vo.getData();
                 if (vo.getStatus().getCode() != 200) {//失败情况
                     T.showToast(mContext, vo.getStatus().getMessage());
                     return;

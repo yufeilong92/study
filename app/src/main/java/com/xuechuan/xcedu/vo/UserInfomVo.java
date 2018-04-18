@@ -38,6 +38,55 @@ public class UserInfomVo extends BaseVo {
          */
         private int status;
         private UserBean user;
+        private int code;
+        /**
+         * 平台id
+         */
+        private String unionid;
+        /**
+         * 微信标识
+         */
+        private String openid;
+        /**
+         * 是否绑定手机号（true 绑定 false 未绑定）
+         */
+        private boolean isbinduser;
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getUnionid() {
+            return unionid;
+        }
+
+        public void setUnionid(String unionid) {
+            this.unionid = unionid;
+        }
+
+        public String getOpenid() {
+            return openid;
+        }
+
+        public void setOpenid(String openid) {
+            this.openid = openid;
+        }
+
+        public boolean isIsbinduser() {
+            return isbinduser;
+        }
+
+        public void setIsbinduser(boolean isbinduser) {
+            this.isbinduser = isbinduser;
+        }
+
+        /**
+         * 用户信息
+         */
 
         public String getInfo() {
             return info;
@@ -63,139 +112,5 @@ public class UserInfomVo extends BaseVo {
             this.user = user;
         }
 
-        public static class UserBean {
-            /**
-             * 生日
-             */
-            private String birthday;
-            /**
-             * 城市
-             */
-            private String city;
-            /**
-             * 性别（1男,2女）
-             */
-            private int gender;
-            /**
-             * 头像
-             */
-            private String headicon;
-            /**
-             * id
-             */
-            private int id;
-            /**
-             * 昵称
-             */
-            private String nickname;
-            /**
-             * 手机号
-             */
-            private String phone;
-            /**
-             * 省份
-             */
-            private String province;
-            /**
-             * token
-             */
-            private String token;
-            /**
-             * token 时效
-             */
-            private String tokenexpire;
-            /**
-             * 用户标识
-             */
-            private String uuid;
-
-            public String getBirthday() {
-                return birthday;
-            }
-
-            public void setBirthday(String birthday) {
-                this.birthday = birthday;
-            }
-
-            public String getCity() {
-                return city;
-            }
-
-            public void setCity(String city) {
-                this.city = city;
-            }
-
-            public int getGender() {
-                return gender;
-            }
-
-            public void setGender(int gender) {
-                this.gender = gender;
-            }
-
-            public String getHeadicon() {
-                return headicon;
-            }
-
-            public void setHeadicon(String headicon) {
-                this.headicon = headicon;
-            }
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public String getNickname() {
-                return nickname;
-            }
-
-            public void setNickname(String nickname) {
-                this.nickname = nickname;
-            }
-
-            public String getPhone() {
-                return phone;
-            }
-
-            public void setPhone(String phone) {
-                this.phone = phone;
-            }
-
-            public String getProvince() {
-                return province;
-            }
-
-            public void setProvince(String province) {
-                this.province = province;
-            }
-
-            public String getToken() {
-                return token;
-            }
-
-            public void setToken(String token) {
-                this.token = token;
-            }
-
-            public String getTokenexpire() {
-                return tokenexpire;
-            }
-
-            public void setTokenexpire(String tokenexpire) {
-                this.tokenexpire = tokenexpire;
-            }
-
-            public String getUuid() {
-                return uuid;
-            }
-
-            public void setUuid(String uuid) {
-                this.uuid = uuid;
-            }
-        }
     }
 }

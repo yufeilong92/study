@@ -9,33 +9,16 @@
 
     <LinearLayout style="@style/TitleBar">
 
-        <com.xuechuan.xcedu.weight.AddressTextView
-            android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:padding="@dimen/space_8"
-            android:text="河南省"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/btn_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/btn_home_search_bg"
-            android:gravity="left|center_vertical"
-            android:hint="搜索文章、题库"
-            android:paddingLeft="@dimen/space_8" />
-        <!--    <ImageView
+            <ImageView
+                style="@style/TitleBarAction"
+                android:src=""/>
+            <ImageView
                 style="@style/TitleBarText"
                 android:text="" />
 
             <ImageView
                 style="@style/TitleBarAction"
-                android:clickable="false" />-->
+                android:clickable="false" />
     </LinearLayout>
 
     <FrameLayout
@@ -51,21 +34,25 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_home"
             style="@style/radiobutton_style"
             android:text="首页" />
 
         <RadioButton
+            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_bank"
             style="@style/radiobutton_style"
             android:text="题库" />
 
         <RadioButton
+            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_net"
             style="@style/radiobutton_style"
             android:text="网课" />
 
         <RadioButton
+            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_personal"
             style="@style/radiobutton_style"
             android:text="我的" />
