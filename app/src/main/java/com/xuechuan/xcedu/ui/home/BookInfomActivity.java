@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseActivity;
+
 /**
  * @Title:  BookInfomActivity
  * @Package com.xuechuan.xcedu.ui
@@ -15,7 +17,7 @@ import com.xuechuan.xcedu.R;
  * @verdescript  版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class BookInfomActivity extends AppCompatActivity {
+public class BookInfomActivity extends BaseActivity {
     /**
      * 章
      */
@@ -28,6 +30,11 @@ public class BookInfomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_book_infom);
         initView();
         initData();

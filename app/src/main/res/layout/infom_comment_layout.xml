@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <WebView
-        android:id="@+id/wb_infom"
+        android:id="@+id/web_infom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -374,6 +375,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(searchIntent);
                 break;
             case R.id.rl_home_book://教材
+                Log.e("yfl", "onClick: " );
                 BookActivity.newInstance(mContext, null, null);
                 break;
             case R.id.rl_home_standard://规范

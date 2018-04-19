@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseActivity;
+
 /**
  * @Title:  BookActivity
  * @Package com.xuechuan.xcedu.ui
@@ -17,7 +19,7 @@ import com.xuechuan.xcedu.R;
  * @verdescript  版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class BookActivity extends AppCompatActivity {
+public class BookActivity extends BaseActivity {
 
     private ImageView mIvBookSkill;
     private ImageView mIvBookColligate;
@@ -38,6 +40,11 @@ public class BookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_book);
         if (getIntent()!=null){
             params = getIntent().getStringExtra(PARAMP);

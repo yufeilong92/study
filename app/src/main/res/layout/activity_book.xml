@@ -11,6 +11,7 @@
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
+            android:onClick="onHomeClick"
             style="@style/TitleBarAction"
             android:src="@mipmap/back" />
 

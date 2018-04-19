@@ -6,28 +6,33 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseActivity;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
+
 /**
- * @Title:  InfomActivity
+ * @version V 1.0 xxxxxxxx
+ * @Title: InfomActivity
  * @Package com.xuechuan.xcedu.ui
  * @Description: 详情信息页
  * @author: L-BackPacker
- * @date:   2018/4/19 16:35
- * @version V 1.0 xxxxxxxx
- * @verdescript  版本号 修改时间  修改人 修改的概要说明
+ * @date: 2018/4/19 16:35
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class InfomActivity extends AppCompatActivity {
+public class InfomActivity extends BaseActivity implements View.OnClickListener {
 
     private WebView mWebInfom;
     private RelativeLayout mRlvInfomShow;
@@ -35,6 +40,11 @@ public class InfomActivity extends AppCompatActivity {
 
     private static String URLPARAM = "urlparam";
     private String mUrl;
+    private WebView mWbInfom;
+    private RecyclerView mRlvInfomComment;
+    private EditText mEtInfomContent;
+    private Button mBtnInfomSend;
+    private RelativeLayout mRlInfomContent;
 
     public static void newInstance(Context context, String url) {
         Intent intent = new Intent(context, InfomActivity.class);
@@ -46,6 +56,11 @@ public class InfomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_infom);
         if (getIntent() != null) {
 //            mUrl = getIntent().getStringExtra(URLPARAM);
@@ -68,16 +83,13 @@ public class InfomActivity extends AppCompatActivity {
         mWebInfom.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url == null) return false;
+                if (url == null) return false;
 
                 try {
-                    if (url.startsWith("http:") || url.startsWith("https:"))
-                    {
+                    if (url.startsWith("http:") || url.startsWith("https:")) {
                         view.loadUrl(url);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(intent);
                         return true;
@@ -91,14 +103,14 @@ public class InfomActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 mRlvInfomShow.setVisibility(View.VISIBLE);
-                mWebInfom.setVisibility(View.GONE);
+                mRlInfomContent.setVisibility(View.GONE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 mRlvInfomShow.setVisibility(View.GONE);
-                mWebInfom.setVisibility(View.VISIBLE);
+                mRlInfomContent.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -110,9 +122,16 @@ public class InfomActivity extends AppCompatActivity {
 
 
     private void initView() {
-        mWebInfom = (WebView) findViewById(R.id.wb_infom);
+        mWebInfom = (WebView) findViewById(R.id.web_infom);
         mRlvInfomShow = (RelativeLayout) findViewById(R.id.rlv_infom_show);
-
+        mRlvInfomComment = (RecyclerView) findViewById(R.id.rlv_infom_comment);
+        mRlvInfomComment.setOnClickListener(this);
+        mEtInfomContent = (EditText) findViewById(R.id.et_infom_content);
+        mEtInfomContent.setOnClickListener(this);
+        mBtnInfomSend = (Button) findViewById(R.id.btn_infom_send);
+        mBtnInfomSend.setOnClickListener(this);
+        mRlInfomContent = (RelativeLayout) findViewById(R.id.rl_infom_content);
+        mRlInfomContent.setOnClickListener(this);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -121,5 +140,18 @@ public class InfomActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_infom_send:
+
+                break;
+        }
+    }
+
+    private void submit() {
+
     }
 }
