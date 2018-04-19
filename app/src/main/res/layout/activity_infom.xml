@@ -20,20 +20,16 @@
         <ImageView style="@style/TitleBarAction" />
 
     </LinearLayout>
-
-
     <RelativeLayout
         android:id="@+id/li_infom_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/space_48"
             android:fillViewport="true">
-
             <include
                 layout="@layout/infom_comment_layout"
                 android:layout_width="match_parent"
@@ -48,6 +44,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/et_infom_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -59,8 +56,9 @@
                 android:paddingRight="@dimen/space_8" />
 
             <Button
+                android:id="@+id/btn_infom_send"
                 android:layout_width="48dp"
-                android:layout_height="@dimen/space_48"
+                android:layout_height="48dp"
                 android:background="@mipmap/ic_launcher_round"
                 android:src="@mipmap/ic_search" />
         </LinearLayout>
