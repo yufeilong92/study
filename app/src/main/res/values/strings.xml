@@ -9,6 +9,7 @@
     <!--//请求头-->
     <!--<string name="app_content_heat">http://app1.xuechuanedu.com</string>-->
     <string name="app_content_heat">http://192.168.1.110:8080</string>
+    <!--<string name="app_content_heat">http://app1.t.com</string>-->
     <!--微信接口-->
     <string name="http_url_weixin">/api/auth/login</string>
     <!--token刷新-->
@@ -73,4 +74,5 @@
     <string name="home_infom">推荐资讯</string>
     <string name="home_infom_all">推荐文章</string>
     <string name="please_right_phone">请输入正确的手机号码</string>
+    <string name="home_select_content">搜索文章、题库</string>
 </resources>

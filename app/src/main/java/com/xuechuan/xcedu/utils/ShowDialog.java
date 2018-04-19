@@ -38,9 +38,9 @@ public class ShowDialog {
     }
 
     public static ShowDialog getInstance(Context context) {
+        mContext = context;
         if (dialog == null)
             dialog = new ShowDialog();
-        mContext = context;
         return dialog;
     }
 
@@ -52,9 +52,9 @@ public class ShowDialog {
      * @param cancelable 是否取消
      */
     public void Show(String title, String msg, int view, boolean cancelable) {
-        if (mContentView == null) {
-            mContentView = LayoutInflater.from(mContext).inflate(view, null);
-        }
+//        if (mContentView == null) {
+        View    mContentView = LayoutInflater.from(mContext).inflate(view, null);
+//        }
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setMessage(msg)
                 .setView(mContentView)
@@ -90,9 +90,9 @@ public class ShowDialog {
         if (mDialog == null) {
             throw new NullPointerException("请选创建dialog");
         }
-        if (mContentView == null) {
+        /*if (mContentView == null) {
             throw new NullPointerException("自定义视图为空");
-        }
+        }*/
     }
 
     /**
@@ -116,7 +116,8 @@ public class ShowDialog {
         builder.setView(view)
                 .setCancelable(false)
                 .create();
-        return builder.show();
+        mDialog = builder.show();
+        return mDialog;
     }
 //
 //    /**

@@ -10,26 +10,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomeFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
-import com.xuechuan.xcedu.ui.AddressSelectActivity;
-import com.xuechuan.xcedu.ui.SearchActivity;
-import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.Utils;
-import com.xuechuan.xcedu.vo.ProvinceEvent;
-import com.xuechuan.xcedu.weight.AddressTextView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -58,31 +45,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
      * 填充的布局
      */
     private int mFragmentLayout = R.id.fl_content;
-    /**
-     * 请求结果码
-     */
-    private int REQUESTCODE = 1001;
-    /**
-     * 请求回调码
-     */
-    public static int REQUESTRESULT = 1002;
-    /**
-     * 省份
-     */
-    public static String STR_INT_PROVINCE = "province";
-    /**
-     * code码
-     */
-    public static String STR_INT_CODE = "code";
-    /**
-     * 位标
-     */
-    public static String STR_INT_POSITION = "position";
-    private AddressTextView mTvAddress;
-    private TextView mTvSearch;
-
-    private static HomeActivity service;
-
     private static String Params = "Params";
     private static String Params1 = "Params";
 
@@ -124,10 +86,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mRdbHomePersonal.setOnClickListener(this);
         mLlBtns = (LinearLayout) findViewById(R.id.ll_btns);
         mLlBtns.setOnClickListener(this);
-        mTvAddress = (AddressTextView) findViewById(R.id.tv_address);
-        mTvAddress.setOnClickListener(this);
-        mTvSearch = (TextView) findViewById(R.id.btn_search);
-        mTvSearch.setOnClickListener(this);
     }
 
     protected void initData() {
@@ -169,15 +127,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.rdb_home_personal://个人
                 Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 3);
-                break;
-            case R.id.tv_address://地址
-//                Intent intent = AddressSelectActivity.newInstance(mContext, mProvice);
-//                intent.putExtra(AddressSelectActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.location));
-//                startActivityForResult(intent, REQUESTCODE);
-                break;
-            case R.id.btn_search://搜素
-                Intent searchIntent = new Intent(HomeActivity.this, SearchActivity.class);
-                startActivity(searchIntent);
                 break;
         }
     }

@@ -67,11 +67,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         bingHostData();
     }
 
+    /**
+     * 绑定历史
+     */
     private void bindHistoryData() {
         ArrayList<String> list = mInstance.getHistoryList(mContext);
-        if (list.size() > 0) {
-            bindTextViewData(mFlSearchHistory,list);
-        }
+        if (list.size() > 0)
+            BuildTextViewData(mFlSearchHistory, list);
     }
 
     private void initData() {
@@ -79,16 +81,25 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mInstance = SaveHistoryUtil.getInstance(mContext);
     }
 
+    /**
+     * 绑定热搜
+     */
     private void bingHostData() {
         int a = 10;
         ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < a; i++) {
             list.add("测" + i);
         }
-         bindTextViewData(mFlSearchHost,list);
+        BuildTextViewData(mFlSearchHost, list);
     }
 
-    private void bindTextViewData(FlowLayout flowLayout,ArrayList<String> list) {
+    /**
+     * 创建历史记录按钮
+     *
+     * @param flowLayout
+     * @param list
+     */
+    private void BuildTextViewData(FlowLayout flowLayout, ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             TextView tv = (TextView) mInflater.inflate(R.layout.search_label_tv,
                     flowLayout, false);
@@ -99,7 +110,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onClick(View v) {
                     //加入搜索历史纪录记录
-                    T.showToast(mContext,str);
+                    T.showToast(mContext, str);
                 }
             });
             flowLayout.addView(tv);
@@ -111,6 +122,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mEtSearch = (EditText) findViewById(R.id.et_search);
         mIvSearch = (ImageView) findViewById(R.id.iv_search);
         mTvSearchClear = (TextView) findViewById(R.id.tv_search_clear);
+        mTvSearchClear.setOnClickListener(this);
         mRlSearchHistory = (RelativeLayout) findViewById(R.id.rl_search_history);
         mIvSearch.setOnClickListener(this);
         mContext = this;
@@ -129,10 +141,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     T.showToast(mContext, "内容不能为空");
                     return;
                 }
+                mFlSearchHistory.removeAllViews();
                 mInstance.saveHistory(trim);
+                bindHistoryData();
                 break;
             case R.id.tv_search_clear:
                 mInstance.delete(mContext);
+                mFlSearchHistory.removeAllViews();
                 break;
             default:
                 break;

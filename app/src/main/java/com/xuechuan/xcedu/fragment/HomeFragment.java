@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,33 +15,38 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.google.android.exoplayer.C;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.adapter.HomeAllAdapter;
+import com.xuechuan.xcedu.adapter.HomeContentAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.AddressSelectActivity;
+import com.xuechuan.xcedu.ui.SearchActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
+import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.AdvisoryBean;
+import com.xuechuan.xcedu.vo.ArticleBean;
+import com.xuechuan.xcedu.vo.BannerBean;
 import com.xuechuan.xcedu.vo.HomePageVo;
-import com.xuechuan.xcedu.vo.ProvinceEvent;
 import com.xuechuan.xcedu.weight.AddressTextView;
+import com.xuechuan.xcedu.weight.DividerItemDecoration;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -62,7 +68,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private Context mContext;
     private LocationClient mLocationClient;
     private AddressTextView mTvAddress;
-    private TextView mBtnSearch;
+    private TextView mTvSearch;
     private ImageView mIvOption;
     private ImageView mIvLiftOption;
     private RecyclerView mRlvRecommendContent;
@@ -87,9 +93,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 位标
      */
     public static String STR_INT_POSITION = "position";
+    /**
+     * 地址
+     */
     private String provice;
-    private String code;
-    private String position;
+    private ShowDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,30 +108,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, null);
-        initView(view);
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        EventBus.getDefault().unregister(this);
-
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_home, null);
+//        initView(view);
+//        return view;
+//    }
 
     @Override
     public void onStop() {
         super.onStop();
-        mLocationClient.stop();
+        if (mLocationClient != null)
+            mLocationClient.stop();
     }
 
     @Override
@@ -132,12 +128,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         if (mLocationClient != null) {
             mLocationClient.restart();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
     }
 
     public HomeFragment() {
@@ -163,22 +153,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
-    protected void initCreateView(Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
+    protected void initCreateView(View view, Bundle savedInstanceState) {
+        initView(view);
         initBaiduLocation();
     }
 
     @Override
     protected void initViewCreate(View view, Bundle savedInstanceState) {
-        initView(view);
         initData();
-
     }
 
     /**
      * 初始百度
      */
     private void initBaiduLocation() {
+        dialog = ShowDialog.getInstance(mContext);
+        dialog.showDialog(null, getStrWithId(R.string.loading));
         mLocationClient = new LocationClient(getActivity());
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -197,19 +187,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(ProvinceEvent event) {
-        String province = event.getProvince();
-        String code = PushXmlUtil.getInstance().getLocationCode(mContext, province);
-        requestData(code);
-    }
 
     /**
      * 请求资讯
      *
      * @param code
      */
-    private void requestData(String code) {
+    private void requestData(final String code) {
         HomeService service = HomeService.getInstance(mContext);
         service.requestHomePager(code, new StringCallBackView() {
             @Override
@@ -220,16 +204,86 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 HomePageVo homePageVo = gson.fromJson(message, HomePageVo.class);
                 BaseVo.StatusBean status = homePageVo.getStatus();
                 if (status.getCode() == 200) {//成功
+                    if (dialog != null) {
+                        dialog.cancel();
+                    }
                     HomePageVo.DataBean data = homePageVo.getData();
+                    List<AdvisoryBean> advisory = data.getAdvisory();
+                    List<ArticleBean> article = data.getArticle();
+                    List<BannerBean> banner = data.getBanner();
+                    bindInfomData(advisory);
+                    bindAllData(article);
+                    bindBanner(banner);
 
+
+                } else {//失败
+//                    T.showToast(mContext, status.getMessage());
+                    requestData(code);
                 }
-
-
             }
 
             @Override
             public void onError(Response<String> response) {
+                if (dialog != null) {
+                    dialog.cancel();
+                }
                 L.e("错误", response.message());
+            }
+        });
+
+    }
+
+    /**
+     * banne图片
+     *
+     * @param banner
+     */
+    private void bindBanner(List<BannerBean> banner) {
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < banner.size(); i++) {
+            list.add(banner.get(i).getImageurl());
+        }
+        ArrayList<String> list1 = DataMessageVo.getImageList1();
+        bindData(list1);
+    }
+
+    /**
+     * 资讯
+     *
+     * @param article
+     */
+    private void bindAllData(List<ArticleBean> article) {
+        HomeAllAdapter allAdapter = new HomeAllAdapter(mContext, article);
+        GridLayoutManager manager = new GridLayoutManager(mContext, 1);
+        manager.setOrientation(GridLayoutManager.VERTICAL);
+        mRlvRecommendAll.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerviewline));
+        mRlvRecommendAll.setLayoutManager(manager);
+        mRlvRecommendAll.setAdapter(allAdapter);
+        allAdapter.setClickListener(new HomeAllAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(Object obj, int position) {
+                T.showToast(mContext, position+"");
+            }
+        });
+
+    }
+
+    /**
+     * 文章
+     *
+     * @param advisory
+     */
+    private void bindInfomData(List<AdvisoryBean> advisory) {
+        HomeContentAdapter allAdapter = new HomeContentAdapter(mContext, advisory);
+        GridLayoutManager manager = new GridLayoutManager(mContext, 1);
+        manager.setOrientation(GridLayoutManager.VERTICAL);
+        mRlvRecommendContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerviewline));
+        mRlvRecommendContent.setLayoutManager(manager);
+        mRlvRecommendContent.setAdapter(allAdapter);
+        allAdapter.setClickListener(new HomeContentAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(Object obj, int position) {
+                T.showToast(mContext, position+"");
             }
         });
 
@@ -240,8 +294,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mContext = getActivity();
         mTvAddress = (AddressTextView) view.findViewById(R.id.tv_address);
         mTvAddress.setOnClickListener(this);
-        mBtnSearch = (TextView) view.findViewById(R.id.btn_search);
-        mBtnSearch.setOnClickListener(this);
+        mTvSearch = (TextView) view.findViewById(R.id.tv_search);
+        mTvSearch.setOnClickListener(this);
         mIvOption = (ImageView) view.findViewById(R.id.iv_option);
         mIvOption.setOnClickListener(this);
         mIvLiftOption = (ImageView) view.findViewById(R.id.iv_lift_option);
@@ -254,7 +308,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
 
     private void initData() {
-        ArrayList<String> list = DataMessageVo.getImageList1();
+
+//        bindData(list);
+
+    }
+
+    private void bindData(ArrayList<String> list) {
         mBanHome.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         mBanHome.setIndicatorGravity(BannerConfig.CENTER);
         mBanHome.setDelayTime(2000);
@@ -272,7 +331,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 T.showToast(mContext, position + "");
             }
         });
-
     }
 
     private BDAbstractLocationListener locationListener = new BDAbstractLocationListener() {
@@ -285,7 +343,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             String province = location.getProvince();    //获取省份
             mTvAddress.setText(province);
             L.d("定位位置", province);
-            EventBus.getDefault().post(new ProvinceEvent(province));
+            String code = PushXmlUtil.getInstance().getLocationCode(mContext, province);
+            if (!StringUtil.isEmpty(code))
+                requestData(code);
         }
     };
 
@@ -297,6 +357,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 Intent intent = AddressSelectActivity.newInstance(mContext, provice);
                 intent.putExtra(AddressSelectActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.location));
                 startActivityForResult(intent, REQUESTCODE);
+                break;
+            case R.id.tv_search:
+                Intent searchIntent = new Intent(mContext, SearchActivity.class);
+                startActivity(searchIntent);
                 break;
 
             default:
@@ -310,9 +374,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         if (requestCode == REQUESTCODE && resultCode == REQUESTRESULT) {
             if (data != null) {
                 provice = data.getStringExtra(STR_INT_PROVINCE);
-//                code = data.getStringExtra(STR_INT_CODE);
-//                position = data.getStringExtra(STR_INT_POSITION);
+                L.d("地址数据回调", provice);
                 mTvAddress.setText(provice);
+                String code = PushXmlUtil.getInstance().getLocationCode(mContext, provice);
+                if (!StringUtil.isEmpty(code))
+                    requestData(code);
             }
         }
     }

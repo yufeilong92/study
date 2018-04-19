@@ -68,14 +68,17 @@ public class BaseHttpServcie {
     }
 
     protected void requestHttpServciePost(Context context, final String url, final JSONObject params, boolean isWithToken, final StringCallBackView callBackView) {
-        UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
-        if (vo == null) {
-            T.showToast(context, context.getString(R.string.please_login));
-            return;
+        UserBean user = null;
+        if (isWithToken) {
+            UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            if (vo == null) {
+                T.showToast(context, context.getString(R.string.please_login));
+                return;
+            }
+            user = vo.getData().getUser();
         }
         addParams(context, params);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
-        UserBean user = vo.getData().getUser();
         HttpInfomVo infomVo = getInfomData();
         String token = null;
         String signature = null;
@@ -94,14 +97,17 @@ public class BaseHttpServcie {
     }
 
     protected void requestHttpServiceGet(Context context, String url, ArrayList<GetParamVo> obj, boolean isWithToken, final StringCallBackView callBackView) {
-        UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();
-        if (userInfomVo == null) {
-            T.showToast(context, context.getString(R.string.please_login));
-            return;
+        UserBean user = null;
+        if (isWithToken) {
+            UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();
+            if (userInfomVo == null) {
+                T.showToast(context, context.getString(R.string.please_login));
+                return;
+            }
+            user = userInfomVo.getData().getUser();
         }
         addParams(context, obj);
         HttpInfomVo infomVo = getInfomData();
-        UserBean user = userInfomVo.getData().getUser();
         String signature = null;
         if (isWithToken) {
             int id = user.getId();

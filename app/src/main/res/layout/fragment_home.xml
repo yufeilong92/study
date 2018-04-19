@@ -7,39 +7,51 @@
     android:background="@color/white"
     tools:context=".fragment.HomeFragment">
 
-    <LinearLayout style="@style/TitleBar">
-
-        <com.xuechuan.xcedu.weight.AddressTextView
-            android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:padding="@dimen/space_8"
-            android:text="河南省"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/btn_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/btn_home_search_bg"
-            android:gravity="left|center_vertical"
-            android:hint="搜索文章、题库"
-            android:paddingLeft="@dimen/space_8" />
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_56"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <com.xuechuan.xcedu.weight.AddressTextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_8"
+                android:text="河南省"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_search"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/space_32"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_home_search_bg"
+                android:gravity="left|center_vertical"
+                android:hint="@string/home_select_content"
+                android:paddingLeft="@dimen/space_8" />
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
         <com.youth.banner.Banner
             android:id="@+id/ban_home"
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_150" />
+
+        <Space style="@style/space_8_height" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,9 +113,15 @@
             </RelativeLayout>
         </LinearLayout>
 
+        <Space style="@style/space_8_height" />
+<ScrollView
+    android:fillViewport="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <include
             layout="@layout/home_infom_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+</ScrollView>
     </LinearLayout>
 </FrameLayout>

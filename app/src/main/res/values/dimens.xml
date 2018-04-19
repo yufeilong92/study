@@ -66,6 +66,7 @@
     <dimen name="text_regular">24sp</dimen>
     <dimen name="text_regular_big">34sp</dimen>
     <dimen name="space_8">8dp</dimen>
+    <dimen name="space_4">4dp</dimen>
     <dimen name="space_16">16dp</dimen>
     <dimen name="space_24">24dp</dimen>
     <dimen name="space_32">32dp</dimen>

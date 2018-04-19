@@ -11,13 +11,37 @@ package com.xuechuan.xcedu.vo;
  * @Copyright: 2018
  */
 public class ArticleBean extends HomePageVo {
+    /**
+     * 图片地址
+     */
     private String gourl;
+    /**
+     * id
+     */
     private int id;
+    /**
+     *
+     */
     private boolean issupport;
+    /**
+     * 发布时间
+     */
     private String publishdate;
+    /**
+     *
+     */
     private int supportcount;
+    /***
+     *
+     */
     private String thumbnailimg;
+    /***
+     * 标题
+     */
     private String title;
+    /**
+     * 类型
+     */
     private int type;
     private int viewcount;
 

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -34,6 +35,9 @@ import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.UserInfomVo;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -100,7 +104,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mIvWeixinlogin.setOnClickListener(this);
         mChbLoginEyable = (CheckBox) findViewById(R.id.chb_login_eyable);
         mChbLoginEyable.setOnClickListener(this);
-        Utils.showPassWord(mChbLoginEyable,mEtLoginPassword);
+        Utils.showPassWord(mChbLoginEyable, mEtLoginPassword);
     }
 
     @Override
@@ -108,6 +112,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.btn_login_login://登录
                 Utils.hideInputMethod(LoginActivity.this);
+                String phone = getTextStr(mEtLoginUsername);
+                boolean phoneNum = Utils.isPhoneNum(phone);
+                L.w(phone+phoneNum);
+                if (!Utils.isPhoneNum(phone)) {
+                    T.showToast(mContext, getStringWithId(R.string.please_right_phone));
+                    return;
+                }
                 submit();
                 break;
             case R.id.tv_login_forgetpaw://忘记密码
@@ -122,9 +133,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.iv_weixinlogin://微信登录
                 loginWeiXin();
                 break;
-            case R.id.chb_login_eyable:
 
-                break;
         }
     }
 
@@ -264,6 +273,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onSuccess(Response<String> response) {
                 String message = response.body().toString();
                 L.d("登录成功", message);
+                String code = JSONObject.quote(message);
+                L.w(code);
                 Gson gson = new Gson();
                 UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
                 if (vo.getStatus().getCode() == 200) {

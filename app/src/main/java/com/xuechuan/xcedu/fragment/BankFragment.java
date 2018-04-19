@@ -50,7 +50,7 @@ public class BankFragment extends BaseFragment {
     }
 
     @Override
-    protected void initCreateView(Bundle savedInstanceState) {
+    protected void initCreateView(View view,Bundle savedInstanceState) {
 
     }
     @Override

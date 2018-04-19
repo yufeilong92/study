@@ -21,7 +21,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(initInflateView(), container, false);
-        initCreateView(savedInstanceState);
+        initCreateView(inflate,savedInstanceState);
         return inflate;
     }
 
@@ -33,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int initInflateView();
 
-    protected abstract void initCreateView(Bundle savedInstanceState);
+    protected abstract void initCreateView(View view,Bundle savedInstanceState);
 
     protected abstract void initViewCreate(View view, Bundle savedInstanceState);
 

@@ -10,50 +10,65 @@ package com.xuechuan.xcedu.vo;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class BannerBean extends HomePageVo{
-        private String gourl;
-        private int id;
-        private String imageurl;
-        private int sort;
-        private int type;
+public class BannerBean extends HomePageVo {
+    /**
+     * 跳转地址
+     */
+    private String gourl;
+    /**
+     * id
+     */
+    private int id;
+    /**
+     * 图片地址
+     */
+    private String imageurl;
+    /**
+     *
+     */
+    private int sort;
+    /**
+     *
+     */
+    private int type;
 
-        public String getGourl() {
-            return gourl;
-        }
+    public String getGourl() {
+        return gourl;
+    }
 
-        public void setGourl(String gourl) {
-            this.gourl = gourl;
-        }
+    public void setGourl(String gourl) {
+        this.gourl = gourl;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public int getId() {
+        return id;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-        public String getImageurl() {
-            return imageurl;
-        }
+    public String getImageurl() {
+        return imageurl;
+    }
 
-        public void setImageurl(String imageurl) {
-            this.imageurl = imageurl;
-        }
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
+    }
 
-        public int getSort() {
-            return sort;
-        }
+    public int getSort() {
+        return sort;
+    }
 
-        public void setSort(int sort) {
-            this.sort = sort;
-        }
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
 
-        public int getType() {
-            return type;
-        }
+    public int getType() {
+        return type;
+    }
 
-        public void setType(int type) {
-            this.type = type;
-        }
+    public void setType(int type) {
+        this.type = type;
+    }
 }

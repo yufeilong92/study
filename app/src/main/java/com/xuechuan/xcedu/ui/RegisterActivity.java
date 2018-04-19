@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
@@ -148,7 +150,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Utils.hideInputMethod(RegisterActivity.this);
                 String phone = getTextStr(mEtRegisterPhone);
                 if (!StringUtil.isEmpty(phone)) {
-                    if (Utils.isPhoneNum(phone)) {
+                    if (!Utils.isPhoneNum(phone)) {
                         T.showToast(mContext, getString(R.string.please_right_phone));
                         return;
                     }
@@ -167,11 +169,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Utils.showPassWord(mChbShowPasw, mEtRegisterPaw);
                 break;
             case R.id.chb_show_passw:
-                Utils. showPassWord(mChbShowPassw, mEtRegisterPaws);
+                Utils.showPassWord(mChbShowPassw, mEtRegisterPaws);
                 break;
         }
     }
-
 
 
     /**
@@ -237,30 +238,35 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             T.showToast(mContext, getString(R.string.please_input_pass));
             return;
         }
-        if (paw.length() < 6) {
-            T.showToast(mContext, getString(R.string.passundersixt));
-            return;
-        }
+//        if (paw.length() < 6) {
+//            T.showToast(mContext, getString(R.string.passundersixt));
+//            return;
+//        }
         String paws = getTextStr(mEtRegisterPaws);
         if (TextUtils.isEmpty(paws)) {
             T.showToast(mContext, getString(R.string.please_input_pass));
             return;
         }
-        if (paws.length() < 6) {
-            T.showToast(mContext, getString(R.string.passundersixt));
-            return;
-        }
+//        if (paws.length() < 6) {
+//            T.showToast(mContext, getString(R.string.passundersixt));
+//            return;
+//        }
         if (!paw.equals(paws)) {
-            T.showToast(mContext, "密码错误,请重新输入");
+            T.showToast(mContext, "两次输入密码不一致");
             return;
         }
         RegisterService service = RegisterService.getInstance(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext(null, getString(R.string.login_loading));
-        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
+//        service.setIsShowDialog(true);
+//        service.setDialogContext(null, getString(R.string.login_loading));
+        ShowDialog dialog = ShowDialog.getInstance(mContext);
+        final AlertDialog dialog1 = dialog.showDialog("", "提交数据中...");
+//        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
+        service.requestRegister(mType, phone, "1234", paw, mOpenid, mUuionid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
+
                 String message = response.body().toString();
+                L.w(message);
                 Gson gson = new Gson();
                 UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
                 if (vo == null) {
@@ -270,6 +276,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (code1 == 200) {//注册成功
                     UserInfomVo.DataBean data = vo.getData();
                     int status = data.getStatus();
+                    dialog1.dismiss();
                     switch (status) {
                         case 1:
                             T.showToast(mContext, getString(R.string.registerOK));
@@ -295,7 +302,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onError(Response<String> response) {
-
+                dialog1.dismiss();
+                L.e(response.message());
             }
         });
     }

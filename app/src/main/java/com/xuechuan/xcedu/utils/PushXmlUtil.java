@@ -41,6 +41,7 @@ public class PushXmlUtil {
             mProvinces.clear();
         }
     }
+
     public static PushXmlUtil getInstance() {
         if (pushXmlUtil == null) {
             pushXmlUtil = new PushXmlUtil();
@@ -81,11 +82,25 @@ public class PushXmlUtil {
     }
 
     public String getLocationCode(Context context, String province) {
+        if (StringUtil.isEmpty(province)) {
+            return null;
+        }
         ArrayList<ProvincesVo> vos = pushXml(context);
         for (ProvincesVo vo : vos
                 ) {
             if (vo.getName().contains(province)) {
                 return vo.getCode();
+            }
+        }
+        return null;
+    }
+
+    public String getLocationProvice(Context context, String code) {
+        ArrayList<ProvincesVo> vos = pushXml(context);
+        for (ProvincesVo vo : vos
+                ) {
+            if (vo.getCode().contains(code)) {
+                return vo.getName();
             }
         }
         return null;

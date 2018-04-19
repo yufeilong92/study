@@ -54,7 +54,7 @@ public class NetFragment extends BaseFragment {
     }
 
     @Override
-    protected void initCreateView(Bundle savedInstanceState) {
+    protected void initCreateView(View view,Bundle savedInstanceState) {
 
     }
 

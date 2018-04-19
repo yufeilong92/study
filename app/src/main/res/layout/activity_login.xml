@@ -62,7 +62,6 @@
                 android:src="@drawable/login_icon_password" />
 
             <EditText
-
                 android:id="@+id/et_login_password"
                 style="@style/et_style"
                 android:layout_weight="1"
