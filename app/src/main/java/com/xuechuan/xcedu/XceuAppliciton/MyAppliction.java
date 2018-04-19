@@ -121,7 +121,7 @@ public class MyAppliction extends Application {
      * @param isRound     true为圆形，false不处理
      * @param cacheOnDisk true缓存到SD卡，false不缓存到SD卡
      */
-    public static void displayImages(ImageView iv, String url, boolean isRound) {
+    public void displayImages(ImageView iv, String url, boolean isRound) {
 //配置一些图片选项
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.ic_show_erro)// 设置图片在下载期间显示的图片
@@ -134,6 +134,8 @@ public class MyAppliction extends Application {
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)//图片将降低2倍，直到下一减少步骤，使图像更小的目标大小
                 .bitmapConfig(Bitmap.Config.RGB_565)//图片色彩565
                 .build();
+//        String string ="http://192.168.1.110/8080";
+//        url = string.concat(url);
         imageLoader.displayImage(url, iv, options);
     }
 

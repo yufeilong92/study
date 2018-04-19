@@ -119,6 +119,7 @@ public class ShowDialog {
         mDialog = builder.show();
         return mDialog;
     }
+
 //
 //    /**
 //     * @param titel 标题

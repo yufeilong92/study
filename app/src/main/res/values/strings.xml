@@ -18,13 +18,15 @@
     <string name="http_code">/api/SecurityCode/Send</string>
     <!--注册-->
     <string name="http_register">/api/user/userpost</string>
-     <!--密码登录-->
+    <!--密码登录-->
     <string name="http_login">/api/user/login</string>
-     <!--热词-->
+    <!--热词-->
     <string name="http_getHot">/api/search/gethot</string>
-     <!--资讯-->
+    <!--关键字-->
+    <string name="http_getHotkey">/api/search/getsearchkey</string>
+    <!--资讯-->
     <string name="http_infom">/api/advisory/get</string>
-     <!--推荐文章-->
+    <!--推荐文章-->
     <string name="http_WenZhan">/api/article/get</string>
     <!--主界面-->
     <string name="http_HomePage">/api/homepage/get</string>

@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.ui;
+package com.xuechuan.xcedu.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +10,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.BaseVo;
+import com.xuechuan.xcedu.net.HomeService;
+import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveHistoryUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.HotKeyVo;
 import com.xuechuan.xcedu.weight.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxx
@@ -65,6 +73,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         initData();
         bindHistoryData();
         bingHostData();
+
     }
 
     /**
@@ -82,15 +91,42 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     }
 
     /**
+     *
      * 绑定热搜
      */
+    // TODO: 2018/4/19 处理缓存问题 
     private void bingHostData() {
-        int a = 10;
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < a; i++) {
-            list.add("测" + i);
-        }
-        BuildTextViewData(mFlSearchHost, list);
+        HomeService service = HomeService.getInstance(mContext);
+//        service.setIsShowDialog(true);
+//        service.setDialogContext("",getStringWithId(R.string.loading));
+        service.requestHost("10", new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                String hot = response.body().toString();
+                L.d("获取热词数据" + hot);
+                Gson gson = new Gson();
+                HotKeyVo vo = gson.fromJson(hot, HotKeyVo.class);
+                BaseVo.StatusBean status = vo.getStatus();
+                if (status.getCode() == 200) {
+                    List<String> datas = vo.getDatas();
+                    BuildTextViewData(mFlSearchHost, datas);
+                } else {
+                    T.showToast(mContext, response.message());
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                T.showToast(mContext, response.message());
+            }
+        });
+//
+//        int a = 10;
+//        ArrayList<String> list = new ArrayList<>();
+//        for (int i = 0; i < a; i++) {
+//            list.add("测" + i);
+//        }
+//        BuildTextViewData(mFlSearchHost, list);
     }
 
     /**
@@ -99,7 +135,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
      * @param flowLayout
      * @param list
      */
-    private void BuildTextViewData(FlowLayout flowLayout, ArrayList<String> list) {
+    private void BuildTextViewData(FlowLayout flowLayout, List<String> list) {
         for (int i = 0; i < list.size(); i++) {
             TextView tv = (TextView) mInflater.inflate(R.layout.search_label_tv,
                     flowLayout, false);

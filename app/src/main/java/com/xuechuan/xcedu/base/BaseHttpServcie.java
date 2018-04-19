@@ -3,9 +3,12 @@ package com.xuechuan.xcedu.base;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
@@ -156,7 +159,15 @@ public class BaseHttpServcie {
                         if (isShow) {
                             dialog.dismiss();
                         }
-                        callBackView.onSuccess(response);
+                        String s = response.body().toString();
+                        try {
+                            new JsonParser().parse(s);
+                            callBackView.onSuccess(response);
+                        } catch (JsonParseException e) {
+                            L.e("数据异常");
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -203,7 +214,13 @@ public class BaseHttpServcie {
                         if (isShow) {
                             dialog.dismiss();
                         }
-                        callBackView.onSuccess(response);
+                        try {
+                            new JsonParser().parse(response.body().toString());
+                            callBackView.onSuccess(response);
+                        } catch (JsonParseException e) {
+                            L.e("数据异常");
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

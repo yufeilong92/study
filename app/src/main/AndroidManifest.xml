@@ -34,9 +34,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/App_NOAction">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".player.PolyvPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -47,6 +45,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="UAh9Ml4SK83z7DfdG9K15Xka3fUAOVUN" />
@@ -57,21 +56,25 @@
             android:process=":remote" />
 
         <activity android:name=".HomeActivity" />
-        <activity android:name=".ui.LoginActivity" >
+        <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AddressSelectActivity" />
-        <activity android:name=".ui.SearchActivity" />
-        <activity android:name=".ui.RegisterActivity"></activity>
-       <activity android:name=".wxapi.WXEntryActivity"
-           android:exported="true"
-           android:label="@string/app_name">
-       </activity>
-
+        <activity android:name=".ui.home.AddressSelectActivity" />
+        <activity android:name=".ui.home.SearchActivity" />
+        <activity android:name=".ui.RegisterActivity" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name" />
+        <activity android:name=".ui.InfomActivity" />
+        <activity android:name=".ui.home.BookActivity" />
+        <activity android:name=".ui.home.BookInfomActivity" />
+        <activity android:name=".ui.home.SpecasActivity" />
+        <activity android:name=".ui.home.InfomListActivity"></activity>
     </application>
 
 </manifest>

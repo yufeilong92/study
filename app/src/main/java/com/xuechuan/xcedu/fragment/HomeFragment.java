@@ -9,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.google.android.exoplayer.C;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
@@ -27,8 +27,11 @@ import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.AddressSelectActivity;
-import com.xuechuan.xcedu.ui.SearchActivity;
+import com.xuechuan.xcedu.ui.InfomActivity;
+import com.xuechuan.xcedu.ui.home.AddressSelectActivity;
+import com.xuechuan.xcedu.ui.home.BookActivity;
+import com.xuechuan.xcedu.ui.home.SearchActivity;
+import com.xuechuan.xcedu.ui.home.SpecasActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
 import com.xuechuan.xcedu.utils.ShowDialog;
@@ -98,6 +101,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      */
     private String provice;
     private ShowDialog dialog;
+    private RelativeLayout mRlHomeBook;
+    private RelativeLayout mRlHomeStandard;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,13 +112,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_home, null);
-//        initView(view);
-//        return view;
-//    }
 
     @Override
     public void onStop() {
@@ -129,6 +127,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             mLocationClient.restart();
         }
     }
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_home, null);
+//        initView(view);
+//        return view;
+//    }
 
     public HomeFragment() {
     }
@@ -262,7 +267,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         allAdapter.setClickListener(new HomeAllAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                T.showToast(mContext, position+"");
+                T.showToast(mContext, position + "");
+                ArticleBean vo = (ArticleBean) obj;
+                InfomActivity.newInstance(mContext, vo.getGourl());
             }
         });
 
@@ -283,7 +290,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         allAdapter.setClickListener(new HomeContentAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                T.showToast(mContext, position+"");
+                AdvisoryBean vo = (AdvisoryBean) obj;
+                T.showToast(mContext, position + "");
+                InfomActivity.newInstance(mContext, vo.getGourl());
             }
         });
 
@@ -304,13 +313,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mRlvRecommendContent.setOnClickListener(this);
         mRlvRecommendAll = (RecyclerView) view.findViewById(R.id.rlv_recommend_all);
         mRlvRecommendAll.setOnClickListener(this);
+        mRlHomeBook = (RelativeLayout) view.findViewById(R.id.rl_home_book);
+        mRlHomeBook.setOnClickListener(this);
+        mRlHomeStandard = (RelativeLayout) view.findViewById(R.id.rl_home_standard);
+        mRlHomeStandard.setOnClickListener(this);
     }
 
 
     private void initData() {
-
 //        bindData(list);
-
     }
 
     private void bindData(ArrayList<String> list) {
@@ -320,7 +331,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mBanHome.setImageLoader(new ImageLoader() {
             @Override
             public void displayImage(Context context, Object path, ImageView imageView) {
-                MyAppliction.displayImages(imageView, (String) path, false);
+                MyAppliction.getInstance().displayImages(imageView, (String) path, false);
             }
         });
         mBanHome.setImages(list);
@@ -358,11 +369,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 intent.putExtra(AddressSelectActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.location));
                 startActivityForResult(intent, REQUESTCODE);
                 break;
-            case R.id.tv_search:
+            case R.id.tv_search://搜索
                 Intent searchIntent = new Intent(mContext, SearchActivity.class);
                 startActivity(searchIntent);
                 break;
-
+            case R.id.rl_home_book://教材
+                BookActivity.newInstance(mContext, null, null);
+                break;
+            case R.id.rl_home_standard://规范
+                SpecasActivity.newInstance(mContext, null, null);
+                break;
             default:
 
         }

@@ -59,6 +59,7 @@
             android:orientation="horizontal">
 
             <RelativeLayout
+                android:id="@+id/rl_home_book"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/space_8"
@@ -86,6 +87,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_home_standard"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/space_24"

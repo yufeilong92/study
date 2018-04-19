@@ -71,7 +71,7 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
-            MyAppliction.displayImages(holder.mIvItemHomeAll, bean.getGourl(), false);
+            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll, bean.getThumbnailimg(), false);
         }
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);

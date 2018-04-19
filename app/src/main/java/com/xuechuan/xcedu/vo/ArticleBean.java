@@ -12,7 +12,7 @@ package com.xuechuan.xcedu.vo;
  */
 public class ArticleBean extends HomePageVo {
     /**
-     * 图片地址
+     * 跳转地址地址
      */
     private String gourl;
     /**

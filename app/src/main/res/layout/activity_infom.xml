@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.InfomActivity">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <ImageView
+            style="@style/TitleBarAction"
+            android:src="@mipmap/back" />
+
+        <TextView
+            style="@style/TitleBarText"
+            android:text="" />
+
+        <ImageView style="@style/TitleBarAction" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/li_infom_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/space_48"
+            android:fillViewport="true">
+
+            <include
+                layout="@layout/infom_comment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_48"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_8"
+                android:layout_marginRight="@dimen/space_8"
+                android:layout_weight="1"
+                android:background="@drawable/btn_home_search_bg"
+                android:paddingLeft="@dimen/space_8"
+                android:paddingRight="@dimen/space_8" />
+
+            <Button
+                android:layout_width="48dp"
+                android:layout_height="@dimen/space_48"
+                android:background="@mipmap/ic_launcher_round"
+                android:src="@mipmap/ic_search" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlv_infom_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="@dimen/space_56"
+            android:layout_height="@dimen/space_56"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/gray"
+            android:indeterminateTintMode="src_atop" />
+    </RelativeLayout>
+</LinearLayout>

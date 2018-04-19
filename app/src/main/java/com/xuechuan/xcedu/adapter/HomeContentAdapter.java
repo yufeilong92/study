@@ -72,10 +72,11 @@ public class HomeContentAdapter extends BaseRecyclerAdapter<HomeContentAdapter.V
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         AdvisoryBean vo = mData.get(position);
         holder.mTvItemHomeTitelContent.setText(vo.getTitle());
+        holder.mTvItemHomeTimeContent.setText(vo.getPublishdate()+"");
         if (StringUtil.isEmpty(vo.getGourl())) {
             holder.mIvItemHomeContent.setVisibility(View.GONE);
         } else {
-            MyAppliction.displayImages(holder.mIvItemHomeContent, vo.getGourl(), false);
+            MyAppliction.getInstance().displayImages(holder.mIvItemHomeContent, vo.getThumbnailimg(), false);
             holder.mIvItemHomeContent.setVisibility(View.GONE);
         }
         holder.mTvItemHomeAddressContent.setText(vo.getSource());

@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.ui;
+package com.xuechuan.xcedu.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AddressAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;

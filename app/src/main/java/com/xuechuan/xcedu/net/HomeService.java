@@ -56,10 +56,10 @@ public class HomeService extends BaseHttpServcie {
     public void requestHost(String num, StringCallBackView callBackView) {
         ArrayList<GetParamVo> vos = getGetParamList();
         GetParamVo vo = getParamVo();
-        vo.setParam("id");
+        vo.setParam("num");
         vo.setValue(num);
         vos.add(vo);
-        String url = getUrl(R.string.http_getHot);
+        String url = getUrl(R.string.http_getHotkey );
         requestHttpServiceGet(mContext, url, vos,true, callBackView);
     }
 
@@ -77,22 +77,22 @@ public class HomeService extends BaseHttpServcie {
         requestHttpServiceGet(mContext, url, list,true,  callBackView);
 
     }
-
-    /**
-     * 请求文章
-     *
-     * @param staffid
-     * @param callBackView
-     */
-    public void requestArticle(String staffid, StringCallBackView callBackView) {
-        ArrayList<GetParamVo> list = getGetParamList();
-        GetParamVo paramVo = getParamVo();
-        paramVo.setParam("staffid");
-        paramVo.setValue(staffid);
-        list.add(paramVo);
-        String url = getUrl(R.string.http_WenZhan);
-        requestHttpServiceGet(mContext, url, list,true, callBackView);
-    }
+//
+//    /**
+//     * 请求文章
+//     *
+//     * @param staffid
+//     * @param callBackView
+//     */
+//    public void requestArticle(String staffid, StringCallBackView callBackView) {
+//        ArrayList<GetParamVo> list = getGetParamList();
+//        GetParamVo paramVo = getParamVo();
+//        paramVo.setParam("staffid");
+//        paramVo.setValue(staffid);
+//        list.add(paramVo);
+//        String url = getUrl(R.string.http_WenZhan);
+//        requestHttpServiceGet(mContext, url, list,true, callBackView);
+//    }
 
     public void requestHomePager(String provice, StringCallBackView callBackView) {
         ArrayList<GetParamVo> list = getGetParamList();

@@ -5,27 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".ui.home.AddressSelectActivity">
-
+    tools:context=".ui.home.SpecasActivity">
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
             style="@style/TitleBarAction"
-            android:onClick="onHomeClick"
             android:src="@mipmap/back" />
 
         <TextView
             style="@style/TitleBarText"
-            android:text="定位" />
+            android:text="" />
 
-        <ImageView
-            style="@style/TitleBarAction"
-            android:clickable="false" />
+        <ImageView style="@style/TitleBarAction" />
+
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rlv_sel_adress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+   <ListView
+       android:layout_width="match_parent"
+       android:id="@+id/lv_speca_content"
+       android:layout_height="wrap_content">
+
+   </ListView>
 </LinearLayout>

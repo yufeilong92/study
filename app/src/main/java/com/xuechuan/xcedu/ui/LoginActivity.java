@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -215,6 +217,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onSuccess(Response<String> response) {
                 String infom = response.body().toString();
+                JsonElement parse = new JsonParser().parse(infom);
+
                 L.d(infom);
                 Gson gson = new Gson();
                 UserInfomVo vo = gson.fromJson(infom, UserInfomVo.class);
