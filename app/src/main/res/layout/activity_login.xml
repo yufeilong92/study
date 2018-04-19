@@ -43,11 +43,12 @@
                 android:src="@drawable/login_icon_phone" />
 
             <EditText
+
                 android:id="@+id/et_login_username"
                 style="@style/et_style"
                 android:hint="@string/phone"
                 android:imeOptions="actionNext"
-                android:inputType="text" />
+                android:inputType="number" />
         </LinearLayout>
 
         <Space style="@style/space_30_height" />
@@ -69,11 +70,10 @@
                 android:imeOptions="actionDone"
                 android:inputType="textPassword" />
 
-            <ImageView
-                android:id="@+id/iv_login_eyable"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/login_icon_eyeable" />
+            <CheckBox
+                style="@style/chb_paw"
+                android:id="@+id/chb_login_eyable"
+               />
         </LinearLayout>
 
     </LinearLayout>

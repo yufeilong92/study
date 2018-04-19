@@ -1,13 +1,9 @@
 package com.xuechuan.xcedu.base;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.net.RequestToken;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringSort;
@@ -18,12 +14,7 @@ import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
-import retrofit2.http.GET;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -97,7 +88,7 @@ public class OkGetHttpService extends BaseHttpServcie {
         StringSort sort = new StringSort();
         String signature = sort.getOrderMd5Data(obj);
         L.e(signature);
-        sendRequestGetHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, callBackView);
+//        sendRequestGetHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, callBackView);
     }
 
     @Override

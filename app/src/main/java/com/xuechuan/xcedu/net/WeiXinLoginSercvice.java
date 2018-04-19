@@ -3,7 +3,7 @@ package com.xuechuan.xcedu.net;
 import android.content.Context;
 
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.base.OkPostRequestService;
+import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 
 import org.json.JSONException;
@@ -19,7 +19,7 @@ import org.json.JSONObject;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class WeiXinLoginSercvice extends OkPostRequestService {
+public class WeiXinLoginSercvice extends BaseHttpServcie {
 
     private static WeiXinLoginSercvice sercvice;
     private Context mContext;
@@ -43,7 +43,7 @@ public class WeiXinLoginSercvice extends OkPostRequestService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestPostWithOutToken(mContext, url, jsonObject, backView);
+        requestHttpServciePost(mContext, url, jsonObject, false,backView);
 
     }
 }

@@ -59,7 +59,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_play:
-
                 break;
             case R.id.btn_play_get:
 //                OkTextGetRequest.getInstance().sendRequestGet(mContext, "id2", new StringCallBackView() {
@@ -100,4 +99,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) and run LayoutCreator again
+    }
 }
