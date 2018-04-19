@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -32,13 +31,11 @@ import com.xuechuan.xcedu.net.LoginService;
 import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -60,7 +57,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextView mTvLoginRegist;
     private Context mContext;
     private ImageView mIvWeixinlogin;
-    private ShowDialog mDialog;
     private IWXAPI api;
     private BroadcastReceiver receiver;
     private CheckBox mChbLoginEyable;

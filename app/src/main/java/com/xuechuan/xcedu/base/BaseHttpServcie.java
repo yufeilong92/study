@@ -8,12 +8,11 @@ import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
-import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -43,12 +42,12 @@ import okhttp3.RequestBody;
  * @Copyright: 2018
  */
 public class BaseHttpServcie {
-    private Context context;
+    private Context mContext;
     private String title;
     private String cont;
-    private ShowDialog instance;
     private boolean isShow = false;
     private AlertDialog dialog;
+    private AlertDialog mDialog;
 
     public HttpInfomVo getInfomData() {
         HttpInfomVo infomVo = MyAppliction.getInstance().getHttpInfomInstance();
@@ -64,10 +63,9 @@ public class BaseHttpServcie {
     }
 
     public void setDialogContext(Context context, String title, String cont) {
-        this.context = context;
+        this.mContext = context;
         this.title = title;
         this.cont = cont;
-        instance = ShowDialog.getInstance(context);
     }
 
     protected void requestHttpServciePost(Context context, final String url, final JSONObject params, boolean isWithToken, final StringCallBackView callBackView) {
@@ -144,7 +142,7 @@ public class BaseHttpServcie {
             saffid = "0";
         }
         if (isShow) {
-            dialog = instance.showDialog(title, cont);
+            dialog = DialogUtil.showDialog(mContext, title, cont);
         }
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
@@ -198,7 +196,7 @@ public class BaseHttpServcie {
             saffid = "0";
         }
         if (isShow) {
-            dialog = instance.showDialog(title, cont);
+            dialog = DialogUtil.showDialog(mContext, title, cont);
         }
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
@@ -229,6 +227,7 @@ public class BaseHttpServcie {
                         if (isShow) {
                             dialog.dismiss();
                         }
+                        L.e(response.message());
                         callBackView.onError(response);
                     }
                 });
@@ -240,7 +239,7 @@ public class BaseHttpServcie {
             saffid = "0";
         }
         if (isShow) {
-            dialog = instance.showDialog(title, cont);
+            dialog = DialogUtil.showDialog(mContext, title, cont);
         }
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
@@ -265,6 +264,8 @@ public class BaseHttpServcie {
                         if (isShow) {
                             dialog.dismiss();
                         }
+                        T.showToast(mContext,"网络异常");
+                        L.e(response.message());
                         callBackView.onError(response);
                     }
                 });

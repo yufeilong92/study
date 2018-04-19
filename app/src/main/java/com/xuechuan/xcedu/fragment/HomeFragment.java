@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,9 +31,9 @@ import com.xuechuan.xcedu.ui.home.AddressSelectActivity;
 import com.xuechuan.xcedu.ui.home.BookActivity;
 import com.xuechuan.xcedu.ui.home.SearchActivity;
 import com.xuechuan.xcedu.ui.home.SpecasActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
-import com.xuechuan.xcedu.utils.ShowDialog;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.AdvisoryBean;
@@ -101,9 +99,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 地址
      */
     private String provice;
-    private ShowDialog dialog;
     private RelativeLayout mRlHomeBook;
     private RelativeLayout mRlHomeStandard;
+    private android.support.v7.app.AlertDialog mDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -173,8 +171,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 初始百度
      */
     private void initBaiduLocation() {
-        dialog = ShowDialog.getInstance(mContext);
-        dialog.showDialog(null, getStrWithId(R.string.loading));
+        mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
         mLocationClient = new LocationClient(getActivity());
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -210,8 +207,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 HomePageVo homePageVo = gson.fromJson(message, HomePageVo.class);
                 BaseVo.StatusBean status = homePageVo.getStatus();
                 if (status.getCode() == 200) {//成功
-                    if (dialog != null) {
-                        dialog.cancel();
+                    if (mDialog != null) {
+                        mDialog.dismiss();
                     }
                     HomePageVo.DataBean data = homePageVo.getData();
                     List<AdvisoryBean> advisory = data.getAdvisory();
@@ -224,14 +221,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 } else {//失败
 //                    T.showToast(mContext, status.getMessage());
+                    mDialog.dismiss();
                     requestData(code);
                 }
             }
 
             @Override
             public void onError(Response<String> response) {
-                if (dialog != null) {
-                    dialog.cancel();
+                if (mDialog != null) {
+                    mDialog.dismiss();
                 }
                 L.e("错误", response.message());
             }

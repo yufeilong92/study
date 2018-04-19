@@ -20,7 +20,7 @@ import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.ShowDialog;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
@@ -258,8 +258,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         RegisterService service = RegisterService.getInstance(mContext);
 //        service.setIsShowDialog(true);
 //        service.setDialogContext(null, getString(R.string.login_loading));
-        ShowDialog dialog = ShowDialog.getInstance(mContext);
-        final AlertDialog dialog1 = dialog.showDialog("", "提交数据中...");
+         final AlertDialog dialog = DialogUtil.showDialog(mContext, "", "提交数据中...");
 //        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
         service.requestRegister(mType, phone, "1234", paw, mOpenid, mUuionid, new StringCallBackView() {
             @Override
@@ -276,7 +275,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (code1 == 200) {//注册成功
                     UserInfomVo.DataBean data = vo.getData();
                     int status = data.getStatus();
-                    dialog1.dismiss();
+                    dialog.dismiss();
                     switch (status) {
                         case 1:
                             T.showToast(mContext, getString(R.string.registerOK));
@@ -302,7 +301,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onError(Response<String> response) {
-                dialog1.dismiss();
+                dialog.dismiss();
                 L.e(response.message());
             }
         });

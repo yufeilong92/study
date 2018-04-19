@@ -42,49 +42,11 @@
                 android:src="@mipmap/ic_search" />
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_search_history"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space_48"
-        android:padding="@dimen/space_8">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/tv_search_history" />
-
-        <TextView
-            android:padding="@dimen/space_8"
-            android:id="@+id/tv_search_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:text="清除记录" />
-
-    </RelativeLayout>
-
-<com.xuechuan.xcedu.weight.FlowLayout
-    android:id="@+id/fl_search_history"
+<include layout="@layout/search_history_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space_48"
-        android:layout_margin="@dimen/space_8">
+    android:layout_height="match_parent"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/host_nominate" />
-    </RelativeLayout>
-    <com.xuechuan.xcedu.weight.FlowLayout
-        android:id="@+id/fl_search_host"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
+<include layout="@layout/search_reasult_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 </LinearLayout>

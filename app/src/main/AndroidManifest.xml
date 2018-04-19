@@ -74,7 +74,8 @@
         <activity android:name=".ui.home.BookActivity" />
         <activity android:name=".ui.home.BookInfomActivity" />
         <activity android:name=".ui.home.SpecasActivity" />
-        <activity android:name=".ui.home.InfomListActivity"></activity>
+        <activity android:name=".ui.home.InfomListActivity" />
+        <activity android:name=".ui.home.SearchResultActivity"></activity>
     </application>
 
 </manifest>

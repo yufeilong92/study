@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private FlowLayout mFlSearchHistory;
     private FlowLayout mFlSearchHost;
     private LayoutInflater mInflater;
+    private LinearLayout mLiSearchHistory;
 
 
     public static void newInstance(Context context, String param1, String param2) {
@@ -59,12 +61,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         context.startActivity(intent);
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_search);
-//        initView();
-//    }
+/*
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+        initView();
+    }
+*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -88,10 +92,10 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void initData() {
         mInflater = LayoutInflater.from(mContext);
         mInstance = SaveHistoryUtil.getInstance(mContext);
+
     }
 
     /**
-     *
      * 绑定热搜
      */
     // TODO: 2018/4/19 处理缓存问题 
@@ -166,6 +170,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mFlSearchHistory.setOnClickListener(this);
         mFlSearchHost = (FlowLayout) findViewById(R.id.fl_search_host);
         mFlSearchHost.setOnClickListener(this);
+        mLiSearchHistory = (LinearLayout) findViewById(R.id.li_search_history);
+        mLiSearchHistory.setOnClickListener(this);
     }
 
     @Override

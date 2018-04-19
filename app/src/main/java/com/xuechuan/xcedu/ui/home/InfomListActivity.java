@@ -2,7 +2,6 @@ package com.xuechuan.xcedu.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 
 import com.xuechuan.xcedu.R;
@@ -29,7 +28,10 @@ public class InfomListActivity extends BaseActivity {
     }
 
     private void initData() {
-        HomeService.getInstance(mContext);
+        HomeService service = HomeService.getInstance(mContext);
+         service.setIsShowDialog(true);
+         service.setDialogContext("",getStringWithId(R.string.loading));
+
     }
 
     private void initView() {
