@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: todo
+ * @Description: 搜索结果适配器
  * @author: L-BackPacker
  * @date: 2018/4/20 8:32
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

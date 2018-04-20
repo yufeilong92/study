@@ -387,7 +387,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 BookActivity.newInstance(mContext, null, null);
                 break;
             case R.id.rl_home_standard://规范
-                SpecasActivity.newInstance(mContext, null, null);
+                Intent intent2 = SpecasActivity.newInstance(mContext, null, null);
+                intent2.putExtra(SpecasActivity.CSTR_EXTRA_TITLE_STR,getStrWithId(R.string.home_specs));
+                startActivity(intent2);
                 break;
             case R.id.btn_infom_more:
                 String str=null;

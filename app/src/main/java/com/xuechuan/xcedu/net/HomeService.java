@@ -8,6 +8,7 @@ import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.GetParamVo;
+import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.util.ArrayList;
@@ -85,6 +86,9 @@ public class HomeService extends BaseHttpServcie {
      * @param callBackView
      */
     public void requestArticleList(int staffid, int page, StringCallBackView callBackView) {
+        if (page <= 0) {
+            page = 1;
+        }
         ArrayList<GetParamVo> list = getGetParamList();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("staffid");
@@ -103,12 +107,16 @@ public class HomeService extends BaseHttpServcie {
     }
 
     /**
-     *请求文章资讯列表数据
+     * 请求文章资讯列表数据
+     *
      * @param provinceCode
      * @param page
      * @param callBackView
      */
     public void requestAdvisoryList(String provinceCode, int page, StringCallBackView callBackView) {
+        if (page <= 0) {
+            page = 1;
+        }
         ArrayList<GetParamVo> list = getGetParamList();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("page");
@@ -125,7 +133,6 @@ public class HomeService extends BaseHttpServcie {
         String url = getUrl(R.string.http_infom);
         requestHttpServiceGet(mContext, url, list, true, callBackView);
     }
-
 
 
     /**
@@ -154,9 +161,80 @@ public class HomeService extends BaseHttpServcie {
         requestHttpServiceGet(mContext, url, list, true, callBackView);
     }
 
-//    private GetParamVo getParamVo() {
-//        return new GetParamVo();
-//    }
+    /**
+     * 规范章节列表数据
+     *
+     * @param callBackView
+     */
+    public void requestChapterList(int page, StringCallBackView callBackView) {
+        if (page <= 0) {
+            page = 1;
+        }
+        String url = getUrl(mContext, R.string.http_chapter);
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("page");
+        paramVo.setValue(String.valueOf(page));
+        listParamVo.add(paramVo);
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("pagesize");
+        paramVo1.setValue("10");
+        listParamVo.add(paramVo1);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+
+    }
+
+    /**
+     * 规范章节数据数据
+     *
+     * @param chapterid    编号
+     * @param callBackView
+     */
+    public void requestarticle(String chapterid, StringCallBackView callBackView) {
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("chapterid");
+        paramVo.setValue(chapterid);
+        listParamVo.add(paramVo);
+        String url = getUrl(mContext, R.string.http_article);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
+    /**
+     * .获取教材科目
+     */
+    public void requestCourse(int page, StringCallBackView callBackView) {
+        if (page <= 0) {
+            page = 1;
+        }
+        String url = getUrl(mContext, R.string.http_Course);
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("page");
+        paramVo.setValue(String.valueOf(page));
+        listParamVo.add(paramVo);
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("pagesize");
+        paramVo1.setValue("10");
+        listParamVo.add(paramVo1);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
+    /**
+     * 教材章节
+     *
+     * @param courseid     科目
+     * @param callBackView
+     */
+    public void requesthCapter(String courseid, StringCallBackView callBackView) {
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("courseid");
+        paramVo.setValue(courseid);
+        listParamVo.add(paramVo);
+        String url = getUrl(mContext, R.string.http_jiaocaichapter);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
 
     private ArrayList<GetParamVo> getGetParamList() {
         if (vos == null) {

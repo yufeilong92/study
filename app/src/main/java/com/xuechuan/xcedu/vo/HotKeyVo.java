@@ -16,16 +16,16 @@ import java.util.List;
  */
 public class HotKeyVo extends BaseVo {
 
-    private TotalBean total;
+//    private TotalBean total;
     private List<String> datas;
 
-    public TotalBean getTotal() {
-        return total;
-    }
+//    public TotalBean getTotal() {
+//        return total;
+//    }
 
-    public void setTotal(TotalBean total) {
-        this.total = total;
-    }
+//    public void setTotal(TotalBean total) {
+//        this.total = total;
+//    }
 
     public List<String> getDatas() {
         return datas;

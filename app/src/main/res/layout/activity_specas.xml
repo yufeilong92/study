@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".ui.home.SpecasActivity">
     <LinearLayout style="@style/TitleBar">
@@ -21,10 +22,10 @@
 
     </LinearLayout>
 
-   <ListView
+   <android.support.v7.widget.RecyclerView
        android:layout_width="match_parent"
-       android:id="@+id/lv_speca_content"
+       android:id="@+id/rlv_speca_content"
        android:layout_height="wrap_content">
 
-   </ListView>
+   </android.support.v7.widget.RecyclerView>
 </LinearLayout>

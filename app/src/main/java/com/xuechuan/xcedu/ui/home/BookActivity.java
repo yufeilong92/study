@@ -67,7 +67,6 @@ public class BookActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_book_case://案例
-
                 break;
             case R.id.iv_book_colligate://综合
                 break;

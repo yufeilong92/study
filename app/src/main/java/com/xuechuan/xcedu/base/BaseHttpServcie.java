@@ -103,6 +103,9 @@ public class BaseHttpServcie {
     }
 
     protected void requestHttpServiceGet(Context context, String url, ArrayList<GetParamVo> obj, boolean isWithToken, final StringCallBackView callBackView) {
+         if (obj==null){
+             obj=getListParamVo();
+         }
         UserBean user = null;
         if (isWithToken) {
             UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();

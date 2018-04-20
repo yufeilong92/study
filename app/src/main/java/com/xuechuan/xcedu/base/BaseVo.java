@@ -3,6 +3,9 @@ package com.xuechuan.xcedu.base;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.xuechuan.xcedu.vo.TotalBeanVo;
+import com.xuechuan.xcedu.vo.TotalVo;
+
 import java.io.Serializable;
 
 
@@ -31,6 +34,25 @@ public class BaseVo implements Serializable, Cloneable, Parcelable {
 
     public void setStatus(StatusBean status) {
         this.status = status;
+    }
+  /*  private TotalVo total;
+
+    public TotalVo getTotal() {
+        return total;
+    }
+
+    public void setTotal(TotalVo total) {
+        this.total = total;
+    }*/
+
+    private TotalBeanVo total;
+
+    public TotalBeanVo getTotal() {
+        return total;
+    }
+
+    public void setTotal(TotalBeanVo total) {
+        this.total = total;
     }
 
     public static class StatusBean {

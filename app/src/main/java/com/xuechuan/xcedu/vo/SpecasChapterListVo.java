@@ -8,29 +8,31 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: 资讯列表
+ * @Description: 规范类
  * @author: L-BackPacker
- * @date: 2018/4/20 11:34
+ * @date: 2018/4/20 18:51
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class AdvisoryListVo extends BaseVo {
-//    private TotalVo total;
-    private List<AdvisoryVo> datas;
+public class SpecasChapterListVo extends BaseVo {
 
-//    public TotalVo getTotal() {
+//    private TotalBeanVo total;
+    private List<DatasBeanVo> datas;
+
+//    public TotalBeanVo getTotal() {
 //        return total;
 //    }
-
-//    public void setTotal(TotalVo total) {
+//
+//    public void setTotal(TotalBeanVo total) {
 //        this.total = total;
 //    }
 
-    public List<AdvisoryVo> getDatas() {
+    public List<DatasBeanVo> getDatas() {
         return datas;
     }
 
-    public void setDatas(List<AdvisoryVo> datas) {
+    public void setDatas(List<DatasBeanVo> datas) {
         this.datas = datas;
     }
+
 }

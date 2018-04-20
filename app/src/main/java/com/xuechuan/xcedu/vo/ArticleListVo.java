@@ -15,16 +15,16 @@ import java.util.List;
  * @Copyright: 2018
  */
 public class ArticleListVo extends BaseVo {
-    private TotalVo total;
+//    private TotalVo total;
     private List<ArticleVo> datas;
 
-    public TotalVo getTotal() {
-        return total;
-    }
+//    public TotalVo getTotal() {
+//        return total;
+//    }
 
-    public void setTotal(TotalVo total) {
-        this.total = total;
-    }
+//    public void setTotal(TotalVo total) {
+//        this.total = total;
+//    }
 
     public List<ArticleVo> getDatas() {
         return datas;
