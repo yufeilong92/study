@@ -10,26 +10,41 @@ import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.vo.AdvisoryVo;
+import com.xuechuan.xcedu.vo.ArticleVo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: 列表适配器
+ * @Description: 资讯列表适配器
  * @author: L-BackPacker
  * @date: 2018/4/19 19:01
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class InfomListAdapter extends BaseRecyclerAdapter<InfomListAdapter.ViewHolder> implements View.OnClickListener {
+public class AdvisoryListAdapter extends BaseRecyclerAdapter<AdvisoryListAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private ArrayList<Object> mData;
+    private List<AdvisoryVo> mData;
     private final LayoutInflater mInflater;
 
-    public InfomListAdapter(Context mContext, ArrayList<Object> mData) {
+    private onItemClickListener clickListener;
+
+    public interface onItemClickListener {
+        public void onClickListener(Object obj, int position);
+        }
+
+        public void setClickListener(onItemClickListener clickListener) {
+            this.clickListener = clickListener;
+    }
+
+    public AdvisoryListAdapter(Context mContext, List<AdvisoryVo> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
@@ -50,6 +65,18 @@ public class InfomListAdapter extends BaseRecyclerAdapter<InfomListAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
+        AdvisoryVo vo = mData.get(position);
+        if (StringUtil.isEmpty(vo.getThumbnailimg())){
+            holder.mIvItemInfomlistContent.setVisibility(View.GONE);
+        }else {
+            holder.mIvItemInfomlistContent.setVisibility(View.VISIBLE);
+            MyAppliction.getInstance().displayImages(holder.mIvItemInfomlistContent,vo.getThumbnailimg(),false);
+        }
+        holder.mTvItemInfomlistTitel.setText(vo.getTitle());
+        holder.mTvItemInfomlistTime.setText(vo.getPublishdate());
+        holder.mTvItemInfomSource.setText(vo.getSource());
+        holder.itemView.setTag(vo);
+        holder.itemView.setId(position);
 
     }
 
@@ -60,7 +87,9 @@ public class InfomListAdapter extends BaseRecyclerAdapter<InfomListAdapter.ViewH
 
     @Override
     public void onClick(View v) {
-
+         if (clickListener!=null){
+             clickListener.onClickListener(v.getTag(),v.getId());
+         }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

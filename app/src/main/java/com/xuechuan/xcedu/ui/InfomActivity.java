@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +25,7 @@ import static android.view.KeyEvent.KEYCODE_BACK;
  * @version V 1.0 xxxxxxxx
  * @Title: InfomActivity
  * @Package com.xuechuan.xcedu.ui
- * @Description: 详情信息页
+ * @Description:  文章详情信息页
  * @author: L-BackPacker
  * @date: 2018/4/19 16:35
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
@@ -63,8 +62,8 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_infom);
         if (getIntent() != null) {
-//            mUrl = getIntent().getStringExtra(URLPARAM);
-            mUrl = "https://www.baidu.com/";
+            mUrl = getIntent().getStringExtra(URLPARAM);
+//            mUrl = "https://www.baidu.com/";
         }
         initView();
         initVebView();

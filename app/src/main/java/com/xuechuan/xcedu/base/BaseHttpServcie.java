@@ -66,6 +66,11 @@ public class BaseHttpServcie {
         this.mContext = context;
         this.title = title;
         this.cont = cont;
+        if (isShow) {
+            if (dialog == null) {
+                dialog = DialogUtil.showDialog(mContext, title, cont);
+            }
+        }
     }
 
     protected void requestHttpServciePost(Context context, final String url, final JSONObject params, boolean isWithToken, final StringCallBackView callBackView) {
@@ -141,9 +146,7 @@ public class BaseHttpServcie {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
-        if (isShow) {
-            dialog = DialogUtil.showDialog(mContext, title, cont);
-        }
+
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>get(url)
@@ -195,9 +198,6 @@ public class BaseHttpServcie {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
-        if (isShow) {
-            dialog = DialogUtil.showDialog(mContext, title, cont);
-        }
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>post(url)
@@ -238,9 +238,7 @@ public class BaseHttpServcie {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
-        if (isShow) {
-            dialog = DialogUtil.showDialog(mContext, title, cont);
-        }
+
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         L.d("请求地址", url);
@@ -264,7 +262,7 @@ public class BaseHttpServcie {
                         if (isShow) {
                             dialog.dismiss();
                         }
-                        T.showToast(mContext,"网络异常");
+                        T.showToast(mContext, "网络异常");
                         L.e(response.message());
                         callBackView.onError(response);
                     }
@@ -364,4 +362,36 @@ public class BaseHttpServcie {
         list.add(paramVo8);
 
     }
+
+    public GetParamVo getParamVo() {
+        return new GetParamVo();
+    }
+
+    public ArrayList<GetParamVo> getListParamVo() {
+        return new ArrayList<GetParamVo>();
+    }
+
+    public String getUrl(Context context, int str) {
+        return context.getResources().getString(str);
+    }
+
+    /**
+     * 是否登录
+     *
+     * @param context
+     * @return
+     */
+    public UserInfomVo isLogin(Context context) {
+        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+        if (userInfom == null) {
+            T.showToast(context, context.getResources().getString(R.string.please_login));
+            return null;
+        }
+        return userInfom;
+    }
+
+    public JSONObject getJsonObj() {
+        return new JSONObject();
+    }
+
 }

@@ -23,11 +23,11 @@
             android:text="@string/home_infom"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_20" />
-         <RadioButton
+         <Button
+             android:id="@+id/btn_infom_more"
              android:textColor="@color/text_color"
-             android:button="@null"
              android:drawableRight="@mipmap/back"
-             android:text="更多"
+             android:text="@string/more"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content" />
     </LinearLayout>
@@ -54,9 +54,9 @@
             android:text="@string/home_infom_all"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_20" />
-       <RadioButton
-           android:button="@null"
-           android:text="更多"
+       <Button
+           android:id="@+id/btn_article_more"
+           android:text="@string/more"
            android:textColor="@color/text_color"
            android:drawableRight="@mipmap/back"
            android:layout_width="wrap_content"

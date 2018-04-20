@@ -3,10 +3,12 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +29,9 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.InfomActivity;
-import com.xuechuan.xcedu.ui.home.AddressSelectActivity;
+import com.xuechuan.xcedu.ui.home.AddressShowActivity;
+import com.xuechuan.xcedu.ui.home.AdvisoryListActivity;
+import com.xuechuan.xcedu.ui.home.ArticleListActivity;
 import com.xuechuan.xcedu.ui.home.BookActivity;
 import com.xuechuan.xcedu.ui.home.SearchActivity;
 import com.xuechuan.xcedu.ui.home.SpecasActivity;
@@ -40,6 +44,7 @@ import com.xuechuan.xcedu.vo.AdvisoryBean;
 import com.xuechuan.xcedu.vo.ArticleBean;
 import com.xuechuan.xcedu.vo.BannerBean;
 import com.xuechuan.xcedu.vo.HomePageVo;
+import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.weight.AddressTextView;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
 import com.youth.banner.Banner;
@@ -101,7 +106,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private String provice;
     private RelativeLayout mRlHomeBook;
     private RelativeLayout mRlHomeStandard;
-    private android.support.v7.app.AlertDialog mDialog;
+    private AlertDialog mDialog;
+    private Button mBtnInfomMore;
+    private Button mBtnArticleMore;
+    private String code;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,12 +135,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_home, null);
-//        initView(view);
-//        return view;
-//    }
+/*
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, null);
+        initView(view);
+        return view;
+    }
+*/
 
     public HomeFragment() {
     }
@@ -252,7 +262,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     /**
-     * 资讯
+     * 文章
      *
      * @param article
      */
@@ -260,7 +270,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         HomeAllAdapter allAdapter = new HomeAllAdapter(mContext, article);
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
-        mRlvRecommendAll.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerviewline));
+        mRlvRecommendAll.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvRecommendAll.setLayoutManager(manager);
         mRlvRecommendAll.setAdapter(allAdapter);
         allAdapter.setClickListener(new HomeAllAdapter.onItemClickListener() {
@@ -275,7 +285,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     /**
-     * 文章
+     * 资讯
      *
      * @param advisory
      */
@@ -283,7 +293,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         HomeContentAdapter allAdapter = new HomeContentAdapter(mContext, advisory);
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
-        mRlvRecommendContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerviewline));
+        mRlvRecommendContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvRecommendContent.setLayoutManager(manager);
         mRlvRecommendContent.setAdapter(allAdapter);
         allAdapter.setClickListener(new HomeContentAdapter.onItemClickListener() {
@@ -304,10 +314,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mTvAddress.setOnClickListener(this);
         mTvSearch = (TextView) view.findViewById(R.id.tv_search);
         mTvSearch.setOnClickListener(this);
-        mIvOption = (ImageView) view.findViewById(R.id.iv_option);
-        mIvOption.setOnClickListener(this);
-        mIvLiftOption = (ImageView) view.findViewById(R.id.iv_lift_option);
-        mIvLiftOption.setOnClickListener(this);
         mRlvRecommendContent = (RecyclerView) view.findViewById(R.id.rlv_recommend_content);
         mRlvRecommendContent.setOnClickListener(this);
         mRlvRecommendAll = (RecyclerView) view.findViewById(R.id.rlv_recommend_all);
@@ -316,6 +322,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mRlHomeBook.setOnClickListener(this);
         mRlHomeStandard = (RelativeLayout) view.findViewById(R.id.rl_home_standard);
         mRlHomeStandard.setOnClickListener(this);
+        mBtnInfomMore = (Button) view.findViewById(R.id.btn_infom_more);
+        mBtnInfomMore.setOnClickListener(this);
+        mBtnArticleMore = (Button) view.findViewById(R.id.btn_article_more);
+        mBtnArticleMore.setOnClickListener(this);
     }
 
 
@@ -353,7 +363,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             String province = location.getProvince();    //获取省份
             mTvAddress.setText(province);
             L.d("定位位置", province);
-            String code = PushXmlUtil.getInstance().getLocationCode(mContext, province);
+            code = PushXmlUtil.getInstance().getLocationCode(mContext, province);
             if (!StringUtil.isEmpty(code))
                 requestData(code);
         }
@@ -364,8 +374,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.tv_address://定位
                 String provice = getTextStr(mTvAddress);
-                Intent intent = AddressSelectActivity.newInstance(mContext, provice);
-                intent.putExtra(AddressSelectActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.location));
+                Intent intent = AddressShowActivity.newInstance(mContext, provice, AddressShowActivity.TYPEHOME);
+                intent.putExtra(AddressShowActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.location));
                 startActivityForResult(intent, REQUESTCODE);
                 break;
             case R.id.tv_search://搜索
@@ -373,17 +383,40 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(searchIntent);
                 break;
             case R.id.rl_home_book://教材
-                Log.e("yfl", "onClick: " );
+                Log.e("yfl", "onClick: ");
                 BookActivity.newInstance(mContext, null, null);
                 break;
             case R.id.rl_home_standard://规范
                 SpecasActivity.newInstance(mContext, null, null);
                 break;
-            default:
-
+            case R.id.btn_infom_more:
+                String str=null;
+                if (StringUtil.isEmpty(code)) {
+                     str = getTextStr(mTvAddress);
+                    code = PushXmlUtil.getInstance().getLocationCode(mContext, str);
+                }else {
+                    str=PushXmlUtil.getInstance().getLocationProvice(mContext,code);
+                }
+                Intent intent1 = AdvisoryListActivity.newInstance(mContext, code);
+                intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
+                startActivity(intent1);
+                break;
+            case R.id.btn_article_more:
+                UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+                Intent instance = ArticleListActivity.newInstance(mContext, vo.getData().getUser().getId());
+                instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_infom_all));
+                startActivity(instance);
+                break;
         }
     }
 
+    /**
+     * 省份
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -392,7 +425,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 provice = data.getStringExtra(STR_INT_PROVINCE);
                 L.d("地址数据回调", provice);
                 mTvAddress.setText(provice);
-                String code = PushXmlUtil.getInstance().getLocationCode(mContext, provice);
+                code = PushXmlUtil.getInstance().getLocationCode(mContext, provice);
                 if (!StringUtil.isEmpty(code))
                     requestData(code);
             }

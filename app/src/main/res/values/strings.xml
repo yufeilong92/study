@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">学川教育</string>
-    <!--测试-->
-    <string name="app_content_token_text">http://app1.xuechuanedu.com/api/Service/Get?staffId=121</string>
-    <string name="app_content_get_text">http://app1.xuechuanedu.com/api/test/Get?id=2</string>
-    <string name="app_content_post_text">http://app1.xuechuanedu.com/api/test/POST</string>
-    <!--测试-->
 
     <!--//请求头-->
     <!--<string name="app_content_heat">http://app1.xuechuanedu.com</string>-->
@@ -37,11 +32,33 @@
     <string name="http_comment">/api/comment/post</string>
     <!--点赞接口-->
     <string name="http_laud">/api/spport/post</string>
-    <!--<string name="app_content_token">http://192.168.1.110/api/Service/Get?staffId=121</string>-->
-    <!--<string name="app_content_get">http://192.168.1.110/api/test/Get?id=2</string>-->
-    <!--<string name="app_content_post">http://192.168.1.110/api/test/POST</string>-->
-    <string name="startlocation">开始定位</string>
-    <string name="stoplocation">停止定位</string>
+    <!--章节列表-->
+    <string name="http_chapter">/api/question/getchapter</string>
+    <!--所有练习题题库-->
+    <string name="http_coursequestionids">/api/question/getcoursequestionids</string>
+    <!--题库首页获取错题和收藏数-->
+    <string name="http_errsetandfav">/api/question/geterrsetandfav</string>
+    <!--所有练习题题号(章节，历年真题，独家密卷)-->
+    <string name="http_chapterquestionids">/api/question/getchapterquestionids</string>
+    <!--科目题库获取题库标签-->
+    <string name="http_questiontags">/api/question/getquestiontags</string>
+    <!--用户错题/收藏题统计信息-->
+    <string name="http_questiontagscount">/api/question/getquestiontagscount</string>
+    <!--标签编号获取用户收藏错题或者错题题号-->
+    <string name="http_questiontagids">/api/question/getquestiontagids</string>
+    <!--题目详情-->
+    <string name="http_datail">/api/question/getdetail</string>
+    <!--题目评论-->
+    <string name="http_questioncmment">/api/question/getquestioncmment</string>
+    <!--获取题目评论二级评论-->
+    <string name="http_commentcomment">/api/question/getcommentcomment</string>
+    <!--是否购买此科目-->
+    <string name="http_isbought">/api/question/getisbought</string>
+    <!--获取下面所有题好号-->
+    <string name="http_questionidsbytagid">/api/question/getquestionidsbytagid</string>
+    <!--获取模拟考试试卷-->
+    <string name="http_examchapter">/api/question/getexamchapter </string>
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -66,7 +83,7 @@
     <string name="sure_password">确认密码</string>
     <string name="bingphone">绑定手机号</string>
     <string name="reset_password">重置密码</string>
-    <string name="loading">数据加载中...</string>
+    <string name="loading">加载数据中...</string>
     <string name="passundersixt">密码不能低于6位</string>
     <string name="please_login">用户没有登录，请登录</string>
     <string name="please_register">用户还未注册,请注册</string>
@@ -81,4 +98,6 @@
     <string name="home_infom_all">推荐文章</string>
     <string name="please_right_phone">请输入正确的手机号码</string>
     <string name="home_select_content">搜索文章、题库</string>
+    <string name="more">更多</string>
+
 </resources>

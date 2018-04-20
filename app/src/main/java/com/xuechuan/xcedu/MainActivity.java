@@ -12,7 +12,6 @@ import com.xuechuan.xcedu.ui.LoginActivity;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final String TAG = MainActivity.class.getSimpleName();
     private Button mBtnPlay;
-    private String url;
     private Button mBtnPlayGet;
     private Button mBtnPlayPost;
     private MainActivity mContext;
@@ -32,7 +31,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void initView() {
         mBtnPlay = (Button) findViewById(R.id.btn_play);
         mBtnPlay.setOnClickListener(this);
-        url = getResources().getString(R.string.app_content_token_text);
         mBtnPlayGet = (Button) findViewById(R.id.btn_play_get);
         mBtnPlayGet.setOnClickListener(this);
         mBtnPlayPost = (Button) findViewById(R.id.btn_play_post);

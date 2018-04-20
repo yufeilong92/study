@@ -13,11 +13,16 @@ package com.xuechuan.xcedu.vo;
 public class ProvinceEvent {
     private String province;
 
-    public ProvinceEvent(String province) {
+    private String code;
+    public  ProvinceEvent(String province,String code) {
         this.province = province;
+        this.code=code;
     }
 
-    public String getProvince() {
+    public  String getProvince() {
         return province;
+    }
+    public  String getCode() {
+        return code;
     }
 }

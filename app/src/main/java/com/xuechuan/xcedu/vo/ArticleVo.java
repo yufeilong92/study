@@ -6,44 +6,20 @@ import com.xuechuan.xcedu.utils.TimeUtil;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: 文章
+ * @Description: todo
  * @author: L-BackPacker
- * @date: 2018/4/18 20:37
+ * @date: 2018/4/20 9:27
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class ArticleBean extends HomePageVo {
-    /**
-     * 跳转地址地址
-     */
+public class ArticleVo {
     private String gourl;
-    /**
-     * id
-     */
     private int id;
-    /**
-     *
-     */
     private boolean issupport;
-    /**
-     * 发布时间
-     */
     private String publishdate;
-    /**
-     *
-     */
-    private int supportcount;
-    /***
-     *
-     */
+    private String supportcount;
     private String thumbnailimg;
-    /***
-     * 标题
-     */
     private String title;
-    /**
-     * 类型
-     */
     private int type;
     private int viewcount;
 
@@ -79,11 +55,11 @@ public class ArticleBean extends HomePageVo {
         this.publishdate = publishdate;
     }
 
-    public int getSupportcount() {
+    public String getSupportcount() {
         return supportcount;
     }
 
-    public void setSupportcount(int supportcount) {
+    public void setSupportcount(String supportcount) {
         this.supportcount = supportcount;
     }
 
@@ -113,6 +89,10 @@ public class ArticleBean extends HomePageVo {
 
     public int getViewcount() {
         return viewcount;
+    }
+
+    public String getStringViewcount() {
+        return String.valueOf(viewcount);
     }
 
     public void setViewcount(int viewcount) {

@@ -12,7 +12,7 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.utils.StringUtil;
-import com.xuechuan.xcedu.vo.ArticleBean;
+import com.xuechuan.xcedu.vo.ArticleVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +21,23 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: 文章适配器
+ * @Description: 文章列表适配器
  * @author: L-BackPacker
- * @date: 2018/4/19 11:17
+ * @date: 2018/4/19 19:01
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolder> implements View.OnClickListener {
+public class ArticleListAdapter extends BaseRecyclerAdapter<ArticleListAdapter.ViewHolder> implements View.OnClickListener {
+
     private Context mContext;
-    private List<ArticleBean> mData;
+    private List<ArticleVo> mData;
     private final LayoutInflater mInflater;
+
+    public ArticleListAdapter(Context mContext, List<ArticleVo> mData) {
+        this.mContext = mContext;
+        this.mData = mData;
+        mInflater = LayoutInflater.from(mContext);
+    }
 
     private onItemClickListener clickListener;
 
@@ -42,11 +49,6 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         this.clickListener = clickListener;
     }
 
-    public HomeAllAdapter(Context mContext, List<ArticleBean> mData) {
-        this.mContext = mContext;
-        this.mData = mData;
-        mInflater = LayoutInflater.from(mContext);
-    }
 
     @Override
     public ViewHolder getViewHolder(View view) {
@@ -63,17 +65,19 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        ArticleBean bean = mData.get(position);
-        holder.mTvItemHomeTitleAll.setText(bean.getTitle());
-        holder.mTvItemHomeLookAll.setText(bean.getViewcount()+"");
-        holder.mTvItemHomeLaudAll.setText(bean.getSupportcount()+"");
-        if (StringUtil.isEmpty(bean.getGourl())) {
+        ArticleVo vo = mData.get(position);
+        if (StringUtil.isEmpty(vo.getThumbnailimg())) {
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
-            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll, bean.getThumbnailimg(), false);
+            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll,vo.getThumbnailimg(),false);
         }
-        holder.itemView.setTag(bean);
+        String titel="中兴遭美国“封杀”强烈震动了中国社会，舆论场上给出诸多反应，既包括对美国的做法很愤怒，又有些人认为中兴“遭此报应活该”，既有强大声音主张中国须以此为鉴，真正把本国半导体产业做强做优，又有不少很悲观的声音，认为中国“不可能斗得过美国”。";
+        holder.mTvItemHomeLookAll.setText(vo.getStringViewcount());
+        holder.mTvItemHomeTitleAll.setText(vo.getTitle());
+        holder.mTvItemHomeTitleAll.setText(titel);
+        holder.mTvItemHomeLaudAll.setText(vo.getSupportcount());
+        holder.itemView.setTag(vo);
         holder.itemView.setId(position);
     }
 
@@ -89,12 +93,11 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvItemHomeTitleAll;
         public ImageView mIvItemHomeAll;
         public TextView mTvItemHomeLookAll;
         public TextView mTvItemHomeLaudAll;
-//        public TextView mTvItemHomeAssessAll;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -102,8 +105,6 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
             this.mIvItemHomeAll = (ImageView) itemView.findViewById(R.id.iv_item_home_all);
             this.mTvItemHomeLookAll = (TextView) itemView.findViewById(R.id.tv_item_home_look_all);
             this.mTvItemHomeLaudAll = (TextView) itemView.findViewById(R.id.tv_item_home_laud_all);
-//            this.mTvItemHomeAssessAll = (TextView) itemView.findViewById(R.id.tv_item_home_assess_all);
-
         }
     }
 }

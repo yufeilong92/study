@@ -11,8 +11,8 @@
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
-            android:onClick="onHomeClick"
             style="@style/TitleBarAction"
+            android:onClick="onHomeClick"
             android:src="@mipmap/back" />
 
         <TextView
@@ -26,21 +26,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_16"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/space_8">
 
             <ImageView
                 android:id="@+id/iv_book_skill"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/bg_book_li"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/space_32"
                 android:src="@mipmap/ic_launcher_round" />
+
+            <Space style="@style/space_8_height" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -52,16 +58,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_16"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/space_8">
 
             <ImageView
                 android:id="@+id/iv_book_colligate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/bg_book_li"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/space_32"
                 android:src="@mipmap/ic_launcher_round" />
+
+            <Space style="@style/space_8_height" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -74,21 +85,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:padding="@dimen/space_16">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_16"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/space_8">
 
             <ImageView
                 android:id="@+id/iv_book_case"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/bg_book_li"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/space_32"
                 android:src="@mipmap/ic_launcher_round" />
+
+            <Space style="@style/space_8_height" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -100,9 +116,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_16"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:padding="@dimen/space_8"
             android:visibility="invisible">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

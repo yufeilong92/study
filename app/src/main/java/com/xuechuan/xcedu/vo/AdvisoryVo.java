@@ -1,50 +1,28 @@
 package com.xuechuan.xcedu.vo;
 
+import android.widget.ProgressBar;
+
 import com.xuechuan.xcedu.utils.TimeUtil;
 
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: 文章
+ * @Description: 资讯
  * @author: L-BackPacker
- * @date: 2018/4/18 20:37
+ * @date: 2018/4/20 11:24
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class ArticleBean extends HomePageVo {
-    /**
-     * 跳转地址地址
-     */
+public class AdvisoryVo {
     private String gourl;
-    /**
-     * id
-     */
     private int id;
-    /**
-     *
-     */
-    private boolean issupport;
-    /**
-     * 发布时间
-     */
+    private String provincecode;
     private String publishdate;
-    /**
-     *
-     */
-    private int supportcount;
-    /***
-     *
-     */
+    private String source;
     private String thumbnailimg;
-    /***
-     * 标题
-     */
     private String title;
-    /**
-     * 类型
-     */
-    private int type;
+    private int  type;
     private int viewcount;
 
     public String getGourl() {
@@ -63,28 +41,28 @@ public class ArticleBean extends HomePageVo {
         this.id = id;
     }
 
-    public boolean isIssupport() {
-        return issupport;
+    public String getProvincecode() {
+        return provincecode;
     }
 
-    public void setIssupport(boolean issupport) {
-        this.issupport = issupport;
+    public void setProvincecode(String provincecode) {
+        this.provincecode = provincecode;
     }
 
     public String getPublishdate() {
-        return TimeUtil.getYMDT(publishdate);
+        return TimeUtil.getYMDT(publishdate) ;
     }
 
     public void setPublishdate(String publishdate) {
         this.publishdate = publishdate;
     }
 
-    public int getSupportcount() {
-        return supportcount;
+    public String getSource() {
+        return source;
     }
 
-    public void setSupportcount(int supportcount) {
-        this.supportcount = supportcount;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getThumbnailimg() {

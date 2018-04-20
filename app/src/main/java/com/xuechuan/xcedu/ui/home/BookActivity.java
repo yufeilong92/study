@@ -4,22 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
 
 /**
- * @Title:  BookActivity
- * @Package com.xuechuan.xcedu.ui
- * @Description:  教材页面
- * @author: L-BackPacker
- * @date:   2018/4/19 16:43
  * @version V 1.0 xxxxxxxx
- * @verdescript  版本号 修改时间  修改人 修改的概要说明
+ * @Title: BookActivity
+ * @Package com.xuechuan.xcedu.ui
+ * @Description: 教材页面
+ * @author: L-BackPacker
+ * @date: 2018/4/19 16:43
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class BookActivity extends BaseActivity {
+public class BookActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mIvBookSkill;
     private ImageView mIvBookColligate;
@@ -46,7 +47,7 @@ public class BookActivity extends BaseActivity {
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_book);
-        if (getIntent()!=null){
+        if (getIntent() != null) {
             params = getIntent().getStringExtra(PARAMP);
             params1 = getIntent().getStringExtra(PARAMP1);
         }
@@ -57,5 +58,23 @@ public class BookActivity extends BaseActivity {
         mIvBookSkill = (ImageView) findViewById(R.id.iv_book_skill);
         mIvBookColligate = (ImageView) findViewById(R.id.iv_book_colligate);
         mIvBookCase = (ImageView) findViewById(R.id.iv_book_case);
+        mIvBookCase.setOnClickListener(this);
+        mIvBookSkill.setOnClickListener(this);
+        mIvBookColligate.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_book_case://案例
+
+                break;
+            case R.id.iv_book_colligate://综合
+                break;
+            case R.id.iv_book_skill://技术
+                break;
+            default:
+
+        }
     }
 }

@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.home.InfomListActivity">
+    android:background="@color/white"
+    tools:context=".ui.home.ArticleListActivity">
 
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
+            android:onClick="onHomeClick"
             style="@style/TitleBarAction"
             android:src="@mipmap/back" />
 

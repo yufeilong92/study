@@ -12,8 +12,11 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.fragment.HomeFragment;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
 import com.xuechuan.xcedu.utils.RecyclerSelectItem;
+import com.xuechuan.xcedu.vo.ProvinceEvent;
 import com.xuechuan.xcedu.vo.ProvincesVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/14
  */
-public class AddressSelectActivity extends BaseActivity {
+public class AddressShowActivity extends BaseActivity {
     private RecyclerView mRlvSelAdress;
     private Context mContext;
     /**
@@ -39,12 +42,22 @@ public class AddressSelectActivity extends BaseActivity {
     /**
      * 位标
      */
-    private static String POSITON = "position";
+    private static String POSITONTYPE = "type";
+    /**
+     * 首页
+     */
+    public static String TYPEHOME = "typehome";
+    /**
+     * 列表
+     */
+    public static String TYPELIST = "typelist";
     private ArrayList<ProvincesVo> list;
+    private String mTypeLocation;
 
-    public static Intent newInstance(Context context, String address) {
-        Intent intent = new Intent(context, AddressSelectActivity.class);
+    public static Intent newInstance(Context context, String address, String type) {
+        Intent intent = new Intent(context, AddressShowActivity.class);
         intent.putExtra(ADDRESS, address);
+        intent.putExtra(POSITONTYPE, type);
         return intent;
     }
 
@@ -53,6 +66,7 @@ public class AddressSelectActivity extends BaseActivity {
         setContentView(R.layout.activity_address_select);
         if (getIntent() != null) {
             mAddress = getIntent().getStringExtra(ADDRESS);
+            mTypeLocation = getIntent().getStringExtra(POSITONTYPE);
         }
         initView();
         initData();
@@ -86,14 +100,23 @@ public class AddressSelectActivity extends BaseActivity {
         addressAdapter.setOnClickListener(new AddressAdapter.AddressOnClickListener() {
             @Override
             public void onClickListener(ProvincesVo vo, int position) {
-                Intent intent = new Intent();
-                intent.putExtra(HomeFragment.STR_INT_PROVINCE, vo.getName());
-                intent.putExtra(HomeFragment.STR_INT_CODE, vo.getCode());
-                intent.putExtra(HomeFragment.STR_INT_POSITION, position);
-                setResult(HomeFragment.REQUESTRESULT, intent);
-                finish();
+                toIntent(vo, position);
             }
         });
+    }
+
+    private void toIntent(ProvincesVo vo, int position) {
+        if (mTypeLocation.equals(TYPEHOME)) {
+            Intent intent = new Intent();
+            intent.putExtra(HomeFragment.STR_INT_PROVINCE, vo.getName());
+            intent.putExtra(HomeFragment.STR_INT_CODE, vo.getCode());
+            intent.putExtra(HomeFragment.STR_INT_POSITION, position);
+            setResult(HomeFragment.REQUESTRESULT, intent);
+            finish();
+        }if (mTypeLocation.equals(TYPELIST)){
+                EventBus.getDefault().postSticky(new ProvinceEvent(vo.getName(),vo.getCode()));
+            finish();
+        }
     }
 
     private int getPersionPosition(String mAddress, ArrayList<ProvincesVo> list) {

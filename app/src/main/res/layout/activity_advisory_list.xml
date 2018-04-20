@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".ui.home.AddressShowActivity">
+    android:orientation="vertical"
+    tools:context=".ui.home.AdvisoryListActivity">
 
     <LinearLayout style="@style/TitleBar">
 
@@ -14,18 +14,29 @@
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
             android:src="@mipmap/back" />
-
         <TextView
-            style="@style/TitleBarText"
-            android:text="定位" />
+            android:id="@+id/tv_address_title"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/title_action_height"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingEnd="@dimen/space_8"
+            android:paddingLeft="@dimen/space_8"
+            android:paddingRight="@dimen/space_8"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_18" />
 
         <ImageView
+            android:id="@+id/iv_adviistory_location"
             style="@style/TitleBarAction"
-            android:clickable="false" />
+            android:src="@mipmap/ic_location" />
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rlv_sel_adress"
+        android:id="@+id/rlv_advisory_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

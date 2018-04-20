@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.net
- * @Description: 热词接口
+ * @Description: 首页接口
  * @author: L-BackPacker
  * @date: 2018/4/18 9:56
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
@@ -84,15 +84,15 @@ public class HomeService extends BaseHttpServcie {
      * @param staffid
      * @param callBackView
      */
-    public void requestArticleList(String staffid, String page, StringCallBackView callBackView) {
+    public void requestArticleList(int staffid, int page, StringCallBackView callBackView) {
         ArrayList<GetParamVo> list = getGetParamList();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("staffid");
-        paramVo.setValue(staffid);
+        paramVo.setValue(String.valueOf(staffid));
         list.add(paramVo);
         GetParamVo paramVo1 = getParamVo();
         paramVo1.setParam("page");
-        paramVo1.setValue(page);
+        paramVo1.setValue(String.valueOf(page));
         list.add(paramVo1);
         GetParamVo paramVo2 = getParamVo();
         paramVo2.setParam("pagesize");
@@ -108,11 +108,11 @@ public class HomeService extends BaseHttpServcie {
      * @param page
      * @param callBackView
      */
-    public void requestAdvisoryList(String provinceCode, String page, StringCallBackView callBackView) {
+    public void requestAdvisoryList(String provinceCode, int page, StringCallBackView callBackView) {
         ArrayList<GetParamVo> list = getGetParamList();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("page");
-        paramVo.setValue(page);
+        paramVo.setValue(String.valueOf(page));
         list.add(paramVo);
         GetParamVo paramVo2 = getParamVo();
         paramVo2.setParam("pagesize");
@@ -125,6 +125,7 @@ public class HomeService extends BaseHttpServcie {
         String url = getUrl(R.string.http_infom);
         requestHttpServiceGet(mContext, url, list, true, callBackView);
     }
+
 
 
     /**
@@ -153,9 +154,9 @@ public class HomeService extends BaseHttpServcie {
         requestHttpServiceGet(mContext, url, list, true, callBackView);
     }
 
-    private GetParamVo getParamVo() {
-        return new GetParamVo();
-    }
+//    private GetParamVo getParamVo() {
+//        return new GetParamVo();
+//    }
 
     private ArrayList<GetParamVo> getGetParamList() {
         if (vos == null) {

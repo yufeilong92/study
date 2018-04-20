@@ -3,6 +3,10 @@ package com.xuechuan.xcedu.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -14,10 +18,14 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.adapter.HomeReasultViewPagAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.BaseVo;
+import com.xuechuan.xcedu.fragment.ArticleReasultFragment;
+import com.xuechuan.xcedu.fragment.BankReasultFragment;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveHistoryUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -52,6 +60,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private FlowLayout mFlSearchHost;
     private LayoutInflater mInflater;
     private LinearLayout mLiSearchHistory;
+    private ViewPager mVpSearchReasult;
+    private LinearLayout mLiSearchReasult;
+    private TabLayout mTabTitleContent;
 
 
     public static void newInstance(Context context, String param1, String param2) {
@@ -61,14 +72,12 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         context.startActivity(intent);
     }
 
-/*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        initView();
-    }
-*/
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_search);
+//        initView();
+//    }
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -77,7 +86,31 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         initData();
         bindHistoryData();
         bingHostData();
+        bindReasultData();
 
+    }
+
+    private void bindReasultData() {
+        ArrayList<Fragment> list = new ArrayList<>();
+        ArticleReasultFragment reasultFragment = new ArticleReasultFragment();
+        BankReasultFragment bankReasultFragment = new BankReasultFragment();
+        list.add(reasultFragment);
+        list.add(bankReasultFragment);
+        setViewPageAdapter(list);
+    }
+
+    private void setViewPageAdapter(ArrayList<Fragment> list) {
+        if (list.size() < 2) {
+            mTabTitleContent.setVisibility(View.GONE);
+        } else {
+            mTabTitleContent.setVisibility(View.VISIBLE);
+        }
+        ArrayList<String> titles = ArrayToListUtil.arraytoList(mContext, R.array.search_reasult);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        HomeReasultViewPagAdapter adapter = new HomeReasultViewPagAdapter(fragmentManager, mContext, list,titles);
+        mVpSearchReasult.setAdapter(adapter);
+        mTabTitleContent.setupWithViewPager(mVpSearchReasult);
     }
 
     /**
@@ -172,6 +205,12 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mFlSearchHost.setOnClickListener(this);
         mLiSearchHistory = (LinearLayout) findViewById(R.id.li_search_history);
         mLiSearchHistory.setOnClickListener(this);
+        mVpSearchReasult = (ViewPager) findViewById(R.id.vp_search_reasult);
+        mVpSearchReasult.setOnClickListener(this);
+
+        mLiSearchReasult = (LinearLayout) findViewById(R.id.li_search_reasult);
+        mLiSearchReasult.setOnClickListener(this);
+        mTabTitleContent = findViewById(R.id.tab_title_content);
     }
 
     @Override
