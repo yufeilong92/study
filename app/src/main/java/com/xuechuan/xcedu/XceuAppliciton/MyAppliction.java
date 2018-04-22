@@ -13,19 +13,20 @@ import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.io.File;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -101,7 +102,28 @@ public class MyAppliction extends Application {
         initOkGo();
 //        initOkHttp();
 //        initJPush();
+        initImagerLoader();
 
+    }
+
+    private void initImagerLoader() {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .memoryCacheExtraOptions(480, 800) // default = device screen dimensions 内存缓存文件的最大长宽
+                .diskCacheExtraOptions(480, 800, null)  // 本地缓存的详细信息(缓存的最大长宽)，最好不要设置这个
+                .threadPriority(Thread.NORM_PRIORITY - 2) // default 设置当前线程的优先级
+                .tasksProcessingOrder(QueueProcessingType.FIFO) // default
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024)) //可以通过自己的内存缓存实现
+                .memoryCacheSize(2 * 1024 * 1024)  // 内存缓存的最大值
+                .memoryCacheSizePercentage(13) // default
+//                .diskCache(new UnlimitedDiscCache(cacheDir)) // default 可以自定义缓存路径
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb sd卡(本地)缓存的最大值
+                .diskCacheFileCount(100)  // 可以缓存的文件数量
+                // default为使用HASHCODE对UIL进行加密命名， 还可以用MD5(new Md5FileNameGenerator())加密
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .writeDebugLogs() // 打印debug log
+                .build(); //开始构建
+        imageLoader.init(config);
     }
 
     private void initJPush() {
@@ -117,9 +139,7 @@ public class MyAppliction extends Application {
      *
      * @param iv          显示图片控件
      * @param url         网络或本地图片地址
-     * @param defaultPic  默认图片
      * @param isRound     true为圆形，false不处理
-     * @param cacheOnDisk true缓存到SD卡，false不缓存到SD卡
      */
     public void displayImages(ImageView iv, String url, boolean isRound) {
 //配置一些图片选项
@@ -136,13 +156,14 @@ public class MyAppliction extends Application {
                 .build();
 //        String string ="http://192.168.1.110/8080";
 //        url = string.concat(url);
+
         imageLoader.displayImage(url, iv, options);
     }
 
     private void initPolyCilent() {
         // 创建默认的ImageLoader配置参数
-        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
-        ImageLoader.getInstance().init(configuration);
+//        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
+//        ImageLoader.getInstance().init(configuration);
         mPolyclient = PolyvSDKClient.getInstance();
         mPolyclient.initCrashReport(mContext);
         MessageData data = MessageData.getInstance();
