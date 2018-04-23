@@ -81,6 +81,7 @@ public class SpecasActivity extends BaseActivity {
         initView();
         clearData();
         bindAdapterData();
+        initXrfresh();
         mXrfvSpecaRefresh.startRefresh();
     }
 
@@ -131,7 +132,7 @@ public class SpecasActivity extends BaseActivity {
         mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
         mRlvSpecaContent.setAdapter(adapter);
-        initXrfresh();
+
 
 
     }

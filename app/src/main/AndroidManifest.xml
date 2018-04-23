@@ -77,6 +77,7 @@
         <activity android:name=".ui.home.ArticleListActivity" />
         <activity android:name=".ui.home.SearchResultActivity" />
         <activity android:name=".ui.home.AdvisoryListActivity" />
+        <activity android:name=".ui.User.PersionActivity"></activity>
     </application>
 
 </manifest>
