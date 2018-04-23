@@ -154,8 +154,10 @@ public class SpecasActivity extends BaseActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
                         mXrfvSpecaRefresh.setPullLoadEnable(true);
-                        mXrfvSpecaRefresh.setLoadComplete(false);
+                        mXrfvSpecaRefresh.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
                     }
                 }, 3000);
 //                mXrfvSpecaRefresh.setLoadComplete(false);
