@@ -3,9 +3,12 @@ package com.xuechuan.xcedu.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.andview.refreshview.XRefreshView;
+import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
@@ -15,10 +18,10 @@ import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.DatasBeanVo;
 import com.xuechuan.xcedu.vo.SpecasChapterListVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +43,17 @@ public class SpecasActivity extends BaseActivity {
     private String parame;
     private String parame1;
     private Context mContext;
+    private XRefreshView mXrfvSpecaRefresh;
+    private List mArrary;
+    /**
+     * 刷新时间
+     */
+    public static long lastRefreshTime;
+    private SpecsOrderAdapter adapter;
+    /**
+     * 防止冲突
+     */
+    private boolean isRefresh = false;
 
     public static Intent newInstance(Context context, String parame, String parame1) {
         Intent intent = new Intent(context, SpecasActivity.class);
@@ -48,11 +62,14 @@ public class SpecasActivity extends BaseActivity {
         return intent;
     }
 
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_specas);
+        initView();
     }
+*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -62,23 +79,35 @@ public class SpecasActivity extends BaseActivity {
             parame1 = getIntent().getStringExtra(PARAME1);
         }
         initView();
-        initData();
+        clearData();
+        bindAdapterData();
+        mXrfvSpecaRefresh.startRefresh();
+
     }
 
-    private void initData() {
+    private void requestData() {
+        if (isRefresh) {
+            isRefresh = false;
+            return;
+        }
         HomeService service = HomeService.getInstance(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext(null, getStringWithId(R.string.loading));
         service.requestChapterList(1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
+                mXrfvSpecaRefresh.stopRefresh();
                 String s = response.body().toString();
                 L.e("获取规范章节列表数据" + s);
                 Gson gson = new Gson();
                 SpecasChapterListVo vo = gson.fromJson(s, SpecasChapterListVo.class);
                 if (vo.getStatus().getCode() == 200) {//成功
-                    List<DatasBeanVo> datas = vo.getDatas();
-                    bindAdapterData(datas);
+//                    List<DatasBeanVo> mArraylist = vo.getDatas();
+                    List list = vo.getDatas();
+                    clearData();
+                    addListData(list);
+                    adapter.notifyDataSetChanged();
+                    mXrfvSpecaRefresh.setPullLoadEnable(true);
+                    mXrfvSpecaRefresh.setLoadComplete(false);
+//                    mXrfvSpecaRefresh.setLoadComplete(true);
 
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
@@ -95,24 +124,79 @@ public class SpecasActivity extends BaseActivity {
 
     /**
      * 绑定适配器数据
-     *
-     * @param dataBean
      */
-    private void bindAdapterData( List<DatasBeanVo> dataBean) {
-        SpecsOrderAdapter adapter = new SpecsOrderAdapter(mContext, dataBean);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
+    private void bindAdapterData() {
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext, com.xuechuan.xcedu.weight.DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
+        adapter = new SpecsOrderAdapter(mContext, mArrary, gridLayoutManager);
+        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
         mRlvSpecaContent.setAdapter(adapter);
+        initXrfresh();
 
 
+    }
+
+    private void initXrfresh() {
+        mXrfvSpecaRefresh.restoreLastRefreshTime(lastRefreshTime);
+        mXrfvSpecaRefresh.setPullLoadEnable(true);
+        mXrfvSpecaRefresh.setAutoLoadMore(true);
+        mXrfvSpecaRefresh.setPullRefreshEnable(true);
+        adapter.setCustomLoadMoreView(new XRefreshViewFooter(this));
+        mXrfvSpecaRefresh.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
+            @Override
+            public void onRefresh(boolean isPullDown) {
+                requestData();
+            }
+
+            @Override
+            public void onLoadMore(boolean isSilence) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mXrfvSpecaRefresh.setPullLoadEnable(true);
+                        mXrfvSpecaRefresh.setLoadComplete(false);
+                    }
+                }, 3000);
+//                mXrfvSpecaRefresh.setLoadComplete(false);
+            }
+        });
+        adapter.setClickListener(new SpecsOrderAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(Object obj, int position) {
+
+            }
+        });
     }
 
 
     private void initView() {
         mContext = this;
         mRlvSpecaContent = (RecyclerView) findViewById(R.id.rlv_speca_content);
+        mXrfvSpecaRefresh = (XRefreshView) findViewById(R.id.xrfv_speca_refresh);
 
     }
+
+    private void initRefresh(SpecsOrderAdapter adapter) {
+
+    }
+
+    private void clearData() {
+        if (mArrary == null) {
+            mArrary = new ArrayList();
+        } else {
+            mArrary.clear();
+        }
+    }
+
+    private void addListData(List<?> list) {
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        if (mArrary == null) {
+            clearData();
+        }
+        mArrary.addAll(list);
+    }
+
 }

@@ -19,7 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="@dimen/space_4"
-            android:text="测试标题测试标题测试标题测试标题" />
+            android:textSize="@dimen/space_16"
+            android:textColor="@color/text_title_color"
+            android:text="试标试标试标试标试标试标试标试标试标试标试标试标试标测试标题测试标题测试标题测试标题" />
 
         <Space style="@style/space_16_height" />
 
@@ -30,14 +32,18 @@
             android:orientation="horizontal">
 
             <TextView
+                android:drawableLeft="@drawable/list_icon_pageview"
                 android:id="@+id/tv_item_home_look_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/space_6"
                 android:text="123" />
 
             <Space style="@style/space_16_width" />
 
             <TextView
+                android:drawablePadding="@dimen/space_6"
+                android:drawableLeft="@drawable/list_icon_like_s"
                 android:id="@+id/tv_item_home_laud_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,8 +54,8 @@
 
     <ImageView
         android:id="@+id/iv_item_home_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/space_100dp"
+        android:layout_height="match_parent"
         android:padding="@dimen/space_8"
         android:src="@mipmap/ic_launcher_round" />
 </LinearLayout>

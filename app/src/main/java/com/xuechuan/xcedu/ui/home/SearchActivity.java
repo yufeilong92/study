@@ -52,7 +52,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private static String ARG_PARAM2 = "arg_param2";
     private EditText mEtSearch;
     private ImageView mIvSearch;
-    private TextView mTvSearchClear;
+    private ImageView mIvSearchClear;
     private RelativeLayout mRlSearchHistory;
     private SaveHistoryUtil mInstance;
     private Context mContext;
@@ -157,13 +157,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 T.showToast(mContext, response.message());
             }
         });
-//
-//        int a = 10;
-//        ArrayList<String> list = new ArrayList<>();
-//        for (int i = 0; i < a; i++) {
-//            list.add("测" + i);
-//        }
-//        BuildTextViewData(mFlSearchHost, list);
+
     }
 
     /**
@@ -177,6 +171,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             TextView tv = (TextView) mInflater.inflate(R.layout.search_label_tv,
                     flowLayout, false);
             tv.setText(list.get(i));
+
             final String str = tv.getText().toString();
             //点击事件
             tv.setOnClickListener(new View.OnClickListener() {
@@ -194,8 +189,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void initView() {
         mEtSearch = (EditText) findViewById(R.id.et_search);
         mIvSearch = (ImageView) findViewById(R.id.iv_search);
-        mTvSearchClear = (TextView) findViewById(R.id.tv_search_clear);
-        mTvSearchClear.setOnClickListener(this);
+        mIvSearchClear = (ImageView) findViewById(R.id.iv_search_clear);
+        mIvSearchClear.setOnClickListener(this);
         mRlSearchHistory = (RelativeLayout) findViewById(R.id.rl_search_history);
         mIvSearch.setOnClickListener(this);
         mContext = this;
@@ -226,7 +221,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 mInstance.saveHistory(trim);
                 bindHistoryData();
                 break;
-            case R.id.tv_search_clear:
+            case R.id.iv_search_clear:
                 mInstance.delete(mContext);
                 mFlSearchHistory.removeAllViews();
                 break;

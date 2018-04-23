@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
@@ -19,32 +18,48 @@ import com.xuechuan.xcedu.ui.InfomActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.DatasBeanVo;
-import com.xuechuan.xcedu.vo.SpecasChapterListVo;
 import com.xuechuan.xcedu.vo.SpecasJieVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: todo
+ * @Description: 规范适配器
  * @author: L-BackPacker
  * @date: 2018/4/20 18:59
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.ViewHolder> {
+public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.ViewHolder> implements View.OnClickListener {
+    private final GridLayoutManager manager;
     private Context mContext;
     private List<DatasBeanVo> mData;
     private final LayoutInflater mInflater;
+    private onItemClickListener clickListener;
 
-    public SpecsOrderAdapter(Context mContext, List<DatasBeanVo> mData) {
+    @Override
+    public void onClick(View v) {
+        if (clickListener != null) {
+            clickListener.onClickListener(v.getTag(), v.getId());
+        }
+    }
+
+    public interface onItemClickListener {
+        public void onClickListener(Object obj, int position);
+    }
+
+    public void setClickListener(onItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public SpecsOrderAdapter(Context mContext, List<DatasBeanVo> mData, GridLayoutManager manager) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
+        this.manager = manager;
     }
 
 
@@ -57,6 +72,7 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType, boolean isItem) {
         View view = mInflater.inflate(R.layout.item_specas_order, null);
         ViewHolder holder = new ViewHolder(view);
+        view.setOnClickListener(this);
         return holder;
     }
 
@@ -67,14 +83,20 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                manager.scrollToPosition(0);
+
                 if (holder.mRlvItemSpecasContent.getVisibility() == View.VISIBLE) {
                     holder.mRlvItemSpecasContent.setVisibility(View.GONE);
                 } else {
+
                     holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
                 }
                 reqeustData(holder, vo);
+
             }
         });
+        holder.itemView.setTag(vo);
+        holder.itemView.setId(vo.getId());
     }
 
     private void reqeustData(final ViewHolder holder, DatasBeanVo vo) {
@@ -103,6 +125,7 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
 
     private void bindData(ViewHolder holder, List<SpecasJieVo.DatasBean> datas) {
         SpecsJieAdapter adapter = new SpecsJieAdapter(mContext, datas);
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         holder.mRlvItemSpecasContent.addItemDecoration(new DividerItemDecoration(mContext, com.xuechuan.xcedu.weight.DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
@@ -111,8 +134,9 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
         adapter.setClickListener(new SpecsJieAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                SpecasJieVo.DatasBean vo= (SpecasJieVo.DatasBean) obj;
-                InfomActivity.newInstance(mContext,vo.getGourl());
+
+                SpecasJieVo.DatasBean vo = (SpecasJieVo.DatasBean) obj;
+                InfomActivity.newInstance(mContext, vo.getGourl());
             }
         });
 

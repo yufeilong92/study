@@ -96,6 +96,7 @@ public class AddressShowActivity extends BaseActivity {
         mRlvSelAdress.setAdapter(addressAdapter);
         int mPosition = getPersionPosition(mAddress, list);
         addressAdapter.setSelectItem(mAddress, mPosition);
+        gridLayoutManager.scrollToPositionWithOffset(mPosition,0);
         RecyclerSelectItem.MoveToPostion(gridLayoutManager, mRlvSelAdress, mPosition);
         addressAdapter.setOnClickListener(new AddressAdapter.AddressOnClickListener() {
             @Override

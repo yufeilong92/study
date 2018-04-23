@@ -2,11 +2,8 @@ package com.xuechuan.xcedu.utils;
 
 import android.content.Context;
 
-import com.xuechuan.xcedu.adapter.JieAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx

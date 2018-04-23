@@ -7,11 +7,12 @@
     android:background="@color/white"
     android:orientation="vertical"
     tools:context=".ui.home.SpecasActivity">
+
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
-            android:onClick="onHomeClick"
             style="@style/TitleBarAction"
+            android:onClick="onHomeClick"
             android:src="@mipmap/back" />
 
         <TextView
@@ -22,10 +23,16 @@
 
     </LinearLayout>
 
-   <android.support.v7.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:id="@+id/rlv_speca_content"
-       android:layout_height="wrap_content">
+    <com.andview.refreshview.XRefreshView
+        android:layout_width="match_parent"
+        android:id="@+id/xrfv_speca_refresh"
+        android:layout_height="match_parent">
 
-   </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv_speca_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.andview.refreshview.XRefreshView>
 </LinearLayout>

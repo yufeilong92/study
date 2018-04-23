@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +26,7 @@ import static android.view.KeyEvent.KEYCODE_BACK;
  * @version V 1.0 xxxxxxxx
  * @Title: InfomActivity
  * @Package com.xuechuan.xcedu.ui
- * @Description:  文章详情信息页
+ * @Description:  详情信息页
  * @author: L-BackPacker
  * @date: 2018/4/19 16:35
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
@@ -63,7 +64,6 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_infom);
         if (getIntent() != null) {
             mUrl = getIntent().getStringExtra(URLPARAM);
-//            mUrl = "https://www.baidu.com/";
         }
         initView();
         initVebView();
@@ -77,6 +77,7 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
         settings.setSupportZoom(true);
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
+        settings.setTextSize(WebSettings.TextSize.LARGER);
         mWebInfom.loadUrl(mUrl);
         mWebInfom.setWebChromeClient(new WebChromeClient());
         mWebInfom.setWebViewClient(new WebViewClient() {
@@ -96,6 +97,7 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
                 } catch (Exception e) { //防止crash (如果手机上没有安装处理某个scheme开头的url的APP, 会导致crash)
                     return false;
                 }
+
             }
 
             @Override
@@ -153,4 +155,15 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
     private void submit() {
 
     }
+/*    private void selectIsSupper(boolean isSupper){
+        Drawable supperDrawable;
+        if (isSupper) {
+            supperDrawable = getResources().getDrawable(R.drawable.common_tab_home_s);
+        } else {
+            supperDrawable = getResources().getDrawable(R.drawable.common_tab_home_n);
+        }
+        supperDrawable.setBounds(0, 0,  supperDrawable.getMinimumWidth(), supperDrawable.getMinimumHeight());
+        m.setCompoundDrawables(null, supperDrawable, null, null);
+    }*/
+
 }

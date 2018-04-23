@@ -13,7 +13,7 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@mipmap/back" />
+            android:src="@drawable/nav_icon_back" />
 
         <TextView
             style="@style/TitleBarText"
@@ -23,7 +23,8 @@
             style="@style/TitleBarAction"
             android:clickable="false" />
     </LinearLayout>
-
+<View
+    style="@style/title_line_style"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_sel_adress"
         android:layout_width="match_parent"

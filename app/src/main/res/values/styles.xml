@@ -165,6 +165,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">100dp</item>
     </style>
+    <style name="space_10_height">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">10dp</item>
+</style>
+    <style name="space_10_width">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 
     <style name="space_8_width">
         <item name="android:layout_width">8dp</item>
@@ -179,6 +187,14 @@
     <style name="space_16_width">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="space_12_width">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="space_12_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">12dp</item>
     </style>
 
     <style name="li_style">
@@ -216,5 +232,23 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    <style name="title_line_style">
+        <item name="android:background">@drawable/ic_title_line</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+    </style>
+
+    <style name="input_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/space_32</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/hint_text</item>
+        <item name="android:paddingLeft">@dimen/space_16</item>
+        <item name="android:paddingRight">@dimen/space_16</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:background">@drawable/btn_home_search_bg</item>
     </style>
 </resources>

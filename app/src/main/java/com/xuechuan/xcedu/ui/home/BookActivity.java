@@ -3,12 +3,25 @@ package com.xuechuan.xcedu.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.adapter.BookHomeAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.net.HomeService;
+import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.BookHomeVo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -21,28 +34,26 @@ import com.xuechuan.xcedu.base.BaseActivity;
  * @Copyright: 2018/4/19
  */
 public class BookActivity extends BaseActivity implements View.OnClickListener {
-
-    private ImageView mIvBookSkill;
-    private ImageView mIvBookColligate;
-    private ImageView mIvBookCase;
-
     private static String PARAMP = "PARAMP";
     private static String PARAMP1 = "PARAMP";
     private String params;
     private String params1;
+    private Context mContext;
+    private RecyclerView mRlvBookContent;
 
-    public static void newInstance(Context context, String param, String param1) {
+    public static Intent newInstance(Context context, String param, String param1) {
         Intent intent = new Intent(context, BookActivity.class);
         intent.putExtra(PARAMP, param);
         intent.putExtra(PARAMP, param1);
-        context.startActivity(intent);
+        return intent;
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_book);
+//        initView();
+//    }
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -52,28 +63,65 @@ public class BookActivity extends BaseActivity implements View.OnClickListener {
             params1 = getIntent().getStringExtra(PARAMP1);
         }
         initView();
+        initData();
+    }
+
+    private void bindAdapter(List<BookHomeVo.DatasBean> vo) {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        BookHomeAdapter bookHomeAdapter = new BookHomeAdapter(mContext, vo);
+        mRlvBookContent.setLayoutManager(gridLayoutManager);
+        mRlvBookContent.setAdapter(bookHomeAdapter);
+        bookHomeAdapter.setClickListener(new BookHomeAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(Object obj, int position) {
+                BookHomeVo.DatasBean vo = (BookHomeVo.DatasBean) obj;
+                Intent intent = BookInfomActivity.newInstance(mContext, String.valueOf(vo.getId()));
+                intent.putExtra(BookInfomActivity.CSTR_EXTRA_TITLE_STR, vo.getName());
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+    private void initData() {
+        HomeService service = new HomeService(mContext);
+        service.setIsShowDialog(true);
+        service.setDialogContext(mContext, "", getStringWithId(R.string.loading));
+        service.requestCourse(1, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                String message = response.body().toString();
+                L.d("教程首页内容", message);
+                Gson gson = new Gson();
+                BookHomeVo vo = gson.fromJson(message, BookHomeVo.class);
+                if (vo.getStatus().getCode() == 200) {
+                    List<BookHomeVo.DatasBean> datas = vo.getDatas();
+                    bindAdapter(datas);
+
+                } else {
+                    T.showToast(mContext, vo.getStatus().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                L.w(response.message());
+            }
+        });
     }
 
     private void initView() {
-        mIvBookSkill = (ImageView) findViewById(R.id.iv_book_skill);
-        mIvBookColligate = (ImageView) findViewById(R.id.iv_book_colligate);
-        mIvBookCase = (ImageView) findViewById(R.id.iv_book_case);
-        mIvBookCase.setOnClickListener(this);
-        mIvBookSkill.setOnClickListener(this);
-        mIvBookColligate.setOnClickListener(this);
+        mContext = this;
+        mRlvBookContent = (RecyclerView) findViewById(R.id.rlv_book_content);
+        mRlvBookContent.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_book_case://案例
-                break;
-            case R.id.iv_book_colligate://综合
-                break;
-            case R.id.iv_book_skill://技术
-                break;
-            default:
 
-        }
+
     }
 }

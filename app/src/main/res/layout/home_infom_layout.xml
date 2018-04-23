@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/space_16"
+    android:paddingRight="@dimen/space_16">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,25 +13,31 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/login_icon_eyeable" />
+            android:layout_width="@dimen/space_18"
+            android:layout_height="@dimen/space_30"
+            android:src="@drawable/home_icon_information" />
+
+        <Space style="@style/space_10_width" />
 
         <TextView
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/home_infom"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_20" />
-         <Button
-             android:id="@+id/btn_infom_more"
-             android:textColor="@color/text_color"
-             android:drawableRight="@mipmap/back"
-             android:text="@string/more"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_infom_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/space_4"
+            android:drawableRight="@drawable/common_icon_more_gray"
+            android:gravity="center_vertical"
+            android:padding="@dimen/space_8"
+            android:text="@string/more"
+            android:textColor="@color/hint_text" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -44,24 +52,29 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/login_icon_eyeable" />
-
+            android:src="@drawable/home_icon_article" />
+<Space style="@style/space_8_width"/>
         <TextView
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/home_infom_all"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_20" />
-       <Button
-           android:id="@+id/btn_article_more"
-           android:text="@string/more"
-           android:textColor="@color/text_color"
-           android:drawableRight="@mipmap/back"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_article_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/space_8"
+            android:drawablePadding="@dimen/space_4"
+            android:drawableRight="@drawable/common_icon_more_gray"
+            android:text="@string/more"
+            android:textColor="@color/hint_text" />
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_recommend_all"
         android:layout_width="match_parent"

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".HomeActivity">
 
     <FrameLayout
@@ -13,34 +14,47 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <View
+        style="@style/title_line_style"/>
     <RadioGroup
-        android:id="@+id/ll_btns"
+        android:id="@+id/rg_btns"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/space_8"
+        android:paddingTop="@dimen/space_8">
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
             android:id="@+id/rdb_home_home"
             style="@style/radiobutton_style"
+            android:drawablePadding="@dimen/space_6"
+            android:drawableTop="@drawable/select_home_bg"
+            android:checked="true"
+            android:textColor="@drawable/select_home_textcolor"
             android:text="首页" />
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
+            android:textColor="@drawable/select_home_textcolor"
             android:id="@+id/rdb_home_bank"
             style="@style/radiobutton_style"
+            android:drawablePadding="@dimen/space_6"
+            android:drawableTop="@drawable/common_tab_questionbank_n"
             android:text="题库" />
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
+            android:textColor="@drawable/select_home_textcolor"
             android:id="@+id/rdb_home_net"
             style="@style/radiobutton_style"
+            android:drawablePadding="@dimen/space_6"
+            android:drawableTop="@drawable/common_tab_course_n"
             android:text="网课" />
 
         <RadioButton
-            android:drawableTop="@mipmap/back"
+            android:textColor="@drawable/select_home_textcolor"
             android:id="@+id/rdb_home_personal"
             style="@style/radiobutton_style"
+            android:drawablePadding="@dimen/space_6"
+            android:drawableTop="@drawable/common_tab_mine_n"
             android:text="我的" />
 
     </RadioGroup>

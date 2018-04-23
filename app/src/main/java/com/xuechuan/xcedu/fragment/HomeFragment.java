@@ -6,11 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -75,7 +74,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private Context mContext;
     private LocationClient mLocationClient;
     private AddressTextView mTvAddress;
-    private TextView mTvSearch;
+    private LinearLayout mLiSearch;
     private ImageView mIvOption;
     private ImageView mIvLiftOption;
     private RecyclerView mRlvRecommendContent;
@@ -104,11 +103,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 地址
      */
     private String provice;
-    private RelativeLayout mRlHomeBook;
-    private RelativeLayout mRlHomeStandard;
+    private ImageView mIvHomeBook;
+    private ImageView mIvHomeStandard;
     private AlertDialog mDialog;
-    private Button mBtnInfomMore;
-    private Button mBtnArticleMore;
+    private TextView mTvInfomMore;
+    private TextView mTvArticleMore;
     private String code;
 
     @Override
@@ -174,7 +173,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initViewCreate(View view, Bundle savedInstanceState) {
-        initData();
     }
 
     /**
@@ -254,11 +252,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      */
     private void bindBanner(List<BannerBean> banner) {
         ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> url = new ArrayList<>();
         for (int i = 0; i < banner.size(); i++) {
             list.add(banner.get(i).getImageurl());
+            url.add(banner.get(i).getGourl());
         }
-        ArrayList<String> list1 = DataMessageVo.getImageList1();
-        bindData(list1);
+        bindData(list,url);
     }
 
     /**
@@ -312,28 +311,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mContext = getActivity();
         mTvAddress = (AddressTextView) view.findViewById(R.id.tv_address);
         mTvAddress.setOnClickListener(this);
-        mTvSearch = (TextView) view.findViewById(R.id.tv_search);
-        mTvSearch.setOnClickListener(this);
+        mLiSearch = (LinearLayout) view.findViewById(R.id.li_search);
+        mLiSearch.setOnClickListener(this);
         mRlvRecommendContent = (RecyclerView) view.findViewById(R.id.rlv_recommend_content);
         mRlvRecommendContent.setOnClickListener(this);
         mRlvRecommendAll = (RecyclerView) view.findViewById(R.id.rlv_recommend_all);
         mRlvRecommendAll.setOnClickListener(this);
-        mRlHomeBook = (RelativeLayout) view.findViewById(R.id.rl_home_book);
-        mRlHomeBook.setOnClickListener(this);
-        mRlHomeStandard = (RelativeLayout) view.findViewById(R.id.rl_home_standard);
-        mRlHomeStandard.setOnClickListener(this);
-        mBtnInfomMore = (Button) view.findViewById(R.id.btn_infom_more);
-        mBtnInfomMore.setOnClickListener(this);
-        mBtnArticleMore = (Button) view.findViewById(R.id.btn_article_more);
-        mBtnArticleMore.setOnClickListener(this);
+        mIvHomeBook = (ImageView) view.findViewById(R.id.iv_home_book);
+        mIvHomeBook.setOnClickListener(this);
+        mIvHomeStandard = (ImageView) view.findViewById(R.id.iv_home_standard);
+        mIvHomeStandard.setOnClickListener(this);
+        mTvInfomMore = (TextView) view.findViewById(R.id.tv_infom_more);
+        mTvInfomMore.setOnClickListener(this);
+        mTvArticleMore = (TextView) view.findViewById(R.id.tv_article_more);
+        mTvArticleMore.setOnClickListener(this);
     }
 
 
-    private void initData() {
-//        bindData(list);
-    }
 
-    private void bindData(ArrayList<String> list) {
+    private void bindData(ArrayList<String> strings, final ArrayList<String> list) {
         mBanHome.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         mBanHome.setIndicatorGravity(BannerConfig.CENTER);
         mBanHome.setDelayTime(2000);
@@ -343,12 +339,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 MyAppliction.getInstance().displayImages(imageView, (String) path, false);
             }
         });
-        mBanHome.setImages(list);
+        mBanHome.setImages(strings);
         mBanHome.start();
         mBanHome.setOnBannerClickListener(new OnBannerClickListener() {
             @Override
             public void OnBannerClick(int position) {
-                T.showToast(mContext, position + "");
+                String url = list.get(position-1);
+                InfomActivity.newInstance(mContext,url);
+
             }
         });
     }
@@ -378,20 +376,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 intent.putExtra(AddressShowActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.location));
                 startActivityForResult(intent, REQUESTCODE);
                 break;
-            case R.id.tv_search://搜索
+            case R.id.li_search://搜索
                 Intent searchIntent = new Intent(mContext, SearchActivity.class);
                 startActivity(searchIntent);
                 break;
-            case R.id.rl_home_book://教材
-                Log.e("yfl", "onClick: ");
-                BookActivity.newInstance(mContext, null, null);
+            case R.id.iv_home_book://教材
+                Intent intent3 = BookActivity.newInstance(mContext, null, null);
+                intent3.putExtra(BookActivity.CSTR_EXTRA_TITLE_STR,getStrWithId(R.string.home_teacherMateri));
+                startActivity(intent3);
                 break;
-            case R.id.rl_home_standard://规范
+            case R.id.iv_home_standard://规范
                 Intent intent2 = SpecasActivity.newInstance(mContext, null, null);
                 intent2.putExtra(SpecasActivity.CSTR_EXTRA_TITLE_STR,getStrWithId(R.string.home_specs));
                 startActivity(intent2);
                 break;
-            case R.id.btn_infom_more:
+            case R.id.tv_infom_more:
                 String str=null;
                 if (StringUtil.isEmpty(code)) {
                      str = getTextStr(mTvAddress);
@@ -403,7 +402,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
                 startActivity(intent1);
                 break;
-            case R.id.btn_article_more:
+            case R.id.tv_article_more:
                 UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
                 Intent instance = ArticleListActivity.newInstance(mContext, vo.getData().getUser().getId());
                 instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_infom_all));

@@ -1,50 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:padding="@dimen/space_16">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_item_home_titel_content"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:ellipsize="end"
             android:lineSpacingExtra="@dimen/space_4"
-            android:text="测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题" />
+            android:maxLines="2"
+            android:text="测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/space_16" />
 
-        <ImageView
-            android:id="@+id/iv_item_home_content"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher_round" />
+        <Space style="@style/space_16_height" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item_home_time_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2018-02-02"
+                android:textColor="@color/text_fu_color"
+                android:textSize="@dimen/text_size_12" />
+
+            <Space style="@style/space_12_width" />
+
+            <TextView
+                android:id="@+id/tv_item_home_address_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="中国消防资源"
+                android:textColor="@color/text_fu_color"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
     </LinearLayout>
 
-    <Space style="@style/space_20_height" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_item_home_time_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2018-02-02" />
-
-        <Space style="@style/space_16_width" />
-
-        <TextView
-            android:id="@+id/tv_item_home_address_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="中国消防资源" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_item_home_content"
+        android:layout_width="@dimen/space_100dp"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher_round" />
 
 </LinearLayout>

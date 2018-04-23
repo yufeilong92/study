@@ -7,11 +7,11 @@
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/spance_50"
         android:text="地址"
-        android:textSize="@dimen/text_normal"
-        android:paddingLeft="@dimen/space_24"
+        android:textSize="@dimen/text_size_14"
+        android:paddingLeft="@dimen/space_16"
         android:gravity="center_vertical"
-        android:textColor="@color/text_color" />
+        android:textColor="@color/text_title_color" />
 
 </RelativeLayout>

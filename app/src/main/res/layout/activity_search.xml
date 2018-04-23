@@ -13,7 +13,7 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@mipmap/back" />
+            android:src="@drawable/nav_icon_back" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +23,9 @@
             android:orientation="horizontal">
 
             <EditText
-
+                android:textColor="@color/hint_text"
+                android:textSize="@dimen/text_size_14"
+                android:text="@string/home_select_content"
                 android:id="@+id/et_search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -39,10 +41,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="8dp"
                 android:padding="8dp"
-                android:src="@mipmap/ic_search" />
+                android:src="@drawable/nav_icon_search" />
         </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
+    <View
+        style="@style/title_line_style"/>
+    <Space
+        style="@style/space_20_height" />
     <include
         layout="@layout/search_history_layout"
         android:layout_width="match_parent"
