@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.home.AddressShowActivity">
 
     <LinearLayout style="@style/TitleBar">
@@ -23,8 +23,9 @@
             style="@style/TitleBarAction"
             android:clickable="false" />
     </LinearLayout>
-<View
-    style="@style/title_line_style"/>
+
+    <View style="@style/title_line_style" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_sel_adress"
         android:layout_width="match_parent"

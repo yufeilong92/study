@@ -29,9 +29,8 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_weight="0.7"
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/speca_105dp"
             android:layout_height="match_parent">
           <android.support.v7.widget.RecyclerView
               android:scrollbars="vertical"
@@ -43,9 +42,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight="0.3"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
            <android.support.v7.widget.RecyclerView
                android:scrollbars="vertical"

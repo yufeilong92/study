@@ -82,7 +82,6 @@ public class SpecasActivity extends BaseActivity {
         clearData();
         bindAdapterData();
         mXrfvSpecaRefresh.startRefresh();
-
     }
 
     private void requestData() {
@@ -154,7 +153,6 @@ public class SpecasActivity extends BaseActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
                         mXrfvSpecaRefresh.setPullLoadEnable(true);
                         mXrfvSpecaRefresh.setLoadComplete(true);
                         adapter.notifyDataSetChanged();

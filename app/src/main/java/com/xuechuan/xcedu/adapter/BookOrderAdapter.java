@@ -56,6 +56,7 @@ public class BookOrderAdapter extends RecyclerView.Adapter<BookOrderAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BookHomePageVo.DatasBean datasBean = mData.get(position);
         holder.mTvBookhomeOrder.setText( datasBean.getTitle());
+
         holder.itemView.setTag(datasBean);
         holder.itemView.setId(position);
     }
