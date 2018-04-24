@@ -53,22 +53,6 @@ public class DataMessageVo {
     public static final String HTTP_DPI="dpi";
     //定位信息
     public static final  String LOCATIONACTION="com.xuechaun.loaction";
-
-    public static ArrayList<String> getImageList(){
-        ArrayList<String> list = new ArrayList<>();
-        list.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic1xjab4j30ci08cjrv.jpg");
-        list.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic21363tj30ci08ct96.jpg");
-        list.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic259ohaj30ci08c74r.jpg");
-        list.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic2b16zuj30ci08cwf4.jpg");
-        list.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic2e7vsaj30ci08cglz.jpg");
-        return list;
-    }
-    public static ArrayList<String> getImageList1(){
-        ArrayList<String> list = new ArrayList<>();
-        list.add("http://img.zcool.cn/community/01fca557a7f5f90000012e7e9feea8.jpg");
-        list.add("http://img.zcool.cn/community/01b72057a7e0790000018c1bf4fce0.png");
-        list.add("http://img.zcool.cn/community/01996b57a7f6020000018c1bedef97.jpg");
-        list.add("http://img.zcool.cn/community/01700557a7f42f0000018c1bd6eb23.jpg");
-        return list;
-    }
+   //默认请求记录数
+    public static  final  int CINT_PANGE_SIZE=10;
 }

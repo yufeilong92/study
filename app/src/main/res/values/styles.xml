@@ -256,4 +256,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
     </style>
+    <style name="view_line_1">
+        <item name="android:background">@color/input_bg</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+    <style name="view_line_1_gray">
+        <item name="android:background">@color/book_line</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
 </resources>

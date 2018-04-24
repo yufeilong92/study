@@ -13,7 +13,7 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@drawable/nav_icon_back" />
+            android:src="@drawable/icon_back" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,8 +47,7 @@
     </LinearLayout>
     <View
         style="@style/title_line_style"/>
-    <Space
-        style="@style/space_20_height" />
+
     <include
         layout="@layout/search_history_layout"
         android:layout_width="match_parent"

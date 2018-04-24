@@ -13,7 +13,7 @@ package com.xuechuan.xcedu.vo;
 public class DatasBeanVo {  private String cover;
     private int id;
     private String name;
-
+    public boolean isSelect;
     public String getCover() {
         return cover;
     }

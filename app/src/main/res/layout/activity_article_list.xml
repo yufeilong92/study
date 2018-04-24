@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.home.ArticleListActivity">
 
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
-            android:onClick="onHomeClick"
             style="@style/TitleBarAction"
-            android:src="@mipmap/back" />
+            android:onClick="onHomeClick"
+            android:src="@drawable/icon_back" />
 
         <TextView
             style="@style/TitleBarText"
@@ -23,9 +23,15 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rlv_infom_list"
+    <com.andview.refreshview.XRefreshView
+        android:id="@+id/xfv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv_infom_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.andview.refreshview.XRefreshView>
 </LinearLayout>

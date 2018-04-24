@@ -33,11 +33,17 @@ import static android.view.KeyEvent.KEYCODE_BACK;
  * @Copyright: 2018/4/19
  */
 public class InfomActivity extends BaseActivity implements View.OnClickListener {
+    /**
+     * 资讯id
+     */
+    private static final String MOID = "oid";
 
     private WebView mWebInfom;
     private RelativeLayout mRlvInfomShow;
 
-
+    /**
+     * 地址
+     */
     private static String URLPARAM = "urlparam";
     private String mUrl;
     private WebView mWbInfom;
@@ -51,6 +57,13 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
         intent.putExtra(URLPARAM, url);
         context.startActivity(intent);
     }
+    public static Intent startInstance(Context context, String url,String id) {
+        Intent intent = new Intent(context, InfomActivity.class);
+        intent.putExtra(URLPARAM, url);
+        intent.putExtra(MOID,id);
+        return intent;
+    }
+
 
 
     @Override
@@ -152,9 +165,10 @@ public class InfomActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    private void submit() {
 
-    }
+   private void bindAdapterData(){
+
+   }
 /*    private void selectIsSupper(boolean isSupper){
         Drawable supperDrawable;
         if (isSupper) {

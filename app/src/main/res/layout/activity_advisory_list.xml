@@ -13,7 +13,8 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@mipmap/back" />
+            android:src="@drawable/icon_back" />
+
         <TextView
             android:id="@+id/tv_address_title"
             android:layout_width="0dp"
@@ -31,12 +32,18 @@
         <ImageView
             android:id="@+id/iv_adviistory_location"
             style="@style/TitleBarAction"
-            android:src="@mipmap/ic_location" />
+            android:src="@drawable/icon_infom_location" />
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rlv_advisory_list"
+    <com.andview.refreshview.XRefreshView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:id="@+id/xrv_content"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv_advisory_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.andview.refreshview.XRefreshView>
 </LinearLayout>

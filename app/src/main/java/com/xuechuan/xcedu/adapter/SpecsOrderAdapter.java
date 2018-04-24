@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.xuechuan.xcedu.vo.DatasBeanVo;
 import com.xuechuan.xcedu.vo.SpecasJieVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +41,8 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
     private List<DatasBeanVo> mData;
     private final LayoutInflater mInflater;
     private onItemClickListener clickListener;
+    private ArrayList<Integer> mClickSelect = new ArrayList<>();
+
 
     @Override
     public void onClick(View v) {
@@ -58,8 +62,8 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
     public SpecsOrderAdapter(Context mContext, List<DatasBeanVo> mData, GridLayoutManager manager) {
         this.mContext = mContext;
         this.mData = mData;
-        mInflater = LayoutInflater.from(mContext);
         this.manager = manager;
+        mInflater = LayoutInflater.from(mContext);
     }
 
 
@@ -79,20 +83,50 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final DatasBeanVo vo = mData.get(position);
+
+        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+//                        manager.scrollToPositionWithOffset(position, 0);
+                        break;
+                    default:
+
+                }
+                return false;
+            }
+        });
+
+        if (mClickSelect.contains(position)) {
+            holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
+            reqeustData(holder, vo);
+        } else {
+            holder.mRlvItemSpecasContent.setVisibility(View.GONE);
+        }
         holder.mTvSpecsorderTitel.setText(vo.getName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                manager.scrollToPosition(0);
-
-                if (holder.mRlvItemSpecasContent.getVisibility() == View.VISIBLE) {
+                if (!mClickSelect.contains(position)) {
+                    mClickSelect.add(position);
+                    holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
+                    reqeustData(holder, vo);
+                } else {
+                    for (int i = 0; i < mClickSelect.size(); i++) {
+                        if (mClickSelect.get(i) == position) {
+                            mClickSelect.remove(i);
+                            holder.mRlvItemSpecasContent.setVisibility(View.GONE);
+                        }
+                    }
+                }
+           /*     if (holder.mRlvItemSpecasContent.getVisibility() == View.VISIBLE) {
                     holder.mRlvItemSpecasContent.setVisibility(View.GONE);
                 } else {
-
+                    mClickSelect.add(position);
                     holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
                 }
-                reqeustData(holder, vo);
-
+          */
             }
         });
         holder.itemView.setTag(vo);

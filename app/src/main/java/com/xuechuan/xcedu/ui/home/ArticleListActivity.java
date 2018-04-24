@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.andview.refreshview.XRefreshView;
+import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.ArticleListAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.BaseVo;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.InfomActivity;
@@ -21,6 +24,7 @@ import com.xuechuan.xcedu.vo.ArticleListVo;
 import com.xuechuan.xcedu.vo.ArticleVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +44,17 @@ public class ArticleListActivity extends BaseActivity {
 
     private static String SAFFID = "saffid";
     private int mSaffid;
+    private XRefreshView mXfvContent;
+    /**
+     * 保存数据
+     */
+    private List mArray;
+    /**
+     * 防止重复刷新
+     */
+    private boolean isRefresh;
+    private ArticleListAdapter adapter;
+    private static long lastRefreshtime;
 
     /**
      * @param context
@@ -51,12 +66,12 @@ public class ArticleListActivity extends BaseActivity {
         return intent;
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_article_list);
-//        initView();
-//    }
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_article_list);
+        initView();
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -65,47 +80,141 @@ public class ArticleListActivity extends BaseActivity {
             mSaffid = getIntent().getIntExtra(SAFFID, 0);
         }
         initView();
-        initData();
+        clearData();
+        bindAdapterData();
+        initXrfresh();
+        mXfvContent.startRefresh();
+    }
+    private void initView() {
+        mContext = this;
+        mRlvInfomList = (RecyclerView) findViewById(R.id.rlv_infom_list);
+        mXfvContent = (XRefreshView) findViewById(R.id.xfv_content);
+    }
+    private void initXrfresh() {
+        mXfvContent.setPullLoadEnable(true);
+        mXfvContent.setAutoRefresh(true);
+        mXfvContent.setAutoLoadMore(true);
+        adapter.setCustomLoadMoreView(new XRefreshViewFooter(this));
+        mXfvContent.restoreLastRefreshTime(lastRefreshtime);
+        mXfvContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
+            @Override
+            public void onRefresh(boolean isPullDown) {
+
+                reqestData();
+            }
+
+            @Override
+            public void onLoadMore(boolean isSilence) {
+                loadMoreData();
+
+            }
+        });
     }
 
-    private void initData() {
+
+
+    private void reqestData() {
+        if (isRefresh) {
+            return;
+        }
+        isRefresh = true;
         final HomeService service = HomeService.getInstance(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext("", getStringWithId(R.string.loading));
+ /*       service.setIsShowDialog(true);
+        service.setDialogContext("", getStringWithId(R.string.loading));*/
         service.requestArticleList(mSaffid, 1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
+                mXfvContent.stopRefresh();
+                lastRefreshtime = mXfvContent.getLastRefreshTime();
+                isRefresh = false;
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();
                 ArticleListVo vo = gson.fromJson(message, ArticleListVo.class);
                 BaseVo.StatusBean status = vo.getStatus();
                 if (status.getCode() == 200) {
-                    bindAdapterData( vo.getDatas());
+                    List<ArticleVo> datas = vo.getDatas();
+                    clearData();
+                    if (datas != null && !datas.isEmpty()) {
+                        addListData(datas);
+                    }
+                    if (mArray.size()<DataMessageVo.CINT_PANGE_SIZE||mArray.size() == vo.getTotal().getTotal()) {
+                        mXfvContent.setLoadComplete(true);
+                    } else {
+                    mXfvContent.setPullLoadEnable(true);
+                    mXfvContent.setLoadComplete(false);
+                    }
+                    adapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, status.getMessage());
                 }
             }
+
             @Override
             public void onError(Response<String> response) {
+                isRefresh = false;
+                L.e(response.message());
+            }
+        });
+    }
+    private void loadMoreData() {
+        if (isRefresh) {
+            return;
+        }
+        isRefresh = true;
+        final HomeService service = HomeService.getInstance(mContext);
+ /*       service.setIsShowDialog(true);
+        service.setDialogContext("", getStringWithId(R.string.loading));*/
+        service.requestArticleList(mSaffid, getPager() + 1, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                mXfvContent.stopRefresh();
+                isRefresh = false;
+                String message = response.body().toString();
+                L.w(message);
+                Gson gson = new Gson();
+                ArticleListVo vo = gson.fromJson(message, ArticleListVo.class);
+                BaseVo.StatusBean status = vo.getStatus();
+                if (status.getCode() == 200) {
+                    List<ArticleVo> datas = vo.getDatas();
+//                    clearData();
+                    if (datas != null && !datas.isEmpty()) {
+                        addListData(datas);
+                    } else {
+                        mXfvContent.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+
+                    if (mArray != null && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                        mXfvContent.setPullLoadEnable(true);
+                        mXfvContent.setLoadComplete(false);
+                    } else {
+                        mXfvContent.setLoadComplete(true);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    T.showToast(mContext, status.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                isRefresh = false;
                 L.e(response.message());
             }
         });
     }
 
-    private void initView() {
-        mContext = this;
-        mRlvInfomList = (RecyclerView) findViewById(R.id.rlv_infom_list);
-    }
 
-    private void bindAdapterData(List<ArticleVo> list) {
-        ArticleListAdapter articleAdapter = new ArticleListAdapter(mContext, list);
+    private void bindAdapterData() {
+        adapter = new ArticleListAdapter(mContext, mArray);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvInfomList.setLayoutManager(gridLayoutManager);
         mRlvInfomList.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
-        mRlvInfomList.setAdapter(articleAdapter);
-        articleAdapter.setClickListener(new ArticleListAdapter.onItemClickListener() {
+        mRlvInfomList.setAdapter(adapter);
+        adapter.setClickListener(new ArticleListAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
@@ -114,4 +223,34 @@ public class ArticleListActivity extends BaseActivity {
         });
 
     }
+
+    private void clearData() {
+        if (mArray == null) {
+            mArray = new ArrayList();
+        } else {
+            mArray.clear();
+        }
+    }
+
+    private void addListData(List<?> list) {
+        if (mArray == null) {
+            clearData();
+        }
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        mArray.addAll(list);
+    }
+
+    private int getPager() {
+        if (mArray == null || mArray.isEmpty()) {
+            return 0;
+        }
+        if (mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+            return mArray.size() / DataMessageVo.CINT_PANGE_SIZE;
+        } else {
+            return mArray.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
+        }
+    }
+
 }

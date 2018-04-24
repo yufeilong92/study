@@ -9,12 +9,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.andview.refreshview.XRefreshView;
+import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
+import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AdvisoryListAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.BaseVo;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.InfomActivity;
@@ -30,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,12 +50,23 @@ import java.util.List;
 public class AdvisoryListActivity extends BaseActivity implements View.OnClickListener {
 
     private static String PROVICECODE = "provicecode";
-    public static String CSTR_EXTREA_TITLE ="titletex";
+    public static String CSTR_EXTREA_TITLE = "titletex";
     private String mProvinceCode;
     private RecyclerView mRlvAdvisoryList;
     private Context mContext;
     private ImageView mIvAdviistoryLocation;
     private TextView mTvAddressTitle;
+    private XRefreshView mXrvContent;
+    /**
+     * 保存数据
+     */
+    private List mArray;
+    /**
+     * 防止重复刷新
+     */
+    private boolean isRefresh;
+    private AdvisoryListAdapter adapter;
+    private long lastRefreshtime;
 
 
     /**
@@ -63,15 +79,15 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         return intent;
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_advisory_list);
-//        initView();
-//        if (getIntent() != null) {
-//            mProvinceCode = getIntent().getStringExtra(PROVICECODE);
-//        }
-//    }
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_advisory_list);
+        initView();
+        if (getIntent() != null) {
+            mProvinceCode = getIntent().getStringExtra(PROVICECODE);
+        }
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -84,16 +100,44 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         }
         initView();
         mTvAddressTitle.setText(title);
-        requestData(mProvinceCode);
+
+        clearData();
+        bindAdapter();
+        initRxfresh();
+        mXrvContent.startRefresh();
+//        requestData(mProvinceCode);
     }
 
-    private void requestData(String mProvinceCode) {
+    private void initRxfresh() {
+        mXrvContent.setPullLoadEnable(true);
+        mXrvContent.stopLoadMore(true);
+        mXrvContent.setAutoLoadMore(true);
+        mXrvContent.restoreLastRefreshTime(lastRefreshtime);
+        adapter.setCustomLoadMoreView(new XRefreshViewFooter(this));
+        mXrvContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
+            @Override
+            public void onRefresh(boolean isPullDown) {
+                requestData(mProvinceCode);
+            }
+
+            @Override
+            public void onLoadMore(boolean isSilence) {
+                loadMoreData();
+            }
+        });
+    }
+
+    private void loadMoreData() {
+        if (isRefresh) {
+            return;
+        }
+        isRefresh = true;
         HomeService service = HomeService.getInstance(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext("", getStringWithId(R.string.loading));
-        service.requestAdvisoryList(mProvinceCode, 1, new StringCallBackView() {
+        service.requestAdvisoryList(mProvinceCode, getPager() + 1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
+                isRefresh = false;
+                mXrvContent.stopRefresh();
                 String message = response.body().toString();
                 L.d("资讯数据==" + message);
                 Gson gson = new Gson();
@@ -101,7 +145,21 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                 BaseVo.StatusBean status = vo.getStatus();
                 if (status.getCode() == 200) {
                     List<AdvisoryVo> datas = vo.getDatas();
-                    bindAdapter(datas);
+//                    clearData();
+                    if (datas != null && !datas.isEmpty()) {
+                        addListData(datas);
+                    }else {
+                        mXrvContent.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+                    if (!mArray.isEmpty() && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                        mXrvContent.setLoadComplete(false);
+                        mXrvContent.setPullLoadEnable(true);
+                    } else {
+                        mXrvContent.setLoadComplete(true);
+                    }
+                    adapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, status.getMessage());
                 }
@@ -109,6 +167,51 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onError(Response<String> response) {
+                isRefresh = false;
+                L.e(response.message());
+            }
+        });
+    }
+
+    private void requestData(String mProvinceCode) {
+        if (isRefresh) {
+            return;
+        }
+        isRefresh = true;
+        HomeService service = HomeService.getInstance(mContext);
+        service.requestAdvisoryList(mProvinceCode, 1, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                isRefresh = false;
+                mXrvContent.stopRefresh();
+                lastRefreshtime = mXrvContent.getLastRefreshTime();
+
+                String message = response.body().toString();
+                L.d("资讯数据==" + message);
+                Gson gson = new Gson();
+                AdvisoryListVo vo = gson.fromJson(message, AdvisoryListVo.class);
+                BaseVo.StatusBean status = vo.getStatus();
+                if (status.getCode() == 200) {
+                    List<AdvisoryVo> datas = vo.getDatas();
+                    clearData();
+                    if (datas != null && !datas.isEmpty()) {
+                        addListData(datas);
+                    }
+                    if (mArray.size()<DataMessageVo.CINT_PANGE_SIZE||mArray.size() == vo.getTotal().getTotal()) {
+                        mXrvContent.setLoadComplete(true);
+                    } else {
+                        mXrvContent.setPullLoadEnable(true);
+                        mXrvContent.setLoadComplete(false);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    T.showToast(mContext, status.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                isRefresh = false;
                 L.e(response.message());
             }
         });
@@ -121,16 +224,18 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         mIvAdviistoryLocation.setOnClickListener(this);
         mTvAddressTitle = (TextView) findViewById(R.id.tv_address_title);
         mTvAddressTitle.setOnClickListener(this);
+        mXrvContent = (XRefreshView) findViewById(R.id.xrv_content);
+        mXrvContent.setOnClickListener(this);
     }
 
-    private void bindAdapter(List<AdvisoryVo> vos) {
+    private void bindAdapter() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-        AdvisoryListAdapter advisoryListAdapter = new AdvisoryListAdapter(mContext, vos);
+        adapter = new AdvisoryListAdapter(mContext, mArray);
         mRlvAdvisoryList.setLayoutManager(gridLayoutManager);
         mRlvAdvisoryList.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
-        mRlvAdvisoryList.setAdapter(advisoryListAdapter);
-        advisoryListAdapter.setClickListener(new AdvisoryListAdapter.onItemClickListener() {
+        mRlvAdvisoryList.setAdapter(adapter);
+        adapter.setClickListener(new AdvisoryListAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
                 AdvisoryVo vo = (AdvisoryVo) obj;
@@ -162,10 +267,38 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         requestData(mProvinceCode);
     }
 
+    private void clearData() {
+        if (mArray == null) {
+            mArray = new ArrayList();
+        } else {
+            mArray.clear();
+        }
+    }
+
+    private void addListData(List<?> list) {
+        if (mArray == null) {
+            clearData();
+        }
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        mArray.addAll(list);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private int getPager() {
+        if (mArray == null || mArray.isEmpty())
+            return 0;
+        if (mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0)
+            return mArray.size() / DataMessageVo.CINT_PANGE_SIZE;
+        else
+            return mArray.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
     }
 }
 

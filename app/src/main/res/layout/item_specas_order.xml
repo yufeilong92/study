@@ -2,37 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/space_8"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/space_8">
+
     <LinearLayout
-        android:padding="@dimen/space_8"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/space_48"
         android:gravity="center_vertical"
-        android:layout_height="@dimen/space_48">
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/space_8"
+        android:layout_marginRight="@dimen/space_8"
+        android:padding="@dimen/space_8">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_cirle" />
-<Space style="@style/space_16_width"/>
-    <TextView
-        android:layout_weight="1"
-        android:textSize="@dimen/text_size_14"
-        android:id="@+id/tv_specsorder_titel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="222222" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_speca_node" />
 
-    <ImageView
-        android:paddingRight="@dimen/space_16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_cpecas_noraml" />
+        <Space style="@style/space_16_width" />
+
+        <TextView
+            android:id="@+id/tv_specsorder_titel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="222222"
+            android:textSize="@dimen/text_size_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/space_16"
+            android:src="@drawable/icon_spread_gray" />
     </LinearLayout>
+
+    <View style="@style/view_line_1" />
+
     <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
         android:id="@+id/rlv_item_specas_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 </LinearLayout>

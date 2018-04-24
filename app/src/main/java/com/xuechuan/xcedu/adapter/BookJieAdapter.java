@@ -1,25 +1,20 @@
 package com.xuechuan.xcedu.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.j256.ormlite.stmt.query.In;
-import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.net.HomeService;
-import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.InfomActivity;
-import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.ChildrenBeanVo;
-import com.xuechuan.xcedu.vo.ChildrenBeanXVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,11 +29,11 @@ import java.util.List;
  */
 public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHolder> implements View.OnClickListener {
     private Context mContext;
-    private List<ChildrenBeanXVo> mData;
+    private List<ChildrenBeanVo> mData;
     private final LayoutInflater mInflater;
-
+    private GridLayoutManager manager;
     private onItemClickListener clickListener;
-
+    private ArrayList<Integer> mClickList = new ArrayList<>();
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
@@ -48,9 +43,10 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
         this.clickListener = clickListener;
     }
 
-    public BookJieAdapter(Context mContext, List<ChildrenBeanXVo> mData) {
+    public BookJieAdapter(Context mContext, List<ChildrenBeanVo> mData, GridLayoutManager manager) {
         this.mContext = mContext;
         this.mData = mData;
+        this.manager = manager;
         mInflater = LayoutInflater.from(mContext);
     }
 
@@ -63,25 +59,40 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final ChildrenBeanXVo vo = mData.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        final ChildrenBeanVo vo = mData.get(position);
         holder.mTvItemJieTitle.setText(vo.getTitle());
+        if (mClickList.contains(position)) {
+            holder.mRlvJieContent.setVisibility(View.VISIBLE);
+            requestJieData(holder, vo);
+        } else {
+            holder.mRlvJieContent.setVisibility(View.GONE);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isend = vo.isIsend();
-                if (!isend) {
-                    int visibility = holder.mRlvJieContent.getVisibility();
-                    if (visibility == View.GONE) {
-                        holder.mRlvJieContent.setVisibility(View.VISIBLE);
-                        requestJieData(holder, vo);
-                    } else {
-                        holder.mRlvJieContent.setVisibility(View.GONE);
+                if (isend) {
+                    Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()));
+                    mContext.startActivity(intent);
+                    return;
+                }
+                if (!mClickList.contains(position)) {
+                    mClickList.add(position);
+                    holder.mRlvJieContent.setVisibility(View.VISIBLE);
+                    requestJieData(holder, vo);
+                } else {
+                    for (int i = 0; i < mClickList.size(); i++) {
+                        if (mClickList.get(i) == position) {
+                            mClickList.remove(i);
+                            holder.mRlvJieContent.setVisibility(View.GONE);
+                        }
                     }
                 }
+
             }
         });
-//
 //        holder.itemView.setId(position);
 //        holder.itemView.setTag(vo);
 
@@ -93,7 +104,7 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
      * @param holder
      * @param vo
      */
-    private void requestJieData(ViewHolder holder, ChildrenBeanXVo vo) {
+    private void requestJieData(ViewHolder holder, ChildrenBeanVo vo) {
         BookJieJieAdapter jieJieAdapter = new BookJieJieAdapter(mContext, vo.getChildren());
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);

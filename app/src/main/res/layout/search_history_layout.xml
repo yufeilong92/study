@@ -7,7 +7,7 @@
     android:paddingBottom="@dimen/space_16"
     android:paddingLeft="@dimen/space_16"
     android:paddingRight="@dimen/space_16"
-    android:paddingTop="@dimen/space_16">
+    >
 
     <RelativeLayout
         android:id="@+id/rl_search_history"

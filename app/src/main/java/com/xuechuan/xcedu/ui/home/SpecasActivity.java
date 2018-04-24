@@ -3,7 +3,6 @@ package com.xuechuan.xcedu.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -14,12 +13,12 @@ import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.SpecsOrderAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.SpecasChapterListVo;
-import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +60,6 @@ public class SpecasActivity extends BaseActivity {
         intent.putExtra(PARAME1, parame1);
         return intent;
     }
-
 /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,29 +85,35 @@ public class SpecasActivity extends BaseActivity {
 
     private void requestData() {
         if (isRefresh) {
-            isRefresh = false;
             return;
         }
+        isRefresh = true;
         HomeService service = HomeService.getInstance(mContext);
         service.requestChapterList(1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 mXrfvSpecaRefresh.stopRefresh();
+                isRefresh = false;
                 String s = response.body().toString();
                 L.e("获取规范章节列表数据" + s);
                 Gson gson = new Gson();
                 SpecasChapterListVo vo = gson.fromJson(s, SpecasChapterListVo.class);
                 if (vo.getStatus().getCode() == 200) {//成功
-//                    List<DatasBeanVo> mArraylist = vo.getDatas();
                     List list = vo.getDatas();
                     clearData();
-                    addListData(list);
-                    adapter.notifyDataSetChanged();
-                    mXrfvSpecaRefresh.setPullLoadEnable(true);
-                    mXrfvSpecaRefresh.setLoadComplete(false);
-//                    mXrfvSpecaRefresh.setLoadComplete(true);
+                    if (list != null && !list.isEmpty()) {
+                        addListData(list);
+                    }
 
+                    if (mArrary.size()<DataMessageVo.CINT_PANGE_SIZE||mArrary.size() == vo.getTotal().getTotal()) {
+                        mXrfvSpecaRefresh.setLoadComplete(true);
+                    } else {
+                        mXrfvSpecaRefresh.setPullLoadEnable(true);
+                        mXrfvSpecaRefresh.setLoadComplete(false);
+                    }
+                    adapter.notifyDataSetChanged();
                 } else {
+                    isRefresh = false;
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
 
@@ -117,6 +121,55 @@ public class SpecasActivity extends BaseActivity {
 
             @Override
             public void onError(Response<String> response) {
+                isRefresh = false;
+                L.e("获取规范章节错误" + response.message());
+            }
+        });
+    }
+
+    private void LoadMoreData() {
+        if (isRefresh) {
+            return;
+        }
+        isRefresh = true;
+        HomeService service = HomeService.getInstance(mContext);
+        service.requestChapterList(getNowPage() + 1, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                isRefresh = false;
+                String s = response.body().toString();
+                L.e("获取规范章节列表数据" + s);
+                L.e(getNowPage() + "集合长度" + mArrary.size());
+                Gson gson = new Gson();
+                SpecasChapterListVo vo = gson.fromJson(s, SpecasChapterListVo.class);
+                if (vo.getStatus().getCode() == 200) {//成功
+                    List list = vo.getDatas();
+//                    clearData();
+                    if (list != null && !list.isEmpty()) {
+                        addListData(list);
+                    }else {
+                        mXrfvSpecaRefresh.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+                    //判断是否能整除
+                    if (!mArrary.isEmpty() && mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                        mXrfvSpecaRefresh.setLoadComplete(false);
+                        mXrfvSpecaRefresh.setPullLoadEnable(true);
+                    } else {
+                        mXrfvSpecaRefresh.setLoadComplete(true);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    isRefresh = false;
+                    T.showToast(mContext, vo.getStatus().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                isRefresh = false;
                 L.e("获取规范章节错误" + response.message());
             }
         });
@@ -129,10 +182,8 @@ public class SpecasActivity extends BaseActivity {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new SpecsOrderAdapter(mContext, mArrary, gridLayoutManager);
-        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
         mRlvSpecaContent.setAdapter(adapter);
-
 
 
     }
@@ -151,15 +202,7 @@ public class SpecasActivity extends BaseActivity {
 
             @Override
             public void onLoadMore(boolean isSilence) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mXrfvSpecaRefresh.setPullLoadEnable(true);
-                        mXrfvSpecaRefresh.setLoadComplete(true);
-                        adapter.notifyDataSetChanged();
-                    }
-                }, 3000);
-//                mXrfvSpecaRefresh.setLoadComplete(false);
+                LoadMoreData();
             }
         });
         adapter.setClickListener(new SpecsOrderAdapter.onItemClickListener() {
@@ -198,6 +241,20 @@ public class SpecasActivity extends BaseActivity {
             clearData();
         }
         mArrary.addAll(list);
+    }
+
+    /**
+     * 当前数据有几页
+     *
+     * @return
+     */
+    private int getNowPage() {
+        if (mArrary == null || mArrary.isEmpty())
+            return 0;
+        if (mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0)
+            return mArrary.size() / DataMessageVo.CINT_PANGE_SIZE;
+        else
+            return mArrary.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
     }
 
 }

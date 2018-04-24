@@ -14,21 +14,26 @@ import java.util.List;
  */
 public class ChildrenBeanVo extends BookHomePageVo {
     /**
-     * children : []
-     * gourl : http://192.168.1.110:8081/article/jc/202
-     * id : 202
-     * isend : true
-     * parentid : 19
-     * title : 案例1 木器厂房防火案例分析
+     * 地址
      */
-
     private String gourl;
+    /**
+     * id
+     */
     private int id;
+    /**
+     * 是否终节点
+     */
     private boolean isend;
+    /**
+     * 父级编号
+     */
     private int parentid;
+    /**
+     * 标题
+     */
     private String title;
-    private List<?> children;
-
+    private List<ChildrenBeanVo> children;
     public String getGourl() {
         return gourl;
     }
@@ -69,11 +74,11 @@ public class ChildrenBeanVo extends BookHomePageVo {
         this.title = title;
     }
 
-    public List<?> getChildren() {
+    public List<ChildrenBeanVo> getChildren() {
         return children;
     }
 
-    public void setChildren(List<?> children) {
+    public void setChildren(List<ChildrenBeanVo> children) {
         this.children = children;
     }
 }

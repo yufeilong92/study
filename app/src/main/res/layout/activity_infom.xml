@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".ui.InfomActivity">
 
     <LinearLayout style="@style/TitleBar">
@@ -23,12 +24,9 @@
     </LinearLayout>
 
     <RelativeLayout
-
         android:id="@+id/rl_infom_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingRight="@dimen/space_16"
-        android:paddingLeft="@dimen/space_16"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -46,20 +44,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_48"
+            android:layout_height="@dimen/space_56"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="@dimen/space_8">
 
             <EditText
                 android:id="@+id/et_infom_content"
                 style="@style/input_style"
+                android:layout_marginRight="@dimen/space_8"
                 android:hint="我来说两句..." />
-
-            <Space style="@style/space_16_width" />
-
+            <!--style="@style/input_style"-->
             <Button
+
                 android:id="@+id/btn_infom_send"
                 android:layout_width="@dimen/space_22"
                 android:layout_height="@dimen/space_22"

@@ -390,7 +390,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 intent2.putExtra(SpecasActivity.CSTR_EXTRA_TITLE_STR,getStrWithId(R.string.home_specs));
                 startActivity(intent2);
                 break;
-            case R.id.tv_infom_more:
+            case R.id.tv_infom_more://资讯更多
                 String str=null;
                 if (StringUtil.isEmpty(code)) {
                      str = getTextStr(mTvAddress);
@@ -402,7 +402,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
                 startActivity(intent1);
                 break;
-            case R.id.tv_article_more:
+            case R.id.tv_article_more://全部更多
                 UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
                 Intent instance = ArticleListActivity.newInstance(mContext, vo.getData().getUser().getId());
                 instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_infom_all));

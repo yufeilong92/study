@@ -1,8 +1,10 @@
 package com.xuechuan.xcedu.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -17,7 +19,8 @@ import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BookHomePageVo;
-import com.xuechuan.xcedu.vo.ChildrenBeanXVo;
+import com.xuechuan.xcedu.vo.ChildrenBeanVo;
+import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
 import java.util.List;
 
@@ -52,13 +55,13 @@ public class BookInfomActivity extends BaseActivity {
         intent.putExtra(CEX_INT_ID, cex_int_id);
         return intent;
     }
-
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-    }
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -96,7 +99,6 @@ public class BookInfomActivity extends BaseActivity {
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
-
             }
 
             @Override
@@ -112,40 +114,42 @@ public class BookInfomActivity extends BaseActivity {
      * @param datas
      */
     private void bindOrderData(List<BookHomePageVo.DatasBean> datas) {
-        BookOrderAdapter bookOrderAdapter = new BookOrderAdapter(mContext, datas);
+        final BookOrderAdapter bookOrderAdapter = new BookOrderAdapter(mContext, datas,BookInfomActivity.this);
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
+        mRlvBookinfomZhang.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvBookinfomZhang.setLayoutManager(manager);
         mRlvBookinfomZhang.setAdapter(bookOrderAdapter);
         bookOrderAdapter.setClickListener(new BookOrderAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
                 // TODO: 2018/4/23 判断是否有子类
-                BookHomePageVo.DatasBean vo= (BookHomePageVo.DatasBean) obj;
+                bookOrderAdapter.selectItem(position);
+                BookHomePageVo.DatasBean vo = (BookHomePageVo.DatasBean) obj;
                 bindJieData(vo.getChildren());
             }
         });
     }
 
+
+
     /**
      * 绑定节数据
+     *
      * @param children
      */
-    private void bindJieData(List<ChildrenBeanXVo> children){
-        BookJieAdapter jieOrderAdapter = new BookJieAdapter(mContext, children);
+    public void bindJieData(List<ChildrenBeanVo> children) {
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
+        BookJieAdapter jieOrderAdapter = new BookJieAdapter(mContext, children,manager);
         manager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvBookinfomJie.setLayoutManager(manager);
         mRlvBookinfomJie.setAdapter(jieOrderAdapter);
-   /*     jieOrderAdapter.setClickListener(new BookJieAdapter.onItemClickListener() {
+
+        jieOrderAdapter.setClickListener(new BookJieAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                // TODO: 2018/4/23 判断是否有子类
-                ChildrenBeanXVo vo= (ChildrenBeanXVo) obj;
-
-
             }
-        });*/
+        });
     }
 
     private void initView() {
@@ -154,4 +158,9 @@ public class BookInfomActivity extends BaseActivity {
         mContext = this;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 }

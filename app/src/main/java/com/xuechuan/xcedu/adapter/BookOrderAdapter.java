@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.ui.home.BookInfomActivity;
 import com.xuechuan.xcedu.vo.BookHomePageVo;
+import com.xuechuan.xcedu.vo.JieEven;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -27,8 +32,11 @@ public class BookOrderAdapter extends RecyclerView.Adapter<BookOrderAdapter.View
     private Context mContext;
     private List<BookHomePageVo.DatasBean> mData;
     private final LayoutInflater mInflater;
+    private BookInfomActivity mActivity;
 
     private onItemClickListener clickListener;
+    private int mPosition=-1;
+    private boolean isShow = true;
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
@@ -38,9 +46,10 @@ public class BookOrderAdapter extends RecyclerView.Adapter<BookOrderAdapter.View
         this.clickListener = clickListener;
     }
 
-    public BookOrderAdapter(Context mContext, List<BookHomePageVo.DatasBean> mData) {
+    public BookOrderAdapter(Context mContext, List<BookHomePageVo.DatasBean> mData, BookInfomActivity bookInfomActivityClass) {
         this.mContext = mContext;
         this.mData = mData;
+        this.mActivity = bookInfomActivityClass;
         mInflater = LayoutInflater.from(mContext);
     }
 
@@ -52,11 +61,30 @@ public class BookOrderAdapter extends RecyclerView.Adapter<BookOrderAdapter.View
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BookHomePageVo.DatasBean datasBean = mData.get(position);
-        holder.mTvBookhomeOrder.setText( datasBean.getTitle());
+    public void selectItem(int position) {
+        this.mPosition = position;
+        notifyDataSetChanged();
+    }
 
+
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        BookHomePageVo.DatasBean datasBean = mData.get(position);
+        boolean isSelect=true;
+        if (isShow && position == 0) {
+            isShow = false;
+            holder.mTvBookhomeOrder.setTextColor(mContext.getResources().getColor(R.color.red_text));
+            mActivity.bindJieData(datasBean.getChildren());
+        }
+        if (!isShow&&position == mPosition) {
+            isSelect=false;
+            holder.mTvBookhomeOrder.setTextColor(mContext.getResources().getColor(R.color.red_text));
+        }
+        if (!isShow&&mPosition!=-1&&isSelect){
+            holder.mTvBookhomeOrder.setTextColor(mContext.getResources().getColor(R.color.text_title_color));
+        }
+
+        holder.mTvBookhomeOrder.setText(datasBean.getTitle());
         holder.itemView.setTag(datasBean);
         holder.itemView.setId(position);
     }
@@ -75,13 +103,14 @@ public class BookOrderAdapter extends RecyclerView.Adapter<BookOrderAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvBookhomeOrder;
-//        public TextView mTvBookhomeOrderContent;
-       public ViewHolder(View itemView) {
+
+        //        public TextView mTvBookhomeOrderContent;
+        public ViewHolder(View itemView) {
             super(itemView);
-           this.mTvBookhomeOrder = (TextView) itemView.findViewById(R.id.tv_bookhome_order);
+            this.mTvBookhomeOrder = (TextView) itemView.findViewById(R.id.tv_bookhome_order);
 //           this.mTvBookhomeOrderContent = (TextView) itemView.findViewById(R.id.tv_bookhome_order_content);
         }
     }
 
-  
+
 }

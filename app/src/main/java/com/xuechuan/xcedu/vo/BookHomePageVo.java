@@ -31,7 +31,7 @@ public class BookHomePageVo extends BaseVo {
         private boolean isend;
         private int parentid;
         private String title;
-        private List<ChildrenBeanXVo> children;
+        private List<ChildrenBeanVo> children;
 
         public int getId() {
             return id;
@@ -65,11 +65,11 @@ public class BookHomePageVo extends BaseVo {
             this.title = title;
         }
 
-        public List<ChildrenBeanXVo> getChildren() {
+        public List<ChildrenBeanVo> getChildren() {
             return children;
         }
 
-        public void setChildren(List<ChildrenBeanXVo> children) {
+        public void setChildren(List<ChildrenBeanVo> children) {
             this.children = children;
         }
 

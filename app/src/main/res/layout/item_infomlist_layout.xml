@@ -6,24 +6,28 @@
     android:padding="@dimen/space_8">
 
     <LinearLayout
+        android:paddingLeft="@dimen/text_size_16"
+        android:paddingRight="@dimen/text_size_16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:padding="@dimen/space_8"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.73"
             android:orientation="vertical">
 
             <TextView
-                android:textSize="@dimen/text_size_14"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_title_color"
                 android:layout_weight="1"
                 android:id="@+id/tv_item_infomlist_titel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lineSpacingExtra="@dimen/space_4"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:text="测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题" />
 
             <LinearLayout
@@ -35,6 +39,8 @@
                 <TextView
                     android:id="@+id/tv_item_infomlist_time"
                     android:layout_width="wrap_content"
+                    android:textSize="@dimen/text_size_14"
+                    android:textColor="@color/text_fu_color"
                     android:layout_height="wrap_content"
                     android:text="2018-02-02" />
 
@@ -44,21 +50,19 @@
                     android:id="@+id/tv_item_infom_source"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_14"
+                    android:textColor="@color/text_fu_color"
                     android:text="中国消防资源" />
             </LinearLayout>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_item_infomlist_content"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/space_100dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.27"
-            android:padding="@dimen/space_8"
-            android:scaleType="fitXY"
             android:src="@mipmap/ic_launcher_round" />
     </LinearLayout>
 
-    <!--<Space style="@style/space_20_height" />-->
 
 
 </LinearLayout>
