@@ -38,7 +38,7 @@
             android:id="@+id/rdb_home_bank"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/common_tab_questionbank_n"
+            android:drawableTop="@drawable/icon_home_tab_bank_n"
             android:text="题库" />
 
         <RadioButton
@@ -46,7 +46,7 @@
             android:id="@+id/rdb_home_net"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/common_tab_course_n"
+            android:drawableTop="@drawable/icon_home_tab_course_n"
             android:text="网课" />
 
         <RadioButton
@@ -54,7 +54,7 @@
             android:id="@+id/rdb_home_personal"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/common_tab_mine_n"
+            android:drawableTop="@drawable/icon_home_tab_mine_n"
             android:text="我的" />
 
     </RadioGroup>

@@ -99,7 +99,6 @@ public class ArticleListActivity extends BaseActivity {
         mXfvContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
             public void onRefresh(boolean isPullDown) {
-
                 reqestData();
             }
 

@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="@dimen/space_18"
             android:layout_height="@dimen/space_30"
-            android:src="@drawable/home_icon_information" />
+            android:src="@drawable/icon_home_information" />
 
         <Space style="@style/space_10_width" />
 
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:drawablePadding="@dimen/space_4"
-            android:drawableRight="@drawable/common_icon_more_gray"
+            android:drawableRight="@drawable/icon_more_gray"
             android:gravity="center_vertical"
             android:padding="@dimen/space_8"
             android:text="@string/more"
@@ -52,7 +52,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/home_icon_article" />
+            android:src="@drawable/icon_home_article" />
 <Space style="@style/space_8_width"/>
         <TextView
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/space_8"
             android:drawablePadding="@dimen/space_4"
-            android:drawableRight="@drawable/common_icon_more_gray"
+            android:drawableRight="@drawable/icon_more_gray"
             android:text="@string/more"
             android:textColor="@color/hint_text" />
     </LinearLayout>
