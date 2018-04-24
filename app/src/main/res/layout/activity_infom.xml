@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.InfomActivity">
 
     <LinearLayout style="@style/TitleBar">
@@ -44,26 +44,42 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_56"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="@dimen/space_8">
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/et_infom_content"
-                style="@style/input_style"
-                android:layout_marginRight="@dimen/space_8"
-                android:hint="我来说两句..." />
-            <!--style="@style/input_style"-->
-            <Button
+            <View style="@style/view_line_1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_8">
 
-                android:id="@+id/btn_infom_send"
-                android:layout_width="@dimen/space_22"
-                android:layout_height="@dimen/space_22"
-                android:layout_gravity="center_vertical"
-                android:background="@mipmap/ic_send"
-                android:src="@mipmap/ic_search" />
+                <EditText
+                    android:minLines="2"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:maxLines="4"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:paddingLeft="@dimen/space_16"
+                    android:paddingRight="@dimen/space_16"
+                    android:textSize="@dimen/text_size_14"
+                    android:background="@drawable/btn_home_search_bg"
+                    android:id="@+id/et_infom_content"
+                    android:layout_marginRight="@dimen/space_8"
+                    android:hint="我来说两句..." />
+                <Button
+                    android:id="@+id/btn_infom_send"
+                    android:layout_width="@dimen/space_22"
+                    android:layout_height="@dimen/space_22"
+                    android:layout_gravity="center_vertical"
+                    android:background="@mipmap/ic_send"
+                    android:src="@mipmap/ic_search" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
