@@ -55,8 +55,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         intent.putExtra(Params1, param2);
         context.startActivity(intent);
     }
-
-    //        @Override
+//        @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_home);
@@ -97,7 +96,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         BankFragment bankFragment = new BankFragment();
         NetFragment netFragment = new NetFragment();
         PersionalFragment persionalFragment = new PersionalFragment();
-        mFragmentLists.add(homeFragment);
+//        mFragmentLists.add(homeFragment);
         mFragmentLists.add(bankFragment);
         mFragmentLists.add(netFragment);
         mFragmentLists.add(persionalFragment);
@@ -108,7 +107,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             transaction.add(mFragmentLayout, fragment).hide(fragment).commit();
         }
         FragmentTransaction transaction = mSfm.beginTransaction();
-        transaction.show(homeFragment).commit();
+//        transaction.show(homeFragment).commit();
         selectTabBg(true,false,false,false);
     }
 

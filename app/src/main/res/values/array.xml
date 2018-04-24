@@ -4,4 +4,9 @@
         <item>文章</item>
         <item>题库</item>
     </string-array>
+    <string-array name="bank_tab">
+        <item>技术实务</item>
+        <item>综合能力</item>
+        <item>案例分析</item>
+    </string-array>
 </resources>

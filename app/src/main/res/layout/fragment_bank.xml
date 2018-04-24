@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.BankFragment">
 
+    <android.support.design.widget.TabLayout
+        app:tabTextColor="@color/hint_text"
+        android:layout_marginRight="@dimen/space_32"
+        android:layout_marginLeft="@dimen/space_32"
+        android:id="@+id/tab_title_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+        app:tabIndicatorColor="@color/bank_line"
 
-<TextView
-    android:text="题库"
-    android:textColor="#000000"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-</FrameLayout>
+        app:tabSelectedTextColor="@color/black" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpg_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

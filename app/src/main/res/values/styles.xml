@@ -8,7 +8,14 @@
     <!--<item name="colorAccent">@color/colorAccent</item>-->
 
     <!--</style>-->
-
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/hint_text</item>
+    </style>
+    <style name="MyTabLayoutTextAppearanceInverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="App_NOAction" parent="Theme.AppCompat.Light.NoActionBar">
         <!--//actionabr 颜色-->
         <item name="android:windowNoTitle">true</item>
