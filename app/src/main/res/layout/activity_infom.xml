@@ -65,6 +65,8 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
+                    android:paddingBottom="@dimen/space_4"
+                    android:paddingTop="@dimen/space_4"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
                     android:textSize="@dimen/text_size_14"
