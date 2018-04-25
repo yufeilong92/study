@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragment.ColligateFragment">
-
+    <Space style="@style/space_20_height" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_70"
