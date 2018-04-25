@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_speca_node" />
+            android:src="@drawable/ic_speca_node" />
 
         <Space style="@style/space_16_width" />
 

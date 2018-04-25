@@ -13,7 +13,7 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@drawable/icon_back" />
+            android:src="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/tv_address_title"
@@ -32,7 +32,7 @@
         <ImageView
             android:id="@+id/iv_adviistory_location"
             style="@style/TitleBarAction"
-            android:src="@drawable/icon_infom_location" />
+            android:src="@drawable/ic_infom_location" />
 
     </LinearLayout>
 

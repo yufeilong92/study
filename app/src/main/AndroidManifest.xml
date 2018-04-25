@@ -55,9 +55,7 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".HomeActivity" >
-
-        </activity>
+        <activity android:name=".HomeActivity" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -79,7 +77,9 @@
         <activity android:name=".ui.home.ArticleListActivity" />
         <activity android:name=".ui.home.SearchResultActivity" />
         <activity android:name=".ui.home.AdvisoryListActivity" />
-        <activity android:name=".ui.User.PersionActivity"></activity>
+        <activity android:name=".ui.User.PersionActivity" />
+        <activity android:name=".ui.User.SettingActivity" />
+        <activity android:name=".ui.User.AboutActivity"></activity>
     </application>
 
 </manifest>
