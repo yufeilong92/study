@@ -55,4 +55,16 @@ public class DataMessageVo {
     public static final  String LOCATIONACTION="com.xuechaun.loaction";
    //默认请求记录数
     public static  final  int CINT_PANGE_SIZE=10;
+    //ac文章评论
+    public static String  USERTYPEAC="ac";
+    //a文章
+    public static String  USERTYPEA="a";
+    //qc问题评论
+    public static String  USERTYPEQC="qc";
+    //vc视频评论
+    public static String  USERTYPEVC="vc";
+    //文章
+    public static String  USERTYOEARTICLE="article";
+    //视频
+    public static String  USERTYOEVIDEO ="question video";
 }

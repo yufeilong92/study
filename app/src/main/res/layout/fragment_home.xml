@@ -60,7 +60,7 @@
                     android:layout_width="@dimen/space_22"
                     android:layout_height="@dimen/space_22"
                     android:layout_margin="@dimen/space_16"
-                    android:src="@drawable/nav_icon_search" />
+                    android:src="@drawable/icon_nav_search" />
 
             </LinearLayout>
         </LinearLayout>

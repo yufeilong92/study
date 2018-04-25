@@ -1,6 +1,7 @@
 package com.xuechuan.xcedu.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.InfomActivity;
@@ -170,7 +172,8 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
             public void onClickListener(Object obj, int position) {
 
                 SpecasJieVo.DatasBean vo = (SpecasJieVo.DatasBean) obj;
-                InfomActivity.newInstance(mContext, vo.getGourl());
+                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                mContext.startActivity(intent);
             }
         });
 

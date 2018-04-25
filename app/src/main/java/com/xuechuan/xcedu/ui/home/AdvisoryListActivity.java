@@ -240,7 +240,8 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
             public void onClickListener(Object obj, int position) {
                 AdvisoryVo vo = (AdvisoryVo) obj;
                 String gourl = vo.getGourl();
-                InfomActivity.newInstance(mContext, gourl);
+                Intent intent = InfomActivity.startInstance(mContext, gourl, String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                mContext.startActivity(intent);
             }
         });
 

@@ -9,13 +9,10 @@
 
     <!--</style>-->
     <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/hint_text</item>
     </style>
-    <style name="MyTabLayoutTextAppearanceInverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
+
     <style name="App_NOAction" parent="Theme.AppCompat.Light.NoActionBar">
         <!--//actionabr 颜色-->
         <item name="android:windowNoTitle">true</item>
@@ -157,6 +154,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">8dp</item>
     </style>
+    <style name="space_4_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">4dp</item>
+    </style>
 
     <style name="space_30_height">
         <item name="android:layout_width">match_parent</item>
@@ -166,6 +167,10 @@
     <style name="space_20_height">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">20dp</item>
+    </style>
+    <style name="space_20_width">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="space_100_height">
@@ -268,9 +273,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
     </style>
-    <style name="view_line_1_gray">
-        <item name="android:background">@color/book_line</item>
+
+    <style name="view_line_10_gray">
+        <item name="android:background">@color/input_bg</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">10dp</item>
     </style>
 </resources>

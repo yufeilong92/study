@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -173,6 +174,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initViewCreate(View view, Bundle savedInstanceState) {
+
     }
 
     /**
@@ -257,7 +259,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             list.add(banner.get(i).getImageurl());
             url.add(banner.get(i).getGourl());
         }
-        bindData(list,url);
+        bindData(list, url);
     }
 
     /**
@@ -277,8 +279,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             public void onClickListener(Object obj, int position) {
                 T.showToast(mContext, position + "");
                 ArticleBean vo = (ArticleBean) obj;
-                InfomActivity.newInstance(mContext, vo.getGourl());
+                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, String.valueOf(vo.getSupportcount()));
+                mContext.startActivity(intent);
             }
+
         });
 
     }
@@ -300,7 +304,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             public void onClickListener(Object obj, int position) {
                 AdvisoryBean vo = (AdvisoryBean) obj;
                 T.showToast(mContext, position + "");
-                InfomActivity.newInstance(mContext, vo.getGourl());
+                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                mContext.startActivity(intent);
             }
         });
 
@@ -327,8 +332,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mTvArticleMore.setOnClickListener(this);
     }
 
-
-
+    /**
+     * banner图
+     * @param strings
+     * @param list
+     */
     private void bindData(ArrayList<String> strings, final ArrayList<String> list) {
         mBanHome.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         mBanHome.setIndicatorGravity(BannerConfig.CENTER);
@@ -344,8 +352,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mBanHome.setOnBannerClickListener(new OnBannerClickListener() {
             @Override
             public void OnBannerClick(int position) {
-                String url = list.get(position-1);
-                InfomActivity.newInstance(mContext,url);
+                String url = list.get(position - 1);
+                InfomActivity.newInstance(mContext, url);
 
             }
         });
@@ -382,21 +390,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.iv_home_book://教材
                 Intent intent3 = BookActivity.newInstance(mContext, null, null);
-                intent3.putExtra(BookActivity.CSTR_EXTRA_TITLE_STR,getStrWithId(R.string.home_teacherMateri));
+                intent3.putExtra(BookActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_teacherMateri));
                 startActivity(intent3);
                 break;
             case R.id.iv_home_standard://规范
                 Intent intent2 = SpecasActivity.newInstance(mContext, null, null);
-                intent2.putExtra(SpecasActivity.CSTR_EXTRA_TITLE_STR,getStrWithId(R.string.home_specs));
+                intent2.putExtra(SpecasActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_specs));
                 startActivity(intent2);
                 break;
             case R.id.tv_infom_more://资讯更多
-                String str=null;
+                String str = null;
                 if (StringUtil.isEmpty(code)) {
-                     str = getTextStr(mTvAddress);
+                    str = getTextStr(mTvAddress);
                     code = PushXmlUtil.getInstance().getLocationCode(mContext, str);
-                }else {
-                    str=PushXmlUtil.getInstance().getLocationProvice(mContext,code);
+                } else {
+                    str = PushXmlUtil.getInstance().getLocationProvice(mContext, code);
                 }
                 Intent intent1 = AdvisoryListActivity.newInstance(mContext, code);
                 intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.ArticleBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,14 +65,16 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         ArticleBean bean = mData.get(position);
         holder.mTvItemHomeTitleAll.setText(bean.getTitle());
-        holder.mTvItemHomeLookAll.setText(bean.getViewcount()+"");
-        holder.mTvItemHomeLaudAll.setText(bean.getSupportcount()+"");
+        holder.mTvItemHomeLookAll.setText(bean.getViewcount() + "");
+        holder.mTvItemHomeLaudAll.setText(bean.getSupportcount() + "");
         if (StringUtil.isEmpty(bean.getGourl())) {
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
             MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll, bean.getThumbnailimg(), false);
         }
+
+        holder.mChbIsSupper.setChecked(bean.isIssupport());
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
     }
@@ -89,21 +91,25 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         }
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvItemHomeTitleAll;
-        public ImageView mIvItemHomeAll;
         public TextView mTvItemHomeLookAll;
+        public CheckBox mChbIsSupper;
         public TextView mTvItemHomeLaudAll;
+        public ImageView mIvItemHomeAll;
 //        public TextView mTvItemHomeAssessAll;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.mTvItemHomeTitleAll = (TextView) itemView.findViewById(R.id.tv_item_home_title_all);
-            this.mIvItemHomeAll = (ImageView) itemView.findViewById(R.id.iv_item_home_all);
             this.mTvItemHomeLookAll = (TextView) itemView.findViewById(R.id.tv_item_home_look_all);
+            this.mChbIsSupper = (CheckBox) itemView.findViewById(R.id.chb_isSupper);
             this.mTvItemHomeLaudAll = (TextView) itemView.findViewById(R.id.tv_item_home_laud_all);
+            this.mIvItemHomeAll = (ImageView) itemView.findViewById(R.id.iv_item_home_all);
 //            this.mTvItemHomeAssessAll = (TextView) itemView.findViewById(R.id.tv_item_home_assess_all);
 
         }
     }
+
 }

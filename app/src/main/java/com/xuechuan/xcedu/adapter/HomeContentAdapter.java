@@ -13,6 +13,7 @@ import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.AdvisoryBean;
 
 import java.util.ArrayList;
@@ -72,7 +73,9 @@ public class HomeContentAdapter extends BaseRecyclerAdapter<HomeContentAdapter.V
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         AdvisoryBean vo = mData.get(position);
         holder.mTvItemHomeTitelContent.setText(vo.getTitle());
-        holder.mTvItemHomeTimeContent.setText(vo.getPublishdate()+"");
+        String ymdt = TimeUtil.getYMDT(vo.getPublishdate());
+        holder.mTvItemHomeTimeContent.setText(ymdt);
+
         if (StringUtil.isEmpty(vo.getGourl())) {
             holder.mIvItemHomeContent.setVisibility(View.GONE);
         } else {

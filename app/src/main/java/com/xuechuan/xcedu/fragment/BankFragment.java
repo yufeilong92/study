@@ -6,7 +6,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.BankFragmentAdapter;
@@ -77,19 +80,70 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
 
     private void initData() {
         list = new ArrayList<>();
+
         SkillFragment skillFragment = new SkillFragment();
         ColligateFragment colligateFragment = new ColligateFragment();
         CaseFragment caseFragment = new CaseFragment();
         list.add(skillFragment);
         list.add(colligateFragment);
         list.add(caseFragment);
-        ArrayList<String> mTabs = ArrayToListUtil.arraytoList(mContext, R.array.bank_tab);
+        final ArrayList<String> mTabs = ArrayToListUtil.arraytoList(mContext, R.array.bank_tab);
+
+
         FragmentManager manager = getFragmentManager();
         BankFragmentAdapter fragmentAdapter = new BankFragmentAdapter(manager, mContext, list, mTabs);
         mVpgContent.setAdapter(fragmentAdapter);
         mTabTitleTab.setupWithViewPager(mVpgContent);
+        for (int i = 0; i < fragmentAdapter.getCount(); i++) {
+            TabLayout.Tab tab = mTabTitleTab.getTabAt(i);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_tab, null);
+            tab.setCustomView(view);
+            if (i == 0) {
+                View customView = tab.getCustomView();
+                TextView tv = customView.findViewById(R.id.tv_tab_titele);
+                tv.setTextColor(mContext.getResources().getColor(R.color.black));
+                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
+                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_s));
+                tv.setText(mTabs.get(i));
+
+            }else {
+            View customView = tab.getCustomView();
+            TextView tv = customView.findViewById(R.id.tv_tab_titele);
+            tv.setTextColor(mContext.getResources().getColor(R.color.hint_text));
+            ImageView ivline = customView.findViewById(R.id.iv_tab_line);
+            ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_n));
+            tv.setText(mTabs.get(i));
+            }
+        }
 
 
+        mTabTitleTab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                View customView = tab.getCustomView();
+                TextView tv = customView.findViewById(R.id.tv_tab_titele);
+                tv.setSelected(true);
+                tv.setTextColor(mContext.getResources().getColor(R.color.black));
+                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
+                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_s));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                View customView = tab.getCustomView();
+                TextView tv = customView.findViewById(R.id.tv_tab_titele);
+                tv.setTextColor(mContext.getResources().getColor(R.color.hint_text));
+                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
+                tv.setSelected(false);
+                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_n));
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        mVpgContent.setCurrentItem(0);
     }
 
 

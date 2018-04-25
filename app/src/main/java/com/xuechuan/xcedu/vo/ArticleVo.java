@@ -6,7 +6,7 @@ import com.xuechuan.xcedu.utils.TimeUtil;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: todo
+ * @Description: 文章列表
  * @author: L-BackPacker
  * @date: 2018/4/20 9:27
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

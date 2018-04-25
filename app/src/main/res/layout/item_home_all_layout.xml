@@ -13,15 +13,15 @@
         android:padding="@dimen/space_8">
 
         <TextView
-            android:maxLines="2"
-            android:ellipsize="end"
             android:id="@+id/tv_item_home_title_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:lineSpacingExtra="@dimen/space_4"
-            android:textSize="@dimen/space_16"
+            android:maxLines="2"
+            android:text="试标试标试标试标试标试标试标试标试标试标试标试标试标测试标题测试标题测试标题测试标题"
             android:textColor="@color/text_title_color"
-            android:text="试标试标试标试标试标试标试标试标试标试标试标试标试标测试标题测试标题测试标题测试标题" />
+            android:textSize="@dimen/space_16" />
 
         <Space style="@style/space_16_height" />
 
@@ -32,22 +32,30 @@
             android:orientation="horizontal">
 
             <TextView
-                android:drawableLeft="@drawable/list_icon_pageview"
                 android:id="@+id/tv_item_home_look_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_pageview"
                 android:drawablePadding="@dimen/space_6"
                 android:text="123" />
 
             <Space style="@style/space_16_width" />
 
+            <CheckBox
+                android:id="@+id/chb_isSupper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_issupper_home"
+                android:button="@null" />
+            <Space style="@style/space_8_width" />
+
             <TextView
-                android:drawablePadding="@dimen/space_6"
-                android:drawableLeft="@drawable/list_icon_like_s"
                 android:id="@+id/tv_item_home_laud_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/space_6"
                 android:text="123" />
+
 
         </LinearLayout>
     </LinearLayout>

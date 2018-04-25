@@ -42,9 +42,9 @@ public class BankFragmentAdapter extends FragmentPagerAdapter {
         return mData.size();
     }
 
-    @Nullable
+/*    @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitles.get(position);
-    }
+    }*/
 }

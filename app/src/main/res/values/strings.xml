@@ -30,7 +30,7 @@
     <!--评价接口-->
     <string name="http_comment">/api/comment/post</string>
     <!--点赞接口-->
-    <string name="http_laud">/api/spport/post</string>
+    <string name="http_laud">/api/support/post</string>
     <!--规范章节列表-->
     <string name="http_chapter">/api/standard/getchapter</string>
     <!--规范文章列表-->
@@ -51,10 +51,15 @@
     <string name="http_questiontagscount">/api/question/getquestiontagscount</string>
     <!--标签编号获取用户收藏错题或者错题题号-->
     <string name="http_questiontagids">/api/question/getquestiontagids</string>
+    <!--获取文章评论-->
+    <string name="http_articlecomment">/api/article/getarticlecomment</string>
+    <!--获取评论的评论 -->
+    <string name="http_homecommentcomment">/api/article/getcommentcomment</string>
     <!--题目详情-->
     <string name="http_datail">/api/question/getdetail</string>
     <!--题目评论-->
     <string name="http_questioncmment">/api/question/getquestioncmment</string>
+
     <!--获取题目评论二级评论-->
     <string name="http_commentcomment">/api/question/getcommentcomment</string>
     <!--是否购买此科目-->
@@ -104,5 +109,12 @@
     <string name="please_right_phone">请输入正确的手机号码</string>
     <string name="home_select_content">搜索文章、题库</string>
     <string name="more">更多</string>
+    <string name="submit">数据提交中...</string>
+    <string name="content_is_empty">内容不能为空</string>
+    <string name="mywrongquestion">我的错题</string>
+    <string name="bank_my_collect">我的收藏</string>
+    <string name="skill_free_composition">自由组卷</string>
+    <string name="special_practice">专项练习</string>
+    <string name="sequential_exercise">顺序练习</string>
 
 </resources>

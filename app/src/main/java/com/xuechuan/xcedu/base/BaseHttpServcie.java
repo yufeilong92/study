@@ -78,6 +78,7 @@ public class BaseHttpServcie {
         if (isWithToken) {
             UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
             if (vo == null) {
+                dialog.dismiss();
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }
@@ -110,6 +111,7 @@ public class BaseHttpServcie {
         if (isWithToken) {
             UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();
             if (userInfomVo == null) {
+                dialog.dismiss();
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }

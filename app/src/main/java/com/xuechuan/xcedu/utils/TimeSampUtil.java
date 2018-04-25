@@ -20,8 +20,9 @@ public class TimeSampUtil {
      * @return
      */
     public static String getStringTimeStamp(String date) {
-        if (Utils.isEmpty(date))
+        if (StringUtil.isEmpty(date)){
             return "";
+        }
         String commonDateStr = TimeUtil.getCommonDateStr(date);
         long nowTime = TimeUtil.intervalNow(commonDateStr);
         String result = "";

@@ -85,11 +85,13 @@ public class ArticleListActivity extends BaseActivity {
         initXrfresh();
         mXfvContent.startRefresh();
     }
+
     private void initView() {
         mContext = this;
         mRlvInfomList = (RecyclerView) findViewById(R.id.rlv_infom_list);
         mXfvContent = (XRefreshView) findViewById(R.id.xfv_content);
     }
+
     private void initXrfresh() {
         mXfvContent.setPullLoadEnable(true);
         mXfvContent.setAutoRefresh(true);
@@ -109,7 +111,6 @@ public class ArticleListActivity extends BaseActivity {
             }
         });
     }
-
 
 
     private void reqestData() {
@@ -137,11 +138,11 @@ public class ArticleListActivity extends BaseActivity {
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
                     }
-                    if (mArray.size()<DataMessageVo.CINT_PANGE_SIZE||mArray.size() == vo.getTotal().getTotal()) {
+                    if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
                         mXfvContent.setLoadComplete(true);
                     } else {
-                    mXfvContent.setPullLoadEnable(true);
-                    mXfvContent.setLoadComplete(false);
+                        mXfvContent.setPullLoadEnable(true);
+                        mXfvContent.setLoadComplete(false);
                     }
                     adapter.notifyDataSetChanged();
                 } else {
@@ -156,6 +157,7 @@ public class ArticleListActivity extends BaseActivity {
             }
         });
     }
+
     private void loadMoreData() {
         if (isRefresh) {
             return;
@@ -217,7 +219,8 @@ public class ArticleListActivity extends BaseActivity {
             @Override
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
-                InfomActivity.newInstance(mContext, vo.getGourl());
+                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,vo.getSupportcount());
+                mContext.startActivity(intent);
             }
         });
 

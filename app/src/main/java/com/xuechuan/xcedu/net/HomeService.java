@@ -236,6 +236,72 @@ public class HomeService extends BaseHttpServcie {
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
 
+    /**
+     * 0. 获取文章评论
+     *
+     * @param articleid
+     * @param callBackView
+     */
+    public void requestArticleCommentList(String articleid, int page, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        if (page <= 0) {
+            page = 1;
+        }
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("articleid");
+        paramVo.setValue(articleid);
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("staffid");
+        paramVo1.setValue(String.valueOf(user.getId()));
+        GetParamVo paramVo2 = getParamVo();
+        paramVo2.setParam("page");
+        paramVo2.setValue(String.valueOf(page));
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("pagesize");
+        paramVo3.setValue("10");
+        listParamVo.add(paramVo3);
+        listParamVo.add(paramVo2);
+        listParamVo.add(paramVo1);
+        listParamVo.add(paramVo);
+
+        String url = getUrl(mContext, R.string.http_articlecomment);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
+    /**
+     * 获取评论的评论
+     *
+     * @param articleid    科目
+     * @param callBackView
+     */
+    public void requestCommentCommentList(String articleid, String commentid, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("articleid");
+        paramVo.setValue(articleid);
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("commentid");
+        GetParamVo paramVo2 = getParamVo();
+        paramVo2.setParam("staffid");
+        paramVo2.setValue(String.valueOf(user.getId()));
+        paramVo1.setValue(commentid);
+        listParamVo.add(paramVo2);
+        listParamVo.add(paramVo1);
+        listParamVo.add(paramVo);
+        String url = getUrl(mContext, R.string.http_homecommentcomment);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
     private ArrayList<GetParamVo> getGetParamList() {
         if (vos == null) {
             vos = new ArrayList<>();

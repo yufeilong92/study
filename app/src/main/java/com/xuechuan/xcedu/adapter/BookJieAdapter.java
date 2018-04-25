@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.ui.InfomActivity;
 import com.xuechuan.xcedu.vo.ChildrenBeanVo;
 
@@ -74,7 +75,7 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
             public void onClick(View v) {
                 boolean isend = vo.isIsend();
                 if (isend) {
-                    Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()));
+                    Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
                     mContext.startActivity(intent);
                     return;
                 }
@@ -115,7 +116,8 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
             public void onClickListener(Object obj, int position) {
                 ChildrenBeanVo vo = (ChildrenBeanVo) obj;
                 String gourl = vo.getGourl();
-                InfomActivity.newInstance(mContext, gourl);
+                Intent intent = InfomActivity.startInstance(mContext, gourl, String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                mContext.startActivity(intent);
             }
         });
 

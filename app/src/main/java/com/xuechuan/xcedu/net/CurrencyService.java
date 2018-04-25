@@ -49,9 +49,9 @@ public class CurrencyService extends BaseHttpServcie {
      * @param usetype      类型 article（文章） question video（视频）
      * @param callBackView
      */
-    public void requestConmment(String targentid,
-                                String comment, String commentid,
-                                String usetype, StringCallBackView callBackView) {
+    public void submitConmment(String targentid,
+                               String comment, String commentid,
+                               String usetype, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -81,7 +81,7 @@ public class CurrencyService extends BaseHttpServcie {
 
      * @param callBackView
      */
-    public void requesstSpport(String targetid, String issupport, String usetype,StringCallBackView callBackView) {
+    public void subimtSpport(String targetid, String issupport, String usetype, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;

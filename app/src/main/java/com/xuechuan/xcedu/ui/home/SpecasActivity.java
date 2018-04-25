@@ -103,9 +103,13 @@ public class SpecasActivity extends BaseActivity {
                     clearData();
                     if (list != null && !list.isEmpty()) {
                         addListData(list);
+                    } else {
+                        mXrfvSpecaRefresh.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
+                        return;
                     }
 
-                    if (mArrary.size()<DataMessageVo.CINT_PANGE_SIZE||mArrary.size() == vo.getTotal().getTotal()) {
+                    if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == vo.getTotal().getTotal()) {
                         mXrfvSpecaRefresh.setLoadComplete(true);
                     } else {
                         mXrfvSpecaRefresh.setPullLoadEnable(true);
@@ -147,7 +151,7 @@ public class SpecasActivity extends BaseActivity {
 //                    clearData();
                     if (list != null && !list.isEmpty()) {
                         addListData(list);
-                    }else {
+                    } else {
                         mXrfvSpecaRefresh.setLoadComplete(true);
                         adapter.notifyDataSetChanged();
                         return;
