@@ -103,7 +103,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
                 TextView tv = customView.findViewById(R.id.tv_tab_titele);
                 tv.setTextColor(mContext.getResources().getColor(R.color.black));
                 ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_s));
+                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_tab_line_s));
                 tv.setText(mTabs.get(i));
 
             }else {
@@ -111,7 +111,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
             TextView tv = customView.findViewById(R.id.tv_tab_titele);
             tv.setTextColor(mContext.getResources().getColor(R.color.hint_text));
             ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-            ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_n));
+            ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_tab_line_n));
             tv.setText(mTabs.get(i));
             }
         }
@@ -125,7 +125,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
                 tv.setSelected(true);
                 tv.setTextColor(mContext.getResources().getColor(R.color.black));
                 ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_s));
+                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_tab_line_s));
             }
 
             @Override
@@ -135,7 +135,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
                 tv.setTextColor(mContext.getResources().getColor(R.color.hint_text));
                 ImageView ivline = customView.findViewById(R.id.iv_tab_line);
                 tv.setSelected(false);
-                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_tab_line_n));
+                ivline.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_tab_line_n));
             }
 
             @Override

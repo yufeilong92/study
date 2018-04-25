@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="@dimen/space_16"
-            android:src="@drawable/icon_spread_gray" />
+            android:src="@drawable/ic_spread_gray" />
     </LinearLayout>
 
     <View style="@style/view_line_1" />

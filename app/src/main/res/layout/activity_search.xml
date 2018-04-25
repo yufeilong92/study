@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="8dp"
                 android:padding="8dp"
-                android:src="@drawable/icon_nav_search" />
+                android:src="@drawable/ic_search" />
         </LinearLayout>
 
     </LinearLayout>

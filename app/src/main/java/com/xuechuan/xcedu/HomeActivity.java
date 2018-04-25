@@ -137,33 +137,33 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private void selectTabBg(boolean home, boolean book, boolean net, boolean user) {
         Drawable homeDrawable;
         if (home) {
-            homeDrawable = getResources().getDrawable(R.drawable.icon_tab_home_s);
+            homeDrawable = getResources().getDrawable(R.drawable.ic_tab_home_s);
         } else {
-            homeDrawable = getResources().getDrawable(R.drawable.icon_tab_home_n);
+            homeDrawable = getResources().getDrawable(R.drawable.ic_tab_home_n);
         }
         homeDrawable.setBounds(0, 0,  homeDrawable.getMinimumWidth(), homeDrawable.getMinimumHeight());
         mRdbHomeHome.setCompoundDrawables(null, homeDrawable, null, null);
         Drawable banDrawable;
         if (book) {
-            banDrawable = getResources().getDrawable(R.drawable.icon_tab_questionbank_s);
+            banDrawable = getResources().getDrawable(R.drawable.ic_tab_questionbank_s);
         } else {
-            banDrawable = getResources().getDrawable(R.drawable.icon_home_tab_bank_n);
+            banDrawable = getResources().getDrawable(R.drawable.ic_home_tab_bank_n);
         }
         banDrawable.setBounds(0, 0,  banDrawable.getMinimumWidth(), banDrawable.getMinimumHeight());
         mRdbHomeBank.setCompoundDrawables(null, banDrawable, null, null);
         Drawable netDrawable;
         if (net) {
-            netDrawable = getResources().getDrawable(R.drawable.icon_home_tab_course_s);
+            netDrawable = getResources().getDrawable(R.drawable.ic_home_tab_course_s);
         } else {
-            netDrawable = getResources().getDrawable(R.drawable.icon_home_tab_course_n);
+            netDrawable = getResources().getDrawable(R.drawable.ic_home_tab_course_n);
         }
         netDrawable.setBounds(0, 0, netDrawable.getMinimumWidth(), netDrawable.getMinimumHeight());
         mRdbHomeNet.setCompoundDrawables(null, netDrawable, null, null);
         Drawable userDrawable;
         if (user) {
-            userDrawable = getResources().getDrawable(R.drawable.icon_tab_mine_s);
+            userDrawable = getResources().getDrawable(R.drawable.ic_tab_mine_s);
         } else {
-            userDrawable = getResources().getDrawable(R.drawable.icon_home_tab_mine_n);
+            userDrawable = getResources().getDrawable(R.drawable.ic_home_tab_mine_n);
         }
         userDrawable.setBounds(0, 0, userDrawable.getMinimumWidth(), userDrawable.getMinimumHeight());
 

@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:drawablePadding="@dimen/space_8"
-                android:drawableRight="@drawable/icon_home_location"
+                android:drawableRight="@drawable/ic_home_location"
                 android:gravity="center_vertical"
                 android:padding="@dimen/space_8"
                 android:text="河南省"
@@ -60,7 +60,7 @@
                     android:layout_width="@dimen/space_22"
                     android:layout_height="@dimen/space_22"
                     android:layout_margin="@dimen/space_16"
-                    android:src="@drawable/icon_nav_search" />
+                    android:src="@drawable/ic_search" />
 
             </LinearLayout>
         </LinearLayout>
@@ -98,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/icon_home_textbook" />
+                        android:src="@drawable/ic_home_textbook" />
 
                     <Space style="@style/space_8_width" />
 
@@ -107,7 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/icon_home_standard" />
+                        android:src="@drawable/ic_home_standard" />
 
                 </LinearLayout>
 
