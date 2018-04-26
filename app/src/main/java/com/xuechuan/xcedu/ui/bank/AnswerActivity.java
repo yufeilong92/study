@@ -93,6 +93,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    /**
+     * 显示pop
+     */
     private void showPopwindow() {
         setBackgroundAlpha(0.5f,AnswerActivity.this);
         popupWindow = new CommonPopupWindow(mContext, R.layout.popw_setting_layout, 400, WindowManager.LayoutParams.WRAP_CONTENT) {
@@ -136,7 +139,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         };
         gravity = new CommonPopupWindow.LayoutGravity(CommonPopupWindow.LayoutGravity.ALIGN_LEFT | CommonPopupWindow.LayoutGravity.TO_BOTTOM);
         popupWindow.showBashOfAnchor(mIvBMore, gravity, 0, 0);
-
     }
 
 
