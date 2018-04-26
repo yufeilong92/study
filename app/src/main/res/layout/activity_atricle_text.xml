@@ -4,35 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.home.SpecasListActivity">
+    tools:context=".ui.bank.AtricleTextListActivity">
 
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@mipmap/back" />
+            android:src="@drawable/ic_back" />
 
         <TextView
             style="@style/TitleBarText"
             android:text="" />
 
-        <ImageView style="@style/TitleBarAction" />
+        <ImageView
+            style="@style/TitleBarAction"
+            android:src="@drawable/ic_more" />
 
     </LinearLayout>
 
     <com.andview.refreshview.XRefreshView
+        android:id="@+id/xfv_text_content"
         android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_speca_content"
+            android:id="@+id/rlv_text_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
     </com.andview.refreshview.XRefreshView>
+
+
 </LinearLayout>

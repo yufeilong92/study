@@ -17,7 +17,7 @@ import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.InfomActivity;
+import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ArticleListVo;
@@ -206,8 +206,6 @@ public class ArticleListActivity extends BaseActivity {
             }
         });
     }
-
-
     private void bindAdapterData() {
         adapter = new ArticleListAdapter(mContext, mArray);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
@@ -219,7 +217,7 @@ public class ArticleListActivity extends BaseActivity {
             @Override
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
-                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,vo.getSupportcount());
+                Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,vo.getSupportcount());
                 mContext.startActivity(intent);
             }
         });

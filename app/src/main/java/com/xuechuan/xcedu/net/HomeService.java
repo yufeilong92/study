@@ -279,13 +279,22 @@ public class HomeService extends BaseHttpServcie {
      * @param articleid    科目
      * @param callBackView
      */
-    public void requestCommentCommentList(String articleid, String commentid, StringCallBackView callBackView) {
+    public void requestCommentCommentList(int page,String articleid, String commentid, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
         }
+        if (page<=0){
+            page=1;
+        }
         UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("page");
+        paramVo3.setValue(String.valueOf(page));
+        GetParamVo paramVo4 = getParamVo();
+        paramVo4.setParam("pagesize");
+        paramVo4.setValue("10");
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("articleid");
         paramVo.setValue(articleid);
@@ -295,6 +304,8 @@ public class HomeService extends BaseHttpServcie {
         paramVo2.setParam("staffid");
         paramVo2.setValue(String.valueOf(user.getId()));
         paramVo1.setValue(commentid);
+        listParamVo.add(paramVo3);
+        listParamVo.add(paramVo4);
         listParamVo.add(paramVo2);
         listParamVo.add(paramVo1);
         listParamVo.add(paramVo);

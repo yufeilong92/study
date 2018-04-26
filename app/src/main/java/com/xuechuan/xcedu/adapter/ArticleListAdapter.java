@@ -72,10 +72,8 @@ public class ArticleListAdapter extends BaseRecyclerAdapter<ArticleListAdapter.V
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
             MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll,vo.getThumbnailimg(),false);
         }
-        String titel="中兴遭美国“封杀”强烈震动了中国社会，舆论场上给出诸多反应，既包括对美国的做法很愤怒，又有些人认为中兴“遭此报应活该”，既有强大声音主张中国须以此为鉴，真正把本国半导体产业做强做优，又有不少很悲观的声音，认为中国“不可能斗得过美国”。";
         holder.mTvItemHomeLookAll.setText(vo.getStringViewcount());
         holder.mTvItemHomeTitleAll.setText(vo.getTitle());
-        holder.mTvItemHomeTitleAll.setText(titel);
         holder.mTvItemHomeLaudAll.setText(vo.getSupportcount());
         holder.itemView.setTag(vo);
         holder.itemView.setId(position);

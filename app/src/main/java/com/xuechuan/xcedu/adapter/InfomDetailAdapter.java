@@ -24,19 +24,25 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: 评价适配器
+ * @Description: todo
  * @author: L-BackPacker
- * @date: 2018/4/25 10:55
+ * @date: 2018/4/26 8:53
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class HomeEvaluateAdapter extends BaseRecyclerAdapter<HomeEvaluateAdapter.ViewHolder> implements View.OnClickListener {
+public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.ViewHoler> implements View.OnClickListener {
     private Context mContext;
     private List<EvalueVo.DatasBean> mData;
     private final LayoutInflater mInflater;
 
     private onItemClickListener clickListener;
 
+    @Override
+    public void onClick(View v) {
+        if (clickListener!=null){
+            clickListener.onClickListener(v.getTag(),v.getId());
+        }
+    }
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
@@ -46,33 +52,33 @@ public class HomeEvaluateAdapter extends BaseRecyclerAdapter<HomeEvaluateAdapter
         this.clickListener = clickListener;
     }
 
-    public HomeEvaluateAdapter(Context mContext, List<EvalueVo.DatasBean> mData) {
+    public InfomDetailAdapter(Context mContext, List<EvalueVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
     }
 
+
     @Override
-    public ViewHolder getViewHolder(View view) {
-        return new ViewHolder(view);
+    public ViewHoler getViewHolder(View view) {
+        return new ViewHoler(view);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType, boolean isItem) {
-
-        View view = mInflater.inflate(R.layout.item_home_evaluate, null);
-        ViewHolder holder = new ViewHolder(view);
+    public ViewHoler onCreateViewHolder(ViewGroup parent, int viewType, boolean isItem) {
+        View view = mInflater.inflate(R.layout.item_h_evalua, null);
+        ViewHoler holer = new ViewHoler(view);
         view.setOnClickListener(this);
-        return holder;
+        return holer;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
+    public void onBindViewHolder(ViewHoler holder, int position, boolean isItem) {
         EvalueVo.DatasBean bean = mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
-            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount()+"");
-        }else {
+            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
+        } else {
             holder.mTvEvalueSuppernumber.setText("赞");
         }
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
@@ -84,26 +90,17 @@ public class HomeEvaluateAdapter extends BaseRecyclerAdapter<HomeEvaluateAdapter
         if (!StringUtil.isEmpty(bean.getHeadicon())) {
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
-        holder.mTvEvalueEvalue.setText(bean.getCommentcount()+"");
+        holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
-
     }
 
     @Override
     public int getAdapterItemCount() {
-        return mData==null?0:mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (clickListener != null) {
-            clickListener.onClickListener(v.getTag(), v.getId());
-        }
-    }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHoler extends RecyclerView.ViewHolder {
         public ImageView mIvEvaluateHear;
         public TextView mTvEvalueUserName;
         public TextView mTvEvalueContent;
@@ -112,8 +109,9 @@ public class HomeEvaluateAdapter extends BaseRecyclerAdapter<HomeEvaluateAdapter
         public CheckBox mChbEvaluaIssupper;
         public TextView mTvEvalueSuppernumber;
 
-        public ViewHolder(View itemView) {
+        public ViewHoler(View itemView) {
             super(itemView);
+
             this.mIvEvaluateHear = (ImageView) itemView.findViewById(R.id.iv_evaluate_hear);
             this.mTvEvalueUserName = (TextView) itemView.findViewById(R.id.tv_evalue_user_name);
             this.mTvEvalueContent = (TextView) itemView.findViewById(R.id.tv_evalue_content);
@@ -126,3 +124,4 @@ public class HomeEvaluateAdapter extends BaseRecyclerAdapter<HomeEvaluateAdapter
 
 
 }
+

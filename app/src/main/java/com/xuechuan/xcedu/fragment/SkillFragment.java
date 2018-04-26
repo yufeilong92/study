@@ -1,12 +1,19 @@
 package com.xuechuan.xcedu.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.mvp.presenter.SkillController;
+import com.xuechuan.xcedu.ui.bank.AnswerActivity;
+
 /**
  * All rights Reserved, Designed By
  *
@@ -20,22 +27,28 @@ import com.xuechuan.xcedu.R;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class SkillFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class SkillFragment extends Fragment implements View.OnClickListener {
+    private static final String TYPEOID = "typeoid";
 
-    private String mParam1;
-    private String mParam2;
+    private String mTypeOid;
+    private TextView mTvSkillWroing;
+    private LinearLayout mLlBSkillError;
+    private TextView mTvSkillCoolect;
+    private LinearLayout mLlBSkillCollect;
+    private ImageView mIvBOrder;
+    private ImageView mIvBTest;
+    private TextView mTvBFree;
+    private TextView mTvBSpecial;
+    private TextView mTvBTurn;
 
 
     public SkillFragment() {
     }
 
-    public static SkillFragment newInstance(String param1, String param2) {
+    public static SkillFragment newInstance(String id) {
         SkillFragment fragment = new SkillFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(TYPEOID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,15 +57,59 @@ public class SkillFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mTypeOid = getArguments().getString(TYPEOID);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_skill, container, false);
+        View view = inflater.inflate(R.layout.fragment_skill, container, false);
+        initView(view);
+        return view;
+
     }
 
+    private void initView(View view) {
+        mTvSkillWroing = (TextView) view.findViewById(R.id.tv_skill_wroing);
+        mLlBSkillError = (LinearLayout) view.findViewById(R.id.ll_b_skill_error);
+        mTvSkillCoolect = (TextView) view.findViewById(R.id.tv_skill_coolect);
+        mLlBSkillCollect = (LinearLayout) view.findViewById(R.id.ll_b_skill_collect);
+        mIvBOrder = (ImageView) view.findViewById(R.id.iv_b_order);
+        mIvBTest = (ImageView) view.findViewById(R.id.iv_b_test);
+        mTvBFree = (TextView) view.findViewById(R.id.tv_b_free);
+        mTvBSpecial = (TextView) view.findViewById(R.id.tv_b_special);
+        mTvBTurn = (TextView) view.findViewById(R.id.tv_b_turn);
+        mTvBTurn.setOnClickListener(this);
+        mIvBOrder.setOnClickListener(this);
+        mLlBSkillError.setOnClickListener(this);
+        mTvSkillCoolect.setOnClickListener(this);
+        mLlBSkillCollect.setOnClickListener(this);
+        mIvBTest.setOnClickListener(this);
+        mTvBFree.setOnClickListener(this);
+        mTvBSpecial.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_b_skill_error://错题
+                break;
+            case R.id.ll_b_skill_collect://收藏
+                break;
+            case R.id.iv_b_order://章节
+                Intent intent=new Intent(getActivity(),AnswerActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.iv_b_test://考试
+                break;
+            case R.id.tv_b_free://自由
+                break;
+            case R.id.tv_b_special://专项
+                break;
+            default:
+
+        }
+    }
 }

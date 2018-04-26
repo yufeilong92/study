@@ -13,7 +13,6 @@ import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
-import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AdvisoryListAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -21,7 +20,7 @@ import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.InfomActivity;
+import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -240,7 +239,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
             public void onClickListener(Object obj, int position) {
                 AdvisoryVo vo = (AdvisoryVo) obj;
                 String gourl = vo.getGourl();
-                Intent intent = InfomActivity.startInstance(mContext, gourl, String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                Intent intent = InfomDetailActivity.startInstance(mContext, gourl, String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
                 mContext.startActivity(intent);
             }
         });

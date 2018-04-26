@@ -14,6 +14,7 @@
         android:paddingRight="36dp">
 
         <LinearLayout
+            android:id="@+id/ll_b_co_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -42,7 +43,7 @@
                 <Space style="@style/space_4_height" />
 
                 <TextView
-                    android:id="@+id/tv_skill_wroing"
+                    android:id="@+id/tv_b_coo_wroing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20道" />
@@ -51,6 +52,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_b_co_collect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -79,7 +81,7 @@
                 <Space style="@style/space_4_height" />
 
                 <TextView
-                    android:id="@+id/tv_skill_coolect"
+                    android:id="@+id/tv_b_co_coolect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20道" />
@@ -99,6 +101,7 @@
         android:paddingTop="@dimen/space_30">
 
         <ImageView
+            android:id="@+id/iv_b_co_order"
             android:layout_width="166dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -107,6 +110,7 @@
         <Space style="@style/space_8_width" />
 
         <ImageView
+            android:id="@+id/iv_b_co_text"
             android:layout_width="166dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -122,6 +126,7 @@
         android:paddingRight="@dimen/space_16">
 
         <TextView
+            android:id="@+id/tv_b_co_free"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -130,6 +135,7 @@
             android:text="@string/skill_free_composition" />
 
         <TextView
+            android:id="@+id/tv_b_co_zhuanxiang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -138,6 +144,7 @@
             android:text="@string/special_practice" />
 
         <TextView
+            android:id="@+id/tv_b_co_shunxu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

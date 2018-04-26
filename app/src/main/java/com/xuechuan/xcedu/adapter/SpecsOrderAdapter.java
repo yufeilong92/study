@@ -17,7 +17,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.InfomActivity;
+import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.DatasBeanVo;
@@ -172,7 +172,7 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
             public void onClickListener(Object obj, int position) {
 
                 SpecasJieVo.DatasBean vo = (SpecasJieVo.DatasBean) obj;
-                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
                 mContext.startActivity(intent);
             }
         });

@@ -5,8 +5,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+
 /**
  * All rights Reserved, Designed By
  *
@@ -21,20 +25,27 @@ import com.xuechuan.xcedu.R;
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 public class ColligateFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
+    private static final String TYPEOID = "typeoid";
+
+    private String mTypeOid;
+    private TextView mTvBCooWroing;
+    private LinearLayout mLlBCoError;
+    private TextView mTvBCoCoolect;
+    private LinearLayout mLlBCoCollect;
+    private ImageView mIvBCoOrder;
+    private ImageView mIvBCoText;
+    private TextView mTvBCoFree;
+    private TextView mTvBCoZhuanxiang;
+    private TextView mTvBCoShunxu;
 
 
     public ColligateFragment() {
     }
 
-    public static ColligateFragment newInstance(String param1, String param2) {
+    public static ColligateFragment newInstance(String id) {
         ColligateFragment fragment = new ColligateFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(TYPEOID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,15 +54,28 @@ public class ColligateFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mTypeOid = getArguments().getString(TYPEOID);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_colligate, container, false);
+        View view = inflater.inflate(R.layout.fragment_colligate, container, false);
+        initView(view);
+        return view;
+    }
+
+    private void initView(View view) {
+        mTvBCooWroing = (TextView) view.findViewById(R.id.tv_b_coo_wroing);
+        mLlBCoError = (LinearLayout) view.findViewById(R.id.ll_b_co_error);
+        mTvBCoCoolect = (TextView) view.findViewById(R.id.tv_b_co_coolect);
+        mLlBCoCollect = (LinearLayout) view.findViewById(R.id.ll_b_co_collect);
+        mIvBCoOrder = (ImageView) view.findViewById(R.id.iv_b_co_order);
+        mIvBCoText = (ImageView) view.findViewById(R.id.iv_b_co_text);
+        mTvBCoFree = (TextView) view.findViewById(R.id.tv_b_co_free);
+        mTvBCoZhuanxiang = (TextView) view.findViewById(R.id.tv_b_co_zhuanxiang);
+        mTvBCoShunxu = (TextView) view.findViewById(R.id.tv_b_co_shunxu);
     }
 
 }

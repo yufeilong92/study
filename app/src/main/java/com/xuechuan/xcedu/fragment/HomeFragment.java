@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,13 +26,13 @@ import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.InfomActivity;
+import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.ui.home.AddressShowActivity;
 import com.xuechuan.xcedu.ui.home.AdvisoryListActivity;
 import com.xuechuan.xcedu.ui.home.ArticleListActivity;
 import com.xuechuan.xcedu.ui.home.BookActivity;
 import com.xuechuan.xcedu.ui.home.SearchActivity;
-import com.xuechuan.xcedu.ui.home.SpecasActivity;
+import com.xuechuan.xcedu.ui.home.SpecasListActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
@@ -279,7 +277,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             public void onClickListener(Object obj, int position) {
                 T.showToast(mContext, position + "");
                 ArticleBean vo = (ArticleBean) obj;
-                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, String.valueOf(vo.getSupportcount()));
+                Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, String.valueOf(vo.getSupportcount()));
                 mContext.startActivity(intent);
             }
 
@@ -304,7 +302,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             public void onClickListener(Object obj, int position) {
                 AdvisoryBean vo = (AdvisoryBean) obj;
                 T.showToast(mContext, position + "");
-                Intent intent = InfomActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
                 mContext.startActivity(intent);
             }
         });
@@ -353,7 +351,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void OnBannerClick(int position) {
                 String url = list.get(position - 1);
-                InfomActivity.newInstance(mContext, url);
+                InfomDetailActivity.newInstance(mContext, url);
 
             }
         });
@@ -394,8 +392,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent3);
                 break;
             case R.id.iv_home_standard://规范
-                Intent intent2 = SpecasActivity.newInstance(mContext, null, null);
-                intent2.putExtra(SpecasActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_specs));
+                Intent intent2 = SpecasListActivity.newInstance(mContext, null, null);
+                intent2.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_specs));
                 startActivity(intent2);
                 break;
             case R.id.tv_infom_more://资讯更多

@@ -78,7 +78,9 @@ public class BaseHttpServcie {
         if (isWithToken) {
             UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
             if (vo == null) {
-                dialog.dismiss();
+                if (dialog!=null){
+                    dialog.dismiss();
+                }
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }
@@ -111,7 +113,9 @@ public class BaseHttpServcie {
         if (isWithToken) {
             UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();
             if (userInfomVo == null) {
+                if (dialog!=null){
                 dialog.dismiss();
+                }
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }
@@ -215,7 +219,9 @@ public class BaseHttpServcie {
                     @Override
                     public void onSuccess(Response<String> response) {
                         if (isShow) {
-                            dialog.dismiss();
+                            if (dialog!=null){
+                                dialog.dismiss();
+                            }
                         }
                         try {
                             new JsonParser().parse(response.body().toString());
@@ -230,7 +236,9 @@ public class BaseHttpServcie {
                     public void onError(Response<String> response) {
                         super.onError(response);
                         if (isShow) {
-                            dialog.dismiss();
+                            if (dialog!=null){
+                                dialog.dismiss();
+                            }
                         }
                         L.e(response.message());
                         callBackView.onError(response);
@@ -256,7 +264,9 @@ public class BaseHttpServcie {
                     @Override
                     public void onSuccess(Response<String> response) {
                         if (isShow) {
-                            dialog.dismiss();
+                            if (dialog!=null){
+                                dialog.dismiss();
+                            }
                         }
                         callBackView.onSuccess(response);
                     }

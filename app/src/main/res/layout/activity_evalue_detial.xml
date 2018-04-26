@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.home.SpecasListActivity">
+    tools:context=".ui.EvalueDetialActivity">
 
     <LinearLayout style="@style/TitleBar">
 
@@ -24,15 +24,13 @@
     </LinearLayout>
 
     <com.andview.refreshview.XRefreshView
+        android:id="@+id/xfv_evaule_content"
         android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_speca_content"
+            android:id="@+id/rlv_evalue_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
     </com.andview.refreshview.XRefreshView>
 </LinearLayout>

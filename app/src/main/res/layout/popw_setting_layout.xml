@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/space_150"
+    android:layout_height="@dimen/space_100"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/space_8">
+
+    <TextView
+
+        android:id="@+id/tv_b_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/black"
+        android:drawableLeft="@drawable/ic_b_setting"
+        android:drawablePadding="@dimen/space_10"
+        android:gravity="center_vertical"
+        android:text="设置" />
+
+    <View style="@style/view_line" />
+
+    <TextView
+
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/black"
+        android:id="@+id/tv_b_share"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_48"
+        android:drawableLeft="@drawable/ic_b_share"
+        android:drawablePadding="@dimen/space_10"
+        android:gravity="center_vertical"
+        android:text="分享" />
+</LinearLayout>

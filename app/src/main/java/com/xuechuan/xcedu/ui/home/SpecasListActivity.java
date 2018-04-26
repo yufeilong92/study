@@ -33,7 +33,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class SpecasActivity extends BaseActivity {
+public class SpecasListActivity extends BaseActivity {
 
     private RecyclerView mRlvSpecaContent;
 
@@ -55,7 +55,7 @@ public class SpecasActivity extends BaseActivity {
     private boolean isRefresh = false;
 
     public static Intent newInstance(Context context, String parame, String parame1) {
-        Intent intent = new Intent(context, SpecasActivity.class);
+        Intent intent = new Intent(context, SpecasListActivity.class);
         intent.putExtra(PARAME, parame);
         intent.putExtra(PARAME1, parame1);
         return intent;
