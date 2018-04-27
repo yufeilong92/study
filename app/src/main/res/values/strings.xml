@@ -69,6 +69,8 @@
     <!--获取模拟考试试卷-->
     <string name="http_examchapter">/api/question/getexamchapter </string>
 
+    <!--题库根据科目编号获取章节列表-->
+    <string name="http_getCnapter">/api/question/getchapter</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>

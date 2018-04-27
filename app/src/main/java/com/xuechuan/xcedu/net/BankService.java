@@ -48,7 +48,7 @@ public class BankService extends BaseHttpServcie {
         paramVo.setParam("courseid");
         paramVo.setValue(couresid);
         listParamVo.add(paramVo);
-        String url = getUrl(mContext, R.string.http_chapter);
+        String url = getUrl(mContext, R.string.http_getCnapter);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
 
@@ -97,19 +97,16 @@ public class BankService extends BaseHttpServcie {
      * 获取所有练习题库题号
      *
      * @param chapterid
-     * @param usertype
+     * @param String usertype,
      * @param callBackView
      */
-    public void requestChapterQuestionids(String chapterid, String usertype, StringCallBackView callBackView) {
+    public void requestChapterQuestionids(String chapterid,  StringCallBackView callBackView) {
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("chapterid");
         paramVo.setValue(chapterid);
         listParamVo.add(paramVo);
-        GetParamVo paramVo1 = getParamVo();
-        paramVo1.setParam("usetype");
-        paramVo1.setValue(usertype);
-        listParamVo.add(paramVo1);
+
         String url = getUrl(mContext, R.string.http_chapterquestionids);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
@@ -202,10 +199,20 @@ public class BankService extends BaseHttpServcie {
      * @param callBackView
      */
     public void requestDetail(String questionid, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("questionid");
         paramVo.setValue(questionid);
+        GetParamVo paramVo1 = getParamVo();
+        GetParamVo paramVo2 = getParamVo();
+        paramVo2.setParam("staffid");
+        paramVo2.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo2);
         listParamVo.add(paramVo);
         String url = getUrl(mContext, R.string.http_datail);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.BookHomeVo;
 
 import java.util.List;
@@ -62,6 +64,9 @@ public class BookHomeAdapter extends BaseRecyclerAdapter<BookHomeAdapter.ViewHol
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         BookHomeVo.DatasBean datasBean = mData.get(position);
         holder.mTvBookhomeTitle.setText(datasBean.getName());
+        if (!StringUtil.isEmpty(datasBean.getCover())){
+            MyAppliction.getInstance().displayImages(holder.mIvBookhomeContent,datasBean.getCover(),false);
+        }
         holder.itemView.setId(position);
         holder.itemView.setTag(datasBean);
     }

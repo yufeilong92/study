@@ -86,9 +86,27 @@ public class AnswerCardUtil {
                 break;
             case WARN:
                 iv.setImageDrawable(context.getDrawable(R.drawable.ic_b_miss));
-                   break;
+                break;
         }
     }
 
+    /**
+     * 获取题类型
+     *
+     * @param id
+     * @return
+     */
+    public static String getTextType(int id) {
+        switch (id) {
+            case 2:
+                return "单选";
+            case 3:
+                return "多选";
+            case 4:
+                return "问答题";
+            default:
+        }
+        return "";
+    }
 }
 

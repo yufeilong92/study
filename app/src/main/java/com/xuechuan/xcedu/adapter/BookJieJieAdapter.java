@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChildrenBeanVo;
 
 import java.util.List;
@@ -62,6 +64,7 @@ public class BookJieJieAdapter extends RecyclerView.Adapter<BookJieJieAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ChildrenBeanVo vo = mData.get(position);
+
         holder.mTvBookhomeJiejieTitle.setText(vo.getTitle());
         holder.itemView.setTag(vo);
         holder.itemView.setId(position);

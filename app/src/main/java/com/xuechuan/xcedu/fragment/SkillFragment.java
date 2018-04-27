@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.mvp.presenter.SkillController;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
+import com.xuechuan.xcedu.ui.bank.AtricleTextListActivity;
 
 /**
  * All rights Reserved, Designed By
@@ -40,6 +42,7 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
     private TextView mTvBFree;
     private TextView mTvBSpecial;
     private TextView mTvBTurn;
+    private Context mContext;
 
 
     public SkillFragment() {
@@ -89,6 +92,7 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
         mIvBTest.setOnClickListener(this);
         mTvBFree.setOnClickListener(this);
         mTvBSpecial.setOnClickListener(this);
+        mContext = getActivity();
     }
 
     @Override
@@ -99,7 +103,7 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
             case R.id.ll_b_skill_collect://收藏
                 break;
             case R.id.iv_b_order://章节
-                Intent intent=new Intent(getActivity(),AnswerActivity.class);
+                Intent intent = AtricleTextListActivity.newInstance(mContext, mTypeOid);
                 startActivity(intent);
                 break;
             case R.id.iv_b_test://考试

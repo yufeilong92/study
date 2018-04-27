@@ -25,11 +25,11 @@
         android:paddingTop="@dimen/space_8">
 
         <RadioButton
+            android:checked="true"
             android:id="@+id/rdb_home_home"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
             android:drawableTop="@drawable/select_home_bg"
-            android:checked="true"
             android:textColor="@drawable/select_home_textcolor"
             android:text="首页" />
 
@@ -38,7 +38,7 @@
             android:id="@+id/rdb_home_bank"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/ic_home_tab_bank_n"
+            android:drawableTop="@drawable/select_bank_tab_bg"
             android:text="题库" />
 
         <RadioButton
@@ -46,7 +46,7 @@
             android:id="@+id/rdb_home_net"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/ic_home_tab_course_n"
+            android:drawableTop="@drawable/select_net_tab_bg"
             android:text="网课" />
 
         <RadioButton
@@ -54,7 +54,7 @@
             android:id="@+id/rdb_home_personal"
             style="@style/radiobutton_style"
             android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/ic_home_tab_mine_n"
+            android:drawableTop="@drawable/select_m_tab_bg"
             android:text="我的" />
 
     </RadioGroup>

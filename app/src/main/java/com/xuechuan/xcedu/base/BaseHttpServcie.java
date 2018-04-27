@@ -63,12 +63,11 @@ public class BaseHttpServcie {
     }
 
     public void setDialogContext(Context context, String title, String cont) {
-        this.mContext = context;
         this.title = title;
         this.cont = cont;
         if (isShow) {
             if (dialog == null) {
-                dialog = DialogUtil.showDialog(mContext, title, cont);
+                dialog = DialogUtil.showDialog(context, title, cont);
             }
         }
     }
@@ -203,7 +202,7 @@ public class BaseHttpServcie {
      * @param requestBody
      * @param callBackView
      */
-    private void sendRequestPostHttp(Context context, String url, String saffid, String time, String nonce, String signature, RequestBody requestBody, final StringCallBackView callBackView) {
+    private void sendRequestPostHttp(final Context context, String url, String saffid, String time, String nonce, String signature, RequestBody requestBody, final StringCallBackView callBackView) {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
@@ -227,7 +226,7 @@ public class BaseHttpServcie {
                             new JsonParser().parse(response.body().toString());
                             callBackView.onSuccess(response);
                         } catch (JsonParseException e) {
-                            L.e("数据异常");
+                            L.e( "数据异常");
                             e.printStackTrace();
                         }
                     }
@@ -235,10 +234,8 @@ public class BaseHttpServcie {
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if (isShow) {
-                            if (dialog!=null){
-                                dialog.dismiss();
-                            }
+                        if (dialog!=null) {
+                            dialog.dismiss();
                         }
                         L.e(response.message());
                         callBackView.onError(response);
@@ -247,7 +244,7 @@ public class BaseHttpServcie {
 
     }
 
-    private void sendRequestGetHttp(Context context, String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
+    private void sendRequestGetHttp(final Context context, String url, String saffid, String time, String nonce, String signature, final StringCallBackView callBackView) {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
@@ -268,16 +265,23 @@ public class BaseHttpServcie {
                                 dialog.dismiss();
                             }
                         }
+                        try {
+                            new JsonParser().parse(response.body().toString());
+                            callBackView.onSuccess(response);
+                        } catch (JsonParseException e) {
+                            T.showToast(context, "网络错误");
+                            e.printStackTrace();
+                        }
                         callBackView.onSuccess(response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if (isShow) {
+                        if (dialog!=null) {
                             dialog.dismiss();
                         }
-                        T.showToast(mContext, "网络异常");
+                        T.showToast(context, "网络错误");
                         L.e(response.message());
                         callBackView.onError(response);
                     }

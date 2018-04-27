@@ -1,15 +1,17 @@
 package com.xuechuan.xcedu.fragment;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
@@ -39,12 +41,18 @@ import java.util.List;
 public class BankFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private Context mContext;
     private String mParam1;
     private String mParam2;
-    private TabLayout mTabTitleTab;
+
+    private ArrayList<Fragment> mlist;
+    private CheckBox mChbBSkill;
+    private ImageView mIvBLineBg;
+    private CheckBox mChbBColled;
+    private ImageView mIvBLineBg1;
+    private CheckBox mChbBCase;
+    private ImageView mIvBLineBg2;
     private ViewPager mVpgContent;
-    private ArrayList<Fragment> list;
 
 
     public BankFragment() {
@@ -81,10 +89,46 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initViewCreate(View view, Bundle savedInstanceState) {
-//        requestChapters();
+        requestChapters();
         initView(view);
-        initData(null);
+        initViewData();
     }
+
+    private void initViewData() {
+        mlist = new ArrayList<>();
+        SkillFragment skillFragment   = SkillFragment.newInstance("1");
+        ColligateFragment colligateFragment = ColligateFragment.newInstance("2");
+        CaseFragment caseFragment = CaseFragment.newInstance("3");
+        mlist.add(skillFragment);
+        mlist.add(colligateFragment);
+        mlist.add(caseFragment);
+        final ArrayList<String> mTabs = ArrayToListUtil.arraytoList(mContext, R.array.bank_tab);
+        FragmentManager manager = getFragmentManager();
+        BankFragmentAdapter fragmentAdapter = new BankFragmentAdapter(manager, mContext, mlist, mTabs);
+        mVpgContent.setAdapter(fragmentAdapter);
+        mVpgContent.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    selectTabBg(true, false, false);
+                } else if (position == 1) {
+                    selectTabBg(false, true, false);
+                } else if (position == 2) {
+                    selectTabBg(false, false, true);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        mVpgContent.setCurrentItem(0);
+        selectTabBg(true, false, false);
+    }
+
 
     /**
      * 请求章节题目
@@ -102,7 +146,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
                 BookHomeVo vo = gson.fromJson(message, BookHomeVo.class);
                 if (vo.getStatus().getCode() == 200) {
                     List<BookHomeVo.DatasBean> datas = vo.getDatas();
-                    initData(datas);
+                    bindTab(datas);
                 } else {
                     T.showToast(getContext(), vo.getStatus().getMessage());
                 }
@@ -115,109 +159,84 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
         });
     }
 
-    private void initData(List<BookHomeVo.DatasBean> datas) {
-        list = new ArrayList<>();
-        SkillFragment skillFragment = null;
-        ColligateFragment colligateFragment = null;
-        CaseFragment caseFragment = null;
-     /*   for (int i = 0; i < datas.size(); i++) {
-            BookHomeVo.DatasBean datasBean = datas.get(i);
-            if (datasBean.getName().equals("技术实务")) {
-                skillFragment = SkillFragment.newInstance(String.valueOf(datasBean.getId()));
-            } else if (datasBean.getName().equals("综合能力")) {
-                colligateFragment = ColligateFragment.newInstance(String.valueOf(datasBean.getId()));
+    private void bindTab(List<BookHomeVo.DatasBean> datas) {
 
-            } else if (datasBean.getName().equals("案例分析")) {
-                caseFragment = CaseFragment.newInstance(String.valueOf(datasBean.getId()));
-            }
-        }*/
-        skillFragment = SkillFragment.newInstance("");
-        colligateFragment = ColligateFragment.newInstance("");
-        caseFragment = CaseFragment.newInstance("");
-        list.add(skillFragment);
-        list.add(colligateFragment);
-        list.add(caseFragment);
-
-        final ArrayList<String> mTabs = ArrayToListUtil.arraytoList(getContext(), R.array.bank_tab);
-        FragmentManager manager = getFragmentManager();
-        BankFragmentAdapter fragmentAdapter = new BankFragmentAdapter(manager, getContext(), list, mTabs);
-        mVpgContent.setAdapter(fragmentAdapter);
-        mTabTitleTab.setupWithViewPager(mVpgContent);
-        for (int i = 0; i < fragmentAdapter.getCount(); i++) {
-            TabLayout.Tab tab = mTabTitleTab.getTabAt(i);
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_tab, null);
-            tab.setCustomView(view);
-            if (i == 0) {
-                View customView = tab.getCustomView();
-                TextView tv = customView.findViewById(R.id.tv_tab_titele);
-                tv.setTextColor(getContext().getResources().getColor(R.color.black));
-                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-                ivline.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_tab_line_s));
-                tv.setText(mTabs.get(i));
-
-            } else {
-                View customView = tab.getCustomView();
-                TextView tv = customView.findViewById(R.id.tv_tab_titele);
-                tv.setTextColor(getContext().getResources().getColor(R.color.hint_text));
-                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-                ivline.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_tab_line_n));
-                tv.setText(mTabs.get(i));
-            }
-        }
-
-
-        mTabTitleTab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                View customView = tab.getCustomView();
-                TextView tv = customView.findViewById(R.id.tv_tab_titele);
-                tv.setSelected(true);
-                tv.setTextColor(getContext().getResources().getColor(R.color.black));
-                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-                ivline.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_tab_line_s));
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                View customView = tab.getCustomView();
-                TextView tv = customView.findViewById(R.id.tv_tab_titele);
-                tv.setTextColor(getContext().getResources().getColor(R.color.hint_text));
-                ImageView ivline = customView.findViewById(R.id.iv_tab_line);
-                tv.setSelected(false);
-                ivline.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_tab_line_n));
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        mVpgContent.setCurrentItem(0);
     }
-
 
     @Override
     protected int initInflateView() {
         return R.layout.fragment_bank;
     }
 
-/*    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_bank, null);
-        initView(view);
-        return view;
-    }*/
-
     private void initView(View view) {
-        mTabTitleTab = (TabLayout) view.findViewById(R.id.tab_title_tab);
-        mTabTitleTab.setOnClickListener(this);
+        mContext = getActivity();
+
+        mChbBSkill = (CheckBox) view.findViewById(R.id.chb_b_skill);
+        mChbBSkill.setOnClickListener(this);
+        mIvBLineBg = (ImageView) view.findViewById(R.id.iv_b_line_bg);
+        mIvBLineBg.setOnClickListener(this);
+        mChbBColled = (CheckBox) view.findViewById(R.id.chb_b_Colled);
+        mChbBColled.setOnClickListener(this);
+        mIvBLineBg1 = (ImageView) view.findViewById(R.id.iv_b_line_bg1);
+        mIvBLineBg1.setOnClickListener(this);
+        mChbBCase = (CheckBox) view.findViewById(R.id.chb_b_case);
+        mChbBCase.setOnClickListener(this);
+        mIvBLineBg2 = (ImageView) view.findViewById(R.id.iv_b_line_bg2);
+        mIvBLineBg2.setOnClickListener(this);
         mVpgContent = (ViewPager) view.findViewById(R.id.vpg_content);
         mVpgContent.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.chb_b_skill:
+                mVpgContent.setCurrentItem(0, true);
+                break;
+            case R.id.chb_b_Colled:
+                mVpgContent.setCurrentItem(1, true);
+                break;
+            case R.id.chb_b_case:
+                mVpgContent.setCurrentItem(2, true);
+                break;
+            default:
 
+        }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment like bottom ... and run LayoutCreator again
+        View view = View.inflate(getActivity(), R.layout.fragment_bank, null);
+        initView(view);
+        return view;
+    }
+
+    private void selectTabBg(boolean skill, boolean co, boolean cased) {
+        mChbBSkill.setChecked(skill);
+        mChbBColled.setChecked(co);
+        mChbBCase.setChecked(cased);
+        Drawable homeDrawable;
+        if (skill) {
+            homeDrawable = getResources().getDrawable(R.drawable.ic_tab_line_s);
+        } else {
+            homeDrawable = getResources().getDrawable(R.drawable.ic_tab_line_n);
+        }
+        mIvBLineBg.setImageDrawable(homeDrawable);
+        Drawable banDrawable;
+        if (co) {
+            banDrawable = getResources().getDrawable(R.drawable.ic_tab_line_s);
+        } else {
+            banDrawable = getResources().getDrawable(R.drawable.ic_tab_line_n);
+        }
+        mIvBLineBg1.setImageDrawable(banDrawable);
+        Drawable netDrawable;
+        if (cased) {
+            netDrawable = getResources().getDrawable(R.drawable.ic_tab_line_s);
+        } else {
+            netDrawable = getResources().getDrawable(R.drawable.ic_tab_line_n);
+        }
+        mIvBLineBg2.setImageDrawable(netDrawable);
+
+    }
 }
