@@ -35,15 +35,6 @@ public class BaseVo implements Serializable, Cloneable, Parcelable {
     public void setStatus(StatusBean status) {
         this.status = status;
     }
-  /*  private TotalVo total;
-
-    public TotalVo getTotal() {
-        return total;
-    }
-
-    public void setTotal(TotalVo total) {
-        this.total = total;
-    }*/
 
     private TotalBeanVo total;
 

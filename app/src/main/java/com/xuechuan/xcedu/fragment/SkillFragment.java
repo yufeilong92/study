@@ -11,10 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.mvp.presenter.SkillController;
+import com.xuechuan.xcedu.net.BankService;
+import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleTextListActivity;
+import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.BuyVo;
 
 /**
  * All rights Reserved, Designed By
@@ -70,7 +76,33 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skill, container, false);
         initView(view);
+        requestBought();
         return view;
+    }
+
+    /**
+     * 初始化用购买的科目
+     */
+    private void requestBought() {
+        BankService bankService = new BankService(mContext);
+        bankService.requestIsBought(mTypeOid, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                String msg = response.body().toString();
+                Gson gson = new Gson();
+                BuyVo vo = gson.fromJson(msg, BuyVo.class);
+                if (vo.getStatus().getCode()==200){
+
+                }else {
+                    T.showToast(mContext,vo.getStatus().getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+
+            }
+        });
 
     }
 
