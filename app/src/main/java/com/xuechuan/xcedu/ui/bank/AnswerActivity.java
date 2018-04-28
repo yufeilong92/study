@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,20 +32,22 @@ import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.SharedPreUtil;
+import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
+import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.TitleNumberVo;
+import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
+import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnswerActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView mTvBType;
-    private TextView mTvBNumber;
     private TextView mTvBMatter;
     private Context mContext;
     private TextView tv_settiong;
@@ -63,7 +68,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private TextView mTvBDContent;
     private ImageView mIvBE;
     private TextView mTvBEContent;
-    private LinearLayout mLlBESelect;
     private LinearLayout mLlRootLayout;
     private LinearLayout mLlBBack;
     private LinearLayout mLlBGo;
@@ -75,15 +79,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mLlBBSelect;
     private LinearLayout mLlBCselect;
     private LinearLayout mLlBDSelect;
+    private LinearLayout mLlBESelect;
     // 第几题
     private int mMark = 0;
     //题目数据
     private List<TitleNumberVo.DatasBean> mTextDetial;
     private AlertDialog dialog;
-    /**
-     * 保存题数据
-     */
-    private HashMap<Integer, TextDetailVo> hashMap;
+
     //用户是否点击下一题
     private boolean isNext;
     private String A = "a";
@@ -91,29 +93,56 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private String C = "c";
     private String D = "d";
     private String E = "e";
-    //记录用户选中的选项
-    private String item = null;
+    //记录用户选中的选项 （用于单选）
+    private String mSelectOnlyitem = null;
+
+
+    private String mSelectMorItemA = null;
+    private String mSelectMorItemB = null;
+    private String mSelectMorItemC = null;
+    private String mSelectMorItemD = null;
+    private String mSelectMorItemE = null;
     //记录用户是否点击自动下一题
     private boolean mSelectNext;
+    //用户选中的item
     private String mRightItem = null;
+    //问题题干类型
+    private String mTitleType = null;
+    private final String mTitleTypeOnly = "only";
+    private final String mTitleTypeMore = "more";
+    private final String mTitleTypeWrite = "write";
+
 
     private String mSelectViewBgZC = "zc";
-    private String mSelectViewBgHY = "hy";
-    private String mSelectViewBgYJ = "yj";
+    private final String mSelectViewBgHY = "hy";
+    private final String mSelectViewBgYJ = "yj";
     private CommonPopupWindow popMore;
     private CommonPopupWindow popSetting;
     private TextView mTvSettring;
     private TextView mTvShare;
-
     private CheckBox mSwtNext;
     private RadioGroup mRgSetType;
     private TextView mTvBAnsewer;
     private TextView mTvBRosoleContent;
-    private LinearLayout mLlBResolveResult;
     private Button mBtnBBuy;
     private LinearLayout mLiBResolveBuy;
     private TextView mTvBAnswer;
     private TextView mTvBAccuracy;
+    private LinearLayout mLlBAnswerKey;
+    private TextView mTvRootEmpty;
+    private RecyclerView mRlvBAnseswrEvalue;
+    private ScrollView mSlvRootShow;
+    /**
+     * 当前题干信息
+     */
+    private TextDetailVo mTextDetialNew;
+    /**
+     * 用户选择结果
+     */
+    private ArrayList<UseSelectItemInfomVo> mSeletList;
+    private LinearLayout mLlBJiexi;
+    private LinearLayout mLlBRightLu;
+    private Button mBtnBSureKey;
 
     public static Intent newInstance(Context context, String courseid) {
         Intent intent = new Intent(context, AnswerActivity.class);
@@ -121,12 +150,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         return intent;
     }
 
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
         initView();
     }
+*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -134,9 +165,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (getIntent() != null) {
             mOid = getIntent().getStringExtra(COURSEID);
         }
-        SharedPreUtil.initSharedPreference(this);
         initView();
         initData();
+        //        获取用户购买情况
+        UserbuyOrInfomVo userBuy = SharedUserUtils.getInstance().getUserBuy();
     }
 
     private void initData() {
@@ -154,9 +186,19 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 Gson gson = new Gson();
                 TitleNumberVo vo = gson.fromJson(msg, TitleNumberVo.class);
                 if (vo.getStatus().getCode() == 200) {
+                    if (vo.getDatas() == null || vo.getDatas().size() == 0) {
+                        mSlvRootShow.setVisibility(View.GONE);
+                        T.showToast(mContext, "该文章没有练习题，请重新选择");
+                        mTvRootEmpty.setVisibility(View.VISIBLE);
+                        return;
+                    } else {
+                        mTvRootEmpty.setVisibility(View.GONE);
+                        mSlvRootShow.setVisibility(View.VISIBLE);
+                    }
                     mTextDetial = vo.getDatas();
-                    mTvBCount.setText(mTextDetial.size());
+                    mTvBCount.setText(String.valueOf(mTextDetial.size()));
                     bindTextNumberData();
+
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
@@ -169,31 +211,23 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
+    /**
+     * 绑定数据
+     */
     private void bindTextNumberData() {
         if (mTextDetial != null) {
-
-            if (mMark < 0) {
-                T.showToast(mContext, "已经是第一题");
-                return;
-            }
-            mTvBNew.setText(mMark);
-            if (mMark < mTextDetial.size()) {//是否有题
+            mTvBNew.setText(String.valueOf(mMark + 1));
+            if (mMark < mTextDetial.size()) {
                 TitleNumberVo.DatasBean bean = mTextDetial.get(mMark);
-                requestDTextData(bean);
-            } else {//没有题了
-                T.showToast(mContext, "已经是最后一题 ");
+                requestData(bean);
             }
         }
 
 
     }
 
-    /**
-     * 请求数据
-     *
-     * @param bean
-     */
-    private void requestDTextData(TitleNumberVo.DatasBean bean) {
+
+    private void requestData(TitleNumberVo.DatasBean bean) {
         BankService service = new BankService(mContext);
         service.requestDetail(String.valueOf(bean.getId()), new StringCallBackView() {
             @Override
@@ -206,19 +240,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 Gson gson = new Gson();
                 TextDetailVo vo = gson.fromJson(message, TextDetailVo.class);
                 if (vo.getStatus().getCode() == 200) {
-                    if (hashMap != null) {//保存数据
-                        hashMap.put(mMark, vo);
-                    } else {
-                        hashMap = new HashMap<>();
-                        hashMap.put(mMark, vo);
-                    }
-                    bindViewData(vo.getData());
-
+                    bindViewData(vo);
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
-
-
             }
 
             @Override
@@ -232,17 +257,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * todo 界面背景选择
      */
     private void selectViewBg() {
-        //用户选中是否护眼/夜间/正常
-        if (mSelectViewBgZC.equals(mSelectViewBgHY)) {//护眼
-
-        } else if (mSelectViewBgZC.equals(mSelectViewBgYJ)) {//夜间
+        // todo 用户选中是否护眼/夜间/正常
+        if (mSelectViewBgZC.equals(mSelectViewBgYJ)) {//夜间
 
         }
     }
 
     private void initView() {
         mTvBType = (TextView) findViewById(R.id.tv_b_type);
-        mTvBNumber = (TextView) findViewById(R.id.tv_b_number);
         mTvBMatter = (TextView) findViewById(R.id.tv_b_matter);
         mContext = this;
         mIvBMore = (ImageView) findViewById(R.id.iv_b_more);
@@ -257,7 +279,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mTvBDContent = (TextView) findViewById(R.id.tv_b_d_content);
         mIvBE = (ImageView) findViewById(R.id.iv_b_e);
         mTvBEContent = (TextView) findViewById(R.id.tv_b_e_content);
-
         mLlRootLayout = (LinearLayout) findViewById(R.id.ll_root_layout);
         mLlRootLayout.setOnClickListener(this);
         mLlBBack = (LinearLayout) findViewById(R.id.ll_b_back);
@@ -284,8 +305,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLlBESelect.setOnClickListener(this);
         mTvBRosoleContent = (TextView) findViewById(R.id.tv_b_rosole_content);
         mTvBRosoleContent.setOnClickListener(this);
-        mLlBResolveResult = (LinearLayout) findViewById(R.id.ll_b_resolve_result);
-        mLlBResolveResult.setOnClickListener(this);
         mBtnBBuy = (Button) findViewById(R.id.btn_b_buy);
         mBtnBBuy.setOnClickListener(this);
         mLiBResolveBuy = (LinearLayout) findViewById(R.id.li_b_resolve_buy);
@@ -294,21 +313,98 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mTvBAnswer.setOnClickListener(this);
         mTvBAccuracy = (TextView) findViewById(R.id.tv_b_accuracy);
         mTvBAccuracy.setOnClickListener(this);
+        mLlBAnswerKey = (LinearLayout) findViewById(R.id.ll_b_answer_key);
+        mLlBAnswerKey.setOnClickListener(this);
+        mTvRootEmpty = (TextView) findViewById(R.id.tv_root_empty);
+        mTvRootEmpty.setOnClickListener(this);
+        mRlvBAnseswrEvalue = (RecyclerView) findViewById(R.id.rlv_b_anseswr_evalue);
+        mRlvBAnseswrEvalue.setOnClickListener(this);
+        mSlvRootShow = (ScrollView) findViewById(R.id.slv_root_show);
+        mSlvRootShow.setOnClickListener(this);
+        mLlBJiexi = (LinearLayout) findViewById(R.id.ll_b_jiexi);
+        mLlBJiexi.setOnClickListener(this);
+        mLlBRightLu = (LinearLayout) findViewById(R.id.ll_b_right_lu);
+        mLlBRightLu.setOnClickListener(this);
+        mBtnBSureKey = (Button) findViewById(R.id.btn_b_sure_key);
+        mBtnBSureKey.setOnClickListener(this);
     }
 
-    private void bindViewData(TextDetailVo.DataBean data) {
-        //判断用户是否购买 -》购买
+    private void bindViewData(TextDetailVo vo) {
+        //用户是做过
+        boolean isdo = false;
+        //用户选中信息
+        UseSelectItemInfomVo item = null;
+        this.mTextDetialNew = vo;
+        TextDetailVo.DataBean data = vo.getData();
 
-        //判断问题类型单选/多选->提供选择处理
+        //todo 判断用户是否做
+//        获取用户做过信息
+        List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
+        for (int i = 0; i < user.size(); i++) {
+            UseSelectItemInfomVo vo1 = user.get(i);
+            if (vo1.getId() == data.getId()) {//做过
+                isdo = true;
+                item = user.get(i);
+                break;
+            }
 
-        // -》未购买不展示解析
-        //判断用户是否做过，是否展示解析
+        }
+        //todo 判断是否正确
+        //todo 正确 -显示解析
+        //todo 错误 -显示解析(显示答案)
+        //赋值
+        if (true) {// 已购买显示解析
+            mLiBResolveBuy.setVisibility(View.GONE);
+            mLlBJiexi.setVisibility(View.VISIBLE);
+            mLlBRightLu.setVisibility(View.VISIBLE);
+        } else {//未购买 隐藏解析
+            mLiBResolveBuy.setVisibility(View.VISIBLE);
+            mLlBJiexi.setVisibility(View.GONE);
+            mLlBRightLu.setVisibility(View.GONE);
+        }
+        //  判断问题类型单选/多选->提供选择处理
+        switch (data.getQuestiontype()) {
+            case 2://单选
+                mTitleType = mTitleTypeOnly;
+                break;
+            case 3://多选
+                mTitleType = mTitleTypeMore;
+                break;
+            case 4://问答
+                mTitleType = mTitleTypeWrite;
+                break;
+            default:
 
+        }
 
-        //用户是否选择错误
-        //题干类型是否是多选
+        if (isdo) {//用户做过 未做不处理
+            mLlBAnswerKey.setVisibility(View.VISIBLE);
+            mLlBJiexi.setVisibility(View.VISIBLE);
+            mLlBRightLu.setVisibility(View.VISIBLE);
+            if (mTitleType.equals(mTitleTypeOnly)) {//单选模式
+                String onlyitme = item.getItem();
+                setIsClick(false);
+                setResultItemBG(onlyitme, data.getChoiceanswer(), mSelectViewBgZC);
+            } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+                String a = item.getSelectItemA();
+                String b = item.getSelectItemB();
+                String c = item.getSelectItemC();
+                String d = item.getSelectItemD();
+                String e = item.getSelectItemE();
+                setIsClick(false);
+                setResultItemBG(a,b,c,d,e, data.getChoiceanswer(), mSelectViewBgZC);
 
+            } else {//问答
 
+            }
+        } else {
+            mLlBAnswerKey.setVisibility(View.GONE);
+            mLlBJiexi.setVisibility(View.GONE);
+            mLlBRightLu.setVisibility(View.GONE);
+            setIsClick(true);
+        }
+        //todo  用户是否选择错误
+        //todo 题干类型是否是多选
         mTvBType.setText(AnswerCardUtil.getTextType(data.getQuestiontype()));
         mTvBMatter.setText(data.getQuestion());
         mTvBAContent.setText(data.getA());
@@ -333,6 +429,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    private void setResultItemBG(String a, String b, String c, String d, String e, String choiceanswer, String mSelectViewBgZC) {
+
+
+
+
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -341,30 +445,26 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 showPopwindow();
                 break;
             case R.id.ll_b_back://上一题
-                //多选
-
-                //单选
-                //读取上一题结果 更具结果展示
-                //判断用户是否做
-                //保存做题结果
-                //判断是否正确
-                //正确 -显示解析
-
-                //错误 -显示解析
-
-                //判断是否做过
-                --mMark;
+                saveBeforeDate();
+                Log.e("yfl", "onClick: " + mMark);
+                if (mMark != 0) {
+                    --mMark;
+                } else if (mMark == 0) {
+                    T.showToast(mContext, "已经是第一题");
+                    break;
+                }
+                clearbg();
                 bindTextNumberData();
                 break;
             case R.id.ll_b_go://下一题
-                //保存做题结果
-                //判断用户是否做
-                //判断是否正确
-                //正确 -显示解析
-                //错误 -显示解析
-
-
-                ++mMark;
+                saveBeforeDate();
+                if (mMark <= mTextDetial.size() - 2) {
+                    ++mMark;
+                } else {//没有题了
+                    T.showToast(mContext, "已经是最后一题 ");
+                    break;
+                }
+                clearbg();
                 bindTextNumberData();
                 break;
             case R.id.iv_b_expand://扩展文件夹
@@ -372,42 +472,159 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             case R.id.chb_b_collect://收藏
                 break;
             case R.id.ll_b_a_select://选择a
-                item = A;
                 //单选/多选
-                setSelectItemBG(true, false, false, false, false, false);
+                if (mTitleType.equals(mTitleTypeOnly)) {//单选
+                    mSelectOnlyitem = A;
+                    setSelectOnlyItemBG(true, false, false, false, false, mSelectViewBgZC);
+                } else if (mTitleType.equals(mTitleTypeMore)) {//多选
+                    mSelectMorItemA = A;
+                }
                 break;
             case R.id.ll_b_b_select://选择b
-                item = B;
-                //单选/多选
-                setSelectItemBG(false, true, false, false, false, false);
+                if (mTitleType.equals(mTitleTypeOnly)) {
+                    mSelectOnlyitem = B;
+                    //单选/多选
+                    setSelectOnlyItemBG(false, true, false, false, false, mSelectViewBgZC);
+                } else if (mTitleType.equals(mTitleTypeMore)) {
+                    mSelectMorItemB = B;
+                }
                 break;
             case R.id.ll_b_cselect://选择c
-                item = C;
-                //单选/多选
-                setSelectItemBG(false, false, true, false, false, false);
+                if (mTitleType.equals(mTitleTypeOnly)) {
+                    mSelectOnlyitem = C;
+                    //单选/多选
+                    setSelectOnlyItemBG(false, false, true, false, false, mSelectViewBgZC);
+                } else if (mTitleType.equals(mTitleTypeMore)) {
+                    mSelectMorItemC = C;
+                }
                 break;
             case R.id.ll_b_d_select://选择d
-                item = D;
-                //单选/多选
-                setSelectItemBG(false, false, false, true, false, false);
+                if (mTitleType.equals(mTitleTypeOnly)) {
+                    //单选/多选
+                    mSelectOnlyitem = D;
+                    setSelectOnlyItemBG(false, false, false, true, false, mSelectViewBgZC);
+                } else if (mTitleType.equals(mTitleTypeMore)) {
+                    mSelectMorItemD = D;
+                }
                 break;
             case R.id.ll_b_e_select://选择e
-                item = E;
-                //单选/多选
-                setSelectItemBG(false, false, false, false, true, false);
+                if (mTitleType.equals(mTitleTypeOnly)) {
+                    mSelectOnlyitem = E;
+                    //单选/多选
+                    setSelectOnlyItemBG(false, false, false, false, true, mSelectViewBgZC);
+                } else if (mTitleType.equals(mTitleTypeMore)) {
+                    mSelectMorItemE = E;
+
+                }
                 break;
             default:
             case R.id.btn_b_buy://购买
 
                 break;
+            case R.id.btn_b_sure_key://多选确认
+
+
+
+
+                break;
         }
+    }
+
+    private void clearbg() {
+        setSelectOnlyItemBG(false, false, false, false, false, mSelectViewBgZC);
+    }
+
+    private void saveBeforeDate() {
+
+        //用户是否选中 没有选中不保存
+        if (mTitleType.equals(mTitleTypeOnly)) {
+            if (StringUtil.isEmpty(mSelectOnlyitem)) {
+                return;
+            }
+        } else if (mTitleType.equals(mTitleTypeMore)) {
+            if (StringUtil.isEmpty(mSelectMorItemB) && StringUtil.isEmpty(mSelectMorItemA) &&
+                    StringUtil.isEmpty(mSelectMorItemC) && StringUtil.isEmpty(mSelectMorItemD)
+                    && StringUtil.isEmpty(mSelectMorItemE)) {
+                return;
+            }
+        }
+        UseSelectItemInfomVo vo = new UseSelectItemInfomVo();
+        vo.setType(mTitleType);
+
+        if (mTextDetialNew != null) {
+            SharedSeletResultListUtil sp = SharedSeletResultListUtil.getInstance();
+            int id = mTextDetialNew.getData().getId();
+            //保存用户选中结果
+            if (mSeletList == null) {
+                mSeletList = new ArrayList<>();
+            }
+            //获取上次保存内容
+            List<UseSelectItemInfomVo> user = sp.getUser();
+            if (user != null && !user.isEmpty() && user.size() != 0) {
+                int size = user.size();
+                for (int i = 0; i < size; i++) {
+                    if (vo.getId() == mTextDetialNew.getData().getId()) {
+                        return;
+                    }
+                }
+            }
+//            问题id
+            vo.setId(id);
+            if (!StringUtil.isEmpty(mSelectOnlyitem)) {
+                vo.setItem(mSelectOnlyitem);
+            }
+            if (!StringUtil.isEmpty(mSelectMorItemA)) {
+                vo.setSelectItemA(mSelectMorItemA);
+            }
+            if (!StringUtil.isEmpty(mSelectMorItemB)) {
+                vo.setSelectItemB(mSelectMorItemB);
+            }
+            if (!StringUtil.isEmpty(mSelectMorItemC)) {
+                vo.setSelectItemC(mSelectMorItemC);
+            }
+            if (!StringUtil.isEmpty(mSelectMorItemD)) {
+                vo.setSelectItemD(mSelectMorItemD);
+            }
+            if (!StringUtil.isEmpty(mSelectMorItemE)) {
+                vo.setSelectItemE(mSelectMorItemE);
+            }
+            mSeletList.add(vo);
+            sp.putListAdd(mSeletList);
+            //清空选项
+            clearSeletItem();
+        }
+    }
+
+    /**
+     * 清空选项
+     */
+    private void clearSeletItem() {
+        mSelectOnlyitem = null;
+        mSelectMorItemA = null;
+        mSelectMorItemB = null;
+        mSelectMorItemC = null;
+        mSelectMorItemD = null;
+        mSelectMorItemE = null;
+    }
+
+    /**
+     * 设置是否能点击
+     */
+    private void setIsClick(boolean isClick) {
+        mLlBASelect.setClickable(isClick);
+        mLlBBSelect.setClickable(isClick);
+        mLlBCselect.setClickable(isClick);
+        mLlBDSelect.setClickable(isClick);
+        mLlBESelect.setClickable(isClick);
+
     }
 
     /**
      * 显示pop
      */
+    DisplayMetrics metrics = new DisplayMetrics();
+
     private void showPopwindow() {
-        DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
         // create popup window
@@ -529,39 +746,70 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    private void setSelectItemBG(boolean a, boolean b, boolean c, boolean d, boolean e, boolean day) {
+    private void setSelectOnlyItemBG(boolean a, boolean b, boolean c, boolean d, boolean e, String day) {
         setImgBg(mIvBA, a, R.drawable.ic_b_a_s, R.drawable.ic_b_a_n);
         setImgBg(mIvBB, b, R.drawable.ic_b_b_s, R.drawable.ic_b_b_n);
         setImgBg(mIvBC, c, R.drawable.ic_b_c_s, R.drawable.ic_b_c_n);
         setImgBg(mIvBD, d, R.drawable.ic_b_d_s, R.drawable.ic_b_d_n);
         setImgBg(mIvBE, e, R.drawable.ic_b_e_s, R.drawable.ic_b_e_n);
-        setLibg(mLlBASelect, a);
+/*        setLibg(mLlBASelect, a);
         setLibg(mLlBBSelect, b);
         setLibg(mLlBCselect, c);
         setLibg(mLlBDSelect, d);
-        setLibg(mLlBESelect, e);
+        setLibg(mLlBESelect, e);*/
     }
 
-    private void setResultItemBG(boolean a, boolean b, boolean c, boolean d, boolean e, boolean day) {
-        setImgBg(mIvBA, a, R.drawable.ic_b_a_s, R.drawable.ic_b_a_n);
-        setImgBg(mIvBB, b, R.drawable.ic_b_b_s, R.drawable.ic_b_b_n);
-        setImgBg(mIvBC, c, R.drawable.ic_b_c_s, R.drawable.ic_b_c_n);
-        setImgBg(mIvBD, d, R.drawable.ic_b_d_s, R.drawable.ic_b_d_n);
-        setImgBg(mIvBE, e, R.drawable.ic_b_e_s, R.drawable.ic_b_e_n);
-        setLibg(mLlBASelect, a);
-        setLibg(mLlBBSelect, b);
-        setLibg(mLlBCselect, c);
-        setLibg(mLlBDSelect, d);
-        setLibg(mLlBESelect, e);
+
+    private void setResultItemBG(String select, String answer, String day) {
+        if (select.equalsIgnoreCase(answer)) {//选项正确
+            ImageView imageView0 = selectItemName(select);
+            if (imageView0 != null) {
+                imageView0.setImageResource(R.drawable.ic_b_right);
+                return;
+            }
+        } else {
+            ImageView imageView1 = selectItemName(select);
+            if (imageView1 != null) {
+                imageView1.setImageResource(R.drawable.ic_b_erro);
+            }
+            ImageView imageView2 = selectItemName(answer);
+            if (imageView2 != null) {
+                imageView2.setImageResource(R.drawable.ic_b_right);
+            }
+            return;
+        }
+
+
+    }
+
+    private ImageView selectItemName(String select) {
+        if (select.equalsIgnoreCase("A")) {
+            return mIvBA;
+        }
+        if (select.equalsIgnoreCase("B")) {
+            return mIvBB;
+        }
+        if (select.equalsIgnoreCase("C")) {
+            return mIvBC;
+        }
+        if (select.equalsIgnoreCase("D")) {
+            return mIvBD;
+        }
+        if (select.equalsIgnoreCase("E")) {
+            return mIvBE;
+        }
+        return null;
     }
 
     private void setImgBg(ImageView iv, boolean is, int selectid, int unselectid) {
         if (is) {
-            iv.setImageDrawable(mContext.getResources().getDrawable(selectid));
+            iv.setImageResource(selectid);
         } else {
-            iv.setImageDrawable(mContext.getResources().getDrawable(unselectid));
+            iv.setImageResource(unselectid);
         }
+
     }
+
 
     private void setLibg(LinearLayout la, boolean is) {
         if (is) {
@@ -570,6 +818,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             la.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedSeletResultListUtil.getInstance().DeleteUser();
     }
 }
 

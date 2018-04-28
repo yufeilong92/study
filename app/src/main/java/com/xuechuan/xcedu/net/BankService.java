@@ -286,7 +286,7 @@ public class BankService extends BaseHttpServcie {
         UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
-        paramVo.setParam("courseid ");
+        paramVo.setParam("courseid");
         paramVo.setValue(courseid);
         listParamVo.add(paramVo);
         GetParamVo paramVo2 = getParamVo();

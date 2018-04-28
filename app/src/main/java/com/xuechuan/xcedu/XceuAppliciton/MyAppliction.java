@@ -23,6 +23,10 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.SharedSeletIdListUtil;
+import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
+import com.xuechuan.xcedu.utils.SharedTextListUtil;
+import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
@@ -103,6 +107,10 @@ public class MyAppliction extends Application {
 //        initOkHttp();
 //        initJPush();
         initImagerLoader();
+        SharedUserUtils.initSharedPreference(this);
+        SharedTextListUtil.initSharedPreference(this);
+        SharedSeletIdListUtil.initSharedPreference(this);
+        SharedSeletResultListUtil.initSharedPreference(this);
 
     }
 

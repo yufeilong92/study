@@ -96,7 +96,9 @@
 
         <service
             android:name=".service.BugBookService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".ui.bank.AnswerListActivity"></activity>
     </application>
 
 </manifest>

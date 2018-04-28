@@ -14,13 +14,18 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.mvp.presenter.SkillController;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleTextListActivity;
+import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
+import com.xuechuan.xcedu.vo.UserInfomVo;
+import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
 
 /**
  * All rights Reserved, Designed By
@@ -91,16 +96,20 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
                 String msg = response.body().toString();
                 Gson gson = new Gson();
                 BuyVo vo = gson.fromJson(msg, BuyVo.class);
-                if (vo.getStatus().getCode()==200){
-
-                }else {
-                    T.showToast(mContext,vo.getStatus().getMessage());
+                if (vo.getStatus().getCode() == 200) {
+                    BuyVo.DataBean data = vo.getData();
+                    boolean isbought = data.isIsbought();
+                    UserbuyOrInfomVo infomVo = new UserbuyOrInfomVo();
+                    infomVo.setSkillbook(isbought);
+                    SharedUserUtils.getInstance().putUserBuyVo(infomVo);
+                } else {
+                    T.showToast(mContext, vo.getStatus().getMessage());
                 }
             }
 
             @Override
             public void onError(Response<String> response) {
-
+                L.e(response.message());
             }
         });
 

@@ -119,6 +119,7 @@ public class TextBAdapter extends RecyclerView.Adapter<TextBAdapter.ViewHolder> 
         });
 
 
+
     }
 
 

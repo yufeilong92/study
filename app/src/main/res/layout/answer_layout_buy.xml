@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:visibility="gone"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/li_b_resolve_buy"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -36,4 +34,4 @@
             android:textColor="@color/white" />
 
     </LinearLayout>
-</LinearLayout>
+</merge>

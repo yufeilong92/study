@@ -71,13 +71,9 @@ public class AtricleTextListActivity extends BaseActivity {
         clearData();
         setAdapter();
         initData();
-        initRequestAll();
     }
 
-    private void initRequestAll() {
 
-
-    }
 
     private void setAdapter() {
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
@@ -99,8 +95,8 @@ public class AtricleTextListActivity extends BaseActivity {
                 SkillTextVo vo = gson.fromJson(message, SkillTextVo.class);
                 if (vo.getStatus().getCode() == 200) {
                     List<SkillTextVo.DatasBean> datas = vo.getDatas();
+                    clearData();
                     addListData(datas);
-
                     bAdapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
@@ -113,6 +109,7 @@ public class AtricleTextListActivity extends BaseActivity {
             }
         });
     }
+
 
     private void initView() {
         mContext = this;

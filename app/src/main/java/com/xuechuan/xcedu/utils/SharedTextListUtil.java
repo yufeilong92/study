@@ -21,19 +21,19 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class SharedPreUtil {
+public class SharedTextListUtil {
     // 用户名key
-    public final static String KEY_NAME = "KEY_NAME";
+    public final static String KEY_NAME = "3249937100970977953L";
     public final static String KEY_LEVEL = "KEY_LEVEL";
-    private static SharedPreUtil s_SharedPreUtil;
-    private static List<TextDetailVo > s_User = null;
+    private static SharedTextListUtil s_SharedTextListUtil;
+    private static List<TextDetailVo.DataBean > s_User = null;
     private SharedPreferences msp;
     // 初始化，一般在应用启动之后就要初始化
     public static synchronized void initSharedPreference(Context context)
     {
-        if (s_SharedPreUtil == null)
+        if (s_SharedTextListUtil == null)
         {
-            s_SharedPreUtil = new SharedPreUtil(context);
+            s_SharedTextListUtil = new SharedTextListUtil(context);
         }
     }
     /**
@@ -41,12 +41,12 @@ public class SharedPreUtil {
      *
      * @return
      */
-    public static synchronized SharedPreUtil getInstance()
+    public static synchronized SharedTextListUtil getInstance()
     {
-        return s_SharedPreUtil;
+        return s_SharedTextListUtil;
     }
     @SuppressLint("WrongConstant")
-    public SharedPreUtil(Context context)
+    public SharedTextListUtil(Context context)
     {
         msp = context.getSharedPreferences("SharedPreUtil",
                 Context.MODE_PRIVATE | Context.MODE_APPEND);
@@ -55,12 +55,12 @@ public class SharedPreUtil {
     {
         return msp;
     }
-    public synchronized void putUser(List<TextDetailVo >user)
+    public synchronized void putListAdd(List<TextDetailVo.DataBean >user)
     {
         SharedPreferences.Editor editor = msp.edit();
         String str="";
         try {
-            str = SerializableUtil.obj2Str(user);
+            str = SerializableUtil.list2String(user);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -69,17 +69,17 @@ public class SharedPreUtil {
         editor.commit();
         s_User = user;
     }
-    public synchronized List <TextDetailVo >getUser()
+    public synchronized List <TextDetailVo.DataBean >getUser()
     {
         if (s_User == null)
         {
             s_User = new ArrayList();
             //获取序列化的数据
-            String str = msp.getString(SharedPreUtil.KEY_NAME, "");
+            String str = msp.getString(SharedTextListUtil.KEY_NAME, "");
             try {
-                Object obj = SerializableUtil.str2Obj(str);
-                if(obj != null){
-                    s_User = (List<TextDetailVo>) obj;
+                List<TextDetailVo.DataBean> list = SerializableUtil.string2List(str);
+                if(list != null){
+                    s_User = (List<TextDetailVo.DataBean>) list;
                 }
             } catch (StreamCorruptedException e) {
                 // TODO Auto-generated catch block

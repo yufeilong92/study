@@ -14,7 +14,8 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/ic_back"
+            tools:ignore="OnClick" />
 
         <TextView
             style="@style/TitleBarText"
@@ -24,14 +25,21 @@
             android:id="@+id/iv_b_more"
             style="@style/TitleBarAction"
             android:src="@drawable/ic_more" />
-
     </LinearLayout>
 
     <View style="@style/view_line_tab_line" />
 
-    <ScrollView
+    <TextView
+        android:id="@+id/tv_root_empty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="该篇没有练习，请重新选择"
+        android:visibility="gone" />
+    <ScrollView
+        android:id="@+id/slv_root_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:fillViewport="true">
 
@@ -39,36 +47,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <Space style="@style/space_16_height" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+            <TextView
                 android:paddingLeft="@dimen/space_16"
-                android:paddingRight="@dimen/space_16">
-
-                <TextView
-                    android:id="@+id/tv_b_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="选题类型"
-                    android:textColor="@color/text_fu_color"
-                    android:textSize="@dimen/text_size_14" />
-
-                <!--<Space style="@style/space_8_width" />-->
-
-                <TextView
-                    android:id="@+id/tv_b_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="20/20"
-                    android:visibility="gone" />
-            </LinearLayout>
-
+                android:id="@+id/tv_b_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选题类型"
+                android:textColor="@color/text_fu_color"
+                android:textSize="@dimen/text_size_14" />
             <Space style="@style/space_16_height" />
-
             <TextView
                 android:id="@+id/tv_b_matter"
                 android:layout_width="match_parent"
@@ -79,28 +67,21 @@
 
             <Space style="@style/space_30_height" />
 
-
-            <include layout="@layout/answer_onlyselect_layout"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"/>
-            <!--<include layout="@layout/answer_moreselect_layout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"/>-->
             <include
-                layout="@layout/answer_layout_resolve"
+                layout="@layout/answer_onlyselect_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv_b_anseswr_evalue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
             <include
                 layout="@layout/answer_layout_buy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
         </LinearLayout>
 
     </ScrollView>
-
-    <View style="@style/view_line_1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -199,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="12"
+                android:text="@string/_12"
                 android:textColor="@color/red_text"
                 android:textSize="@dimen/text_size_14" />
 
@@ -210,7 +191,5 @@
                 android:background="@drawable/select_b_collect_color"
                 android:button="@null" />
         </LinearLayout>
-
-
     </LinearLayout>
 </LinearLayout>

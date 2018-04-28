@@ -4,7 +4,21 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
-
+    <LinearLayout
+        android:padding="@dimen/space_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:text="答对自动跳转下一题"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:button="@drawable/select_pop_swt_bg"
+            android:id="@+id/swt_select_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <RadioGroup
         android:padding="@dimen/space_16"
         android:id="@+id/rg_setting_type"
@@ -32,19 +46,5 @@
             android:drawableTop="@drawable/select_b_set_eye"
             android:text="护眼模式" />
     </RadioGroup>
-  <LinearLayout
-      android:padding="@dimen/space_16"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-      <TextView
-          android:layout_weight="1"
-          android:text="答对自动跳转下一题"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-      <CheckBox
-          android:button="@drawable/select_pop_swt_bg"
-          android:id="@+id/swt_select_next"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-  </LinearLayout>
+
 </LinearLayout>
