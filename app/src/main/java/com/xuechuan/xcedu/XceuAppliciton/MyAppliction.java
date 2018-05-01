@@ -1,8 +1,8 @@
 package com.xuechuan.xcedu.XceuAppliciton;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
@@ -47,10 +47,9 @@ import okhttp3.OkHttpClient;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class MyAppliction extends Application {
+public class MyAppliction extends MultiDexApplication {
     public final String TAG = "MyAppliction.class";
     Context mContext;
-    public OkHttpClient client;
     private HttpInfomVo httpInfom;
     private PolyvSDKClient mPolyclient;
     private UserInfomVo infomVo;
@@ -99,7 +98,7 @@ public class MyAppliction extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this;
+        mContext = getApplicationContext();
         //初始化播放器
         initPolyCilent();
         initDownFile();
@@ -169,10 +168,7 @@ public class MyAppliction extends Application {
     }
 
     private void initPolyCilent() {
-        // 创建默认的ImageLoader配置参数
-//        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
-//        ImageLoader.getInstance().init(configuration);
-        mPolyclient = PolyvSDKClient.getInstance();
+        PolyvSDKClient    mPolyclient = PolyvSDKClient.getInstance();
         mPolyclient.initCrashReport(mContext);
         MessageData data = MessageData.getInstance();
         //配置加密
@@ -180,6 +176,7 @@ public class MyAppliction extends Application {
         //初始化SDK
         mPolyclient.initSetting(mContext);
         mPolyclient.initCrashReport(mContext);
+        //使用SDK加密串来配置
     }
 
     private void initOkGo() {
@@ -245,7 +242,9 @@ public class MyAppliction extends Application {
         PolyvDownloaderManager.setDownloadQueueCount(1);
     }
 
-//    //初始化数请求
+
+
+    //    //初始化数请求
 //    private  void initOkHttp() {
 //        //请求超时
 //        int HTTPTIMEOUT = 6000;

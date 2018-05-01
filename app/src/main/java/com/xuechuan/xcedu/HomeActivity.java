@@ -2,7 +2,6 @@ package com.xuechuan.xcedu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -130,5 +129,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

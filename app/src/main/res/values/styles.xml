@@ -23,6 +23,16 @@
         <item name="android:textColorPrimary">@android:color/black</item>
     </style>
 
+    <style name="App_NOAction_Day" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!--//actionabr 颜色-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <!--状态栏-->
+        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="colorAccent">@color/activity_topbar_bg</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+    </style>
+
     <style name="TitleBar">
         <item name="android:id">@id/activity_title_container</item>
         <item name="android:layout_width">fill_parent</item>
