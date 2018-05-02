@@ -58,7 +58,7 @@
     <!--题目详情-->
     <string name="http_datail">/api/question/getdetail</string>
     <!--题目评论-->
-    <string name="http_questioncmment">/api/question/getquestioncmment</string>
+    <string name="http_questioncmment">/api/question/getquestioncomment</string>
 
     <!--获取题目评论二级评论-->
     <string name="http_commentcomment">/api/question/getcommentcomment</string>
@@ -119,5 +119,6 @@
     <string name="special_practice">专项练习</string>
     <string name="sequential_exercise">顺序练习</string>
     <string name="_12">12</string>
+    <string name="right">正确</string>
 
 </resources>

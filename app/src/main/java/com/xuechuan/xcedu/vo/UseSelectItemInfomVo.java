@@ -26,14 +26,38 @@ public class UseSelectItemInfomVo extends BaseVo {
     private String item;
     /**
      * 问题类型
-      */
+     */
     private String type;
+    /**
+     * 选中的题号
+     */
+    private int itemSelect;
+    /**
+     * 状态 0 为正确 1为错误 2漏选 3 未做
+     */
+    private String  itemStatus;
     private String selectItemA;
     private String selectItemB;
     private String selectItemC;
     private String selectItemD;
     private String selectItemE;
 
+
+    public int getItemSelect() {
+        return itemSelect;
+    }
+
+    public void setItemSelect(int itemSelect) {
+        this.itemSelect = itemSelect;
+    }
+
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
+    }
 
     public int getId() {
         return id;

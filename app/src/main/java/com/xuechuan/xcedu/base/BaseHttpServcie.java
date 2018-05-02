@@ -269,7 +269,7 @@ public class BaseHttpServcie {
                             new JsonParser().parse(response.body().toString());
                             callBackView.onSuccess(response);
                         } catch (JsonParseException e) {
-                            T.showToast(context, "网络错误");
+                            L.e("数据异常");
                             e.printStackTrace();
                         }
                         callBackView.onSuccess(response);
@@ -281,7 +281,7 @@ public class BaseHttpServcie {
                         if (dialog!=null) {
                             dialog.dismiss();
                         }
-                        T.showToast(context, "网络错误");
+                        L.e("数据异常");
                         L.e(response.message());
                         callBackView.onError(response);
                     }

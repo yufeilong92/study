@@ -93,7 +93,9 @@
         <activity android:name=".ui.bank.AnswerActivity" />
         <activity android:name=".ui.User.FeedBackActivity" />
         <activity android:name=".ui.bank.AtricleTextListActivity" />
+        <activity android:name=".ui.bank.AtricleListActivity">
 
+        </activity>
         <service
             android:name=".service.BugBookService"
             android:exported="false" />

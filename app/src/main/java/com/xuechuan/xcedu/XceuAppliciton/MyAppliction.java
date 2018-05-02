@@ -144,9 +144,9 @@ public class MyAppliction extends MultiDexApplication {
      * 调用该方法下载图片
      * 配置imageLoader图片选项
      *
-     * @param iv          显示图片控件
-     * @param url         网络或本地图片地址
-     * @param isRound     true为圆形，false不处理
+     * @param iv      显示图片控件
+     * @param url     网络或本地图片地址
+     * @param isRound true为圆形，false不处理
      */
     public void displayImages(ImageView iv, String url, boolean isRound) {
 //配置一些图片选项
@@ -168,7 +168,7 @@ public class MyAppliction extends MultiDexApplication {
     }
 
     private void initPolyCilent() {
-        PolyvSDKClient    mPolyclient = PolyvSDKClient.getInstance();
+        PolyvSDKClient mPolyclient = PolyvSDKClient.getInstance();
         mPolyclient.initCrashReport(mContext);
         MessageData data = MessageData.getInstance();
         //配置加密
@@ -191,8 +191,9 @@ public class MyAppliction extends MultiDexApplication {
         builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);   //全局的连接超时时间
         OkGo.getInstance().init(this)
                 .setOkHttpClient(builder.build())
+
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
-                .setRetryCount(3);                              //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
+                .setRetryCount(1);                              //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
 
     }
 
@@ -241,7 +242,6 @@ public class MyAppliction extends MultiDexApplication {
         });
         PolyvDownloaderManager.setDownloadQueueCount(1);
     }
-
 
 
     //    //初始化数请求

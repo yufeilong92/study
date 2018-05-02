@@ -5,6 +5,7 @@ import android.content.Context;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
@@ -97,10 +98,9 @@ public class BankService extends BaseHttpServcie {
      * 获取所有练习题库题号
      *
      * @param chapterid
-     * @param String usertype,
      * @param callBackView
      */
-    public void requestChapterQuestionids(String chapterid,  StringCallBackView callBackView) {
+    public void requestChapterQuestionids(String chapterid, StringCallBackView callBackView) {
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("chapterid");
@@ -216,6 +216,7 @@ public class BankService extends BaseHttpServcie {
         listParamVo.add(paramVo);
         String url = getUrl(mContext, R.string.http_datail);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+        L.e("requestDetail");
 
     }
 
@@ -224,10 +225,13 @@ public class BankService extends BaseHttpServcie {
      * @param questionid 编号
      * @param callBackView
      */
-    public void reqiestQuestionCmment(String questionid, StringCallBackView callBackView) {
+    public void reqiestQuestionCmment(String questionid, int page, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
+        }
+        if (page <= 0) {
+            page = 1;
         }
         UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
@@ -237,6 +241,14 @@ public class BankService extends BaseHttpServcie {
         GetParamVo paramVo1 = getParamVo();
         paramVo1.setParam("questionid");
         paramVo1.setValue(questionid);
+        GetParamVo paramVo2 = getParamVo();
+        paramVo2.setParam("page");
+        paramVo2.setValue(String.valueOf(page));
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("pagesize");
+        paramVo3.setValue("10");
+        listParamVo.add(paramVo3);
+        listParamVo.add(paramVo2);
         listParamVo.add(paramVo1);
         listParamVo.add(paramVo);
         String url = getUrl(mContext, R.string.http_questioncmment);
@@ -244,7 +256,7 @@ public class BankService extends BaseHttpServcie {
     }
 
     /**
-     * .获取题目评论的二级评论
+     * .获取题目评论的评论
      *
      * @param questionid   编号
      * @param commentid    评论编号
@@ -274,7 +286,8 @@ public class BankService extends BaseHttpServcie {
     }
 
     /**
-     *  用户是否购买此科目
+     * 用户是否购买此科目
+     *
      * @param courseid
      * @param callBackView
      */
@@ -299,12 +312,13 @@ public class BankService extends BaseHttpServcie {
     }
 
     /**
-     *  根据 tagid 获取下面所有题号
-     * @param courseid 科目编号
-     * @param tagid 标签编号
+     * 根据 tagid 获取下面所有题号
+     *
+     * @param courseid     科目编号
+     * @param tagid        标签编号
      * @param callBackView
      */
-    public void requestUestionIdSbyTagid (String courseid, String tagid ,StringCallBackView callBackView) {
+    public void requestUestionIdSbyTagid(String courseid, String tagid, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -327,12 +341,14 @@ public class BankService extends BaseHttpServcie {
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
 
     }
+
     /**
-     *  获取模拟考试试卷
-     * @param courseid 科目编号
+     * 获取模拟考试试卷
+     *
+     * @param courseid     科目编号
      * @param callBackView
      */
-    public void requestExamchapte (String courseid, StringCallBackView callBackView) {
+    public void requestExamchapte(String courseid, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;

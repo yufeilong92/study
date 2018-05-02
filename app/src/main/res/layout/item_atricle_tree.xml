@@ -2,21 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/space_48"
-    android:paddingLeft="@dimen/space_16"
-    android:paddingRight="@dimen/space_16">
+   >
 
     <ImageView
-
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:id="@+id/iv_tree_mark"
+        android:layout_width="@dimen/space_18"
+        android:layout_height="@dimen/space_18"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/space_16"
         android:src="@drawable/ic_node" />
 
     <TextView
-        android:paddingLeft="@dimen/space_16"
         android:id="@+id/tv_atricle_tree"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="48dp"
         android:gravity="center_vertical"
+        android:paddingLeft="@dimen/space_16"
         android:text="nihai "
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_14" />

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -19,6 +20,7 @@ import com.xuechuan.xcedu.mvp.view.AtricleView;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChildrenBeanVo;
 import com.xuechuan.xcedu.vo.SkillTextVo;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +54,13 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
-        setContentView(R.layout.item_atricle_tree);
+        setContentView(R.layout.activity_atricle_tree);
         if (getIntent() != null) {
             mOid = getIntent().getStringExtra(COURSEID);
         }
         initView();
         initData();
-        setAdapter();
+
     }
 
     private void initData() {
@@ -68,18 +70,19 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     }
 
     private void setAdapter() {
-        GridLayoutManager manager = new GridLayoutManager(mContext, 1);
-        manager.setOrientation(GridLayoutManager.VERTICAL);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        mRlvTreeContent.setLayoutManager(gridLayoutManager);
+        mRlvTreeContent.addItemDecoration(new DividerItemDecoration(this, GridLayoutManager.VERTICAL));
         AtricleTreeAdapter adapter = new AtricleTreeAdapter(mRlvTreeContent, this, mNodeLists,
                 0, R.drawable.ic_more_go, R.drawable.ic_more_go);
-        mRlvTreeContent.setLayoutManager(manager);
-        mRlvTreeContent.addItemDecoration(new DividerItemDecoration(this, GridLayoutManager.VERTICAL));
+
         mRlvTreeContent.setAdapter(adapter);
         adapter.setOnTreeNodeClickListener(new OnTreeNodeClickListener() {
             @Override
             public void onClick(Node node, int position) {
                 if (!node.isRoot()) {
-                    int id = (int) node.getpId();
+                    int id = (int) node.getId();
                     Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id));
                     startActivity(intent);
                 }
@@ -99,7 +102,9 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
         SkillTextVo vo = gson.fromJson(content, SkillTextVo.class);
         if (vo.getStatus().getCode() == 200) {
             List<SkillTextVo.DatasBean> datas = vo.getDatas();
+            clearData();
             addListData(datas);
+            setAdapter();
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
@@ -108,8 +113,8 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     private void addListData(List<SkillTextVo.DatasBean> datas) {
         for (int i = 0; i < datas.size(); i++) {
             SkillTextVo.DatasBean bean = datas.get(i);
-            mNodeLists.add(new Node(bean.getId(), bean.getParentid(), bean.getTitle()));
-            if (bean.isIsend()) {
+            mNodeLists.add(new Node(bean.getId(), bean.getParentid(), bean.getTitle(), bean));
+            if (!bean.isIsend()) {
                 List<ChildrenBeanVo> vos = bean.getChildren();
                 bindData(vos);
             }
@@ -120,8 +125,8 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     private void bindData(List<ChildrenBeanVo> vos) {
         for (int i = 0; i < vos.size(); i++) {
             ChildrenBeanVo vo = vos.get(i);
-            mNodeLists.add(new Node(vo.getId(), vo.getParentid(), vo.getTitle()));
-            if (vo.isIsend()) {
+            mNodeLists.add(new Node(vo.getId(), vo.getParentid(), vo.getTitle(), vo));
+            if (!vo.isIsend()) {
                 bindData(vo.getChildren());
             }
         }
@@ -130,5 +135,13 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     @Override
     public void Error(String content) {
         T.showToast(mContext, content);
+    }
+
+    private void clearData() {
+        if (mNodeLists == null) {
+            mNodeLists = new ArrayList<>();
+        } else {
+            mNodeLists.clear();
+        }
     }
 }

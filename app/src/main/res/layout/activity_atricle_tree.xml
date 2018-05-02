@@ -27,7 +27,7 @@
     style="@style/view_line_tab_line"/>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_text_content"
+            android:id="@+id/rlv_tree_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

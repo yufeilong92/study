@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.multilevel.treelist.Node;
@@ -35,8 +36,14 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
 
     @Override
     public void onBindViewHolder(Node node, RecyclerView.ViewHolder holder, int position) {
+
         TreeViewHolder viewHolder = (TreeViewHolder) holder;
         viewHolder.mTvAtricleTree.setText(node.getName());
+        if (node.getIcon() == -1) {
+            viewHolder.mIvTreeMark.setVisibility(View.INVISIBLE);
+        } else {
+            viewHolder.mIvTreeMark.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull
@@ -48,10 +55,12 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
 
     public class TreeViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvAtricleTree;
+        public ImageView mIvTreeMark;
 
         public TreeViewHolder(View itemView) {
             super(itemView);
             this.mTvAtricleTree = (TextView) itemView.findViewById(R.id.tv_atricle_tree);
+            this.mIvTreeMark = (ImageView) itemView.findViewById(R.id.iv_tree_mark);
 
         }
     }

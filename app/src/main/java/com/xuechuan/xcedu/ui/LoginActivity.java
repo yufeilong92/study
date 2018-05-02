@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -28,9 +29,13 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.model.LoginModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.LoginPresenter;
+import com.xuechuan.xcedu.mvp.view.LoginView;
 import com.xuechuan.xcedu.net.LoginService;
 import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -49,7 +54,7 @@ import org.json.JSONObject;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/16
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginView {
 
     private EditText mEtLoginUsername;
     private EditText mEtLoginPassword;
@@ -61,6 +66,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private IWXAPI api;
     private BroadcastReceiver receiver;
     private CheckBox mChbLoginEyable;
+    private LoginPresenter mPresenter;
+    private AlertDialog mDialog;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +121,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 Utils.hideInputMethod(LoginActivity.this);
                 String phone = getTextStr(mEtLoginUsername);
                 boolean phoneNum = Utils.isPhoneNum(phone);
-                L.w(phone+phoneNum);
+                L.w(phone + phoneNum);
                 if (!Utils.isPhoneNum(phone)) {
                     T.showToast(mContext, getStringWithId(R.string.please_right_phone));
                     return;
@@ -141,7 +148,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 处理微信登录回调
      */
     private void initData() {
-
+        mPresenter = new LoginPresenter(new LoginModelImpl(), this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataMessageVo.WEI_LOGIN_ACTION);
         receiver = new BroadcastReceiver() {
@@ -153,7 +160,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     String extra = intent.getStringExtra(DataMessageVo.WEISTATE);
                     String code = intent.getStringExtra(DataMessageVo.WEICODE);
-                    requestLogin(extra, code);
+//                    requestLogin(extra, code);
+                    mPresenter.getWeiXinLoginContent(mContext, code);
                 }
             }
         };
@@ -270,6 +278,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         final LoginService service = LoginService.getInstance(mContext);
         service.setIsShowDialog(true);
         service.setDialogContext(null, getStringWithId(R.string.login_loading));
+//        mPresenter.getLoginContent(mContext, username, password);
+//        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.login_loading));
         service.requestlogin(username, password, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
@@ -326,4 +336,68 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    @Override
+    public void WeiXinLoginSuccess(String infom) {
+//        String infom = response.body().toString();
+        JsonElement parse = new JsonParser().parse(infom);
+
+        L.d(infom);
+        Gson gson = new Gson();
+        UserInfomVo vo = gson.fromJson(infom, UserInfomVo.class);
+        UserInfomVo.DataBean voData = vo.getData();
+        if (vo.getStatus().getCode() != 200) {//失败情况
+            T.showToast(mContext, vo.getStatus().getMessage());
+            return;
+        }
+        if (voData.isIsbinduser()) {//已经绑定数据（手机）
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        } else {//没有绑定手机
+            Intent intent = RegisterActivity.newInstance(mContext, voData.getOpenid(), RegisterActivity.CEX_INT_TYPE_BIND, voData.getUnionid());
+            intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void WeiXinLoginError(String error) {
+        T.showToast(mContext, error);
+    }
+
+    @Override
+    public void LoginSuccess(String message) {
+        mDialog.dismiss();
+        L.d("登录成功", message);
+        String code = JSONObject.quote(message);
+        L.w(code);
+        Gson gson = new Gson();
+        UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            UserInfomVo.DataBean voData = vo.getData();
+            int status = voData.getStatus();
+            if (status == -1) {
+                T.showToast(mContext, "账号被禁用");
+                return;
+            }
+            if (status == -2) {
+                T.showToast(mContext, "账号密码错误");
+                return;
+            }
+            if (status == -3) {
+                T.showToast(mContext, "账号未注册");
+                return;
+            }
+            MyAppliction.getInstance().setUserInfom(vo);
+            HomeActivity.newInstance(mContext, null, null);
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+    }
+
+    @Override
+    public void LoginError(String con) {
+        mDialog.dismiss();
+        L.e(con);
+    }
 }

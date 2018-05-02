@@ -19,6 +19,7 @@ import com.xuechuan.xcedu.mvp.presenter.SkillController;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
+import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleTextListActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
@@ -144,7 +145,8 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
             case R.id.ll_b_skill_collect://收藏
                 break;
             case R.id.iv_b_order://章节
-                Intent intent = AtricleTextListActivity.newInstance(mContext, mTypeOid);
+//                Intent intent = AtricleTextListActivity.newInstance(mContext, mTypeOid);
+                Intent intent = AtricleListActivity.newInstance(mContext, mTypeOid);
                 startActivity(intent);
                 break;
             case R.id.iv_b_test://考试
