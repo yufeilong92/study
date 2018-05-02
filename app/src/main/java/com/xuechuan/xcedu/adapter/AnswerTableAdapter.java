@@ -87,6 +87,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
                     String status = vo.getItemStatus();
                     if (status.equals("0")) {//正确
                         holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
                     } else if (status.equals("1")) {//错误
                         holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_miss_error);
                         holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.red_text));

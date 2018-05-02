@@ -668,23 +668,23 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 vo.setSelectItemE(mSelectMorItemE);
                 mResult.add(mSelectMorItemE);
             }
-
-            if (mResult.size() > list.size()) {
-                vo.setItemStatus("1");
-            } else if (mResult.size() == list.size()) {
-                boolean b = list.containsAll(mResult);
-                if (b) {
-                    vo.setItemStatus("0");
-                } else {
+            if (mTitleType.equals(mTitleTypeMore)) {
+                if (mResult.size() > list.size()) {
                     vo.setItemStatus("1");
+                } else if (mResult.size() == list.size()) {
+                    boolean b = list.containsAll(mResult);
+                    if (b) {
+                        vo.setItemStatus("0");
+                    } else {
+                        vo.setItemStatus("1");
+                    }
+                } else if (mResult.size() < list.size()) {
+                    if (list.containsAll(mResult)) {
+                        vo.setItemStatus("2");
+                    } else {
+                        vo.setItemStatus("1");
+                    }
                 }
-            }else if (mResult.size()<list.size()){
-                  if (list.containsAll(mResult)){
-                      vo.setItemStatus("2");
-                  }else {
-                      vo.setItemStatus("1");
-                  }
-
             }
             vo.setItemSelect(mMark);
             mSeletList.add(vo);
