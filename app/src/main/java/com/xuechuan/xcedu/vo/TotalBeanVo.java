@@ -11,8 +11,17 @@ package com.xuechuan.xcedu.vo;
  * @Copyright: 2018
  */
 public class TotalBeanVo  {
+    /**
+     * 当前返回集合总数
+     */
     private int current_total;
+    /**
+     * 	跳过多少条后获取的数据
+     */
     private int skip_total;
+    /**
+     * 对象集合总数
+     */
     private int total;
 
     public int getCurrent_total() {

@@ -16,34 +16,34 @@ import com.xuechuan.xcedu.utils.StringUtil;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.mvp.presenter
- * @Description: todo
+ * @Description: 控制器
  * @author: L-BackPacker
  * @date: 2018/5/2 11:11
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class AnswerPresnter {
+public class AnswerPresenter {
     AnswerModel model;
     AnswerView view;
 
-    public AnswerPresnter(AnswerModel model, AnswerView view) {
+    public AnswerPresenter(AnswerModel model, AnswerView view) {
         this.model = model;
         this.view = view;
     }
 
     /**
      * 评价
+     *
      * @param context
      * @param questionid
-
      */
-    public void getEvaluateCotent(Context context, String questionid,int page) {
+    public void getEvaluateCotent(Context context, String questionid, int page) {
         if (StringUtil.isEmpty(questionid)) {
             return;
         }
 
 
-        model.getEvalueContent(context, questionid,page, new RequestResulteView() {
+        model.getEvalueContent(context, questionid, page, new RequestResulteView() {
             @Override
             public void success(String result) {
                 view.EvalueSuccess(result);
@@ -59,6 +59,7 @@ public class AnswerPresnter {
 
     /**
      * 题干
+     *
      * @param context
      * @param id
      */
@@ -83,6 +84,7 @@ public class AnswerPresnter {
 
     /**
      * 题详情
+     *
      * @param content
      * @param id
      */
@@ -99,6 +101,46 @@ public class AnswerPresnter {
             @Override
             public void error(String result) {
                 view.TextDetailError(result);
+            }
+        });
+    }
+
+    /**
+     * @param context
+     * @param targetid 练习题编号
+     * @param isfav
+     */
+    public void submit0ollect(Context context, String targetid, boolean isfav) {
+        if (StringUtil.isEmpty(targetid)) {
+            return;
+        }
+        model.SubmitCollectContent(context, isfav, targetid, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.SumbitCollectSuccess(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.SumbitCollectSuccess(result);
+            }
+        });
+
+    }
+
+    public void submitDoRecord(Context context, String targetid, boolean isright) {
+        if (StringUtil.isEmpty(targetid)) {
+            return;
+        }
+        model.SubmitDoResult(context, isright, targetid, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.DoResultSuccess(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.DoResultError(result);
             }
         });
     }

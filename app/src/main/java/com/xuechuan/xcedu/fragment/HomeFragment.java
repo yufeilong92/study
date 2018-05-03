@@ -328,6 +328,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mTvInfomMore.setOnClickListener(this);
         mTvArticleMore = (TextView) view.findViewById(R.id.tv_article_more);
         mTvArticleMore.setOnClickListener(this);
+        mRlvRecommendAll.setHasFixedSize(true);
+        mRlvRecommendAll.setNestedScrollingEnabled(false);
+        mRlvRecommendContent.setHasFixedSize(true);
+        mRlvRecommendContent.setNestedScrollingEnabled(false);
     }
 
     /**

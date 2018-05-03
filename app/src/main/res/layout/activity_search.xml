@@ -25,7 +25,7 @@
             <EditText
                 android:textColor="@color/hint_text"
                 android:textSize="@dimen/text_size_14"
-                android:text="@string/home_select_content"
+                android:hint="@string/home_select_content"
                 android:id="@+id/et_search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

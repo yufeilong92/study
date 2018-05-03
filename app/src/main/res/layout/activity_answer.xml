@@ -9,25 +9,48 @@
     android:orientation="vertical"
     tools:context=".ui.bank.AnswerActivity">
 
-    <LinearLayout style="@style/TitleBar">
+    <LinearLayout
+        android:id="@+id/ll_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_56"
+        android:background="@color/white"
+        android:gravity="bottom"
+        android:orientation="horizontal">
 
         <ImageView
-            style="@style/TitleBarAction"
+            android:id="@+id/iv_title_back"
+            android:layout_width="@dimen/bottom_layout_height"
+            android:layout_height="@dimen/bottom_layout_height"
             android:onClick="onHomeClick"
+            android:padding="12dp"
             android:src="@drawable/ic_back"
             tools:ignore="OnClick" />
 
         <TextView
-            style="@style/TitleBarText"
-            android:text="" />
+            android:id="@+id/activity_title_text"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/title_action_height"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingLeft="@dimen/space_8"
+            android:paddingRight="@dimen/space_8"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_18" />
 
         <ImageView
             android:id="@+id/iv_b_more"
-            style="@style/TitleBarAction"
+            android:layout_width="@dimen/bottom_layout_height"
+            android:layout_height="@dimen/bottom_layout_height"
+            android:padding="12dp"
             android:src="@drawable/ic_more" />
     </LinearLayout>
 
-    <View style="@style/view_line_tab_line" />
+    <View
+        android:id="@+id/v_line"
+        style="@style/view_line_tab_line" />
 
     <TextView
         android:id="@+id/tv_root_empty"
@@ -38,14 +61,16 @@
         android:visibility="gone" />
 
     <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_marginBottom="@dimen/space_48"
+        <com.xuechuan.xcedu.weight.SmartScrollView
             android:id="@+id/slv_root_show"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/space_56"
             android:fillViewport="true">
 
             <LinearLayout
@@ -72,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
+                    android:textColor="@color/black"
                     android:text="题干题干题干题干题干题干题干题干题干题干题干题干题干题干题干" />
 
                 <Space style="@style/space_30_height" />
@@ -90,11 +116,77 @@
                     android:id="@+id/rlv_euale_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/ll_more_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/space_8"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateTint="@color/gray"
+                        android:indeterminateTintMode="src_atop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/space_48"
+                        android:paddingLeft="@dimen/space_8"
+                        android:text="加载更多"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/text_size_14" />
+
+                </LinearLayout>
             </LinearLayout>
 
-        </ScrollView>
+        </com.xuechuan.xcedu.weight.SmartScrollView>
+
+        <View
+            android:id="@+id/v_line1"
+            style="@style/view_line_tab_line"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/space_48" />
 
         <LinearLayout
+            android:id="@+id/ll_b_submit_evalue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/space_16"
+            android:paddingRight="@dimen/space_16"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/et_b_submit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_8"
+                android:layout_weight="1"
+                android:background="@drawable/et_answer_bg"
+                android:maxLines="4"
+                android:paddingBottom="@dimen/space_8"
+                android:paddingLeft="@dimen/space_16"
+                android:paddingRight="@dimen/space_16"
+                android:paddingTop="@dimen/space_8"
+                android:textSize="@dimen/text_size_14" />
+
+            <ImageView
+                android:id="@+id/iv_b_submit_send"
+                android:layout_width="@dimen/space_32"
+                android:layout_height="48dp"
+                android:paddingLeft="@dimen/space_8"
+                android:src="@mipmap/ic_send" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li_xia"
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_48"
             android:layout_alignParentBottom="true"
@@ -102,7 +194,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/space_16"
-            android:paddingRight="@dimen/space_16">
+            android:paddingRight="@dimen/space_16"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -119,13 +212,10 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
-
-
                     <ImageView
                         android:layout_width="@dimen/space_18"
                         android:layout_height="@dimen/space_18"
                         android:src="@drawable/ic_b_last" />
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -204,5 +294,6 @@
                     android:button="@null" />
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 </LinearLayout>

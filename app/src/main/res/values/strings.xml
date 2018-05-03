@@ -31,6 +31,12 @@
     <string name="http_comment">/api/comment/post</string>
     <!--点赞接口-->
     <string name="http_laud">/api/support/post</string>
+
+    <!--用户收藏接口-->
+    <string name="http_favpost">/api/question/favpost</string>
+
+    <!--提交做题记录-->
+    <string name="http_questionhispost">/api/question/questionhispost</string>
     <!--规范章节列表-->
     <string name="http_chapter">/api/standard/getchapter</string>
     <!--规范文章列表-->
@@ -120,5 +126,7 @@
     <string name="sequential_exercise">顺序练习</string>
     <string name="_12">12</string>
     <string name="right">正确</string>
+    <string name="myError">我的错题</string>
+    <string name="MyCollor">收藏题目</string>
 
 </resources>

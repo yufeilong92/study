@@ -14,18 +14,14 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.base.BaseVo;
-import com.xuechuan.xcedu.mvp.presenter.SkillController;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
-import com.xuechuan.xcedu.ui.bank.AtricleTextListActivity;
+import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
-import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
 
 /**
@@ -141,12 +137,19 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_b_skill_error://错题
+                Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.ERRTYPE);
+                intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
+                startActivity(intent1);
                 break;
             case R.id.ll_b_skill_collect://收藏
+                Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.FAVTYPE);
+                intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
+                startActivity(intent2);
                 break;
             case R.id.iv_b_order://章节
 //                Intent intent = AtricleTextListActivity.newInstance(mContext, mTypeOid);
                 Intent intent = AtricleListActivity.newInstance(mContext, mTypeOid);
+                intent.putExtra(AtricleListActivity.CSTR_EXTRA_TITLE_STR, "章节练习");
                 startActivity(intent);
                 break;
             case R.id.iv_b_test://考试

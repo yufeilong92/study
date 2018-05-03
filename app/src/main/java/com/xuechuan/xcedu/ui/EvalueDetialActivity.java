@@ -33,7 +33,6 @@ import java.util.List;
  * @Copyright: 2018/4/19
  */
 public class EvalueDetialActivity extends BaseActivity implements View.OnClickListener {
-
     /**
      * 文章编号
      */

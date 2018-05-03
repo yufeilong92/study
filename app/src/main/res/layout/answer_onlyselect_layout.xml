@@ -38,7 +38,7 @@
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/space_48"
                     android:text="选项1"
-                    android:textColor="@color/tv_select_color" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -63,7 +63,7 @@
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/space_48"
                     android:text="选项1"
-                    android:textColor="@color/tv_select_color" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -88,7 +88,7 @@
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/space_48"
                     android:text="选项1"
-                    android:textColor="@color/tv_select_color" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -113,7 +113,7 @@
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/space_48"
                     android:text="选项1"
-                    android:textColor="@color/tv_select_color" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -138,7 +138,7 @@
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/space_48"
                     android:text="选项1"
-                    android:textColor="@color/tv_select_color" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <Button
@@ -151,7 +151,8 @@
                 android:background="@drawable/btn_b_sure_n"
                 android:text="确认答案"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_14" />
+                android:textSize="@dimen/text_size_14"
+                android:visibility="gone" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -162,7 +163,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <View style="@style/view_line_10_gray" />
+        <View
+            android:id="@+id/v_line2"
+            style="@style/view_line_10_gray" />
 
         <LinearLayout
 
@@ -175,6 +178,7 @@
             android:paddingTop="@dimen/space_8">
 
             <TextView
+                android:id="@+id/tv_answer_answer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -204,6 +208,7 @@
         android:paddingTop="@dimen/space_8">
 
         <TextView
+            android:id="@+id/tv_answer_jiexi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="解析"
@@ -244,17 +249,93 @@
                 android:textSize="@dimen/text_size_14" />
 
             <TextView
+
                 android:id="@+id/tv_b_accuracy"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:paddingLeft="@dimen/space_8"
                 android:text="20%"
-                android:textColor="@color/text_fu_color"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/space_4"
+                    android:text="难度" />
+
+                <ImageView
+                    android:id="@+id/iv_b_star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/space_4"
+                    android:src="@drawable/ic_b_difficulty_n" />
+
+                <ImageView
+                    android:id="@+id/iv_b_star2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/space_4"
+                    android:src="@drawable/ic_b_difficulty_n" />
+
+                <ImageView
+                    android:id="@+id/iv_b_star3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/space_4"
+                    android:src="@drawable/ic_b_difficulty_n" />
+
+                <ImageView
+                    android:id="@+id/iv_b_star4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/space_4"
+                    android:src="@drawable/ic_b_difficulty_n" />
+
+                <ImageView
+                    android:id="@+id/iv_b_star5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_b_difficulty_n" />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <View style="@style/view_line_10_gray" />
+        <View
+            android:id="@+id/v_line3"
+            style="@style/view_line_10_gray" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/space_16">
+
+            <TextView
+                android:id="@+id/tv_answer_numberevlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/space_16"
+                android:text="评论(0)"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_14" />
+
+            <TextView
+                android:id="@+id/tv_answer_addevlua"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/space_32"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/bg_select_answer_evalue"
+                android:padding="@dimen/space_8"
+                android:text="添加评论"
+                android:textColor="@color/text_home_title"
+                android:textSize="@dimen/text_size_14" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

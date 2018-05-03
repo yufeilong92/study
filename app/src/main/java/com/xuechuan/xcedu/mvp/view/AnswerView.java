@@ -33,5 +33,13 @@ public interface AnswerView {
 
     public void TextDetailError(String con);
 
+    public void SumbitCollectSuccess(String con);
+
+    public void SumbitCollectError(String con);
+
+    public void DoResultSuccess(String con);
+    public void DoResultError(String con);
+
+
 
 }

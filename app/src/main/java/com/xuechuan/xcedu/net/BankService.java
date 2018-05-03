@@ -10,6 +10,9 @@ import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -153,6 +156,7 @@ public class BankService extends BaseHttpServcie {
         GetParamVo paramVo2 = getParamVo();
         paramVo2.setParam("tagtype");
         paramVo2.setValue(tagtype);
+        listParamVo.add(paramVo2);
         String url = getUrl(mContext, R.string.http_questiontagscount);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
@@ -356,7 +360,7 @@ public class BankService extends BaseHttpServcie {
         UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
-        paramVo.setParam("courseid ");
+        paramVo.setParam("courseid");
         paramVo.setValue(courseid);
         listParamVo.add(paramVo);
         GetParamVo paramVo2 = getParamVo();
@@ -366,6 +370,58 @@ public class BankService extends BaseHttpServcie {
         String url = getUrl(mContext, R.string.http_examchapter);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
 
+    }
+
+    /**
+     * 提交收藏
+     * @param isfav true 收藏 false 取消
+     * @param targetid 练习题编号
+
+     * @param callBackView
+     */
+    public void subimtfavpost( String targetid, boolean isfav, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JSONObject obj = getJsonObj();
+        try {
+            obj.put("staffid",user.getId());
+            obj.put("targetid",targetid);
+            obj.put("isfav",isfav);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getUrl(mContext, R.string.http_favpost);
+        requestHttpServciePost(mContext,url,obj,true,callBackView);
+    }
+
+    /**
+     * 提交做题记录
+     * @param isRight true 对 false 错
+     * @param targetid 练习题编号
+
+     * @param callBackView
+     */
+    public void subimtQuestionHispost( String targetid, boolean isRight, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JSONObject obj = getJsonObj();
+        try {
+            obj.put("staffid",user.getId());
+            obj.put("targetid",targetid);
+            obj.put("isright",isRight);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getUrl(mContext, R.string.http_questionhispost);
+        requestHttpServciePost(mContext,url,obj,true,callBackView);
     }
 
 }

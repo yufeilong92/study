@@ -25,7 +25,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.ViewHolder> {
+public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
     private List<TitleNumberVo.DatasBean> mData;
@@ -34,6 +34,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     private int submit;
     private boolean isSubmit;
     private int select = -1;
+
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
@@ -70,6 +71,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.answer_layout_table, null);
         ViewHolder holder = new ViewHolder(view);
+        view.setOnClickListener(this);
         return holder;
     }
 
@@ -77,7 +79,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TitleNumberVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
-        holder.mTvPopAnswerSelect.setText((position+1) + "");
+        holder.mTvPopAnswerSelect.setText((position + 1) + "");
         if (isSubmit) {//提交
             String id = String.valueOf(bean.getId());
             for (int i = 0; i < user.size(); i++) {
@@ -89,7 +91,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
                         holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
                         holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
                     } else if (status.equals("1")) {//错误
-                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_miss_error);
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.btn_answer_bg_error);
                         holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.red_text));
                     } else if (status.equals("2")) {
                         holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_miss);
@@ -100,7 +102,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
                     }
                     break;
 
-                }else {//没有
+                } else {//没有
                     holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
                     holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
                 }
@@ -110,24 +112,33 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
             if (select == position) {//显示当前题
                 holder.mTvPopAnswerSelect.setBackgroundColor(mContext.getResources().getColor(R.color.black));
                 holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.white));
-            }
-            String id = String.valueOf(bean.getId());
-            for (int i = 0; i < user.size(); i++) {
-                UseSelectItemInfomVo vo = user.get(i);
-                String id1 = String.valueOf(vo.getId());
-                if (id.equals(id1)){//有
-                    holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_su);
-                    holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.black));
-                    break;
-                }else {//没有
-                    holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
-                    holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+            } else {
+
+                String id = String.valueOf(bean.getId());
+                for (int i = 0; i < user.size(); i++) {
+                    UseSelectItemInfomVo vo = user.get(i);
+                    String id1 = String.valueOf(vo.getId());
+                    if (id.equals(id1)) {//有
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_su);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.black));
+                        break;
+                    } else {//没有
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                    }
                 }
             }
-
         }
+        holder.itemView.setTag(bean);
+        holder.itemView.setId(position);
 
+    }
 
+    @Override
+    public void onClick(View v) {
+        if (clickListener != null) {
+            clickListener.onClickListener(v.getTag(), v.getId());
+        }
     }
 
     @Override

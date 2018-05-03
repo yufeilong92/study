@@ -56,6 +56,15 @@
     <color name="bg_b_color">#eaf5f2</color>
     <color name="text_tab_miss_color">#ffa177</color>
     <color name="text_tab_right">#2acca0</color>
+    <color name="text_color_right">#26cfa1</color>
+    <color name="text_color_woring">#ffa177</color>
+    <color name="text_color_error">#ff6d6f</color>
+    <color name="night_title_bar">#565d64</color>
+    <color name="night_text_color">#8d98a3</color>
+    <color name="night_layout_bg">#363d44</color>
+    <color name="night_line_bg">#4b5158</color>
+    <color name="eye_layout_bg">#e6f0e1</color>
+    <color name="eye_line_bg">#dae3d5</color>
 
 
 

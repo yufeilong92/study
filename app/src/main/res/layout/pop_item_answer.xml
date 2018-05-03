@@ -78,7 +78,7 @@
                     android:layout_height="12dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/space_20"
-                    android:background="@drawable/bg_select_answer_btn_miss_error" />
+                    android:background="@drawable/btn_answer_bg_error" />
 
                 <TextView
                     android:layout_width="wrap_content"

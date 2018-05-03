@@ -49,7 +49,7 @@
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
-    <dimen name="text_size36">36px</dimen>
+    <dimen name="text_size36">36sp</dimen>
     <dimen name="top_hight">24dp</dimen>
     <dimen name="common_margin_tb">13.3dp</dimen>
     <dimen name="corners_common_m">9dp</dimen>

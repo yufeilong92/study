@@ -278,8 +278,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         final LoginService service = LoginService.getInstance(mContext);
         service.setIsShowDialog(true);
         service.setDialogContext(null, getStringWithId(R.string.login_loading));
-//        mPresenter.getLoginContent(mContext, username, password);
-//        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.login_loading));
+        mPresenter.getLoginContent(mContext, username, password);
+        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.login_loading));
+//        submitLogin(username, password, service);
+    }
+
+    private void submitLogin(String username, String password, LoginService service) {
         service.requestlogin(username, password, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
@@ -367,7 +371,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void LoginSuccess(String message) {
-        mDialog.dismiss();
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
         L.d("登录成功", message);
         String code = JSONObject.quote(message);
         L.w(code);
@@ -397,7 +403,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void LoginError(String con) {
-        mDialog.dismiss();
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
         L.e(con);
     }
 }

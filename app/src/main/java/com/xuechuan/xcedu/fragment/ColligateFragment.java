@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseFragment;
 
 /**
  * All rights Reserved, Designed By
@@ -24,7 +25,7 @@ import com.xuechuan.xcedu.R;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class ColligateFragment extends Fragment {
+public class ColligateFragment extends Fragment implements View.OnClickListener {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -76,6 +77,38 @@ public class ColligateFragment extends Fragment {
         mTvBCoFree = (TextView) view.findViewById(R.id.tv_b_co_free);
         mTvBCoZhuanxiang = (TextView) view.findViewById(R.id.tv_b_co_zhuanxiang);
         mTvBCoShunxu = (TextView) view.findViewById(R.id.tv_b_co_shunxu);
+        mLlBCoCollect.setOnClickListener(this);
+        mLlBCoError.setOnClickListener(this);
+        mIvBCoOrder.setOnClickListener(this);
+        mIvBCoText.setOnClickListener(this);
+        mTvBCoCoolect.setOnClickListener(this);
+        mTvBCoFree.setOnClickListener(this);
+        mTvBCoShunxu.setOnClickListener(this);
+        mTvBCoZhuanxiang.setOnClickListener(this);
+
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_b_co_collect://我的收藏
+                break;
+            case R.id.ll_b_co_error://我的错误
+                break;
+            case R.id.iv_b_co_order://章节练习
+                break;
+            case R.id.iv_b_co_text://模拟考试
+                break;
+            case R.id.tv_b_co_free://自由 组卷
+                break;
+            case R.id.tv_b_co_shunxu://顺序练习
+                break;
+            case R.id.tv_b_co_zhuanxiang://专项练习
+                break;
+
+
+            default:
+
+        }
+    }
 }

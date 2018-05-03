@@ -21,9 +21,9 @@ import com.xuechuan.xcedu.utils.L;
 public class AnswerModelImpl implements AnswerModel {
 
     @Override
-    public void getEvalueContent(Context context, String questionId,int page, final RequestResulteView view) {
+    public void getEvalueContent(Context context, String questionId, int page, final RequestResulteView view) {
         BankService service = new BankService(context);
-        service.reqiestQuestionCmment(questionId,page, new StringCallBackView() {
+        service.reqiestQuestionCmment(questionId, page, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 view.success(response.body().toString());
@@ -64,6 +64,38 @@ public class AnswerModelImpl implements AnswerModel {
             @Override
             public void onError(Response<String> response) {
                 view.error(response.message());
+            }
+        });
+    }
+
+    @Override
+    public void SubmitCollectContent(Context context, boolean isFav, String id, final RequestResulteView view) {
+        BankService service = new BankService(context);
+        service.subimtfavpost(id, isFav, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                view.error(response.message());
+            }
+        });
+    }
+
+    @Override
+    public void SubmitDoResult(Context context, boolean isRight, String id, final RequestResulteView view) {
+        BankService service = new BankService(context);
+        service.subimtQuestionHispost(id, isRight, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                view.success(response.message());
             }
         });
     }
