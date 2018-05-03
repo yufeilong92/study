@@ -84,11 +84,6 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    protected void initViewCreate(View view, Bundle savedInstanceState) {
         requestChapters();
         initView(view);
         initViewData();

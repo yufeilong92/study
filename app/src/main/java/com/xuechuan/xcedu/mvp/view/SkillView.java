@@ -11,5 +11,7 @@ package com.xuechuan.xcedu.mvp.view;
  * @Copyright: 2018
  */
 public interface SkillView {
-    String  requestOrderData(String id);
+    public void ErrorOrCollortNumberSuccess(String con);
+
+    public void ErrorOrCollortNumberError(String con);
 }

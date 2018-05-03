@@ -1,7 +1,6 @@
 package com.xuechuan.xcedu.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseFragment;
 
 /**
  * All rights Reserved, Designed By
@@ -24,7 +24,7 @@ import com.xuechuan.xcedu.R;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class CaseFragment extends Fragment {
+public class CaseFragment extends BaseFragment implements View.OnClickListener {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -67,6 +67,16 @@ public class CaseFragment extends Fragment {
         return view;
     }
 
+    @Override
+    protected int initInflateView() {
+        return R.layout.fragment_case;
+    }
+
+    @Override
+    protected void initCreateView(View view, Bundle savedInstanceState) {
+        initView(view);
+    }
+
 
     private void initView(View view) {
         mTvCaseWroing = (TextView) view.findViewById(R.id.tv_case_wroing);
@@ -78,6 +88,35 @@ public class CaseFragment extends Fragment {
         mTvBCaseFree = (TextView) view.findViewById(R.id.tv_b_case_free);
         mTvBCaseZhuanxiang = (TextView) view.findViewById(R.id.tv_b_case_zhuanxiang);
         mTvBCaseShunxu = (TextView) view.findViewById(R.id.tv_b_case_shunxu);
+        mLiBCaseError.setOnClickListener(this);
+        mLlBCaseCollect.setOnClickListener(this);
+        mIvBCaseOrder.setOnClickListener(this);
+        mIvBCaseText.setOnClickListener(this);
+        mTvBCaseFree.setOnClickListener(this);
+        mTvBCaseShunxu.setOnClickListener(this);
+        mTvBCaseZhuanxiang.setOnClickListener(this);
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.li_b_case_error://我的错题
+                break;
+            case R.id.ll_b_case_collect://我的收藏
+                break;
+            case R.id.iv_b_case_order://章节
+                break;
+            case R.id.iv_b_case_text://考试
+                break;
+            case R.id.tv_b_case_free://自由
+                break;
+            case R.id.tv_b_case_zhuanxiang://专项
+                break;
+            case R.id.tv_b_case_shunxu://顺序
+                break;
+            default:
+                break;
+        }
+    }
 }

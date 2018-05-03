@@ -1,12 +1,7 @@
 package com.xuechuan.xcedu.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
@@ -55,11 +50,6 @@ public class PersionalFragment extends BaseFragment {
 
     @Override
     protected void initCreateView(View view,Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    protected void initViewCreate(View view, Bundle savedInstanceState) {
 
     }
 
