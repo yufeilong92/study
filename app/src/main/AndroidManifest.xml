@@ -100,7 +100,8 @@
             android:exported="false" />
 
         <activity android:name=".ui.bank.MyErrorOrCollectTextActivity" />
-        <activity android:name=".ui.bank.MockTestActivity"></activity>
+        <activity android:name=".ui.bank.MockTestActivity" />
+        <activity android:name=".ui.EvalueTwoActivity"></activity>
     </application>
 
 </manifest>

@@ -707,7 +707,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
-                Utils.showInputMethod(mContext, mLlRootLayout);
+               Utils.showSoftInputFromWindow(AnswerActivity.this,mEtBSubmit);
                 mLlBSubmitEvalue.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_b_submit_send:
@@ -767,7 +767,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mEvaluePresenter.submitContent(mContext, String.valueOf(mResultData.getId()), str, null, DataMessageVo.QUESTION);
         mSubmitDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit));
         adapter.notifyDataSetChanged();
-        Utils.hideInputMethod(mContext, mRlRootLayout);
+        Utils.hideInputMethod(mContext, mEtBSubmit);
 
     }
 
@@ -1675,6 +1675,16 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         mLiXia.setVisibility(View.VISIBLE);
         mLlBSubmitEvalue.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void GetEvalueSuccess(String con) {
+
+    }
+
+    @Override
+    public void GetEvalueError(String con) {
+
     }
 
     /**

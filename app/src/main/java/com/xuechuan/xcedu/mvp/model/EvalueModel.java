@@ -16,4 +16,6 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
  */
 public interface  EvalueModel  {
     public void SubmitContent(Context context, String targetid, String comment, String commentid,String usetype, RequestResulteView view);
+    public void reqeustEvalueContent(Context context, String questionid, String commentid, RequestResulteView view);
+
 }

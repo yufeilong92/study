@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
+import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.CurrencyService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 
@@ -35,4 +36,21 @@ public class EvalueModelImpl implements EvalueModel {
         });
 
     }
+
+    @Override
+    public void reqeustEvalueContent(Context context, String questionid, String commentid, final RequestResulteView view) {
+        BankService bankService = new BankService(context);
+        bankService.requestCommentComment(questionid, commentid, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                view.error(response.message());
+            }
+        });
+    }
+
 }
