@@ -5,6 +5,7 @@ import android.content.Context;
 import com.xuechuan.xcedu.mvp.model.EvalueModel;
 import com.xuechuan.xcedu.mvp.view.EvalueView;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
+import com.xuechuan.xcedu.utils.StringUtil;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -34,6 +35,22 @@ public class EvaluePresenter {
             @Override
             public void error(String result) {
                 view.submitEvalueError(result);
+            }
+        });
+    }
+    public void requestEvalueContent(Context contex, String questionid, String commentid) {
+        if (StringUtil.isEmpty(questionid)) {
+            return;
+        }
+        model.reqeustEvalueContent(contex, questionid, commentid, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.GetEvalueSuccess(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.GetEvalueError(result);
             }
         });
     }

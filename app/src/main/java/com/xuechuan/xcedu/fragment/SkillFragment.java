@@ -3,10 +3,7 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +11,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseFragment;
+import com.xuechuan.xcedu.mvp.model.BuyBookModelImpl;
+import com.xuechuan.xcedu.mvp.model.SkillModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.BuyBookPresenter;
+import com.xuechuan.xcedu.mvp.presenter.SkillPresenter;
+import com.xuechuan.xcedu.mvp.view.BuyBookView;
+import com.xuechuan.xcedu.mvp.view.SkillView;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
@@ -37,7 +41,7 @@ import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class SkillFragment extends Fragment implements View.OnClickListener {
+public class SkillFragment extends BaseFragment implements View.OnClickListener, SkillView, BuyBookView {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -51,6 +55,8 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
     private TextView mTvBSpecial;
     private TextView mTvBTurn;
     private Context mContext;
+    private SkillPresenter mPresenter;
+    private BuyBookPresenter mBuyPresenter;
 
 
     public SkillFragment() {
@@ -73,13 +79,32 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
+/*    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skill, container, false);
         initView(view);
         requestBought();
         return view;
+    }*/
+
+    @Override
+    protected int initInflateView() {
+        return R.layout.fragment_skill;
+    }
+
+    @Override
+    protected void initCreateView(View view, Bundle savedInstanceState) {
+        initView(view);
+        initData();
+//        requestBought();
+    }
+
+    private void initData() {
+        mPresenter = new SkillPresenter(new SkillModelImpl(), this);
+        mPresenter.getErrOrCollNumber(mContext, mTypeOid);
+        mBuyPresenter = new BuyBookPresenter(new BuyBookModelImpl(), this);
+        mBuyPresenter.requestBuyInfom(mContext, mTypeOid);
     }
 
     /**
@@ -161,5 +186,35 @@ public class SkillFragment extends Fragment implements View.OnClickListener {
             default:
 
         }
+    }
+
+    @Override
+    public void ErrorOrCollortNumberSuccess(String con) {
+
+    }
+
+    @Override
+    public void ErrorOrCollortNumberError(String con) {
+
+    }
+
+    @Override
+    public void BuySuccess(String msg) {
+        Gson gson = new Gson();
+        BuyVo vo = gson.fromJson(msg, BuyVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            BuyVo.DataBean data = vo.getData();
+            boolean isbought = data.isIsbought();
+            UserbuyOrInfomVo infomVo = new UserbuyOrInfomVo();
+            infomVo.setSkillbook(isbought);
+            SharedUserUtils.getInstance().putUserBuyVo(infomVo);
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+    }
+
+    @Override
+    public void BuyError(String con) {
+        L.e(con);
     }
 }

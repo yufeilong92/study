@@ -170,11 +170,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         initBaiduLocation();
     }
 
-    @Override
-    protected void initViewCreate(View view, Bundle savedInstanceState) {
-
-    }
-
     /**
      * 初始百度
      */

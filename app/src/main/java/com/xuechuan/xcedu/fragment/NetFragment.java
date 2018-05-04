@@ -58,9 +58,4 @@ public class NetFragment extends BaseFragment {
 
     }
 
-    @Override
-    protected void initViewCreate(View view, Bundle savedInstanceState) {
-
-    }
-
 }

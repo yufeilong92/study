@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.InfomDetailActivity">
+    tools:context=".ui.EvalueTwoActivity">
 
     <LinearLayout style="@style/TitleBar">
 
@@ -26,31 +25,32 @@
     <View style="@style/view_line_tab_line" />
 
     <RelativeLayout
-        android:id="@+id/rl_infom_layout"
+        android:id="@+id/rl_infom_two_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.andview.refreshview.XRefreshView
-            android:id="@+id/xfv_content_detail"
+            android:id="@+id/xfv_content_two_detail"
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/space_56"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/space_56">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rlv_infomdetail_content"
+                android:id="@+id/rlv_infomtwo_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </com.andview.refreshview.XRefreshView>
+
         <LinearLayout
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:background="@color/white"
             android:orientation="horizontal"
             android:padding="@dimen/space_8">
 
             <EditText
-                android:id="@+id/et_infom_content"
+                android:id="@+id/et_infom_two_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -69,12 +69,11 @@
                 android:textSize="@dimen/text_size_14" />
 
             <Button
-                android:id="@+id/btn_infom_send"
+                android:id="@+id/btn_infom_two_send"
                 android:layout_width="@dimen/space_22"
                 android:layout_height="@dimen/space_22"
                 android:layout_gravity="center_vertical"
-                android:background="@mipmap/ic_send"
-                />
+                android:background="@mipmap/ic_send" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

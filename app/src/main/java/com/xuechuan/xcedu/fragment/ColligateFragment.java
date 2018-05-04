@@ -1,10 +1,7 @@
 package com.xuechuan.xcedu.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +22,7 @@ import com.xuechuan.xcedu.base.BaseFragment;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class ColligateFragment extends Fragment implements View.OnClickListener {
+public class ColligateFragment extends BaseFragment implements View.OnClickListener {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -58,13 +55,24 @@ public class ColligateFragment extends Fragment implements View.OnClickListener 
             mTypeOid = getArguments().getString(TYPEOID);
         }
     }
-
+/*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_colligate, container, false);
         initView(view);
         return view;
+    }
+*/
+
+    @Override
+    protected int initInflateView() {
+        return R.layout.fragment_colligate;
+    }
+
+    @Override
+    protected void initCreateView(View view, Bundle savedInstanceState) {
+        initView(view);
     }
 
     private void initView(View view) {

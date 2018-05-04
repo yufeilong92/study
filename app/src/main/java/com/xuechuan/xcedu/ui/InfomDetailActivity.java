@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -19,8 +18,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
@@ -35,10 +34,12 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.CurrencyService;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeUtil;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
@@ -80,6 +81,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private XRefreshView mXfvContentDetail;
     private EditText mEtInfomContent;
     private Button mBtnInfomSend;
+    private AlertDialog mDialog;
+    private RelativeLayout mRlInfomLayout;
 
     public static void newInstance(Context context, String url) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
@@ -112,21 +115,12 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         intent.putExtra(SUPPER, supper);
         return intent;
     }
-/*
-    @Override
+
+/*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_infom_detail);
-        if (getIntent() != null) {
-            mUrl = getIntent().getStringExtra(URLPARAM);
-            mTargetid = getIntent().getStringExtra(MOID);
-            mType = getIntent().getStringExtra(MTYPE);
-            mSupperNumber = getIntent().getStringExtra(SUPPER);
-
-        }
-        clearData();
         initView();
-        reqesstEvaleData();
     }*/
 
     @Override
@@ -149,12 +143,14 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         if (StringUtil.isEmpty(mTargetid)) {
             return;
         }
+        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         HomeService bankService = new HomeService(mContext);
-        bankService.setIsShowDialog(true);
-        bankService.setDialogContext(mContext, "", getStringWithId(R.string.loading));
         bankService.requestArticleCommentList(mTargetid, 1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
+                if (mDialog != null) {
+                    mDialog.dismiss();
+                }
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();
@@ -177,6 +173,9 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onError(Response<String> response) {
+                if (mDialog != null) {
+                    mDialog.dismiss();
+                }
                 T.showToast(mContext, response.message());
             }
         });
@@ -199,6 +198,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         bindAdapter();
 
 
+        mRlInfomLayout = (RelativeLayout) findViewById(R.id.rl_infom_layout);
+        mRlInfomLayout.setOnClickListener(this);
     }
 
     private void bindAdapter() {
@@ -406,6 +407,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     T.showToast(mContext, getString(R.string.content_is_empty));
                     return;
                 }
+                Utils.hideInputMethod(mContext, mEtInfomContent);
                 submit(textStr);
                 break;
         }
