@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.BuyBookModelImpl;
 import com.xuechuan.xcedu.mvp.model.SkillModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.BuyBookPresenter;
@@ -21,6 +22,7 @@ import com.xuechuan.xcedu.mvp.view.SkillView;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
+import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
@@ -178,10 +180,15 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 startActivity(intent);
                 break;
             case R.id.iv_b_test://考试
+                Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPESKILL);
+                intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
+                startActivity(intent3);
                 break;
             case R.id.tv_b_free://自由
                 break;
             case R.id.tv_b_special://专项
+                break;
+            case R.id.tv_b_turn://顺序
                 break;
             default:
 

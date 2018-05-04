@@ -73,6 +73,13 @@ public class DataMessageVo {
     public static String ARTICLE = "article";
     //视频
     public static String VIDEO = "video";
+    //案例
+    public static String MARKTYPECASE = "typecase";
+    //技术
+    public static String MARKTYPESKILL = "typeskill";
+    //综合
+    public static String MARKTYPECOLLORT = "typecoloct";
+    public static String MARKTYPEORDER= "typeorder";
 
 
 }

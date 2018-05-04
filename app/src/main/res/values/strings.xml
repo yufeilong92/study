@@ -128,5 +128,6 @@
     <string name="right">正确</string>
     <string name="myError">我的错题</string>
     <string name="MyCollor">收藏题目</string>
+    <string name="evalue_empty">暂无评论内容</string>
 
 </resources>

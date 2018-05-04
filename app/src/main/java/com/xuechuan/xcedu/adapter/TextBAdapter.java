@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.vo.ChildrenBeanVo;
 import com.xuechuan.xcedu.vo.SkillTextVo;
@@ -113,7 +114,8 @@ public class TextBAdapter extends RecyclerView.Adapter<TextBAdapter.ViewHolder> 
             @Override
             public void onClickListener(Object obj, int position) {
                 ChildrenBeanVo vo = (ChildrenBeanVo) obj;
-                Intent intent = AnswerActivity.newInstance(mContext, String.valueOf(vo.getId()));
+                Intent intent = AnswerActivity.newInstance(mContext, String.valueOf(vo.getId())
+                , DataMessageVo.MARKTYPEORDER);
                 mContext.startActivity(intent);
             }
         });

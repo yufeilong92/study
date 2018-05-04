@@ -32,6 +32,7 @@ public class UseSelectItemInfomVo extends BaseVo {
      * 选中的题号
      */
     private int itemSelect;
+
     /**
      * 状态 0 为正确 1为错误 2漏选 3 未做
      */
@@ -41,6 +42,8 @@ public class UseSelectItemInfomVo extends BaseVo {
     private String selectItemC;
     private String selectItemD;
     private String selectItemE;
+
+
 
 
     public int getItemSelect() {

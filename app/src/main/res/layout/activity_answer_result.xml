@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.bank.AnswerResultActivity">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <ImageView
+            style="@style/TitleBarAction"
+            android:onClick="onHomeClick"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            style="@style/TitleBarText"
+            android:text="" />
+
+        <ImageView style="@style/TitleBarAction" />
+
+    </LinearLayout>
+
+    <View style="@style/view_line_titel_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="183dp"
+        android:layout_margin="@dimen/space_8"
+        android:background="@drawable/ic_statistics_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_24"
+            android:gravity="center"
+            android:text="答题数目"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_result_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="18"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size36" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_30"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/space_32"
+            android:paddingRight="@dimen/space_32">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_time" />
+
+                <TextView
+                    android:id="@+id/tv_answer_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/space_8"
+                    android:text="1:02:03" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_accuracy" />
+
+                <TextView
+                    android:id="@+id/tv_answer_lv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/space_8"
+                    android:text="85%" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rlv_answer_result_bag"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/space_48"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/space_16"
+        android:paddingRight="@dimen/space_16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_48"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_answer_again"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_16"
+            android:layout_marginRight="@dimen/space_8"
+            android:layout_weight="1"
+            android:background="@drawable/ic_tab_line_n"
+            android:text="重新做题" />
+
+        <Button
+            android:id="@+id/btn_answer_jiexi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_16"
+            android:layout_weight="1"
+            android:background="@drawable/ic_tab_line_s"
+            android:text="查看解析"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

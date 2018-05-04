@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
+import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.HomeEvaluateAdapter;
@@ -18,6 +19,8 @@ import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.EvalueVo;
+import com.xuechuan.xcedu.vo.SpecasChapterListVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,15 +61,6 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         return intent;
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_evalue_detial);
-        initView();
-
-    }
-
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_evalue_detial);
@@ -86,16 +80,17 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvEvalueDetail.setLayoutManager(gridLayoutManager);
-        adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
         mRlvEvalueDetail.setAdapter(adapter);
 
     }
 
     private void initRxfresh() {
-        mXfvEvauleContent.setAutoLoadMore(true);
-        mXfvEvauleContent.setPullLoadEnable(false);
-        mXfvEvauleContent.setPullRefreshEnable(true);
         mXfvEvauleContent.setMoveForHorizontal(true);
+        mXfvEvauleContent.setPullLoadEnable(true);
+        mXfvEvauleContent.setAutoLoadMore(true);
+        mXfvEvauleContent.setPullRefreshEnable(true);
+        mXfvEvauleContent.setEmptyView(findViewById(R.id.tv_xfr_content_empty));
+        adapter.setCustomLoadMoreView(new XRefreshViewFooter(this));
         mXfvEvauleContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
             public void onLoadMore(boolean isSilence) {
@@ -115,15 +110,38 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         }
         isRefresh=true;
         HomeService service = new HomeService(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext(mContext, "", getStringWithId(R.string.loading));
         service.requestCommentCommentList(getNowPage()+1,mArticleid, mCommentid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 isRefresh = false;
                 mXfvEvauleContent.stopRefresh();
-                L.w(response.body().toString());
-
+                String s = response.body().toString();
+                L.w(s);
+                L.e("获取规范章节列表数据" + s);
+                Gson gson = new Gson();
+                SpecasChapterListVo vo = gson.fromJson(s, SpecasChapterListVo.class);
+                if (vo.getStatus().getCode() == 200) {//成功
+                    List list = vo.getDatas();
+//                    clearData();
+                    if (list != null && !list.isEmpty()) {
+                        addListData(list);
+                    } else {
+                        mXfvEvauleContent.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+                    //判断是否能整除
+                    if (!mArray.isEmpty() && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                        mXfvEvauleContent.setLoadComplete(false);
+                        mXfvEvauleContent.setPullLoadEnable(true);
+                    } else {
+                        mXfvEvauleContent.setLoadComplete(true);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    isRefresh = false;
+                    T.showToast(mContext, vo.getStatus().getMessage());
+                }
             }
 
             @Override
@@ -141,15 +159,36 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         }
         isRefresh = true;
         HomeService service = new HomeService(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext(mContext, "", getStringWithId(R.string.loading));
         service.requestCommentCommentList(1,mArticleid, mCommentid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 isRefresh = false;
                 mXfvEvauleContent.stopRefresh();
-                L.w(response.body().toString());
-
+                String message = response.body().toString();
+                L.w(message);
+                Gson gson = new Gson();
+                EvalueVo vo = gson.fromJson(message, EvalueVo.class);
+                if (vo.getStatus().getCode() == 200) {//成功
+                    List list = vo.getDatas();
+                    clearData();
+                    if (list != null && !list.isEmpty()) {
+                        addListData(list);
+                    } else {
+                        mXfvEvauleContent.setLoadComplete(true);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+                    if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
+                        mXfvEvauleContent.setLoadComplete(true);
+                    } else {
+                        mXfvEvauleContent.setPullLoadEnable(true);
+                        mXfvEvauleContent.setLoadComplete(false);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    isRefresh = false;
+                    T.showToast(mContext, vo.getStatus().getMessage());
+                }
             }
 
             @Override

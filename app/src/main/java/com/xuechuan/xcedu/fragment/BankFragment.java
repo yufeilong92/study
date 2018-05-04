@@ -75,7 +75,6 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -197,14 +196,6 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
             default:
 
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment like bottom ... and run LayoutCreator again
-        View view = View.inflate(getActivity(), R.layout.fragment_bank, null);
-        initView(view);
-        return view;
     }
 
     private void selectTabBg(boolean skill, boolean co, boolean cased) {

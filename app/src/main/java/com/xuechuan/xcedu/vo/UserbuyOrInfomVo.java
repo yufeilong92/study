@@ -20,6 +20,14 @@ public class UserbuyOrInfomVo  implements Serializable{
     private boolean colligatebook;
     private boolean casebook;
     /**
+     * 用户选中展示的状态（夜间，白天）
+     */
+    private String userSelectShowType;
+    /**
+     * 用户是否选中自动跳转
+     */
+    private String  userNextGo;
+    /**
      * 用户token
      */
     private String token;
@@ -27,6 +35,22 @@ public class UserbuyOrInfomVo  implements Serializable{
      * token 过期时间
      */
     private String time;
+
+    public String getUserSelectShowType() {
+        return userSelectShowType;
+    }
+
+    public void setUserSelectShowType(String userSelectShowType) {
+        this.userSelectShowType = userSelectShowType;
+    }
+
+    public String getUserNextGo() {
+        return userNextGo;
+    }
+
+    public void setUserNextGo(String userNextGo) {
+        this.userNextGo = userNextGo;
+    }
 
     public boolean getSkillbook() {
         return Skillbook;

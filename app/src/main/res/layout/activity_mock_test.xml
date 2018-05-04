@@ -25,4 +25,43 @@
 
     <View style="@style/view_line_tab_line" />
 
+    <com.xuechuan.xcedu.weight.SmartScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:verticalScrollbarPosition="defaultPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_48"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/text_size_16"
+                    android:text="历年真题"
+                    android:textColor="@color/black" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rlv_old_exam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_48"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/text_size_16"
+                    android:text="独家密卷"
+                    android:textColor="@color/black" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rlv_du_exam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+    </com.xuechuan.xcedu.weight.SmartScrollView>
 </LinearLayout>

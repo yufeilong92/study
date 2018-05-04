@@ -14,6 +14,7 @@ import com.multilevel.treelist.OnTreeNodeClickListener;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AtricleTreeAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.AtricleContentModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.AtriclePresenter;
 import com.xuechuan.xcedu.mvp.view.AtricleView;
@@ -83,7 +84,8 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
             public void onClick(Node node, int position) {
                 if (!node.isRoot()) {
                     int id = (int) node.getId();
-                    Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id));
+                    Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id),
+                            DataMessageVo.MARKTYPEORDER);
                     startActivity(intent);
                 }
             }
@@ -95,7 +97,6 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
         mContext = this;
         mRlvTreeContent = (RecyclerView) findViewById(R.id.rlv_tree_content);
     }
-
     @Override
     public void Success(String content) {
         Gson gson = new Gson();

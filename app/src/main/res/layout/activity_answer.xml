@@ -97,8 +97,54 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
-                    android:textColor="@color/black"
-                    android:text="题干题干题干题干题干题干题干题干题干题干题干题干题干题干题干" />
+                    android:text="题干题干题干题干题干题干题干题干题干题干题干题干题干题干题干"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/btn_look_wen_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_48"
+                    android:layout_marginRight="@dimen/space_48"
+                    android:layout_marginTop="@dimen/space_48"
+                    android:background="@drawable/btn_look_answer_bg"
+                    android:text="查看解析"
+                    android:textSize="@dimen/text_size_16" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_look_wen_da"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_48"
+                    android:orientation="vertical"
+                  >
+
+                    <View
+                        android:id="@+id/v_line4"
+                        style="@style/view_line_10_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_look_answer_can"
+                        android:paddingRight="@dimen/text_size_16"
+                        android:paddingLeft="@dimen/text_size_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="参考答案"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_16" />
+
+                    <TextView
+                        android:id="@+id/tv_look_answer_wen"
+                        android:layout_marginTop="@dimen/text_size_16"
+                        android:paddingRight="@dimen/text_size_16"
+                        android:paddingLeft="@dimen/text_size_16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_title_color"
+                        android:text="56454654654654654654654654654654446464464644646464646464644646464" />
+                </LinearLayout>
 
                 <Space style="@style/space_30_height" />
 
@@ -212,10 +258,12 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="@dimen/space_18"
                         android:layout_height="@dimen/space_18"
                         android:src="@drawable/ic_b_last" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

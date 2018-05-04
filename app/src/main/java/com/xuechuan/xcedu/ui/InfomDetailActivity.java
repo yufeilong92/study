@@ -202,10 +202,13 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         mRlInfomLayout.setOnClickListener(this);
     }
 
+    /**
+     * 资讯
+     */
     private void bindAdapter() {
         adapter = new InfomDetailAdapter(mContext, mArray);
         //头
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        final LayoutInflater inflater = LayoutInflater.from(mContext);
         final View view = inflater.inflate(R.layout.item_infom_webview, null);
         adapter.setHeaderView(view, mRlvInfomdetailContent);
         initWebView(view);
@@ -227,7 +230,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 EvalueVo.DatasBean vo = (EvalueVo.DatasBean) obj;
                 Intent intent = EvalueDetialActivity.newInstance(mContext, String.valueOf(vo.getTargetid()),
                         String.valueOf(vo.getCommentid()));
-                mContext.startActivity(intent);
+                intent.putExtra(EvalueDetialActivity.CSTR_EXTRA_TITLE_STR,"评论详情");
+                startActivity(intent);
             }
         });
 

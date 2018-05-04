@@ -1,5 +1,7 @@
 package com.xuechuan.xcedu.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,10 @@ import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
+import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
+import com.xuechuan.xcedu.ui.bank.MockTestActivity;
+import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 
 /**
  * All rights Reserved, Designed By
@@ -37,6 +43,7 @@ public class CaseFragment extends BaseFragment implements View.OnClickListener {
     private TextView mTvBCaseFree;
     private TextView mTvBCaseZhuanxiang;
     private TextView mTvBCaseShunxu;
+    private Context mContext;
 
 
     public CaseFragment() {
@@ -95,6 +102,7 @@ public class CaseFragment extends BaseFragment implements View.OnClickListener {
         mTvBCaseFree.setOnClickListener(this);
         mTvBCaseShunxu.setOnClickListener(this);
         mTvBCaseZhuanxiang.setOnClickListener(this);
+        mContext = getActivity();
     }
 
 
@@ -102,12 +110,24 @@ public class CaseFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.li_b_case_error://我的错题
+                Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.ERRTYPE);
+                intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
+                startActivity(intent1);
                 break;
             case R.id.ll_b_case_collect://我的收藏
+                Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.FAVTYPE);
+                intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
+                startActivity(intent2);
                 break;
             case R.id.iv_b_case_order://章节
+                Intent intent = AtricleListActivity.newInstance(mContext, mTypeOid);
+                intent.putExtra(AtricleListActivity.CSTR_EXTRA_TITLE_STR, "章节练习");
+                startActivity(intent);
                 break;
             case R.id.iv_b_case_text://考试
+                Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPECASE);
+                intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
+                startActivity(intent3);
                 break;
             case R.id.tv_b_case_free://自由
                 break;

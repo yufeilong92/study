@@ -364,7 +364,7 @@ public class BankService extends BaseHttpServcie {
         paramVo.setValue(courseid);
         listParamVo.add(paramVo);
         GetParamVo paramVo2 = getParamVo();
-        paramVo2.setParam("id");
+        paramVo2.setParam("staffid");
         paramVo2.setValue(String.valueOf(user.getId()));
         listParamVo.add(paramVo2);
         String url = getUrl(mContext, R.string.http_examchapter);

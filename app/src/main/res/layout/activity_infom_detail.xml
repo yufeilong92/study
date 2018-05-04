@@ -41,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </com.andview.refreshview.XRefreshView>
+
         <LinearLayout
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
@@ -77,4 +78,5 @@
                 />
         </LinearLayout>
     </RelativeLayout>
+
 </LinearLayout>

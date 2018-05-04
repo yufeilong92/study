@@ -13,6 +13,7 @@ import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.vo.TitleNumberVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     private int submit;
     private boolean isSubmit;
     private int select = -1;
-
+    private ArrayList<Integer> mSelect = new ArrayList<Integer>();
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
@@ -77,6 +78,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         TitleNumberVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
         holder.mTvPopAnswerSelect.setText((position + 1) + "");
@@ -101,7 +103,6 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
                         holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
                     }
                     break;
-
                 } else {//没有
                     holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
                     holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
@@ -109,11 +110,11 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
             }
 
         } else {//未提交
+            holder.mTvPopAnswerSelect.setTag(position);
             if (select == position) {//显示当前题
                 holder.mTvPopAnswerSelect.setBackgroundColor(mContext.getResources().getColor(R.color.black));
                 holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.white));
             } else {
-
                 String id = String.valueOf(bean.getId());
                 for (int i = 0; i < user.size(); i++) {
                     UseSelectItemInfomVo vo = user.get(i);
@@ -143,7 +144,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

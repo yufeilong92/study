@@ -76,6 +76,7 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
                 boolean isend = vo.isIsend();
                 if (isend) {
                     Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+                    intent.putExtra(InfomDetailActivity.CSTR_EXTRA_TITLE_STR, vo.getTitle());
                     mContext.startActivity(intent);
                     return;
                 }

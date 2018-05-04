@@ -23,14 +23,26 @@
 
     </LinearLayout>
 
+    <View style="@style/view_line_tab_line" />
+
     <com.andview.refreshview.XRefreshView
         android:id="@+id/xfv_evaule_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rlv_evalue_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.andview.refreshview.XRefreshView>
+
+    <TextView
+        android:id="@+id/tv_xfr_content_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/evalue_empty"
+        android:textSize="@dimen/text_size_14" />
+
 </LinearLayout>
