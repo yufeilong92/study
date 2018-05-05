@@ -8,13 +8,13 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: todo
+ * @Description: 所有题干
  * @author: L-BackPacker
- * @date: 2018/4/27 11:26
+ * @date: 2018/5/5 13:38
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class TitleNumberVo extends BaseVo {
+public class AllQuestionVo extends BaseVo {
 
     private List<DatasBean> datas;
 
@@ -27,7 +27,6 @@ public class TitleNumberVo extends BaseVo {
     }
 
     public static class DatasBean {
-
         /**
          * 所属末节章节编号
          */
@@ -48,6 +47,7 @@ public class TitleNumberVo extends BaseVo {
          * 问题类型2单选题3多选题4简单题
          */
         private int type;
+
         public int getChapterid() {
             return chapterid;
         }

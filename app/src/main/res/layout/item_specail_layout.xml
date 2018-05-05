@@ -2,11 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/space_48"
-    android:orientation="horizontal"
-   >
+    android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/iv_tree_mark"
+        android:id="@+id/iv_specail_mark"
         android:layout_width="@dimen/space_18"
         android:layout_height="@dimen/space_18"
         android:layout_gravity="center_vertical"
@@ -14,7 +13,7 @@
         android:src="@drawable/ic_node" />
 
     <TextView
-        android:id="@+id/tv_atricle_tree"
+        android:id="@+id/tv_specail_mark"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center_vertical"
@@ -22,5 +21,4 @@
         android:text="nihai "
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_14" />
-
 </LinearLayout>

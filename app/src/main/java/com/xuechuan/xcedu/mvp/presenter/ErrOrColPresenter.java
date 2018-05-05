@@ -2,9 +2,10 @@ package com.xuechuan.xcedu.mvp.presenter;
 
 import android.content.Context;
 
-import com.xuechuan.xcedu.mvp.model.SkillModel;
+import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.mvp.model.ErrOrCollModel;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
-import com.xuechuan.xcedu.mvp.view.SkillView;
+import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.utils.StringUtil;
 
 /**
@@ -18,15 +19,22 @@ import com.xuechuan.xcedu.utils.StringUtil;
  * @Copyright: 2018/5/4 星期五
  * 注意：本内容仅限于学川教育有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class SkillPresenter {
-    private SkillModel model;
-    private SkillView view;
+public class ErrOrColPresenter {
+    private ErrOrCollModel model;
+    private ErrOrColNumView view;
 
-    public SkillPresenter(SkillModel model, SkillView view) {
+
+    public ErrOrColPresenter(ErrOrCollModel model, ErrOrColNumView view) {
         this.model = model;
         this.view = view;
     }
 
+    /**
+     * 获取题号
+     *
+     * @param context
+     * @param courseid
+     */
     public void getErrOrCollNumber(Context context, String courseid) {
         if (StringUtil.isEmpty(courseid)) {
             return;
@@ -43,4 +51,9 @@ public class SkillPresenter {
             }
         });
     }
+
+
+
+
+
 }

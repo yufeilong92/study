@@ -8,13 +8,13 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: todo
+ * @Description: 专项练习
  * @author: L-BackPacker
- * @date: 2018/4/27 11:26
+ * @date: 2018/5/5 16:11
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class TitleNumberVo extends BaseVo {
+public class SpecialDataVo extends BaseVo {
 
     private List<DatasBean> datas;
 
@@ -27,34 +27,22 @@ public class TitleNumberVo extends BaseVo {
     }
 
     public static class DatasBean {
-
         /**
-         * 所属末节章节编号
-         */
-        private int chapterid;
-        /**
-         * 所属末节章节编号
+         *所属科目
          */
         private int courseid;
-        /***
-         * 难度
-         */
-        private int difficultydegree;
         /**
-         * 题目编号
+         * 	题目编号
          */
         private int id;
         /**
-         * 问题类型2单选题3多选题4简单题
+         * 	标签
          */
-        private int type;
-        public int getChapterid() {
-            return chapterid;
-        }
-
-        public void setChapterid(int chapterid) {
-            this.chapterid = chapterid;
-        }
+        private String name;
+        /**
+         * 题目数量
+         */
+        private int num;
 
         public int getCourseid() {
             return courseid;
@@ -62,14 +50,6 @@ public class TitleNumberVo extends BaseVo {
 
         public void setCourseid(int courseid) {
             this.courseid = courseid;
-        }
-
-        public int getDifficultydegree() {
-            return difficultydegree;
-        }
-
-        public void setDifficultydegree(int difficultydegree) {
-            this.difficultydegree = difficultydegree;
         }
 
         public int getId() {
@@ -80,12 +60,20 @@ public class TitleNumberVo extends BaseVo {
             this.id = id;
         }
 
-        public int getType() {
-            return type;
+        public String getName() {
+            return name;
         }
 
-        public void setType(int type) {
-            this.type = type;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getNum() {
+            return num;
+        }
+
+        public void setNum(int num) {
+            this.num = num;
         }
     }
 }

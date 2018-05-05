@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
+import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
+import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
+import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
+import com.xuechuan.xcedu.ui.home.SpecasListActivity;
+import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
+import com.xuechuan.xcedu.vo.ShunXuEvent;
+import com.xuechuan.xcedu.vo.TitleNumberVo;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * All rights Reserved, Designed By
@@ -30,7 +44,7 @@ import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class CaseFragment extends BaseFragment implements View.OnClickListener {
+public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.OnClickListener {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -66,13 +80,13 @@ public class CaseFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    @Override
+ /*   @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_case, container, false);
         initView(view);
         return view;
-    }
+    }*/
 
     @Override
     protected int initInflateView() {
@@ -82,6 +96,12 @@ public class CaseFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
+        initData();
+    }
+
+    private void initData() {
+        ErrOrColPresenter colPresenter = new ErrOrColPresenter(new ErrOrCollModelImpl(), this);
+        colPresenter.getErrOrCollNumber(mContext, mTypeOid);
     }
 
 
@@ -132,11 +152,42 @@ public class CaseFragment extends BaseFragment implements View.OnClickListener {
             case R.id.tv_b_case_free://自由
                 break;
             case R.id.tv_b_case_zhuanxiang://专项
+                Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
+                intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
+                startActivity(intent4);
                 break;
             case R.id.tv_b_case_shunxu://顺序
+                Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
+                intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
+                startActivity(intent5);
                 break;
             default:
                 break;
         }
     }
+
+    @Override
+    public void ErrorOrCollortNumberSuccess(String con) {
+        Gson gson = new Gson();
+        ErrorOrColloctVo vo = gson.fromJson(con, ErrorOrColloctVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            ErrorOrColloctVo.DataBean data = vo.getData();
+            bindErrOrColViewData(data);
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+
+    }
+
+    private void bindErrOrColViewData(ErrorOrColloctVo.DataBean data) {
+        mTvCaseWroing.setText(data.getError() + "道");
+        mTvCaseCoolect.setText(data.getFavorite() + "道");
+    }
+
+    @Override
+    public void ErrorOrCollortNumberError(String con) {
+
+    }
+
+
 }

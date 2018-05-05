@@ -109,7 +109,6 @@ public class BankService extends BaseHttpServcie {
         paramVo.setParam("chapterid");
         paramVo.setValue(chapterid);
         listParamVo.add(paramVo);
-
         String url = getUrl(mContext, R.string.http_chapterquestionids);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
@@ -123,7 +122,7 @@ public class BankService extends BaseHttpServcie {
     public void requestionTags(String couresid, StringCallBackView callBackView) {
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
-        paramVo.setParam("couresid");
+        paramVo.setParam("courseid");
         paramVo.setValue(couresid);
         listParamVo.add(paramVo);
         String url = getUrl(mContext, R.string.http_questiontags);

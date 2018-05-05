@@ -19,7 +19,13 @@ import com.xuechuan.xcedu.utils.L;
  * @Copyright: 2018
  */
 public class AnswerModelImpl implements AnswerModel {
-
+    /**
+     * 获取评论
+     * @param context
+     * @param questionId
+     * @param page
+     * @param view
+     */
     @Override
     public void getEvalueContent(Context context, String questionId, int page, final RequestResulteView view) {
         BankService service = new BankService(context);
@@ -36,6 +42,12 @@ public class AnswerModelImpl implements AnswerModel {
         });
     }
 
+    /**
+     * 获取章节下所有练习题库题号
+     * @param context
+     * @param id
+     * @param view
+     */
     @Override
     public void getTextContent(Context context, String id, final RequestResulteView view) {
         BankService service = new BankService(context);
@@ -52,6 +64,12 @@ public class AnswerModelImpl implements AnswerModel {
         });
     }
 
+    /**
+     * 题干详情
+     * @param context
+     * @param id
+     * @param view
+     */
     @Override
     public void getTextDetailContent(Context context, String id, final RequestResulteView view) {
         BankService bankService = new BankService(context);
@@ -68,6 +86,13 @@ public class AnswerModelImpl implements AnswerModel {
         });
     }
 
+    /**
+     * 提交收藏
+     * @param context
+     * @param isFav
+     * @param id
+     * @param view
+     */
     @Override
     public void SubmitCollectContent(Context context, boolean isFav, String id, final RequestResulteView view) {
         BankService service = new BankService(context);
@@ -84,6 +109,13 @@ public class AnswerModelImpl implements AnswerModel {
         });
     }
 
+    /**
+     * 提交做题结果
+     * @param context
+     * @param isRight
+     * @param id
+     * @param view
+     */
     @Override
     public void SubmitDoResult(Context context, boolean isRight, String id, final RequestResulteView view) {
         BankService service = new BankService(context);

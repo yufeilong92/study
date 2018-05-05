@@ -120,6 +120,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         mVpgContent.setCurrentItem(0);
+        mVpgContent.setOffscreenPageLimit(3);
         selectTabBg(true, false, false);
     }
 

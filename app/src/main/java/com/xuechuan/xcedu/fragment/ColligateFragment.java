@@ -3,17 +3,25 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
+import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
+import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
+import com.xuechuan.xcedu.vo.TitleNumberVo;
 
 /**
  * All rights Reserved, Designed By
@@ -28,7 +36,7 @@ import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class ColligateFragment extends BaseFragment implements View.OnClickListener {
+public class ColligateFragment extends BaseFragment implements View.OnClickListener, ErrOrColNumView {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -80,6 +88,15 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
+        initData();
+    }
+
+    private void initData() {
+        ErrOrColPresenter colPresenter = new ErrOrColPresenter(new ErrOrCollModelImpl(), this);
+        colPresenter.getErrOrCollNumber(mContext, mTypeOid);
+//        colPresenter.getcoursequestionid(mContext,mTypeOid);
+//        colPresenter.getQuestionTags(mContext,mTypeOid);
+
     }
 
     private void initView(View view) {
@@ -138,5 +155,46 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             default:
 
         }
+    }
+
+    @Override
+    public void ErrorOrCollortNumberSuccess(String con) {
+        Gson gson = new Gson();
+        ErrorOrColloctVo errorOrColloctVo = gson.fromJson(con, ErrorOrColloctVo.class);
+        if (errorOrColloctVo.getStatus().getCode() == 200) {
+            ErrorOrColloctVo.DataBean data = errorOrColloctVo.getData();
+            bindErrOrColViewData(data);
+        } else {
+            T.showToast(mContext, errorOrColloctVo.getStatus().getMessage());
+        }
+    }
+
+    private void bindErrOrColViewData(ErrorOrColloctVo.DataBean data) {
+        mTvBCooWroing.setText(data.getError()+"道");
+        mTvBCoCoolect.setText(data.getFavorite()+"道");
+
+    }
+
+    @Override
+    public void ErrorOrCollortNumberError(String con) {
+
+    }
+    @Override
+    public void QuestionIdAllSuccess(String con) {
+        Log.e("yfl", "QuestionIdAllSuccess: " + con);
+
+        Gson gson = new Gson();
+        TitleNumberVo vo = gson.fromJson(con, TitleNumberVo.class);
+        if (vo.getStatus().getCode() == 200) {
+
+
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+    }
+
+    @Override
+    public void QuestionIdAllError(String con) {
+
     }
 }

@@ -9,20 +9,25 @@ import com.xuechuan.xcedu.net.view.StringCallBackView;
 
 /**
  * @version V 1.0 xxxxxxxx
- * @Title: SkillModelImpl.java
+ * @Title: xcedu
  * @Package com.xuechuan.xcedu.mvp.model
  * @Description: todo
- * @author: YFL
- * @date: 2018/5/4 00:02
+ * @author: L-BackPacker
+ * @date: 2018/5/5 17:15
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
- * @Copyright: 2018/5/4 星期五
- * 注意：本内容仅限于学川教育有限公司内部传阅，禁止外泄以及用于其他的商业目
+ * @Copyright: 2018
  */
-public class SkillModelImpl implements SkillModel {
+public class AllQuestionModelImpl implements AllQuestionModel{
+    /**
+     * 获取所有题号
+     * @param context
+     * @param courseid
+     * @param view
+     */
     @Override
-    public void reqeustErrOrCoNumber(Context context, String courseid, final RequestResulteView view) {
-        BankService service = new BankService(context);
-        service.requestErrSetandFav(courseid, new StringCallBackView() {
+    public void reqeustAllQuestionId(Context context, String courseid, final RequestResulteView view) {
+        BankService bankService = new BankService(context);
+        bankService.requestCourseQuestionIdsList(courseid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 view.success(response.body().toString());
@@ -30,7 +35,7 @@ public class SkillModelImpl implements SkillModel {
 
             @Override
             public void onError(Response<String> response) {
-                view.error(response.message());
+                view.success(response.message());
             }
         });
     }

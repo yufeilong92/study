@@ -15,6 +15,8 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
  * @Copyright: 2018/5/4 星期五
  * 注意：本内容仅限于学川教育有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public interface SkillModel {
+public interface ErrOrCollModel {
     public void reqeustErrOrCoNumber(Context context, String courseid, RequestResulteView view);
+
+
 }

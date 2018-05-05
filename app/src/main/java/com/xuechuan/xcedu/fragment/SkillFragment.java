@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,21 +15,30 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.BuyBookModelImpl;
-import com.xuechuan.xcedu.mvp.model.SkillModelImpl;
+import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.BuyBookPresenter;
-import com.xuechuan.xcedu.mvp.presenter.SkillPresenter;
+import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
 import com.xuechuan.xcedu.mvp.view.BuyBookView;
-import com.xuechuan.xcedu.mvp.view.SkillView;
+import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
+import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
+import com.xuechuan.xcedu.ui.home.SpecasListActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
+import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
+import com.xuechuan.xcedu.vo.ShunXuEvent;
+import com.xuechuan.xcedu.vo.SpecialDataVo;
+import com.xuechuan.xcedu.vo.TitleNumberVo;
 import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * All rights Reserved, Designed By
@@ -43,7 +53,7 @@ import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class SkillFragment extends BaseFragment implements View.OnClickListener, SkillView, BuyBookView {
+public class SkillFragment extends BaseFragment implements View.OnClickListener, ErrOrColNumView, BuyBookView {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -57,9 +67,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     private TextView mTvBSpecial;
     private TextView mTvBTurn;
     private Context mContext;
-    private SkillPresenter mPresenter;
+    private ErrOrColPresenter mPresenter;
     private BuyBookPresenter mBuyPresenter;
-
 
     public SkillFragment() {
     }
@@ -103,7 +112,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initData() {
-        mPresenter = new SkillPresenter(new SkillModelImpl(), this);
+        mPresenter = new ErrOrColPresenter(new ErrOrCollModelImpl(), this);
         mPresenter.getErrOrCollNumber(mContext, mTypeOid);
         mBuyPresenter = new BuyBookPresenter(new BuyBookModelImpl(), this);
         mBuyPresenter.requestBuyInfom(mContext, mTypeOid);
@@ -187,8 +196,15 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
             case R.id.tv_b_free://自由
                 break;
             case R.id.tv_b_special://专项
+                Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
+                intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
+                startActivity(intent4);
+
                 break;
             case R.id.tv_b_turn://顺序
+                Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
+                intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
+                startActivity(intent5);
                 break;
             default:
 
@@ -197,13 +213,28 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void ErrorOrCollortNumberSuccess(String con) {
+        L.e("yfl", "ErrorOrCollortNumberSuccess: " + con);
+        Gson gson = new Gson();
+        ErrorOrColloctVo vo = gson.fromJson(con, ErrorOrColloctVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            ErrorOrColloctVo.DataBean data = vo.getData();
+            bindErrorOrCollortData(data);
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+    }
+
+    private void bindErrorOrCollortData(ErrorOrColloctVo.DataBean data) {
+        mTvSkillWroing.setText(data.getError() + "道");
+        mTvSkillCoolect.setText(data.getFavorite() + "道");
 
     }
 
     @Override
     public void ErrorOrCollortNumberError(String con) {
-
+        L.e("yfl", "ErrorOrCollortNumberError: " + con);
     }
+
 
     @Override
     public void BuySuccess(String msg) {
