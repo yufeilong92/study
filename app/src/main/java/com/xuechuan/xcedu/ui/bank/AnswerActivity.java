@@ -2124,12 +2124,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             if (mysecond < 10) {
                 a = "0" + mysecond;
                 mActivityTitleText.setText("0" + myhour + ":" + "0" + myminute + ":" + a);
-            } else if (myminute < 10) {
-                mActivityTitleText.setText("0" + myhour + ":" + "0" + myminute + ":" + mysecond);
+            } else if (myminute > 10) {
+                mActivityTitleText.setText("0" + myhour + ":" + myminute + ":" + mysecond);
             } else if (myhour < 10) {
                 mActivityTitleText.setText("0" + myhour + ":" + "" + myminute + ":" + mysecond);
             } else {
-                mActivityTitleText.setText("" + myhour + ":" + "" + myminute + ":" + mysecond);
+                mActivityTitleText.setText("" + myhour + ":" + "0" + myminute + ":" + mysecond);
 
             }
 
