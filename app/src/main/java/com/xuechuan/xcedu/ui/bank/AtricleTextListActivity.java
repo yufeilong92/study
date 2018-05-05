@@ -15,6 +15,9 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.TextBAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.model.QuestionListModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.QuestionListPresenter;
+import com.xuechuan.xcedu.mvp.view.QuestionListView;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
@@ -34,7 +37,7 @@ import java.util.List;
  * @verdescript  版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/27
  */
-public class AtricleTextListActivity extends BaseActivity {
+public class AtricleTextListActivity extends BaseActivity implements QuestionListView {
 
     private RecyclerView mRlvTextContent;
     private XRefreshView mXfvTextContent;
@@ -47,6 +50,7 @@ public class AtricleTextListActivity extends BaseActivity {
     private static String COURSEID = "courseid";
     private String mOid;
     private TextBAdapter bAdapter;
+    private QuestionListPresenter mListPresenter;
 
 
     public static Intent newInstance(Context context, String courseid) {
@@ -84,7 +88,9 @@ public class AtricleTextListActivity extends BaseActivity {
 
     }
     private void initData() {
-        final BankService service = new BankService(mContext);
+        mListPresenter = new QuestionListPresenter(new QuestionListModelImpl(), this);
+        mListPresenter.requestQuetionList(mContext,mOid);
+     /*   final BankService service = new BankService(mContext);
         service.requestChapterList(mOid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
@@ -107,7 +113,7 @@ public class AtricleTextListActivity extends BaseActivity {
             public void onError(Response<String> response) {
                 isRefresh = false;
             }
-        });
+        });*/
     }
 
 
@@ -146,5 +152,26 @@ public class AtricleTextListActivity extends BaseActivity {
             return mArray.size() / DataMessageVo.CINT_PANGE_SIZE;
         else
             return mArray.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
+    }
+
+    @Override
+    public void QuestionListSuccess(String con) {
+        isRefresh = false;
+        L.d(con);
+        Gson gson = new Gson();
+        SkillTextVo vo = gson.fromJson(con, SkillTextVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            List<SkillTextVo.DatasBean> datas = vo.getDatas();
+            clearData();
+            addListData(datas);
+            bAdapter.notifyDataSetChanged();
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+    }
+
+    @Override
+    public void QuestionListError(String con) {
+        isRefresh = false;
     }
 }

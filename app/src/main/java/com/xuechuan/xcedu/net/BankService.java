@@ -322,24 +322,15 @@ public class BankService extends BaseHttpServcie {
      * @param callBackView
      */
     public void requestUestionIdSbyTagid(String courseid, String tagid, StringCallBackView callBackView) {
-        UserInfomVo login = isLogin(mContext);
-        if (login == null) {
-            return;
-        }
-        UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
         GetParamVo paramVo = getParamVo();
-        paramVo.setParam("courseid ");
+        paramVo.setParam("courseid");
         paramVo.setValue(courseid);
         listParamVo.add(paramVo);
         GetParamVo paramVo1 = getParamVo();
         paramVo1.setParam("tagid");
         paramVo1.setValue(tagid);
         listParamVo.add(paramVo1);
-        GetParamVo paramVo2 = getParamVo();
-        paramVo2.setParam("staffid");
-        paramVo2.setValue(String.valueOf(user.getId()));
-        listParamVo.add(paramVo2);
         String url = getUrl(mContext, R.string.http_questionidsbytagid);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
 

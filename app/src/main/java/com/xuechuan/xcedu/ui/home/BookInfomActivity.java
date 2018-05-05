@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import com.xuechuan.xcedu.adapter.BookOrderAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BookHomePageVo;
@@ -49,6 +51,7 @@ public class BookInfomActivity extends BaseActivity {
     private static String CEX_INT_ID = "cex_int_id";
     private Context mContext;
     private String mOid;
+    private AlertDialog mDialog;
 
     public static Intent newInstance(Context context, String cex_int_id) {
         Intent intent = new Intent(context, BookInfomActivity.class);
@@ -85,11 +88,13 @@ public class BookInfomActivity extends BaseActivity {
 
     private void initData() {
         HomeService service = new HomeService(mContext);
-        service.setIsShowDialog(true);
-        service.setDialogContext(mContext, "", getStringWithId(R.string.loading));
+        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         service.requesthCapter(mOid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
+                if (mDialog!=null){
+                    mDialog.dismiss();
+                }
                 String message = response.body().toString();
                 L.w("教材章节", message);
                 Gson gson = new Gson();

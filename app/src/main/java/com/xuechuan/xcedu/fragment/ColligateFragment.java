@@ -3,7 +3,6 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +20,6 @@ import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
-import com.xuechuan.xcedu.vo.TitleNumberVo;
 
 /**
  * All rights Reserved, Designed By
@@ -147,6 +145,7 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             case R.id.tv_b_co_free://自由 组卷
                 break;
             case R.id.tv_b_co_shunxu://顺序练习
+
                 break;
             case R.id.tv_b_co_zhuanxiang://专项练习
                 break;

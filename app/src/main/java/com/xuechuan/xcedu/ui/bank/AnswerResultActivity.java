@@ -9,12 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.AnswerTableAdapter;
 import com.xuechuan.xcedu.adapter.AnswerTableResultAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.AnswerResultEvent;
-import com.xuechuan.xcedu.vo.TitleNumberVo;
+import com.xuechuan.xcedu.vo.QuestionListVo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,10 +62,10 @@ public class AnswerResultActivity extends BaseActivity implements View.OnClickLi
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMain(AnswerResultEvent event) {
-        List<TitleNumberVo.DatasBean> beans = event.getmTextDetial();
+        List<QuestionListVo.DatasBean> beans = event.getmTextDetial();
         initAdapter(beans);
     }
-    public void initAdapter(List<TitleNumberVo.DatasBean> beans){
+    public void initAdapter(List<QuestionListVo.DatasBean> beans){
         GridLayoutManager gridLayoutManager = new GridLayoutManager(AnswerResultActivity.this, 6);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         AnswerTableResultAdapter adapter = new AnswerTableResultAdapter(AnswerResultActivity.this, beans);

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+
+    tools:context=".ui.bank.FreeQuestionActivity">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <ImageView
+            android:id="@+id/ic_pop_result"
+            style="@style/TitleBarAction"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            style="@style/TitleBarText"
+            android:text="" />
+
+        <ImageView style="@style/TitleBarAction" />
+
+    </LinearLayout>
+
+    <View style="@style/view_line_titel_line" />
+
+    <Space style="@style/space_20_height" />
+
+    <com.xuechuan.xcedu.weight.SmartScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingLeft="@dimen/space_16"
+        android:paddingRight="@dimen/space_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_48"
+                android:gravity="center_vertical"
+                android:text="@string/number"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16" />
+
+            <RadioGroup
+                android:id="@+id/rg_question_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="@dimen/space_32"
+                    android:background="@drawable/select_free_rab_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/twentyquestion"
+                    android:textColor="@drawable/select_free_rdb_color" />
+
+                <RadioButton
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="@dimen/space_32"
+                    android:layout_marginLeft="@dimen/space_16"
+                    android:background="@drawable/select_free_rab_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/fiftyquestion"
+                    android:textColor="@drawable/select_free_rdb_color" />
+
+                <RadioButton
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="@dimen/space_32"
+                    android:layout_marginLeft="@dimen/space_16"
+                    android:background="@drawable/select_free_rab_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/hundredquestion"
+                    android:textColor="@drawable/select_free_rdb_color" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_48"
+                android:gravity="center_vertical"
+                android:text="@string/difficulty"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16" />
+
+            <RadioGroup
+                android:id="@+id/rg_difficulty_grade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="@dimen/space_32"
+                    android:background="@drawable/select_free_rab_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/easy"
+                    android:textColor="@drawable/select_free_rdb_color" />
+
+                <RadioButton
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="@dimen/space_32"
+                    android:layout_marginLeft="@dimen/space_16"
+                    android:background="@drawable/select_free_rab_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/medium"
+                    android:textColor="@drawable/select_free_rdb_color" />
+
+                <RadioButton
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="@dimen/space_32"
+                    android:layout_marginLeft="@dimen/space_16"
+                    android:background="@drawable/select_free_rab_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/hard"
+                    android:textColor="@drawable/select_free_rdb_color" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_48"
+                android:gravity="center_vertical"
+                android:text="范围"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv_free_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    </com.xuechuan.xcedu.weight.SmartScrollView>
+</LinearLayout>

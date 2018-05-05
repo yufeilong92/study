@@ -3,7 +3,6 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,12 +32,7 @@ import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
 import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
-import com.xuechuan.xcedu.vo.ShunXuEvent;
-import com.xuechuan.xcedu.vo.SpecialDataVo;
-import com.xuechuan.xcedu.vo.TitleNumberVo;
 import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * All rights Reserved, Designed By

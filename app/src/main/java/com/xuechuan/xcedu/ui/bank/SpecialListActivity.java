@@ -97,8 +97,8 @@ public class SpecialListActivity extends BaseActivity implements SpecailView {
             @Override
             public void onClickListener(Object obj, int position) {
                 SpecialDataVo.DatasBean bean = (SpecialDataVo.DatasBean) obj;
-                Intent intent = AnswerActivity.newInstance(mContext, String.valueOf(bean.getId()),
-                        DataMessageVo.MARKTYPEORDER);
+                Intent intent = AnswerActivity.newInstance(mContext,mTypeOid ,
+                        String.valueOf(bean.getId()),0);
                 startActivity(intent);
             }
         });

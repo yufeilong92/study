@@ -129,5 +129,13 @@
     <string name="myError">我的错题</string>
     <string name="MyCollor">收藏题目</string>
     <string name="evalue_empty">暂无评论内容</string>
+    <string name="number">数量</string>
+    <string name="twentyquestion">20道</string>
+    <string name="fiftyquestion">50道</string>
+    <string name="hundredquestion">100道</string>
+    <string name="difficulty">难度</string>
+    <string name="easy">容易</string>
+    <string name="medium">中等</string>
+    <string name="hard">困难</string>
 
 </resources>

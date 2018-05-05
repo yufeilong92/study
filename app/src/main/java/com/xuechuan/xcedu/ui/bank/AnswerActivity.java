@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,19 +30,21 @@ import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AnswerEvaluateAdapter;
 import com.xuechuan.xcedu.adapter.AnswerTableAdapter;
+import com.xuechuan.xcedu.adapter.AnswerTableResultAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.AllQuestionModelImpl;
 import com.xuechuan.xcedu.mvp.model.AnswerModelImpl;
 import com.xuechuan.xcedu.mvp.model.EvalueModelImpl;
-import com.xuechuan.xcedu.mvp.model.SpecaliModellmpl;
+import com.xuechuan.xcedu.mvp.model.SpecailDetailModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.AllQuestionPresenter;
 import com.xuechuan.xcedu.mvp.presenter.AnswerPresenter;
 import com.xuechuan.xcedu.mvp.presenter.EvaluePresenter;
-import com.xuechuan.xcedu.mvp.presenter.SpecailPresenter;
+import com.xuechuan.xcedu.mvp.presenter.SpecailDetailPresenter;
 import com.xuechuan.xcedu.mvp.view.AllQuestionView;
 import com.xuechuan.xcedu.mvp.view.AnswerView;
 import com.xuechuan.xcedu.mvp.view.EvalueView;
+import com.xuechuan.xcedu.mvp.view.SpecailDetailView;
 import com.xuechuan.xcedu.utils.AdvancedCountdownTimer;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
@@ -54,42 +55,47 @@ import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
-import com.xuechuan.xcedu.vo.AnswerResultEvent;
 import com.xuechuan.xcedu.vo.EvalueVo;
-import com.xuechuan.xcedu.vo.ShunXuEvent;
 import com.xuechuan.xcedu.vo.TextDetailVo;
-import com.xuechuan.xcedu.vo.TitleNumberVo;
+import com.xuechuan.xcedu.vo.QuestionListVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.SmartScrollView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView {
+public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView, SpecailDetailView {
     /**
      * 科目id
      */
     private static final String MTYPEID = "curseid";
+    /***
+     * 标签id
+     */
+    private static final String TAGEIDDATA = "tageiddata";
     private Context mContext;
     /**
-     * 科目编号
+     * 问题父id
      */
-    private static String COURSEID = "courseid";
+    private static String QUESTIONID = "courseid";
+    /**
+     * 当前题干信息
+     */
+    private TextDetailVo mTextDetialNew;
+    /**
+     * 用户选择结果
+     */
+    private ArrayList<UseSelectItemInfomVo> mSeletList;
 
     private String mOid;
 
     // 第几题
     private int mMark = 0;
     //题目数据
-    private List<TitleNumberVo.DatasBean> mTextDetial;
+    private List<QuestionListVo.DatasBean> mTextDetial;
     private AlertDialog dialog;
 
     //用户是否点击下一题
@@ -137,14 +143,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private CheckBox mSwtNext;
     //用户是否提交
     private boolean isSubmit;
-    /**
-     * 当前题干信息
-     */
-    private TextDetailVo mTextDetialNew;
-    /**
-     * 用户选择结果
-     */
-    private ArrayList<UseSelectItemInfomVo> mSeletList;
+
     //剪切答案集合
     private ArrayList<String> list;
     private AnswerPresenter mPresnter;
@@ -230,10 +229,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mLlLookWenDa;
     private LinearLayout mLlSelectRootLayout;
     private RelativeLayout mRlLookEvalue;
+    /**
+     * 题干类型
+     */
     private static String TYPEMARK = "typemark";
-    private static String MARKNUMBER = "number";
 
     private CommonPopupWindow popShare;
+    //判断当前要显示的类型 是否考试
     private String mTypeMark;
     //是否是模拟考试 ture 隐藏提交答题按钮
     private boolean isExam;
@@ -243,26 +245,63 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     //科目id
     private String mTypeId;
     private AllQuestionPresenter mAllQuestion;
+    private MyCount TimeCount;
+    private String startTime = "00：00：00";
+    /**
+     * 科目id
+     */
+    private static String COURSEIDKEMU = "coureshidkumu";
+    /**
+     * 科目
+     */
+    private String mCouresidKuMu;
+    /**
+     * 标签id
+     */
+    private String mTagid;
+    private SpecailDetailPresenter mDetailPresenter;
 
-
+    /***
+     *
+     * @param context
+     * @param courseid 问题id
+     * @param type  类型  考试，练习等
+     * @return
+     */
     public static Intent newInstance(Context context, String courseid, String type) {
         Intent intent = new Intent(context, AnswerActivity.class);
-        intent.putExtra(COURSEID, courseid);
+        intent.putExtra(QUESTIONID, courseid);
         intent.putExtra(TYPEMARK, type);
         return intent;
     }
 
-    public static Intent newInstance(Context mContext, int mark) {
+    /***
+     *  专项练习
+     * @param mContext
+     * @param courseid 科目id
+     * @param tageid  标签
+     *  id 多余无需传参
+     *
+     * @return
+     */
+    public static Intent newInstance(Context mContext, String courseid, String tageid, int id) {
         Intent intent = new Intent(mContext, AnswerActivity.class);
-        intent.putExtra(MARKNUMBER, mark);
+        intent.putExtra(TAGEIDDATA, tageid);
+        intent.putExtra(COURSEIDKEMU, courseid);
         return intent;
     }
 
+    /**
+     * @param mContext
+     * @param courseid 科目id
+     * @return
+     */
     public static Intent newInstance(Context mContext, String courseid) {
         Intent intent = new Intent(mContext, AnswerActivity.class);
         intent.putExtra(MTYPEID, courseid);
         return intent;
     }
+
 /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,18 +315,19 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_answer);
         if (getIntent() != null) {
-            mOid = getIntent().getStringExtra(COURSEID);
+            mOid = getIntent().getStringExtra(QUESTIONID);
             mTypeMark = getIntent().getStringExtra(TYPEMARK);
-            mResultMark = getIntent().getStringExtra(MARKNUMBER);
             mTypeId = getIntent().getStringExtra(MTYPEID);
+            mCouresidKuMu = getIntent().getStringExtra(COURSEIDKEMU);
+            mTagid = getIntent().getStringExtra(TAGEIDDATA);
         }
         initView();
         initData();
         clearData();
         setLayoutBg();
-        //        获取用户购买情况
         initShowSet();
-        EventBus.getDefault().register(this);
+        initEvalueAdapter();
+
 
     }
 
@@ -314,6 +354,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (!StringUtil.isEmpty(go)) {
             mSelectNext = true;
         }
+        //判断是否显示提交按钮
         if (mTypeMark != null && mTypeMark.equals(DataMessageVo.MARKTYPECASE)) {//案例
             isExam = false;
             init180Time();
@@ -325,10 +366,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             init150Time();
         } else if (mTypeMark != null && mTypeMark.equals(DataMessageVo.MARKTYPEORDER)) {//章节
             isExam = true;
-        }
-        if (!StringUtil.isEmpty(mResultMark)) {
-            mMark = Integer.parseInt(mResultMark);
-            bindTextNumberData();
+        } else {
+            isExam = true;
         }
 
 
@@ -350,10 +389,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         long minute = Long.parseLong("00");
         long second = Long.parseLong("00");
         long time = (hour * 3600 + minute * 60 + second) * 1000;  //因为以ms为单位，所以乘以1000.
-        MyCount count = new MyCount(time, 1000);
-        mActivityTitleText.setText("00：00：00");
+        TimeCount = new MyCount(time, 1000);
+        mActivityTitleText.setText(startTime);
         mActivityTitleText.setTextSize(15);
-        count.start();
+        TimeCount.start();
     }
 
     /**
@@ -370,17 +409,32 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
+        //请求评价
         mEvaluePresenter = new EvaluePresenter(new EvalueModelImpl(), this);
+        //请求答案
         mPresnter = new AnswerPresenter(new AnswerModelImpl(), this);
+        //请求所有问题
         mAllQuestion = new AllQuestionPresenter(new AllQuestionModelImpl(), this);
-        if (mTypeId != null)
+        //请求专项
+        mDetailPresenter = new SpecailDetailPresenter(new SpecailDetailModelImpl(), this);
+        if (!StringUtil.isEmpty(mCouresidKuMu)) {
+            mDetailPresenter.requestSpecailDetail(mContext, mCouresidKuMu, mTagid);
+        }
+        if (!StringUtil.isEmpty(mTypeId)) {
+            isExam = true;
             mAllQuestion.getcoursequestionid(mContext, mTypeId);
+        }
 
-        if (mOid != null) {
+        if (!StringUtil.isEmpty(mOid)) {
             mPresnter.getEvaluateCotent(mContext, mOid, 1);
-            dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
             mPresnter.getTextContent(mContext, mOid);
         }
+        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+
+
+    }
+
+    private void initEvalueAdapter() {
         GridLayoutManager layoutManager = new GridLayoutManager(mContext, 1);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvEualeContent.setLayoutManager(layoutManager);
@@ -409,8 +463,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-
-
     }
 
     /**
@@ -420,7 +472,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTextDetial != null) {
             mTvBNew.setText(String.valueOf(mMark + 1));
             if (mMark < mTextDetial.size()) {
-                TitleNumberVo.DatasBean bean = mTextDetial.get(mMark);
+                QuestionListVo.DatasBean bean = mTextDetial.get(mMark);
                 mPresnter.getTextDetailContent(mContext, String.valueOf(bean.getId()));
             }
         }
@@ -784,7 +836,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = A;
                     setSelectOnlyItemBG(true, false, false, false, false, mSelectViewBgZC);
-                    if (!isExam) {
+                    if (isExam) {
                         setGoNextDan();
                     }
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
@@ -804,7 +856,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {             //单选
                     mSelectOnlyitem = B;
                     setSelectOnlyItemBG(false, true, false, false, false, mSelectViewBgZC);
-                    if (!isExam) {
+                    if (isExam) {
                         setGoNextDan();
                     }
 
@@ -825,7 +877,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {     //单选
                     mSelectOnlyitem = C;
                     setSelectOnlyItemBG(false, false, true, false, false, mSelectViewBgZC);
-                    if (!isExam) {
+                    if (isExam) {
                         setGoNextDan();
                     }
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
@@ -843,7 +895,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = D;
                     setSelectOnlyItemBG(false, false, false, true, false, mSelectViewBgZC);
-                    if (!isExam) {
+                    if (isExam) {
                         setGoNextDan();
                     }
 
@@ -864,10 +916,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {        //单选
                     mSelectOnlyitem = E;
                     setSelectOnlyItemBG(false, false, false, false, true, mSelectViewBgZC);
-                    if (!isExam) {
+                    if (isExam) {
                         setGoNextDan();
                     }
-
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
                     mSelectMorItemE = E;
                     if (isClickE) {
@@ -885,7 +936,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_b_sure_key://多选确认
                 isSure = true;
-                if (!isExam) {
+                if (isExam) {
                     setGoNextDan();
                 }
                 break;
@@ -1361,10 +1412,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         isSubmit = true;
-                        EventBus.getDefault().postSticky(new AnswerResultEvent(mTextDetial));
+                        showResultLayout();
+                        //取消时间
+                        TimeCount.cancel();
+                        mActivityTitleText.setText(startTime);
+
+           /*             EventBus.getDefault().postSticky(new AnswerResultEvent(mTextDetial));
                         Intent intent = new Intent(AnswerActivity.this, AnswerResultActivity.class);
                         intent.putExtra(AnswerResultActivity.CSTR_EXTRA_TITLE_STR, "答题结果");
-                        startActivity(intent);
+                        startActivity(intent);*/
 
                     }
                 });
@@ -1401,11 +1457,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mRlvPopContent.setLayoutManager(manager);
         AnswerTableAdapter adapter = new AnswerTableAdapter(mContext, mTextDetial);
         mRlvPopContent.setAdapter(adapter);
-        adapter.setItemSelect(mMark);
+        adapter.setItemSelect(isExam, mMark);
+        mRlvPopContent.scrollToPosition(mMark);
         adapter.setClickListener(new AnswerTableAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                TitleNumberVo.DatasBean bean = (TitleNumberVo.DatasBean) obj;
+                QuestionListVo.DatasBean bean = (QuestionListVo.DatasBean) obj;
                 clearbg();
                 mMark = position;
                 popAnswer.getPopupWindow().dismiss();
@@ -1417,10 +1474,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
 
     /**
-     * 分享布局
+     * 答案布局
      */
     private void showResultLayout() {
         popResult = new CommonPopupWindow(this, R.layout.activity_answer_result, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) {
+            private ImageView mIcPopBack;
             private TextView mTvResultNumber;
             private TextView mTvAnswerTime;
             private TextView mTvAnswerLv;
@@ -1437,20 +1495,42 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRlvAnswerResultBag = (RecyclerView) view.findViewById(R.id.rlv_answer_result_bag);
                 mBtnAnswerAgain = (Button) view.findViewById(R.id.btn_answer_again);
                 mBtnAnswerJiexi = (Button) view.findViewById(R.id.btn_answer_jiexi);
+                mIcPopBack = (ImageView) view.findViewById(R.id.ic_pop_result);
+                List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
+                int size = user.size();
+                mTvResultNumber.setText(size + "");
+                mTvAnswerTime.setText(getTextStr(mActivityTitleText));
+
             }
 
             @Override
             protected void initEvent() {
+                mIcPopBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popResult.getPopupWindow().dismiss();
+                    }
+                });
                 initAdapter();
 
             }
 
             private void initAdapter() {
-                GridLayoutManager manager = new GridLayoutManager(mContext, 1);
-                manager.setOrientation(GridLayoutManager.VERTICAL);
-                AnswerTableAdapter adapter = new AnswerTableAdapter(mContext, mTextDetial);
-                mRlvAnswerResultBag.setLayoutManager(manager);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 6);
+                gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+                AnswerTableResultAdapter adapter = new AnswerTableResultAdapter(mContext, mTextDetial);
+                mRlvAnswerResultBag.setLayoutManager(gridLayoutManager);
                 mRlvAnswerResultBag.setAdapter(adapter);
+                adapter.setClickListener(new AnswerTableResultAdapter.onItemClickListener() {
+                    @Override
+                    public void onClickListener(Object obj, int position) {
+                        QuestionListVo.DatasBean bean = (QuestionListVo.DatasBean) obj;
+                        clearbg();
+                        mMark = position;
+                        popResult.getPopupWindow().dismiss();
+                        bindTextNumberData();
+                    }
+                });
             }
 
             @Override
@@ -1921,19 +2001,21 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void TextSuccess(String msg) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
         ResolveQuestionData(msg);
     }
 
     private void ResolveQuestionData(String msg) {
-        L.e("TextSuccess");
         Gson gson = new Gson();
-        TitleNumberVo vo = gson.fromJson(msg, TitleNumberVo.class);
+        QuestionListVo vo = gson.fromJson(msg, QuestionListVo.class);
         if (vo.getStatus().getCode() == 200) {
             mRlRootLayout.setVisibility(View.VISIBLE);
             if (vo.getDatas() == null || vo.getDatas().size() == 0) {
                 mSlvRootShow.setVisibility(View.GONE);
                 dialog.dismiss();
-                T.showToast(mContext, "该文章没有练习题，请重新选择");
+//                T.showToast(mContext, "该文章没有练习题，请重新选择");
                 mTvRootEmpty.setVisibility(View.VISIBLE);
                 return;
             } else {
@@ -1951,6 +2033,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void TextError(String con) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
         T.showToast(mContext, con);
     }
 
@@ -1971,6 +2056,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void TextDetailError(String con) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
         T.showToast(mContext, con);
     }
 
@@ -2016,7 +2104,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (!isSubmit) {
             SharedSeletResultListUtil.getInstance().DeleteUser();
         }
-        EventBus.getDefault().unregister(this);
     }
 
 
@@ -2141,12 +2228,31 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void QuestionIdAllSuccess(String con) {
         Log.e("yfl", "QuestionIdAllSuccess: " + con);
+
         ResolveQuestionData(con);
     }
 
     @Override
     public void QuestionIdAllError(String con) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
         Log.e("yfl", "QuestionIdAllError: " + con);
+    }
+
+    //专项
+    @Override
+    public void SuccessSpecatilDetail(String con) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        L.e("yfl", con + "SuccessSpecatilDetail");
+        ResolveQuestionData(con);
+    }
+
+    @Override
+    public void ErrorSpecatilDetail(String con) {
+        L.e("yfl", con + "ErrorSpecatilDetail");
     }
 
     /**

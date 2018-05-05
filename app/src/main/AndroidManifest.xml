@@ -151,7 +151,8 @@
         <activity
             android:name=".ui.bank.AnswerResultActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".ui.bank.SpecialListActivity"></activity>
+        <activity android:name=".ui.bank.SpecialListActivity" />
+        <activity android:name=".ui.bank.FreeQuestionActivity"></activity>
     </application>
 
 </manifest>

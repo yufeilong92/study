@@ -11,13 +11,13 @@ package com.xuechuan.xcedu.vo;
  * @Copyright: 2018
  */
 public class ShunXuEvent {
-   private TitleNumberVo vo;
+   private QuestionListVo vo;
 
-    public ShunXuEvent(TitleNumberVo vo) {
+    public ShunXuEvent(QuestionListVo vo) {
         this.vo = vo;
     }
 
-    public TitleNumberVo getVo() {
+    public QuestionListVo getVo() {
         return vo;
     }
 }

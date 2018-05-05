@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
-import com.xuechuan.xcedu.vo.TitleNumberVo;
+import com.xuechuan.xcedu.vo.QuestionListVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 
 import java.util.ArrayList;
@@ -30,11 +30,12 @@ import java.util.List;
 public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private List<TitleNumberVo.DatasBean> mData;
+    private List<QuestionListVo.DatasBean> mData;
     private final LayoutInflater mInflater;
     private onItemClickListener clickListener;
     private int selectItem = -1;
     private ArrayList<Integer> mSelectList = new ArrayList<Integer>();
+    private boolean isSubmit = false;
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
@@ -44,14 +45,15 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
         this.clickListener = clickListener;
     }
 
-    public AnswerTableAdapter(Context mContext, List<TitleNumberVo.DatasBean> mData) {
+    public AnswerTableAdapter(Context mContext, List<QuestionListVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
     }
 
-    public void setItemSelect(int postion) {
+    public void setItemSelect(boolean isSubmit, int postion) {
         this.selectItem = postion;
+        this.isSubmit = isSubmit;
         notifyDataSetChanged();
     }
 
@@ -68,22 +70,50 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        TitleNumberVo.DatasBean bean = mData.get(position);
+        QuestionListVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
         holder.mTvPopAnswerSelect.setText((position + 1) + "");
-        if (selectItem == position) {//显示当前题
+        if (isSubmit) {//提交
+            String id = String.valueOf(bean.getId());
+            for (int i = 0; i < user.size(); i++) {
+                UseSelectItemInfomVo vo = user.get(i);
+//            判断是否做过
+                if (id.equalsIgnoreCase(String.valueOf(vo.getId()))) {//做过
+                    String status = vo.getItemStatus();
+                    if (status.equals("0")) {//正确
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
+                    } else if (status.equals("1")) {//错误
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.btn_answer_bg_error);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.red_text));
+                    } else if (status.equals("2")) {
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_miss);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_miss_color));
+                    } else {
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                    }
+                    break;
+                } else {//没有
+                    holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+                    holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                }
+            }
+
+        } else {//未提交
+            if (selectItem == position) {//显示当前题
                 holder.mTvPopAnswerSelect.setBackgroundColor(mContext.getResources().getColor(R.color.black));
                 holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.white));
-        } else {
-            setBg(holder, bean, user);
+            } else {
+                setBg(holder, bean, user);
+            }
         }
-
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
 
     }
 
-    private void setBg(@NonNull ViewHolder holder, TitleNumberVo.DatasBean bean, List<UseSelectItemInfomVo> user) {
+    private void setBg(@NonNull ViewHolder holder, QuestionListVo.DatasBean bean, List<UseSelectItemInfomVo> user) {
         String id = String.valueOf(bean.getId());
         for (int i = 0; i < user.size(); i++) {
             UseSelectItemInfomVo vo = user.get(i);
