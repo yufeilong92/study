@@ -179,22 +179,6 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     public void ErrorOrCollortNumberError(String con) {
 
     }
-    @Override
-    public void QuestionIdAllSuccess(String con) {
-        Log.e("yfl", "QuestionIdAllSuccess: " + con);
-
-        Gson gson = new Gson();
-        TitleNumberVo vo = gson.fromJson(con, TitleNumberVo.class);
-        if (vo.getStatus().getCode() == 200) {
 
 
-        } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
-        }
-    }
-
-    @Override
-    public void QuestionIdAllError(String con) {
-
-    }
 }
