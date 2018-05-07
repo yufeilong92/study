@@ -249,7 +249,15 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getErrOrCollNumber(mContext, mTypeOid);
+    }
+
+    @Override
     public void BuyError(String con) {
         L.e(con);
     }
+
+
 }
