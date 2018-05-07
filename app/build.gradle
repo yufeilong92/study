@@ -86,4 +86,5 @@ dependencies {
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation project(':MultilevelTreeLibrary')
     implementation project(':htmlSpanner')
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }

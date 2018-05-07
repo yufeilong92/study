@@ -45,4 +45,26 @@ public class DialogUtil {
         return builder.show();
     }
 
+/*    public static  AlertDialog showDialog(Context context,String cont,String btnback,String btnnnet){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_show_dialog, null);
+        TextView tv_msg = view.findViewById(R.id.tv_msg);
+        TextView tv_title = view.findViewById(R.id.tv_dialog_title);
+
+        if (!StringUtil.isEmpty(titel)) {
+            tv_title.setVisibility(View.VISIBLE);
+            tv_title.setText(titel);
+        } else {
+            tv_title.setVisibility(View.GONE);
+        }
+        tv_msg.setText(cont);
+        builder.setView(view)
+                .setCancelable(false)
+                .create();
+        return builder.show();
+
+    }*/
+
+
+
 }

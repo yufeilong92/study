@@ -1282,7 +1282,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param isRight
      */
     private void submitQuestionResult(boolean isRight) {
-        if (!isExam)
+        if (isExam)
             mPresnter.submitDoRecord(mContext, String.valueOf(mResultData.getId()), isRight);
     }
 
@@ -2137,12 +2137,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void SumbitCollectSuccess(String con) {
-        L.e("yfl提交" + con);
+        L.e("收藏" + con);
     }
 
     @Override
     public void SumbitCollectError(String con) {
-        L.e("yfl提交" + con);
+        L.e("收藏" + con);
     }
 
     @Override

@@ -73,7 +73,7 @@ public class BaseHttpServcie {
     }
 
     protected void requestHttpServciePost(Context context, final String url, final JSONObject params, boolean isWithToken, final StringCallBackView callBackView) {
-        UserBean user = null;
+       UserBean user = null;
         if (isWithToken) {
             UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
             if (vo == null) {
@@ -88,11 +88,11 @@ public class BaseHttpServcie {
         addParams(context, params);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
         HttpInfomVo infomVo = getInfomData();
-        String token = null;
+
         String signature = null;
         if (isWithToken) {
             infomVo.setStaffid(String.valueOf(user.getId()));
-            infomVo.setToken(token);
+            infomVo.setToken(user.getToken());
             StringSort sort = new StringSort();
             signature = sort.getOrderMd5Data(params);
         } else {
@@ -206,6 +206,7 @@ public class BaseHttpServcie {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
+
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>post(url)
