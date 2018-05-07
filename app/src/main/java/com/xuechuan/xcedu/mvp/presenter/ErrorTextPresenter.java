@@ -26,7 +26,7 @@ public class ErrorTextPresenter {
         this.view = view;
     }
 
-    /**
+    /**请求错题数
      * @param context
      * @param courseid
      * @param tagtype
@@ -47,4 +47,6 @@ public class ErrorTextPresenter {
             }
         });
     }
+
+
 }

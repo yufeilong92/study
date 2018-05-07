@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
-import com.xuechuan.xcedu.vo.QuestionListVo;
+import com.xuechuan.xcedu.vo.QuestionAllVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
 public class AnswerTableResultAdapter extends RecyclerView.Adapter<AnswerTableResultAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private List<QuestionListVo.DatasBean> mData;
+    private List<QuestionAllVo.DatasBean> mData;
     private final LayoutInflater mInflater;
     private onItemClickListener clickListener;
     private int submit;
@@ -45,7 +45,7 @@ public class AnswerTableResultAdapter extends RecyclerView.Adapter<AnswerTableRe
         this.clickListener = clickListener;
     }
 
-    public AnswerTableResultAdapter(Context mContext, List<QuestionListVo.DatasBean> mData) {
+    public AnswerTableResultAdapter(Context mContext, List<QuestionAllVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
@@ -63,7 +63,7 @@ public class AnswerTableResultAdapter extends RecyclerView.Adapter<AnswerTableRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        QuestionListVo.DatasBean bean = mData.get(position);
+        QuestionAllVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
         holder.mTvPopAnswerSelect.setText((position + 1) + "");
         String id = String.valueOf(bean.getId());

@@ -15,7 +15,6 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
  * @Copyright: 2018
  */
 public interface AnswerModel {
-    public void getEvalueContent(Context context, String questionId,int page,RequestResulteView  view);
     public void getTextContent(Context context, String id, RequestResulteView  view);
     public void getTextDetailContent(Context context,String id,RequestResulteView view);
     public void SubmitCollectContent(Context context,boolean isFav, String id,RequestResulteView view);

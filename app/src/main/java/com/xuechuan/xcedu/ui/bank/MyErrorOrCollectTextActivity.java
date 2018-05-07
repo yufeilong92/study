@@ -156,7 +156,6 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
         if (mDialog != null) {
             mDialog.dismiss();
         }
-        L.e(con);
     }
 
     private void initView() {

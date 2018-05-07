@@ -54,6 +54,13 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
     private String mArticleid;
     private String mCommentid;
 
+    /**
+     *
+     * @param context
+     * @param articleid
+     * @param commentid
+     * @return
+     */
     public static Intent newInstance(Context context, String articleid, String commentid) {
         Intent intent = new Intent(context, EvalueDetialActivity.class);
         intent.putExtra(ARTICLEID, articleid);
@@ -70,9 +77,14 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         }
         initView();
         clearData();
+        initData();
         initAdapter();
         initRxfresh();
         mXfvEvauleContent.startRefresh();
+    }
+
+    private void initData() {
+
     }
 
     private void initAdapter() {

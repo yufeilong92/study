@@ -14,13 +14,13 @@ import java.util.List;
  */
 public class AnswerResultEvent {
 
-    private List<QuestionListVo.DatasBean> mTextDetial;
+    private List<QuestionAllVo.DatasBean> mTextDetial;
 
-    public AnswerResultEvent(List<QuestionListVo.DatasBean> mTextDetial) {
+    public AnswerResultEvent(List<QuestionAllVo.DatasBean> mTextDetial) {
         this.mTextDetial = mTextDetial;
     }
 
-    public List<QuestionListVo.DatasBean> getmTextDetial() {
+    public List<QuestionAllVo.DatasBean> getmTextDetial() {
         return mTextDetial;
     }
 }

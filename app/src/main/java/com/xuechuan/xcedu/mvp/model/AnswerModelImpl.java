@@ -19,28 +19,6 @@ import com.xuechuan.xcedu.utils.L;
  * @Copyright: 2018
  */
 public class AnswerModelImpl implements AnswerModel {
-    /**
-     * 获取评论
-     * @param context
-     * @param questionId
-     * @param page
-     * @param view
-     */
-    @Override
-    public void getEvalueContent(Context context, String questionId, int page, final RequestResulteView view) {
-        BankService service = new BankService(context);
-        service.reqiestQuestionCmment(questionId, page, new StringCallBackView() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                view.success(response.body().toString());
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-                view.error(response.message());
-            }
-        });
-    }
 
     /**
      * 获取章节下所有练习题库题号

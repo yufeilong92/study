@@ -23,6 +23,7 @@ import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
+import com.xuechuan.xcedu.ui.bank.FreeQuestionActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
@@ -188,12 +189,14 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 startActivity(intent3);
                 break;
             case R.id.tv_b_free://自由
+                Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
+                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR,"自由组卷");
+                startActivity(intent6);
                 break;
             case R.id.tv_b_special://专项
                 Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
                 intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
                 startActivity(intent4);
-
                 break;
             case R.id.tv_b_turn://顺序
                 Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);

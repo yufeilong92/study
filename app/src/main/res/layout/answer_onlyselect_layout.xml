@@ -346,4 +346,9 @@
             android:textColor="@color/text_home_title"
             android:textSize="@dimen/text_size_14" />
     </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
+        android:id="@+id/rlv_euale_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

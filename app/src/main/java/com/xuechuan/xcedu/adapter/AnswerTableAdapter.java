@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
-import com.xuechuan.xcedu.vo.QuestionListVo;
+import com.xuechuan.xcedu.vo.QuestionAllVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
 public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private List<QuestionListVo.DatasBean> mData;
+    private List<QuestionAllVo.DatasBean> mData;
     private final LayoutInflater mInflater;
     private onItemClickListener clickListener;
     private int selectItem = -1;
@@ -45,7 +45,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
         this.clickListener = clickListener;
     }
 
-    public AnswerTableAdapter(Context mContext, List<QuestionListVo.DatasBean> mData) {
+    public AnswerTableAdapter(Context mContext, List<QuestionAllVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
@@ -70,7 +70,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        QuestionListVo.DatasBean bean = mData.get(position);
+        QuestionAllVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
         holder.mTvPopAnswerSelect.setText((position + 1) + "");
         if (isSubmit) {//提交
@@ -113,7 +113,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
 
     }
 
-    private void setBg(@NonNull ViewHolder holder, QuestionListVo.DatasBean bean, List<UseSelectItemInfomVo> user) {
+    private void setBg(@NonNull ViewHolder holder, QuestionAllVo.DatasBean bean, List<UseSelectItemInfomVo> user) {
         String id = String.valueOf(bean.getId());
         for (int i = 0; i < user.size(); i++) {
             UseSelectItemInfomVo vo = user.get(i);

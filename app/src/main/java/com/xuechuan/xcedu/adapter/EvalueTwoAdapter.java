@@ -30,7 +30,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class EvaluateTwoAdapter extends BaseRecyclerAdapter<EvaluateTwoAdapter.ViewHolder> implements View.OnClickListener {
+public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewHolder> implements View.OnClickListener {
     private Context mContext;
     private List<EvalueVo.DatasBean> mData;
     private final LayoutInflater mInflater;
@@ -46,7 +46,7 @@ public class EvaluateTwoAdapter extends BaseRecyclerAdapter<EvaluateTwoAdapter.V
         this.clickListener = clickListener;
     }
 
-    public EvaluateTwoAdapter(Context mContext, List<EvalueVo.DatasBean> mData) {
+    public EvalueTwoAdapter(Context mContext, List<EvalueVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);

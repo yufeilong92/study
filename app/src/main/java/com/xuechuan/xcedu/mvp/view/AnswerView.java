@@ -11,20 +11,6 @@ package com.xuechuan.xcedu.mvp.view;
  * @Copyright: 2018
  */
 public interface AnswerView {
-    /**
-     * 评价成功
-     *
-     * @param con
-     */
-    public void EvalueSuccess(String con);
-
-    /**
-     * 评价错误
-     *
-     * @param error
-     */
-    public void EvalueError(String error);
-
     public void TextSuccess(String con);
 
     public void TextError(String con);

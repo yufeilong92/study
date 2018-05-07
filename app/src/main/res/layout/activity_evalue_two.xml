@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".ui.EvalueTwoActivity">
 
     <LinearLayout style="@style/TitleBar">
@@ -75,5 +76,13 @@
                 android:layout_gravity="center_vertical"
                 android:background="@mipmap/ic_send" />
         </LinearLayout>
+        <TextView
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="评价内容为空"
+            android:id="@+id/tv_evalue_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </RelativeLayout>
+
 </LinearLayout>

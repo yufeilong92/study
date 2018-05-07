@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="用户名字"
-                android:textColor="@color/black"
+                android:textColor="@color/text_title_color"
                 android:textSize="@dimen/text_size_14" />
 
             <Space style="@style/space_16_height" />
@@ -41,7 +41,6 @@
                 android:ellipsize="end"
                 android:lines="2"
                 android:maxLines="2"
-                android:textColor="@color/text_title_color"
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
             <Space style="@style/space_16_height" />
@@ -64,7 +63,6 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_comment"
                     android:drawablePadding="@dimen/space_8"
-                    android:textColor="@color/text_fu_color"
                     android:text="评论" />
 
                 <Space style="@style/space_16_width" />
@@ -73,14 +71,12 @@
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_fu_color"
                     android:background="@drawable/select_issupper_home"
                     android:button="@null" />
 
                 <Space style="@style/space_8_width" />
 
                 <TextView
-                    android:textColor="@color/text_fu_color"
                     android:id="@+id/tv_evalue_suppernumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,8 +84,9 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
     <View
+        android:id="@+id/v_line_hear"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_10"
         android:background="@color/input_bg" />

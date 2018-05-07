@@ -32,32 +32,6 @@ public class AnswerPresenter {
     }
 
     /**
-     * 评价
-     *
-     * @param context
-     * @param questionid
-     */
-    public void getEvaluateCotent(Context context, String questionid, int page) {
-        if (StringUtil.isEmpty(questionid)) {
-            return;
-        }
-
-
-        model.getEvalueContent(context, questionid, page, new RequestResulteView() {
-            @Override
-            public void success(String result) {
-                view.EvalueSuccess(result);
-            }
-
-            @Override
-            public void error(String result) {
-                view.EvalueError(result);
-            }
-        });
-
-    }
-
-    /**
      * 题干
      *
      * @param context
@@ -122,7 +96,7 @@ public class AnswerPresenter {
 
             @Override
             public void error(String result) {
-                view.SumbitCollectSuccess(result);
+                view.SumbitCollectError(result);
             }
         });
 

@@ -12,9 +12,10 @@
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
-            android:id="@+id/ic_pop_result"
+            android:onClick="onHomeClick"
             style="@style/TitleBarAction"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/ic_back"
+            tools:ignore="OnClick" />
 
         <TextView
             style="@style/TitleBarText"
@@ -131,6 +132,7 @@
             </RadioGroup>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_48"
                 android:gravity="center_vertical"
@@ -138,11 +140,28 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rlv_free_title"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rlv_free_title"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/space_74"
+                    android:layout_height="match_parent"/>
+
+                <Button
+                    android:textColor="@color/white"
+                    android:id="@+id/btn_create_question"
+                    android:text="生成组卷"
+                    android:background="@drawable/btn_free_createqution_bg_s"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/space_16"
+                    android:layout_height="@dimen/space_48" />
+            </RelativeLayout>
+
 
         </LinearLayout>
     </com.xuechuan.xcedu.weight.SmartScrollView>

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,9 +37,21 @@ public class FreeQuestionAdapter extends TreeRecyclerAdapter {
     }
 
     @Override
-    public void onBindViewHolder(Node node, RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final Node node, RecyclerView.ViewHolder holder, int position) {
 
-        FreeViewHolder holder1 = (FreeViewHolder) holder;
+        final FreeViewHolder holder1 = (FreeViewHolder) holder;
+        holder1.mChbFreeQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setChecked(node,holder1.mChbFreeQuestion.isChecked());
+            }
+        });
+        if (node.isChecked()){
+           holder1.mChbFreeQuestion.setChecked(true);
+        }else {
+           holder1.mChbFreeQuestion.setChecked(false);
+        }
+        holder1.mTvFreeTitle.setText(node.getName());
 
 
     }

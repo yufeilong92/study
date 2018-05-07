@@ -13,7 +13,13 @@ package com.xuechuan.xcedu.mvp.view;
 public interface EvalueView  {
     public void submitEvalueSuccess(String con);
     public void submitEvalueError(String con);
-    public void GetEvalueSuccess(String con);
-    public void GetEvalueError(String con);
+    public void GetTwoEvalueSuccess(String con);
+    public void GetTwoEvalueError(String con);
+    public void GetTwoMoreEvalueSuccess(String con);
+    public void GetTwoMoreEvalueError(String con);
+    public void GetOneEvalueSuccess(String con);
+    public void GetOneEvalueError(String con);
+    public void GetOneMoreEvalueSuccess(String con);
+    public void GetOneMoreEvalueError(String con);
 
 }

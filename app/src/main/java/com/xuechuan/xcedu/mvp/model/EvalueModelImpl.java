@@ -38,9 +38,9 @@ public class EvalueModelImpl implements EvalueModel {
     }
 
     @Override
-    public void reqeustEvalueContent(Context context, String questionid, String commentid, final RequestResulteView view) {
+    public void reqeustTwoEvalueContent(Context context,int page, String questionid, String commentid, final RequestResulteView view) {
         BankService bankService = new BankService(context);
-        bankService.requestCommentComment(questionid, commentid, new StringCallBackView() {
+        bankService.requestCommentComment(page,questionid, commentid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 view.success(response.body().toString());
@@ -51,6 +51,23 @@ public class EvalueModelImpl implements EvalueModel {
                 view.error(response.message());
             }
         });
+    }
+
+    @Override
+    public void reqeustOneEvalueContent(Context context, int page, String questionid, final RequestResulteView view) {
+        BankService service = new BankService(context);
+        service.reqiestQuestionCmment(questionid, page, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                 view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                 view.error(response.message());
+            }
+        });
+
     }
 
 }

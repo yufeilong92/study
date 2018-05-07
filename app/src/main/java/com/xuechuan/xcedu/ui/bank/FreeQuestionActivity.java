@@ -4,28 +4,40 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
 import com.multilevel.treelist.Node;
+import com.umeng.debug.log.E;
+import com.xuechuan.xcedu.Event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.AtricleTreeAdapter;
+import com.xuechuan.xcedu.adapter.FreeQuestionAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.mvp.model.QuestionListModelImpl;
+import com.xuechuan.xcedu.mvp.model.AllQuestionModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.AllQuestionPresenter;
 import com.xuechuan.xcedu.mvp.presenter.QuestionListPresenter;
+import com.xuechuan.xcedu.mvp.view.AllQuestionView;
 import com.xuechuan.xcedu.mvp.view.QuestionListView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.ChildrenBeanVo;
+import com.xuechuan.xcedu.vo.QuestionAllVo;
 import com.xuechuan.xcedu.vo.SkillTextVo;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -37,7 +49,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/5
  */
-public class FreeQuestionActivity extends BaseActivity implements QuestionListView {
+public class FreeQuestionActivity extends BaseActivity implements View.OnClickListener, AllQuestionView {
 
     private ImageView mIcPopResult;
     private RadioGroup mRgQuestionNumber;
@@ -51,22 +63,75 @@ public class FreeQuestionActivity extends BaseActivity implements QuestionListVi
     private String mCourseid;
     //    数据接口
     private ArrayList<Node> mNodeLists;
+    private Button mBtnCreateQuestion;
+    /**
+     * 自由组卷数量
+     */
+    private String mPaperNumber = null;
+    /**
+     * 自由组卷难度
+     */
+    private int mPaperGrader = -1;
+    private final String TWENTY = "20";
+    private final String FIFTY = "50";
+    private final String HUNDRED = "100";
+    private final int EASY = 1;//容易
+    private final int MEDIUM = 2; //中等
+    private final int DIFFICULTY = 3;//困难
+    /**
+     * 简单
+     */
+    private List<QuestionAllVo.DatasBean> mEasy = null;
+    /**
+     * 中等
+     */
+    private List<QuestionAllVo.DatasBean> mMedium = null;
+    /**
+     * 困难
+     */
+    private List<QuestionAllVo.DatasBean> mDifficulty = null;
+    /**
+     * 简单 单选
+     */
+    private List<QuestionAllVo.DatasBean> mEasyOnly = null;
+    /**
+     * 简单 多选
+     */
+    private List<QuestionAllVo.DatasBean> mEasyMore = null;
+    /**
+     * 中等 单选
+     */
+    private List<QuestionAllVo.DatasBean> mMediumOnly = null;
+    /**
+     * 中等 多选
+     */
+    private List<QuestionAllVo.DatasBean> mMediumMore = null;
+    /**
+     * 困难 单选
+     */
+    private List<QuestionAllVo.DatasBean> mDifficultyOnly = null;
+    /**
+     * 困难 多选
+     */
+    private List<QuestionAllVo.DatasBean> mDifficultyMore = null;
 
-/*
-    @Override
+
+/*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_free_question);
         initView();
         initData();
 
-    }
-*/
+    }*/
+
     /**
      * 科目
      */
     private static String COURSEID = "courseid";
     private AlertDialog mDialog;
+    private AllQuestionPresenter mAllQuestionPresenter;
+
 
     public static Intent newInstance(Context context, String courseid) {
         Intent intent = new Intent(context, FreeQuestionActivity.class);
@@ -85,10 +150,49 @@ public class FreeQuestionActivity extends BaseActivity implements QuestionListVi
     }
 
     private void initData() {
-        mListPresenter = new QuestionListPresenter(new QuestionListModelImpl(), this);
-        if (!StringUtil.isEmpty(mCourseid))
-            mListPresenter.requestQuetionList(mContext, mCourseid);
+        if (!StringUtil.isEmpty(mCourseid)) {
+            mAllQuestionPresenter = new AllQuestionPresenter(new AllQuestionModelImpl(), this);
+            mAllQuestionPresenter.getcoursequestionid(mContext, mCourseid);
+        }
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+        mRgQuestionNumber.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case 1:
+                        mPaperNumber = TWENTY;
+
+                        break;
+                    case 2:
+                        mPaperNumber = FIFTY;
+                        break;
+                    case 3:
+                        mPaperNumber = HUNDRED;
+                        break;
+                    default:
+
+                }
+            }
+        });
+        mRgDifficultyGrade.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case 4:
+                        mPaperGrader = EASY;
+                        break;
+                    case 5:
+                        mPaperGrader = MEDIUM;
+                        break;
+                    case 6:
+                        mPaperGrader = DIFFICULTY;
+                        break;
+                    default:
+
+                }
+            }
+        });
+
     }
 
     private void initView() {
@@ -97,41 +201,228 @@ public class FreeQuestionActivity extends BaseActivity implements QuestionListVi
         mRgQuestionNumber = (RadioGroup) findViewById(R.id.rg_question_number);
         mRgDifficultyGrade = (RadioGroup) findViewById(R.id.rg_difficulty_grade);
         mRlvFreeTitle = (RecyclerView) findViewById(R.id.rlv_free_title);
+        mBtnCreateQuestion = (Button) findViewById(R.id.btn_create_question);
+        mBtnCreateQuestion.setOnClickListener(this);
+    }
+
+
+    private void clearData() {
+        if (mEasy == null) {
+            mEasy = new ArrayList<>();
+        } else {
+            mEasy.clear();
+        }
+        if (mMedium == null) {
+            mMedium = new ArrayList<>();
+        } else {
+            mMedium.clear();
+        }
+        if (mDifficulty == null) {
+            mDifficulty = new ArrayList<>();
+        } else {
+            mDifficulty.clear();
+        }
+        if (mEasyOnly == null) {
+            mEasyOnly = new ArrayList<>();
+        } else {
+            mEasyOnly.clear();
+        }
+        if (mMediumOnly == null) {
+            mMediumOnly = new ArrayList<>();
+        } else {
+            mMediumOnly.clear();
+        }
+        if (mDifficultyOnly == null) {
+            mDifficultyOnly = new ArrayList<>();
+        } else {
+            mDifficultyOnly.clear();
+        }
+        if (mEasyMore == null) {
+            mEasyMore = new ArrayList<>();
+        } else {
+            mEasyMore.clear();
+        }
+        if (mMediumMore == null) {
+            mMediumMore = new ArrayList<>();
+        } else {
+            mMediumMore.clear();
+        }
+        if (mDifficultyMore == null) {
+            mDifficultyMore = new ArrayList<>();
+        } else {
+            mDifficultyMore.clear();
+        }
+
+
     }
 
     @Override
-    public void QuestionListSuccess(String con) {
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_create_question:
+                createrQuestion();
+                break;
+        }
+    }
+
+    @Override
+    public void QuestionIdAllSuccess(String con) {
         if (mDialog != null) {
             mDialog.dismiss();
         }
         Gson gson = new Gson();
-        SkillTextVo vo = gson.fromJson(con, SkillTextVo.class);
+        clearData();
+        QuestionAllVo vo = gson.fromJson(con, QuestionAllVo.class);
         if (vo.getStatus().getCode() == 200) {
-            addListData(vo.getDatas());
+            List<QuestionAllVo.DatasBean> mQuestionAlldatas = vo.getDatas();
+            outLinePager(mQuestionAlldatas);
+
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
 
     }
 
-    private void bindAdapterData(List<ChildrenBeanVo> vos) {
-        AtricleTreeAdapter treeAdapter = new AtricleTreeAdapter(mRlvFreeTitle, mContext, mNodeLists
-                , 0);
+    /**
+     * 分级
+     *
+     * @param mQuestionAlldatas
+     */
+    private void outLinePager(List<QuestionAllVo.DatasBean> mQuestionAlldatas) {
+        for (int i = 0; i < mQuestionAlldatas.size(); i++) {
+            QuestionAllVo.DatasBean bean = mQuestionAlldatas.get(i);
+            int difficultydegree = bean.getDifficultydegree();
+            if (difficultydegree == 1)//容易
+            {
+                mEasy.add(bean);
+            } else if (difficultydegree == 2 || difficultydegree == 3) {
+                mMedium.add(bean);
+            } else if (difficultydegree == 4 || difficultydegree == 5) {
+                mDifficulty.add(bean);
+            }
+        }
+        for (int i = 0; i < mEasy.size(); i++) {
+            QuestionAllVo.DatasBean bean = mEasy.get(i);
+            switch (bean.getType()) {
+                case 2://单选
+                    mEasyOnly.add(bean);
+                    break;
+                case 3://多选
+                    mEasyMore.add(bean);
+                    break;
+                default:
+
+            }
+        }
+        for (int i = 0; i < mMedium.size(); i++) {
+            QuestionAllVo.DatasBean bean = mMedium.get(i);
+            switch (bean.getType()) {
+                case 2://单选
+                    mMediumOnly.add(bean);
+                    break;
+                case 3://多选
+                    mMediumMore.add(bean);
+                    break;
+                default:
+
+            }
+        }
+        for (int i = 0; i < mDifficulty.size(); i++) {
+            QuestionAllVo.DatasBean bean = mDifficulty.get(i);
+            switch (bean.getType()) {
+                case 2://单选
+                    mDifficultyOnly.add(bean);
+                    break;
+                case 3://多选
+                    mDifficultyMore.add(bean);
+                    break;
+                default:
+
+            }
+        }
+
 
     }
 
-    private void addListData(List<SkillTextVo.DatasBean> datas) {
-        for (int i = 0; i < datas.size(); i++) {
-            SkillTextVo.DatasBean bean = datas.get(i);
-            mNodeLists.add(new Node(bean.getId(), bean.getParentid(), bean.getTitle(), bean));
+    private void createrQuestion() {
+        List<QuestionAllVo.DatasBean> overList = null;
+        if (StringUtil.isEmpty(mPaperNumber)) {
+            T.showToast(mContext, "请选择试题数量");
+            return;
         }
+        if (mPaperGrader == -1) {
+            T.showToast(mContext, "请选择试题难度");
+            return;
+        }
+        if (mPaperGrader == EASY) {//容易
+            if (mPaperNumber.equals(TWENTY)) {//20
+                overList = getPagerData(mEasyOnly, mEasyMore, 16, 4);
+            } else if (mPaperNumber.equals(FIFTY)) {//50
+                overList = getPagerData(mEasyOnly, mEasyMore, 40, 10);
+            } else if (mPaperNumber.equals(HUNDRED)) {//100
+                overList = getPagerData(mEasyOnly, mEasyMore, 80, 20);
+            }
+
+        }
+        if (mPaperGrader == MEDIUM) {//中等
+            if (mPaperNumber.equals(TWENTY)) {//20
+                overList = getPagerData(mMediumOnly, mMediumMore, 16, 4);
+            } else if (mPaperNumber.equals(FIFTY)) {//50
+                overList = getPagerData(mMediumOnly, mMediumMore, 40, 10);
+            } else if (mPaperNumber.equals(HUNDRED)) {//100
+                overList = getPagerData(mMediumOnly, mMediumMore, 80, 20);
+
+            }
+        }
+        if (mPaperGrader == DIFFICULTY) {//困难
+            if (mPaperNumber.equals(TWENTY)) {//20
+                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 16, 4);
+            } else if (mPaperNumber.equals(FIFTY)) {//50
+                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 40, 10);
+            } else if (mPaperNumber.equals(HUNDRED)) {//100
+                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 80, 20);
+            }
+        }
+        L.e(overList.size() + "传递的数据个数");
+        EventBus.getDefault().postSticky(new FreeDataEvent(overList));
+        Intent intent = new Intent(mContext, AnswerActivity.class);
+        startActivity(intent);
+
+
+    }
+
+    /**
+     * 合并数据
+     *
+     * @param onlyData 单选数据
+     * @param moreData 多选数据
+     * @param only     单选抽取数量
+     * @param more     多选抽取数量
+     * @return
+     */
+    private List<QuestionAllVo.DatasBean> getPagerData(List<QuestionAllVo.DatasBean> onlyData, List<QuestionAllVo.DatasBean> moreData, int only, int more) {
+        List<QuestionAllVo.DatasBean> dataContent = new ArrayList<>();
+        //单选
+        Collections.shuffle(onlyData);
+        for (int i = 0; i < only; i++) {
+            QuestionAllVo.DatasBean datasBean = onlyData.get(i);
+            dataContent.add(datasBean);
+        }
+        //多选
+        Collections.shuffle(moreData);
+        for (int i = 0; i < more; i++) {
+            QuestionAllVo.DatasBean bean = moreData.get(i);
+            dataContent.add(bean);
+        }
+        return dataContent;
     }
 
     @Override
-    public void QuestionListError(String con) {
+    public void QuestionIdAllError(String con) {
         if (mDialog != null) {
             mDialog.dismiss();
         }
-        L.e(con);
+
     }
+
 }

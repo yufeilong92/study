@@ -60,11 +60,12 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
     }
 
     /**
-     *设置背景
+     * 设置背景
+     *
      * @param id
      */
     public void setBGLayout(String id) {
-        this.mSelectType=id;
+        this.mSelectType = id;
         notifyDataSetChanged();
     }
 
@@ -85,14 +86,31 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         EvalueVo.DatasBean bean = mData.get(position);
-        if (mSelectType.equals(AnswerActivity.mSelectViewBgYJ)){//夜间
-            holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
-
-        }else if (mSelectType.equals(AnswerActivity.mSelectViewBgHY)){//护眼
-
-        }else {//正常
-
+        if (!StringUtil.isEmpty(mSelectType)) {
+            if (mSelectType.equals(AnswerActivity.mSelectViewBgYJ)) {//夜间
+                holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
+                holder.mTvEvalueUserName.setTextColor(getLayoutColor(R.color.night_text_color));
+                holder.mTvEvalueContent.setTextColor(getLayoutColor(R.color.night_text_color));
+                holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.night_text_color));
+                holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.night_text_color));
+                holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.night_text_color));
+            } else if (mSelectType.equals(AnswerActivity.mSelectViewBgHY)) {//护眼
+                holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
+                holder.mTvEvalueUserName.setTextColor(getLayoutColor(R.color.black));
+                holder.mTvEvalueContent.setTextColor(getLayoutColor(R.color.text_title_color));
+                holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.text_fu_color));
+                holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.text_fu_color));
+                holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.text_fu_color));
+            } else {//正常
+                holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.white));
+                holder.mTvEvalueUserName.setTextColor(getLayoutColor(R.color.black));
+                holder.mTvEvalueContent.setTextColor(getLayoutColor(R.color.text_title_color));
+                holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.text_fu_color));
+                holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.text_fu_color));
+                holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.text_fu_color));
+            }
         }
+
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
             holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
@@ -125,8 +143,9 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
             clickListener.onClickListener(v.getTag(), v.getId());
         }
     }
-    private int  getLayoutColor(int id){
-      return mContext.getResources().getColor(id);
+
+    private int getLayoutColor(int id) {
+        return mContext.getResources().getColor(id);
     }
 
 

@@ -265,7 +265,7 @@ public class BankService extends BaseHttpServcie {
      * @param commentid    评论编号
      * @param callBackView
      */
-    public void requestCommentComment(String questionid, String commentid, StringCallBackView callBackView) {
+    public void requestCommentComment(int page, String questionid, String commentid, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -282,8 +282,17 @@ public class BankService extends BaseHttpServcie {
         listParamVo.add(paramVo1);
         GetParamVo paramVo2 = getParamVo();
         paramVo2.setParam("staffid");
+
         paramVo2.setValue(String.valueOf(user.getId()));
         listParamVo.add(paramVo2);
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("page");
+        paramVo3.setValue(String.valueOf(page));
+        GetParamVo paramVo4 = getParamVo();
+        paramVo4.setParam("pagesize");
+        paramVo4.setValue("10");
+        listParamVo.add(paramVo3);
+        listParamVo.add(paramVo4);
         String url = getUrl(mContext, R.string.http_commentcomment);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
@@ -364,12 +373,12 @@ public class BankService extends BaseHttpServcie {
 
     /**
      * 提交收藏
-     * @param isfav true 收藏 false 取消
-     * @param targetid 练习题编号
-
+     *
+     * @param isfav        true 收藏 false 取消
+     * @param targetid     练习题编号
      * @param callBackView
      */
-    public void subimtfavpost( String targetid, boolean isfav, StringCallBackView callBackView) {
+    public void subimtfavpost(String targetid, boolean isfav, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -377,25 +386,25 @@ public class BankService extends BaseHttpServcie {
         UserBean user = login.getData().getUser();
         JSONObject obj = getJsonObj();
         try {
-            obj.put("staffid",user.getId());
-            obj.put("targetid",targetid);
-            obj.put("isfav",isfav);
+            obj.put("staffid", user.getId());
+            obj.put("targetid", targetid);
+            obj.put("isfav", isfav);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String url = getUrl(mContext, R.string.http_favpost);
-        requestHttpServciePost(mContext,url,obj,true,callBackView);
+        requestHttpServciePost(mContext, url, obj, true, callBackView);
     }
 
     /**
      * 提交做题记录
-     * @param isRight true 对 false 错
-     * @param targetid 练习题编号
-
+     *
+     * @param isRight      true 对 false 错
+     * @param targetid     练习题编号
      * @param callBackView
      */
-    public void subimtQuestionHispost( String targetid, boolean isRight, StringCallBackView callBackView) {
+    public void subimtQuestionHispost(String targetid, boolean isRight, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -403,15 +412,15 @@ public class BankService extends BaseHttpServcie {
         UserBean user = login.getData().getUser();
         JSONObject obj = getJsonObj();
         try {
-            obj.put("staffid",user.getId());
-            obj.put("targetid",targetid);
-            obj.put("isright",isRight);
+            obj.put("staffid", user.getId());
+            obj.put("targetid", targetid);
+            obj.put("isright", isRight);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String url = getUrl(mContext, R.string.http_questionhispost);
-        requestHttpServciePost(mContext,url,obj,true,callBackView);
+        requestHttpServciePost(mContext, url, obj, true, callBackView);
     }
 
 }

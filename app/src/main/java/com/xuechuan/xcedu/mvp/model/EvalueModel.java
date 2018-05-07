@@ -16,6 +16,7 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
  */
 public interface  EvalueModel  {
     public void SubmitContent(Context context, String targetid, String comment, String commentid,String usetype, RequestResulteView view);
-    public void reqeustEvalueContent(Context context, String questionid, String commentid, RequestResulteView view);
+    public void reqeustTwoEvalueContent(Context context,int page, String questionid, String commentid, RequestResulteView view);
+    public void reqeustOneEvalueContent(Context context, int page,String questionid, RequestResulteView view);
 
 }

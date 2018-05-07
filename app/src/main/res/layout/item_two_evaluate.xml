@@ -58,6 +58,7 @@
                     android:text="1分钟" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_evalue_evalue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,6 +86,8 @@
         </LinearLayout>
     </LinearLayout>
     <View
+        android:id="@+id/v_line_hear"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_10"
         android:background="@color/input_bg" />
