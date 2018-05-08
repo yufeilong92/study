@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -187,6 +188,7 @@ public class SpecasListActivity extends BaseActivity {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new SpecsOrderAdapter(mContext, mArrary, gridLayoutManager);
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
+        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext,2));
         mRlvSpecaContent.setAdapter(adapter);
 
 

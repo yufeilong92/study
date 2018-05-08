@@ -36,6 +36,26 @@ public class UserbuyOrInfomVo  implements Serializable{
      */
     private String time;
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public boolean isSkillbook() {
+        return Skillbook;
+    }
+
+    public boolean isColligatebook() {
+        return colligatebook;
+    }
+
+    public boolean isCasebook() {
+        return casebook;
+    }
+
     public String getUserSelectShowType() {
         return userSelectShowType;
     }

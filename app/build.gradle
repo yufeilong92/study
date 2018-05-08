@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -64,13 +65,14 @@ dependencies {
     implementation 'org.dom4j:dom4j:2.1.0'
     implementation 'me.drakeet.materialdialog:library:1.3.1'
     implementation 'com.youth.banner:banner:1.4.2'
+//    greendao数据库
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
+    implementation 'org.greenrobot:greendao-generator:3.2.2'
     //轮播图
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okrx2:2.0.2'
     implementation 'com.lzy.net:okserver:2.0.5'
     implementation files('libs/BaiduLBS_Android.jar')
-    implementation files('libs/ormlite-android-5.0.jar')
-    implementation files('libs/ormlite-core-5.0.jar')
     implementation files('libs/umeng-common-1.5.0.jar')
     implementation files('libs/umeng-debug-1.0.0.jar')
     implementation files('libs/umeng-share-core-6.9.0.jar')
@@ -87,4 +89,5 @@ dependencies {
     implementation project(':MultilevelTreeLibrary')
     implementation project(':htmlSpanner')
     implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.github.hackware1993:MagicIndicator:1.3.1'
 }

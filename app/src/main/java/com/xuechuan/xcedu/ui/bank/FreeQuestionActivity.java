@@ -161,7 +161,6 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
                 switch (checkedId) {
                     case 1:
                         mPaperNumber = TWENTY;
-
                         break;
                     case 2:
                         mPaperNumber = FIFTY;

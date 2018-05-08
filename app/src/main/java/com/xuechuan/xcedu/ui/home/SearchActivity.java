@@ -23,6 +23,9 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.fragment.ArticleReasultFragment;
 import com.xuechuan.xcedu.fragment.BankReasultFragment;
+import com.xuechuan.xcedu.mvp.model.SearchModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.SearchPresenter;
+import com.xuechuan.xcedu.mvp.view.SearchView;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
@@ -46,7 +49,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/15
  */
-public class SearchActivity extends BaseActivity implements View.OnClickListener {
+public class SearchActivity extends BaseActivity implements View.OnClickListener, SearchView {
 
     private static String ARG_PARAM1 = "arg_param1";
     private static String ARG_PARAM2 = "arg_param2";
@@ -63,7 +66,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private ViewPager mVpSearchReasult;
     private LinearLayout mLiSearchReasult;
     private TabLayout mTabTitleContent;
-
+    private SearchPresenter mPresenter;
+    //
+    private List<String> mLists = null;
 
     public static void newInstance(Context context, String param1, String param2) {
         Intent intent = new Intent();
@@ -85,7 +90,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         initView();
         initData();
         bindHistoryData();
-        bingHostData();
+//        bingHostData();
         bindReasultData();
 
     }
@@ -108,7 +113,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         ArrayList<String> titles = ArrayToListUtil.arraytoList(mContext, R.array.search_reasult);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        HomeReasultViewPagAdapter adapter = new HomeReasultViewPagAdapter(fragmentManager, mContext, list,titles);
+        HomeReasultViewPagAdapter adapter = new HomeReasultViewPagAdapter(fragmentManager, mContext, list, titles);
         mVpSearchReasult.setAdapter(adapter);
         mTabTitleContent.setupWithViewPager(mVpSearchReasult);
     }
@@ -125,7 +130,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void initData() {
         mInflater = LayoutInflater.from(mContext);
         mInstance = SaveHistoryUtil.getInstance(mContext);
-
+        mPresenter = new SearchPresenter(new SearchModelImpl(), this);
+        mPresenter.requestHostList(mContext, "10");
     }
 
     /**
@@ -178,7 +184,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onClick(View v) {
                     //加入搜索历史纪录记录
-                    T.showToast(mContext, str);
+//                    T.showToast(mContext, str);
+                    starResult(str);
                 }
             });
             flowLayout.addView(tv);
@@ -202,7 +209,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mLiSearchHistory.setOnClickListener(this);
         mVpSearchReasult = (ViewPager) findViewById(R.id.vp_search_reasult);
         mVpSearchReasult.setOnClickListener(this);
-
         mLiSearchReasult = (LinearLayout) findViewById(R.id.li_search_reasult);
         mLiSearchReasult.setOnClickListener(this);
         mTabTitleContent = findViewById(R.id.tab_title_content);
@@ -220,6 +226,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 mFlSearchHistory.removeAllViews();
                 mInstance.saveHistory(trim);
                 bindHistoryData();
+                starResult(trim);
                 break;
             case R.id.iv_search_clear:
                 mInstance.delete(mContext);
@@ -228,5 +235,70 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             default:
                 break;
         }
+    }
+
+    private void starResult(String trim) {
+        Intent intent = SearchResultActivity.newInsanter(mContext, trim);
+        startActivity(intent);
+
+    }
+
+
+    @Override
+    public void HostSuccess(String cont) {
+        L.d("获取热词数据" + cont);
+        Gson gson = new Gson();
+        HotKeyVo vo = gson.fromJson(cont, HotKeyVo.class);
+        BaseVo.StatusBean status = vo.getStatus();
+        if (status.getCode() == 200) {
+            clearData();
+            addList(vo.getDatas());
+            BuildTextViewData(mFlSearchHost, mLists);
+        } else {
+            T.showToast(mContext, status.getMessage());
+        }
+    }
+
+    @Override
+    public void HostError(String cont) {
+        L.e(cont);
+    }
+
+    @Override
+    public void ResultSuccess(String cont) {
+
+    }
+
+    @Override
+    public void ResultError(String cont) {
+
+    }
+
+    @Override
+    public void ResultMoreSuccess(String cont) {
+
+    }
+
+    @Override
+    public void ResultMoreError(String cont) {
+
+    }
+
+    private void clearData() {
+        if (mLists == null) {
+            mLists = new ArrayList<>();
+        } else {
+            mLists.clear();
+        }
+    }
+
+    private void addList(List list) {
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        if (mLists == null) {
+            clearData();
+        }
+        mLists.addAll(list);
     }
 }

@@ -169,7 +169,7 @@ public class ArticleListActivity extends BaseActivity {
         service.requestArticleList(mSaffid, getPager() + 1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
-                mXfvContent.stopRefresh();
+//                mXfvContent.stopRefresh();
                 isRefresh = false;
                 String message = response.body().toString();
                 L.w(message);

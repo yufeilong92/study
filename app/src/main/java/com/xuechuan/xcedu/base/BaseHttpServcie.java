@@ -162,7 +162,6 @@ public class BaseHttpServcie {
         url = hear.concat(url);
         OkGo.<String>get(url)
                 .tag(context)
-                .retryCount(0)
                 .cacheMode(CacheMode.DEFAULT)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
@@ -218,8 +217,7 @@ public class BaseHttpServcie {
         url = hear.concat(url);
         OkGo.<String>post(url)
                 .tag(context)
-                .retryCount(0)
-                .cacheMode(CacheMode.DEFAULT)
+                .cacheMode(CacheMode.NO_CACHE)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
@@ -266,7 +264,6 @@ public class BaseHttpServcie {
         L.d("请求地址", url);
         OkGo.<String>get(url)
                 .tag(context)
-                .retryCount(0)
                 .cacheMode(CacheMode.NO_CACHE)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)

@@ -37,6 +37,7 @@ import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
@@ -87,6 +88,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_login);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         initView();
+
         regToWx();
         initData();
     }
@@ -148,6 +150,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * 处理微信登录回调
      */
     private void initData() {
+
+
         mPresenter = new LoginPresenter(new LoginModelImpl(), this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataMessageVo.WEI_LOGIN_ACTION);
@@ -308,6 +312,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         T.showToast(mContext, "账号未注册");
                         return;
                     }
+
+
                     MyAppliction.getInstance().setUserInfom(vo);
                     HomeActivity.newInstance(mContext, null, null);
                 } else {
@@ -395,6 +401,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 return;
             }
             MyAppliction.getInstance().setUserInfom(vo);
+
             HomeActivity.newInstance(mContext, null, null);
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());

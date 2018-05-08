@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.home.SpecasListActivity">
+    tools:context=".ui.home.SpecalTabActivity">
 
     <LinearLayout style="@style/TitleBar">
 
@@ -15,23 +15,24 @@
             android:onClick="onHomeClick"
             android:src="@mipmap/back" />
 
-        <TextView
-            style="@style/TitleBarText"
-            android:text="" />
+        <TextView style="@style/TitleBarText" />
 
-        <ImageView style="@style/TitleBarAction" />
+        <ImageView
+            style="@style/TitleBarAction"
+           />
 
     </LinearLayout>
-    <com.andview.refreshview.XRefreshView
+
+    <View style="@style/view_line_tab_line" />
+
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/magic_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_48"
+        android:layout_gravity="center_horizontal" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_page_content"
         android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_speca_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
-    </com.andview.refreshview.XRefreshView>
+        android:layout_height="match_parent" />
 </LinearLayout>

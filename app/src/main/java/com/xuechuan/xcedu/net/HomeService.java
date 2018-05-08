@@ -274,18 +274,86 @@ public class HomeService extends BaseHttpServcie {
     }
 
     /**
+     * 获取文章tag
+     *
+     * @param callBackView
+     */
+    public void requestArticletagList(StringCallBackView callBackView) {
+
+        String url = getUrl(mContext, R.string.http_getarticletag);
+        requestHttpServiceGet(mContext, url, null, true, callBackView);
+    }
+
+    /**
+     * 根据文章tagid获取文章列表
+     */
+    public void requestArticleWithTagaList(String tagid, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        UserBean user = login.getData().getUser();
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("staffid");
+        paramVo1.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo1);
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("tagid");
+        paramVo.setValue(tagid);
+        listParamVo.add(paramVo);
+        String url = getUrl(mContext, R.string.http_getarticletag);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
+    /**
+     * 获取搜索内容
+     */
+    public void requestResultList(int page,String key, String usetype, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        UserBean user = login.getData().getUser();
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("staffid");
+        paramVo1.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo1);
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("usetype");
+        paramVo.setValue(usetype);
+        listParamVo.add(paramVo);
+        GetParamVo paramVo2 = getParamVo();
+        paramVo2.setParam("key");
+        paramVo2.setValue(key);
+        listParamVo.add(paramVo2);
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("page");
+        paramVo3.setValue(String.valueOf(page));
+        listParamVo.add(paramVo3);
+        GetParamVo paramVo4 = getParamVo();
+        paramVo4.setParam("pagesize");
+        paramVo4.setValue("10");
+        listParamVo.add(paramVo4);
+        String url = getUrl(mContext, R.string.http_getresult);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
+
+    /**
      * 获取评论的评论
      *
      * @param articleid    科目
      * @param callBackView
      */
-    public void requestCommentCommentList(int page,String articleid, String commentid, StringCallBackView callBackView) {
+    public void requestCommentCommentList(int page, String articleid, String commentid, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
         }
-        if (page<=0){
-            page=1;
+        if (page <= 0) {
+            page = 1;
         }
         UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
@@ -312,6 +380,7 @@ public class HomeService extends BaseHttpServcie {
         String url = getUrl(mContext, R.string.http_homecommentcomment);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
+
 
     private ArrayList<GetParamVo> getGetParamList() {
         if (vos == null) {

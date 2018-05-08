@@ -128,7 +128,6 @@ public class BookInfomActivity extends BaseActivity {
         bookOrderAdapter.setClickListener(new BookOrderAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                // TODO: 2018/4/23 判断是否有子类
                 bookOrderAdapter.selectItem(position);
                 BookHomePageVo.DatasBean vo = (BookHomePageVo.DatasBean) obj;
                 bindJieData(vo.getChildren());

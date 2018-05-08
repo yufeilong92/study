@@ -61,7 +61,6 @@
         android:visibility="gone" />
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/rl_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -332,10 +331,10 @@
 
                 <CheckBox
                     android:id="@+id/chb_b_collect"
-                    android:layout_width="@dimen/space_24"
-                    android:layout_height="@dimen/space_24"
-                    android:background="@drawable/select_b_collect_color"
-                    android:button="@null" />
+                    android:layout_width="@dimen/space_48"
+                    android:layout_height="match_parent"
+                     android:padding="@dimen/space_16"
+                    android:button="@drawable/select_b_collect_color" />
             </LinearLayout>
         </LinearLayout>
 

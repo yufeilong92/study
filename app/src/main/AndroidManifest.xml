@@ -152,7 +152,8 @@
             android:name=".ui.bank.AnswerResultActivity"
             android:launchMode="singleTask" />
         <activity android:name=".ui.bank.SpecialListActivity" />
-        <activity android:name=".ui.bank.FreeQuestionActivity"></activity>
+        <activity android:name=".ui.bank.FreeQuestionActivity" />
+        <activity android:name=".ui.home.SpecalTabActivity"></activity>
     </application>
 
 </manifest>

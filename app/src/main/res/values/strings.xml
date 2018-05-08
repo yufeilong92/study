@@ -34,7 +34,12 @@
 
     <!--用户收藏接口-->
     <string name="http_favpost">/api/question/favpost</string>
-
+    <!--根据文章tagid获取文章列表接口-->
+    <string name="http_getarticlelistbytag">/api/Article/getarticlelistbytag</string>
+    <!--获取文章tag-->
+    <string name="http_getarticletag">/api/Article/getarticletag</string>
+    <!--获取搜索内容-->
+    <string name="http_getresult">/api/search/getresult</string>
     <!--提交做题记录-->
     <string name="http_questionhispost">/api/question/questionhispost</string>
     <!--规范章节列表-->
@@ -137,5 +142,6 @@
     <string name="easy">容易</string>
     <string name="medium">中等</string>
     <string name="hard">困难</string>
+    <string name="again">从头开始</string>
 
 </resources>

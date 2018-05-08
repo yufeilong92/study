@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
@@ -65,8 +66,10 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
         holder.mTvItemJieTitle.setText(vo.getTitle());
         if (mClickList.contains(position)) {
             holder.mRlvJieContent.setVisibility(View.VISIBLE);
+            holder.mIvJieGo.setImageResource(R.drawable.ic_spread_gray);
             requestJieData(holder, vo);
         } else {
+            holder.mIvJieGo.setImageResource(R.drawable.ic_more_go);
             holder.mRlvJieContent.setVisibility(View.GONE);
         }
 
@@ -82,12 +85,14 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
                 }
                 if (!mClickList.contains(position)) {
                     mClickList.add(position);
+                    holder.mIvJieGo.setImageResource(R.drawable.ic_spread_gray);
                     holder.mRlvJieContent.setVisibility(View.VISIBLE);
                     requestJieData(holder, vo);
                 } else {
                     for (int i = 0; i < mClickList.size(); i++) {
                         if (mClickList.get(i) == position) {
                             mClickList.remove(i);
+                            holder.mIvJieGo.setImageResource(R.drawable.ic_more_go);
                             holder.mRlvJieContent.setVisibility(View.GONE);
                         }
                     }
@@ -142,11 +147,13 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvItemJieTitle;
         public RecyclerView mRlvJieContent;
+        public ImageView mIvJieGo;
 
         public ViewHolder(View rootView) {
             super(rootView);
             this.mTvItemJieTitle = (TextView) rootView.findViewById(R.id.tv_item_bookjie_title);
             this.mRlvJieContent = (RecyclerView) rootView.findViewById(R.id.rlv_bookjie_content);
+            this.mIvJieGo = (ImageView) rootView.findViewById(R.id.iv_jie_go);
         }
 
     }

@@ -79,7 +79,7 @@ public class DataMessageVo {
     public static String MARKTYPESKILL = "typeskill";
     //综合
     public static String MARKTYPECOLLORT = "typecoloct";
-    //文章
+    //文章标识
     public static String MARKTYPEORDER= "typeorder";
 
 

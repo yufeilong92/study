@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,11 +22,14 @@ import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.SmsVo;
+import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
+import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -281,6 +285,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             T.showToast(mContext, getString(R.string.registerOK));
                             MyAppliction.getInstance().setUserInfom(vo);
                             Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                            UserBean user = vo.getData().getUser();
+                            UserbuyOrInfomVo vodata =new UserbuyOrInfomVo();
+                            vodata.setToken(user.getToken());
+                            vodata.setTime(user.getTokenexpire());
+                            SharedUserUtils.getInstance().putUserBuyVo(vodata);
                             startActivity(intent);
                             break;
                         case -1:

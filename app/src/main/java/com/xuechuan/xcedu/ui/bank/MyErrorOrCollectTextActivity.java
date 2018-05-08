@@ -112,7 +112,6 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
             content = getString(R.string.MyCollor);
             mLlErrorHear.setBackgroundResource(R.drawable.ic_col_bg);
         }
-
         mPresenter.reqeusetQuestionCount(mContext, mCouresid, mQuestion, con);
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         mTvErrorText.setText(content);
@@ -148,7 +147,8 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
             @Override
             public void onClickListener(Object obj, int position) {
                 ErrorVo.DatasBean vo = (ErrorVo.DatasBean) obj;
-                Toast.makeText(MyErrorOrCollectTextActivity.this, vo.getTagname(), Toast.LENGTH_SHORT).show();
+                Intent intent = AnswerActivity.newInstance(mContext, mCouresid, String.valueOf(vo.getTagid()), mType);
+                startActivity(intent);
             }
         });
 

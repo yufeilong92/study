@@ -423,9 +423,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void Mainthread(FreeDataEvent event) {
-        mTvRootEmpty.setVisibility(View.GONE);
-        mRlRootLayout.setVisibility(View.VISIBLE);
-        mSlvRootShow.setVisibility(View.VISIBLE);
+
         if (dialog != null && dialog.isShowing())
             dialog.dismiss();
         mTextDetial = event.getData();
@@ -474,6 +472,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
 
     }
+
+
 
     /**
      * 设置考试时间
@@ -759,6 +759,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param vo
      */
     private void bindViewData(TextDetailVo vo) {
+        setShowLayout();
         setLayoutBg();
         //用户是做过
         boolean isdo = false;
@@ -789,6 +790,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mLlBJiexi.setVisibility(View.VISIBLE);
             mLlBRightLu.setVisibility(View.VISIBLE);
             mRlLookEvalue.setVisibility(View.GONE);
+
         } else {//未购买 隐藏解析
             mLiBResolveBuy.setVisibility(View.VISIBLE);
             mLlBJiexi.setVisibility(View.GONE);
@@ -801,11 +803,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             case 2://单选
                 mBtnBSureKey.setVisibility(View.GONE);
                 mTitleType = mTitleTypeOnly;
+                setSelectOnlyItemBG(false, false, false, false, false);
                 break;
             case 3://多选
                 mBtnBSureKey.setVisibility(View.VISIBLE);
                 mBtnBSureKey.setClickable(false);
                 mTitleType = mTitleTypeMore;
+                clearMoreBG();
+
                 break;
             case 4://问答
                 mBtnBSureKey.setVisibility(View.GONE);
@@ -889,17 +894,21 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mTvBAnswer.setText(mResultData.getChoiceanswer());
         Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
         mTvBRosoleContent.setText(spanned);
-//        mTvBRosoleContent.setText(mResultData.getAnalysis());
         mTvBAccuracy.setText(mResultData.getAccuracy());
         mChbBCollect.setChecked(mResultData.isIsfav());
         //正确答案
         mRightItem = mResultData.getChoiceanswer();
         Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
         mTvLookAnswerWen.setText(fromHtml);
-//        mTvLookAnswerWen.setText(mResultData.getAnalysis());
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
 
+    }
+
+    private void setShowLayout() {
+        mTvRootEmpty.setVisibility(View.GONE);
+        mRlRootLayout.setVisibility(View.VISIBLE);
+        mSlvRootShow.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -954,7 +963,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 //单选/多选
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = A;
-                    setSelectOnlyItemBG(true, false, false, false, false, mSelectViewBgZC);
+                    setSelectOnlyItemBG(true, false, false, false, false);
                     if (isExam) {
                         setGoNextDan();
                     }
@@ -966,7 +975,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         isClickA = true;
                     }
                     setSureKeyBg();
-                    setSelectMoreItemBG(0, isClickA, mSelectViewBgZC);
+                    setSelectMoreItemBG(0, isClickA);
 
                 }
 
@@ -974,7 +983,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             case R.id.ll_b_b_select://选择b
                 if (mTitleType.equals(mTitleTypeOnly)) {             //单选
                     mSelectOnlyitem = B;
-                    setSelectOnlyItemBG(false, true, false, false, false, mSelectViewBgZC);
+                    setSelectOnlyItemBG(false, true, false, false, false);
                     if (isExam) {
                         setGoNextDan();
                     }
@@ -988,14 +997,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
                     }
                     setSureKeyBg();
-                    setSelectMoreItemBG(1, isClickB, mSelectViewBgZC);
+                    setSelectMoreItemBG(1, isClickB);
 
                 }
                 break;
             case R.id.ll_b_cselect://选择c
                 if (mTitleType.equals(mTitleTypeOnly)) {     //单选
                     mSelectOnlyitem = C;
-                    setSelectOnlyItemBG(false, false, true, false, false, mSelectViewBgZC);
+                    setSelectOnlyItemBG(false, false, true, false, false);
                     if (isExam) {
                         setGoNextDan();
                     }
@@ -1007,13 +1016,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         isClickC = true;
                     }
                     setSureKeyBg();
-                    setSelectMoreItemBG(2, isClickC, mSelectViewBgZC);
+                    setSelectMoreItemBG(2, isClickC);
                 }
                 break;
             case R.id.ll_b_d_select://选择d
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = D;
-                    setSelectOnlyItemBG(false, false, false, true, false, mSelectViewBgZC);
+                    setSelectOnlyItemBG(false, false, false, true, false);
                     if (isExam) {
                         setGoNextDan();
                     }
@@ -1027,14 +1036,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
                     }
                     setSureKeyBg();
-                    setSelectMoreItemBG(3, isClickD, mSelectViewBgZC);
+                    setSelectMoreItemBG(3, isClickD);
 
                 }
                 break;
             case R.id.ll_b_e_select://选择e
                 if (mTitleType.equals(mTitleTypeOnly)) {        //单选
                     mSelectOnlyitem = E;
-                    setSelectOnlyItemBG(false, false, false, false, true, mSelectViewBgZC);
+                    setSelectOnlyItemBG(false, false, false, false, true);
                     if (isExam) {
                         setGoNextDan();
                     }
@@ -1046,7 +1055,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         isClickE = true;
                     }
                     setSureKeyBg();
-                    setSelectMoreItemBG(4, isClickE, mSelectViewBgZC);
+                    setSelectMoreItemBG(4, isClickE);
                 }
                 break;
             default:
@@ -1184,7 +1193,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 清空任何背景
      */
     private void clearbg() {
-        setSelectOnlyItemBG(false, false, false, false, false, mSelectViewBgZC);
+        setSelectOnlyItemBG(false, false, false, false, false);
         setTvColor(mTvBAContent);
         setTvColor(mTvBBContent);
         setTvColor(mTvBCContent);
@@ -1744,24 +1753,28 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param c
      * @param d
      * @param e
-     * @param day
      */
     private void setSelectOnlyItemBG(boolean a, boolean b, boolean c, boolean d,
-                                     boolean e, String day) {
-        setImgBg(mIvBA, a, R.drawable.ic_b_a_s, R.drawable.ic_b_a_n);
-        setImgBg(mIvBB, b, R.drawable.ic_b_b_s, R.drawable.ic_b_b_n);
-        setImgBg(mIvBC, c, R.drawable.ic_b_c_s, R.drawable.ic_b_c_n);
-        setImgBg(mIvBD, d, R.drawable.ic_b_d_s, R.drawable.ic_b_d_n);
+                                     boolean e) {
+        setImgBg(mIvBA, a, R.drawable.ic_b_single_a_s, R.drawable.ic_b_single_a_n);
+        setImgBg(mIvBB, b, R.drawable.ic_b_single_b_s, R.drawable.ic_b_single_b_n);
+        setImgBg(mIvBC, c, R.drawable.ic_b_single_c_s, R.drawable.ic_b_single_c_n);
+        setImgBg(mIvBD, d, R.drawable.ic_b_single_d_s, R.drawable.ic_b_single_d_n);
         setImgBg(mIvBE, e, R.drawable.ic_b_e_s, R.drawable.ic_b_e_n);
     }
-
+    private void clearMoreBG(){
+        setSelectMoreItemBG(0,false);
+        setSelectMoreItemBG(1,false);
+        setSelectMoreItemBG(2,false);
+        setSelectMoreItemBG(3,false);
+        setSelectMoreItemBG(4,false);
+    }
     /**
      * 多选结果展示
      *
      * @param id  0a,1b,2c,3d,4e
-     * @param day
      */
-    private void setSelectMoreItemBG(int id, boolean isSelect, String day) {
+    private void setSelectMoreItemBG(int id, boolean isSelect) {
         if (id == 0) {
             setImgBg(mIvBA, isSelect, R.drawable.ic_b_a_s, R.drawable.ic_b_a_n);
         } else if (id == 1) {
@@ -1775,6 +1788,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
     }
+
 
     /**
      * 单选
@@ -1796,7 +1810,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         } else {
             ImageView imageView1 = selectItemName(select);
             if (imageView1 != null) {
-                imageView1.setImageResource(R.drawable.ic_b_erro);
+                imageView1.setImageResource(R.drawable.ic_b_singlewrong);
             }
             ImageView imageView2 = selectItemName(answer);
             if (imageView2 != null) {
@@ -1987,7 +2001,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param imgRight
      */
     private void setImgRight(ImageView imgRight) {
-        imgRight.setImageResource(R.drawable.ic_b_right);
+        imgRight.setImageResource(R.drawable.ic_b_text_right);
     }
 
     /**
@@ -2102,7 +2116,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         Gson gson = new Gson();
         QuestionAllVo vo = gson.fromJson(msg, QuestionAllVo.class);
         if (vo.getStatus().getCode() == 200) {
-            mRlRootLayout.setVisibility(View.VISIBLE);
+//            mRlRootLayout.setVisibility(View.VISIBLE);
             if (vo.getDatas() == null || vo.getDatas().size() == 0) {
                 mSlvRootShow.setVisibility(View.GONE);
                 dialog.dismiss();
@@ -2430,9 +2444,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 list.add(datasBean);
             }
             mTextDetial = list;
-            mTvRootEmpty.setVisibility(View.GONE);
-            mRlRootLayout.setVisibility(View.VISIBLE);
-            mSlvRootShow.setVisibility(View.VISIBLE);
+            setShowLayout();
             mTvBCount.setText(String.valueOf(mUserData.size()));
             bindTextNumberData();
 

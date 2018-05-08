@@ -23,17 +23,20 @@
             android:orientation="horizontal">
 
             <EditText
-                android:textColor="@color/hint_text"
-                android:textSize="@dimen/text_size_14"
-                android:hint="@string/home_select_content"
                 android:id="@+id/et_search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
+                android:hint="@string/home_select_content"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
                 android:paddingLeft="@dimen/space_16"
                 android:paddingStart="@dimen/space_16"
-                android:textCursorDrawable="@drawable/color_cursor" />
+                android:singleLine="true"
+                android:textColor="@color/hint_text"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="@dimen/text_size_14" />
 
             <ImageView
                 android:id="@+id/iv_search"
@@ -45,8 +48,8 @@
         </LinearLayout>
 
     </LinearLayout>
-    <View
-        style="@style/title_line_style"/>
+
+    <View style="@style/title_line_style" />
 
     <include
         layout="@layout/search_history_layout"

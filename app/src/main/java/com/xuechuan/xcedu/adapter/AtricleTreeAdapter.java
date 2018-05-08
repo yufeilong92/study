@@ -40,10 +40,16 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
         TreeViewHolder viewHolder = (TreeViewHolder) holder;
         viewHolder.mTvAtricleTree.setText(node.getName());
         if (node.getIcon() == -1) {
+            viewHolder.mIcon.setVisibility(View.GONE);
             viewHolder.mIvTreeMark.setVisibility(View.INVISIBLE);
         } else {
+            viewHolder.mIcon.setVisibility(View.VISIBLE);
             viewHolder.mIvTreeMark.setVisibility(View.VISIBLE);
+            viewHolder.mIcon.setImageResource(node.getIcon());
         }
+
+
+
     }
 
     @NonNull
@@ -56,11 +62,13 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
     public class TreeViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvAtricleTree;
         public ImageView mIvTreeMark;
+        public ImageView mIcon;
 
         public TreeViewHolder(View itemView) {
             super(itemView);
             this.mTvAtricleTree = (TextView) itemView.findViewById(R.id.tv_atricle_tree);
             this.mIvTreeMark = (ImageView) itemView.findViewById(R.id.iv_tree_mark);
+            this.mIcon = (ImageView) itemView.findViewById(R.id.icon);
 
         }
     }
