@@ -11,21 +11,21 @@ package com.xuechuan.xcedu.mvp.view;
  * @Copyright: 2018
  */
 public interface AnswerView {
+    //题干类型
     public void TextSuccess(String con);
 
     public void TextError(String con);
-
+   //题干详情
     public void TextDetailSuccess(String con);
 
     public void TextDetailError(String con);
-
+  //提交结果
     public void SumbitCollectSuccess(String con);
 
     public void SumbitCollectError(String con);
-
+     //做题结果
     public void DoResultSuccess(String con);
     public void DoResultError(String con);
-
 
 
 }

@@ -12,8 +12,11 @@ import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.model.CaseModelImpl;
 import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.CasePresenter;
 import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
+import com.xuechuan.xcedu.mvp.view.CaseView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
@@ -37,7 +40,7 @@ import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.OnClickListener {
+public class CaseFragment extends BaseFragment implements CaseView, View.OnClickListener {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -51,6 +54,8 @@ public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.
     private TextView mTvBCaseZhuanxiang;
     private TextView mTvBCaseShunxu;
     private Context mContext;
+    private CasePresenter mCasePresenter;
+    private ErrorOrColloctVo.DataBean mData;
 
 
     public CaseFragment() {
@@ -93,8 +98,8 @@ public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.
     }
 
     private void initData() {
-        ErrOrColPresenter colPresenter = new ErrOrColPresenter(new ErrOrCollModelImpl(), this);
-        colPresenter.getErrOrCollNumber(mContext, mTypeOid);
+        mCasePresenter = new CasePresenter(new CaseModelImpl(), this);
+        mCasePresenter.getErrOrCollNumber(mContext, mTypeOid);
     }
 
 
@@ -123,14 +128,21 @@ public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.li_b_case_error://我的错题
-                Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.ERRTYPE);
-                intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
-                startActivity(intent1);
+                if (mData != null) {
+                    Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                            MyErrorOrCollectTextActivity.ERRTYPE, String.valueOf(mData.getError()));
+                    intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
+                    startActivity(intent1);
+                }
                 break;
             case R.id.ll_b_case_collect://我的收藏
-                Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.FAVTYPE);
+                if (mData!=null){
+                Intent intent2 =
+                        MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                                MyErrorOrCollectTextActivity.FAVTYPE, String.valueOf(mData.getFavorite()));
                 intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
                 startActivity(intent2);
+                }
                 break;
             case R.id.iv_b_case_order://章节
                 Intent intent = AtricleListActivity.newInstance(mContext, mTypeOid);
@@ -164,8 +176,8 @@ public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.
         Gson gson = new Gson();
         ErrorOrColloctVo vo = gson.fromJson(con, ErrorOrColloctVo.class);
         if (vo.getStatus().getCode() == 200) {
-            ErrorOrColloctVo.DataBean data = vo.getData();
-            bindErrOrColViewData(data);
+            mData = vo.getData();
+            bindErrOrColViewData(mData);
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
@@ -182,5 +194,19 @@ public class CaseFragment extends BaseFragment implements ErrOrColNumView, View.
 
     }
 
+    @Override
+    public void BuySuccess(String con) {
 
+    }
+
+    @Override
+    public void BuyError(String con) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCasePresenter.requestBuyInfom(mContext, mTypeOid);
+    }
 }

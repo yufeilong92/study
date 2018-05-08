@@ -18,7 +18,7 @@ import com.nostra13.universalimageloader.utils.L;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.ErrorTextAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.mvp.model.ErrorModelImpl;
+import com.xuechuan.xcedu.mvp.model.ErrorTextTextModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.ErrorTextPresenter;
 import com.xuechuan.xcedu.mvp.view.ErrorTextView;
 import com.xuechuan.xcedu.utils.DialogUtil;
@@ -38,7 +38,14 @@ import java.util.List;
  * @Copyright: 2018/5/3
  */
 public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorTextView, View.OnClickListener {
-
+    /**
+     * 错题或收藏
+     */
+    private static final String ERRORCOLNUMBER = "errorcol";
+    /**
+     * 问题di
+     */
+    private static final String MQUESTION = "question";
     private ImageView mIvBMore;
     private TextView mTvErrorNumber;
     private Button mBtnGoDoText;
@@ -55,18 +62,21 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
     private static String TEXTTYPE = "texttype";
     public static String ERRTYPE = "err";
     public static String FAVTYPE = "fav";
-    private String mOid;
+    private String mCouresid;
     private AlertDialog mDialog;
     private String mType;
     private TextView mTvErrorText;
     private LinearLayout mLlErrorHear;
     //类型内容
     private String content;
+    private String mNumber;
+    private String mQuestion;
 
-    public static Intent newInstance(Context context, String Couresid, String textType) {
+    public static Intent newInstance(Context context, String Couresid, String textType, String number) {
         Intent intent = new Intent(context, MyErrorOrCollectTextActivity.class);
         intent.putExtra(COURESID, Couresid);
         intent.putExtra(TEXTTYPE, textType);
+        intent.putExtra(ERRORCOLNUMBER, number);
         return intent;
     }
 
@@ -81,15 +91,16 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_error_text);
         if (getIntent() != null) {
-            mOid = getIntent().getStringExtra(COURESID);
+            mCouresid = getIntent().getStringExtra(COURESID);
             mType = getIntent().getStringExtra(TEXTTYPE);
+            mNumber = getIntent().getStringExtra(ERRORCOLNUMBER);
         }
         initView();
         initData();
     }
 
     private void initData() {
-        mPresenter = new ErrorTextPresenter(new ErrorModelImpl(), this);
+        mPresenter = new ErrorTextPresenter(new ErrorTextTextModelImpl(), this);
         //请求错误数据
         String con = null;
         if (mType.equals(ERRTYPE)) {
@@ -102,9 +113,10 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
             mLlErrorHear.setBackgroundResource(R.drawable.ic_col_bg);
         }
 
-        mPresenter.reqeusetQuestionCount(mContext, mOid, con);
+        mPresenter.reqeusetQuestionCount(mContext, mCouresid, mQuestion, con);
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         mTvErrorText.setText(content);
+        mTvErrorNumber.setText(mNumber);
 
     }
 
@@ -113,11 +125,10 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
         if (mDialog != null) {
             mDialog.dismiss();
         }
-        L.e("yfl" + con);
+        L.e("我的错题结果" + con);
         Gson gson = new Gson();
         ErrorVo vo = gson.fromJson(con, ErrorVo.class);
         if (vo.getStatus().getCode() == 200) {
-            bindViewData(vo);
             if (vo.getDatas() != null) {
                 bindAdapter(vo.getDatas());
             }
@@ -126,14 +137,6 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
         }
     }
 
-    /**
-     * 绑定数据
-     *
-     * @param vo
-     */
-    private void bindViewData(ErrorVo vo) {
-        mTvErrorNumber.setText(vo.getTotal().getTotal() + "");
-    }
 
     private void bindAdapter(List<ErrorVo.DatasBean> details) {
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
@@ -175,7 +178,8 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_go_do_text:
-
+                Intent intent = AnswerActivity.newInstance(mContext, mCouresid, "0", mType);
+                startActivity(intent);
                 break;
         }
     }

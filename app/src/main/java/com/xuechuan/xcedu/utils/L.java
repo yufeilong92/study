@@ -147,7 +147,7 @@ public class L {
 //        logInfoStringBuilder.append("threadID=" + threadID).append(SEPARATOR);
 //        logInfoStringBuilder.append("threadName=" + threadName).append(SEPARATOR);
 //        logInfoStringBuilder.append("fileName=" + fileName).append(SEPARATOR);
-//        logInfoStringBuilder.append("className=" + className).append(SEPARATOR);
+        logInfoStringBuilder.append("className=" + className).append(SEPARATOR);
         logInfoStringBuilder.append("methodName=" + methodName).append(SEPARATOR);
         logInfoStringBuilder.append("lineNumber=" + lineNumber);
         logInfoStringBuilder.append(" ] ");

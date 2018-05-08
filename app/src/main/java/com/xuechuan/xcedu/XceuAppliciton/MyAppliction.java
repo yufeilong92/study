@@ -186,15 +186,7 @@ public class MyAppliction extends MultiDexApplication {
         loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);        //log打印级别，决定了log显示的详细程度
         loggingInterceptor.setColorLevel(Level.INFO);                               //log颜色级别，决定了log在控制台显示的颜色
         builder.addInterceptor(loggingInterceptor);
-        builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);      //全局的读取超时时间
-        builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);     //全局的写入超时时间
-        builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);   //全局的连接超时时间
-        OkGo.getInstance().init(this)
-                .setOkHttpClient(builder.build())
-
-                .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
-                .setRetryCount(1);                              //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
-
+        OkGo.getInstance().init(this);
     }
 
     /***
@@ -243,22 +235,4 @@ public class MyAppliction extends MultiDexApplication {
         PolyvDownloaderManager.setDownloadQueueCount(1);
     }
 
-
-    //    //初始化数请求
-//    private  void initOkHttp() {
-//        //请求超时
-//        int HTTPTIMEOUT = 6000;
-//        //读取超时
-//        int HTTPTIMEREAD = 6000;
-//        if (client == null) {
-//            synchronized (OkHttpClient.class) {
-//                if (client == null) {
-//                    client = new OkHttpClient.Builder()
-//                            .connectTimeout(HTTPTIMEOUT, TimeUnit.SECONDS)
-//                            .readTimeout(HTTPTIMEREAD, TimeUnit.SECONDS)
-//                            .build();
-//                }
-//            }
-//        }
-//    }
 }

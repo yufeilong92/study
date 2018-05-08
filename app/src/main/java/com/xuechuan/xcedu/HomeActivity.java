@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.lzy.okgo.OkGo;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomeFragment;
@@ -132,5 +133,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        OkGo.getInstance().cancelTag(mContext);
     }
 }

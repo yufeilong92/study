@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
@@ -30,6 +31,8 @@ import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+
+import static com.lzy.okgo.cache.CacheMode.REQUEST_FAILED_READ_CACHE;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -158,6 +161,9 @@ public class BaseHttpServcie {
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>get(url)
+                .tag(context)
+                .retryCount(0)
+                .cacheMode(CacheMode.DEFAULT)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
@@ -171,6 +177,7 @@ public class BaseHttpServcie {
                         String s = response.body().toString();
                         try {
                             new JsonParser().parse(s);
+                            OkGo.getInstance().cancelTag(mContext);
                             callBackView.onSuccess(response);
                         } catch (JsonParseException e) {
                             L.e("数据异常");
@@ -210,6 +217,9 @@ public class BaseHttpServcie {
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>post(url)
+                .tag(context)
+                .retryCount(0)
+                .cacheMode(CacheMode.DEFAULT)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
@@ -225,6 +235,7 @@ public class BaseHttpServcie {
                         }
                         try {
                             new JsonParser().parse(response.body().toString());
+                            OkGo.getInstance().cancelTag(mContext);
                             callBackView.onSuccess(response);
                         } catch (JsonParseException e) {
                             L.e( "数据异常");
@@ -254,6 +265,9 @@ public class BaseHttpServcie {
         url = hear.concat(url);
         L.d("请求地址", url);
         OkGo.<String>get(url)
+                .tag(context)
+                .retryCount(0)
+                .cacheMode(CacheMode.NO_CACHE)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)

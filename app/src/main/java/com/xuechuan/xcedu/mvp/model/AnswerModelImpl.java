@@ -12,7 +12,7 @@ import com.xuechuan.xcedu.utils.L;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.mvp.model
- * @Description: todo
+ * @Description: 答题卡
  * @author: L-BackPacker
  * @date: 2018/5/2 11:14
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

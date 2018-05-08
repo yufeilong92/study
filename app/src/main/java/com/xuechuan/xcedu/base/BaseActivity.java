@@ -15,7 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.lzy.okgo.OkGo;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -82,5 +84,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         return getResources().getString(id);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        L.e("走了父类产品----------------------");
+        OkGo.getInstance().cancelAll();
+    }
 }

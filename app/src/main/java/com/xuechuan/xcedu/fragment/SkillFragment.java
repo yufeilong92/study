@@ -13,12 +13,9 @@ import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
-import com.xuechuan.xcedu.mvp.model.BuyBookModelImpl;
-import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
-import com.xuechuan.xcedu.mvp.presenter.BuyBookPresenter;
-import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
-import com.xuechuan.xcedu.mvp.view.BuyBookView;
-import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
+import com.xuechuan.xcedu.mvp.model.SkillModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.SkillPresenter;
+import com.xuechuan.xcedu.mvp.view.SkillView;
 import com.xuechuan.xcedu.net.BankService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
@@ -48,7 +45,7 @@ import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class SkillFragment extends BaseFragment implements View.OnClickListener, ErrOrColNumView, BuyBookView {
+public class SkillFragment extends BaseFragment implements View.OnClickListener, SkillView {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -62,8 +59,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     private TextView mTvBSpecial;
     private TextView mTvBTurn;
     private Context mContext;
-    private ErrOrColPresenter mPresenter;
-    private BuyBookPresenter mBuyPresenter;
+    private SkillPresenter mPresenter;
+    private ErrorOrColloctVo.DataBean mData;
 
     public SkillFragment() {
     }
@@ -84,15 +81,19 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-
-/*    @Override
+/*
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skill, container, false);
         initView(view);
-        requestBought();
+
+        L.e(++i+"");
+        initData();
         return view;
-    }*/
+    }
+*/
+
 
     @Override
     protected int initInflateView() {
@@ -107,10 +108,10 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initData() {
-        mPresenter = new ErrOrColPresenter(new ErrOrCollModelImpl(), this);
+        mPresenter = new SkillPresenter(new SkillModelImpl(), this);
         mPresenter.getErrOrCollNumber(mContext, mTypeOid);
-        mBuyPresenter = new BuyBookPresenter(new BuyBookModelImpl(), this);
-        mBuyPresenter.requestBuyInfom(mContext, mTypeOid);
+        mPresenter.requestBuyInfom(mContext, mTypeOid);
+
     }
 
     /**
@@ -168,14 +169,20 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_b_skill_error://错题
-                Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.ERRTYPE);
-                intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
-                startActivity(intent1);
+                if (mData != null) {
+                    Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                            MyErrorOrCollectTextActivity.ERRTYPE, String.valueOf(mData.getError()));
+                    intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
+                    startActivity(intent1);
+                }
                 break;
             case R.id.ll_b_skill_collect://收藏
-                Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.FAVTYPE);
-                intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
-                startActivity(intent2);
+                if (mData != null) {
+                    Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                            MyErrorOrCollectTextActivity.FAVTYPE, String.valueOf(mData.getFavorite()));
+                    intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
+                    startActivity(intent2);
+                }
                 break;
             case R.id.iv_b_order://章节
 //                Intent intent = AtricleTextListActivity.newInstance(mContext, mTypeOid);
@@ -190,7 +197,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.tv_b_free://自由
                 Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
-                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR,"自由组卷");
+                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
                 startActivity(intent6);
                 break;
             case R.id.tv_b_special://专项
@@ -214,8 +221,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         Gson gson = new Gson();
         ErrorOrColloctVo vo = gson.fromJson(con, ErrorOrColloctVo.class);
         if (vo.getStatus().getCode() == 200) {
-            ErrorOrColloctVo.DataBean data = vo.getData();
-            bindErrorOrCollortData(data);
+            mData = vo.getData();
+            bindErrorOrCollortData(mData);
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
@@ -232,6 +239,11 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         L.e("yfl", "ErrorOrCollortNumberError: " + con);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getErrOrCollNumber(mContext, mTypeOid);
+    }
 
     @Override
     public void BuySuccess(String msg) {
@@ -248,11 +260,6 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.getErrOrCollNumber(mContext, mTypeOid);
-    }
 
     @Override
     public void BuyError(String con) {

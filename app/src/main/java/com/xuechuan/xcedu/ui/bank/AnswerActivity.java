@@ -13,7 +13,6 @@ import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -52,7 +51,6 @@ import com.xuechuan.xcedu.mvp.view.AnswerView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColListView;
 import com.xuechuan.xcedu.mvp.view.EvalueView;
 import com.xuechuan.xcedu.mvp.view.SpecailDetailView;
-import com.xuechuan.xcedu.ui.EvalueDetialActivity;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.AdvancedCountdownTimer;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
@@ -64,6 +62,7 @@ import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.ErrOrColListVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.QuestionAllVo;
@@ -76,12 +75,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView, SpecailDetailView,ErrOrColListView {
+public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView, SpecailDetailView, ErrOrColListView {
     /**
      * 科目id
      */
@@ -90,6 +88,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 标签id
      */
     private static final String TAGEIDDATA = "tageiddata";
+    /***
+     * 标签id
+     */
+    private static final String TAGEIDDATAUSER = "tageiddatauser";
     /**
      * 收藏和错题类型
      */
@@ -270,6 +272,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private static String COURSEIDKEMU = "coureshidkumu";
     /**
+     * 科目id
+     */
+    private static String COURSEIDKEMUUSER = "courseidkemuuser";
+    /**
      * 科目
      */
     private String mCouresidKuMu;
@@ -283,6 +289,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 题干类型收藏/错题
      */
     private String mTagType;
+    private String mCouresidUser;
+    private String mUserTagid;
+    /**
+     * 用户收藏题号信息
+     */
+    private List<Integer> mUserData;
 
     @Override
     protected void onDestroy() {
@@ -327,21 +339,22 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
 
     /**
-     *  我的错题我的收藏
+     * 我的错题我的收藏
+     *
      * @param mContext
      * @param courseid 科目id
-     * @param tageid 题干id
-     * @param tagtype 类型
+     * @param tageid   题干id
+     * @param tagtype  类型
      * @return
      */
     public static Intent newInstance(Context mContext, String courseid, String tageid, String tagtype) {
         Intent intent = new Intent(mContext, AnswerActivity.class);
-        intent.putExtra(TAGEIDDATA, tageid);
-        intent.putExtra(COURSEIDKEMU, courseid);
-        intent.putExtra(TAGYTTPE,tagtype);
-
+        intent.putExtra(TAGEIDDATAUSER, tageid);
+        intent.putExtra(COURSEIDKEMUUSER, courseid);
+        intent.putExtra(TAGYTTPE, tagtype);
         return intent;
     }
+
     /**
      * @param mContext
      * @param courseid 科目id
@@ -370,7 +383,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mTypeMark = getIntent().getStringExtra(TYPEMARK);
             mTypeId = getIntent().getStringExtra(MTYPEID);
             mCouresidKuMu = getIntent().getStringExtra(COURSEIDKEMU);
+            mCouresidUser = getIntent().getStringExtra(COURSEIDKEMUUSER);
             mTagid = getIntent().getStringExtra(TAGEIDDATA);
+            mUserTagid = getIntent().getStringExtra(TAGEIDDATAUSER);
             mTagType = getIntent().getStringExtra(TAGYTTPE);
         }
         initView();
@@ -502,7 +517,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mDetailPresenter = new SpecailDetailPresenter(new SpecailDetailModelImpl(), this);
         //请求错题和收藏题集合
         mListPresenter = new ErrOrColListPresenter(new ErrOrColListModelImpl(), this);
-        if (!StringUtil.isEmpty(mCouresidKuMu)) {
+        if (!StringUtil.isEmpty(mCouresidKuMu) && !StringUtil.isEmpty(mTagid)) {
             mDetailPresenter.requestSpecailDetail(mContext, mCouresidKuMu, mTagid);
         }
         if (!StringUtil.isEmpty(mTypeId)) {
@@ -513,8 +528,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (!StringUtil.isEmpty(mOid)) {
             mPresnter.getTextContent(mContext, mOid);
         }
-        if (!StringUtil.isEmpty(mTagType)){
-            mListPresenter.requestionErrOrColCont(mContext,mCouresidKuMu,mTagid,mTagType);
+        if (!StringUtil.isEmpty(mTagType) && !StringUtil.isEmpty(mCouresidUser) &&
+                !StringUtil.isEmpty(mUserTagid)) {
+            mListPresenter.requestionErrOrColCont(mContext, mCouresidUser, mUserTagid, mTagType);
         }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
 
@@ -565,7 +581,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 绑定数据
      */
     private void bindTextNumberData() {
-        if (mTextDetial != null) {
+        if (mTextDetial != null) {//不是错题
             mTvBNew.setText(String.valueOf(mMark + 1));
             if (mMark < mTextDetial.size()) {
                 QuestionAllVo.DatasBean bean = mTextDetial.get(mMark);
@@ -839,12 +855,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mLlBRightLu.setVisibility(View.GONE);
                 mRlLookEvalue.setVisibility(View.GONE);
                 mLlSelectRootLayout.setVisibility(View.GONE);
+                mRlvEualeContent.setVisibility(View.GONE);
             } else {
                 mLlBAnswerKey.setVisibility(View.GONE);
                 mLlBJiexi.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.GONE);
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlBRightLu.setVisibility(View.GONE);
+                mRlvEualeContent.setVisibility(View.GONE);
                 mRlLookEvalue.setVisibility(View.GONE);
                 mLlSelectRootLayout.setVisibility(View.VISIBLE);
             }
@@ -1172,6 +1190,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         setTvColor(mTvBCContent);
         setTvColor(mTvBDContent);
         setTvColor(mTvBEContent);
+        mBtnBSureKey.setBackgroundResource(R.drawable.btn_b_sure_n);
 
     }
 
@@ -2395,7 +2414,33 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void ErrOrColListSuccess(String con) {
-         L.w(con);
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        L.w(con);
+        Gson gson = new Gson();
+        ErrOrColListVo vo = gson.fromJson(con, ErrOrColListVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            List<QuestionAllVo.DatasBean> list = new ArrayList<>();
+            mUserData = vo.getData();
+            int size = mUserData.size();
+            for (int i = 0; i < size; i++) {
+                QuestionAllVo.DatasBean datasBean = new QuestionAllVo.DatasBean();
+                datasBean.setId(mUserData.get(i));
+                list.add(datasBean);
+            }
+            mTextDetial = list;
+            mTvRootEmpty.setVisibility(View.GONE);
+            mRlRootLayout.setVisibility(View.VISIBLE);
+            mSlvRootShow.setVisibility(View.VISIBLE);
+            mTvBCount.setText(String.valueOf(mUserData.size()));
+            bindTextNumberData();
+
+
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+
     }
 
     @Override

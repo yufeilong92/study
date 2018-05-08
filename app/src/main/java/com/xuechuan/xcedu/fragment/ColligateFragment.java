@@ -12,8 +12,11 @@ import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.model.ColoctModelImpl;
 import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.ColoctPresenter;
 import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
+import com.xuechuan.xcedu.mvp.view.ColoctView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
@@ -34,7 +37,7 @@ import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
  * @Copyright: 2018/4/24   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class ColligateFragment extends BaseFragment implements View.OnClickListener, ErrOrColNumView {
+public class ColligateFragment extends BaseFragment implements View.OnClickListener, ColoctView {
     private static final String TYPEOID = "typeoid";
 
     private String mTypeOid;
@@ -48,6 +51,8 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     private TextView mTvBCoZhuanxiang;
     private TextView mTvBCoShunxu;
     private Context mContext;
+    private ColoctPresenter colPresenter;
+    private ErrorOrColloctVo.DataBean mData;
 
 
     public ColligateFragment() {
@@ -90,7 +95,7 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void initData() {
-        ErrOrColPresenter colPresenter = new ErrOrColPresenter(new ErrOrCollModelImpl(), this);
+        colPresenter = new ColoctPresenter(new ColoctModelImpl(), this);
         colPresenter.getErrOrCollNumber(mContext, mTypeOid);
 //        colPresenter.getcoursequestionid(mContext,mTypeOid);
 //        colPresenter.getQuestionTags(mContext,mTypeOid);
@@ -123,12 +128,16 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_b_co_collect://我的收藏
-                Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.FAVTYPE);
-                intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
-                startActivity(intent2);
+                if (mData != null) {
+                    Intent intent2 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                            MyErrorOrCollectTextActivity.FAVTYPE, String.valueOf(mData.getError()));
+                    intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
+                    startActivity(intent2);
+                }
                 break;
             case R.id.ll_b_co_error://我的错误
-                Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid, MyErrorOrCollectTextActivity.ERRTYPE);
+                Intent intent1 = MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                        MyErrorOrCollectTextActivity.ERRTYPE, String.valueOf(mData.getFavorite()));
                 intent1.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的错题");
                 startActivity(intent1);
                 break;
@@ -161,16 +170,16 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
         Gson gson = new Gson();
         ErrorOrColloctVo errorOrColloctVo = gson.fromJson(con, ErrorOrColloctVo.class);
         if (errorOrColloctVo.getStatus().getCode() == 200) {
-            ErrorOrColloctVo.DataBean data = errorOrColloctVo.getData();
-            bindErrOrColViewData(data);
+            mData = errorOrColloctVo.getData();
+            bindErrOrColViewData(mData);
         } else {
             T.showToast(mContext, errorOrColloctVo.getStatus().getMessage());
         }
     }
 
     private void bindErrOrColViewData(ErrorOrColloctVo.DataBean data) {
-        mTvBCooWroing.setText(data.getError()+"道");
-        mTvBCoCoolect.setText(data.getFavorite()+"道");
+        mTvBCooWroing.setText(data.getError() + "道");
+        mTvBCoCoolect.setText(data.getFavorite() + "道");
 
     }
 
@@ -179,5 +188,19 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
 
     }
 
+    @Override
+    public void BuySuccess(String con) {
 
+    }
+
+    @Override
+    public void BuyError(String con) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        colPresenter.requestBuyInfom(mContext, mTypeOid);
+    }
 }

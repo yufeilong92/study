@@ -2,7 +2,7 @@ package com.xuechuan.xcedu.mvp.presenter;
 
 import android.content.Context;
 
-import com.xuechuan.xcedu.mvp.model.ErrorModel;
+import com.xuechuan.xcedu.mvp.model.ErrorTextModel;
 import com.xuechuan.xcedu.mvp.view.ErrorTextView;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -11,17 +11,17 @@ import com.xuechuan.xcedu.utils.StringUtil;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.mvp.presenter
- * @Description: todo
+ * @Description: 我的错题
  * @author: L-BackPacker
  * @date: 2018/5/3 10:35
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
 public class ErrorTextPresenter {
-    private ErrorModel model;
+    private ErrorTextModel model;
     private ErrorTextView view;
 
-    public ErrorTextPresenter(ErrorModel model, ErrorTextView view) {
+    public ErrorTextPresenter(ErrorTextModel model, ErrorTextView view) {
         this.model = model;
         this.view = view;
     }
@@ -31,7 +31,7 @@ public class ErrorTextPresenter {
      * @param courseid
      * @param tagtype
      */
-    public void reqeusetQuestionCount(Context context, String courseid, String tagtype) {
+    public void reqeusetQuestionCount(Context context, String courseid,String tagid, String tagtype) {
         if (StringUtil.isEmpty(tagtype)) {
             return;
         }
