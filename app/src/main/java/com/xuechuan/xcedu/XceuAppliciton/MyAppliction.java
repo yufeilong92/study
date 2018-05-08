@@ -11,7 +11,7 @@ import com.easefun.polyvsdk.PolyvDevMountInfo;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -186,7 +186,17 @@ public class MyAppliction extends MultiDexApplication {
         loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);        //log打印级别，决定了log显示的详细程度
         loggingInterceptor.setColorLevel(Level.INFO);                               //log颜色级别，决定了log在控制台显示的颜色
         builder.addInterceptor(loggingInterceptor);
-        OkGo.getInstance().init(this);
+        //全局的读取超时时间
+        builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+//全局的写入超时时间
+        builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+//全局的连接超时时间
+        builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        OkGo.getInstance().init(this)
+                .setOkHttpClient(builder.build())//设置链接
+                .setCacheMode(CacheMode.NO_CACHE) //设置缓存
+                .setRetryCount(3); //断网链接
+
     }
 
     /***

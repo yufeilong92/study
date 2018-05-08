@@ -6,7 +6,6 @@ import android.support.v7.app.AlertDialog;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
@@ -31,8 +30,6 @@ import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-
-import static com.lzy.okgo.cache.CacheMode.REQUEST_FAILED_READ_CACHE;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -162,7 +159,6 @@ public class BaseHttpServcie {
         url = hear.concat(url);
         OkGo.<String>get(url)
                 .tag(context)
-                .cacheMode(CacheMode.DEFAULT)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
@@ -217,7 +213,6 @@ public class BaseHttpServcie {
         url = hear.concat(url);
         OkGo.<String>post(url)
                 .tag(context)
-                .cacheMode(CacheMode.NO_CACHE)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
@@ -264,7 +259,6 @@ public class BaseHttpServcie {
         L.d("请求地址", url);
         OkGo.<String>get(url)
                 .tag(context)
-                .cacheMode(CacheMode.NO_CACHE)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
