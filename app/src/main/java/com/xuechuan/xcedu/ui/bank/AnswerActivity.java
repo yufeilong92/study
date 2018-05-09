@@ -16,10 +16,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -34,6 +36,8 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AnswerEvaluateAdapter;
 import com.xuechuan.xcedu.adapter.AnswerTableAdapter;
 import com.xuechuan.xcedu.adapter.AnswerTableResultAdapter;
+import com.xuechuan.xcedu.adapter.GridViewAdapter;
+import com.xuechuan.xcedu.adapter.GridViewResultAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
@@ -227,6 +231,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private TextView mTvPopNew;
     private TextView mTvPopCount;
     private RecyclerView mRlvPopContent;
+    private GridView mGvPopContent;
     private Button mBtnSubmit;
     //当前结果
     private TextDetailVo.DataBean mResultData;
@@ -510,7 +515,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             isNight = false;
             setZhLayout();
         }
-         if (mTypeMark != null && mTypeMark.equals(DataMessageVo.MARKTYPEORDER)) {//章节
+        if (mTypeMark != null && mTypeMark.equals(DataMessageVo.MARKTYPEORDER)) {//章节
             isExam = true;
         } else {
             isExam = true;
@@ -1674,6 +1679,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mTvPopNew = (TextView) view.findViewById(R.id.tv_pop_new);
                 mTvPopCount = (TextView) view.findViewById(R.id.tv_pop_count);
                 mRlvPopContent = view.findViewById(R.id.rlv_pop_content);
+                mGvPopContent = view.findViewById(R.id.gv_pop_content);
                 mBtnSubmit = (Button) view.findViewById(R.id.btn_pop_answer_sumbit);
                 if (isExam) {
                     mBtnSubmit.setVisibility(View.GONE);
@@ -1702,7 +1708,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 });
                 mTvPopNew.setText(String.valueOf(mMark + 1));
                 mTvPopCount.setText(String.valueOf(mTextDetial.size()));
-                bindAdapter();
+//                bindAdapter();
+                bindGridViewAdapter();
 
 
             }
@@ -1721,6 +1728,28 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         };
         popAnswer.showAtLocation(mLlRootLayout, Gravity.BOTTOM, 0, 0);
         setBackgroundAlpha(0.5f, AnswerActivity.this);
+
+    }
+
+    private void bindGridViewAdapter() {
+        GridViewAdapter adapter = new GridViewAdapter(mContext, mTextDetial);
+        adapter.setItemSelect(isExam, mMark);
+        mGvPopContent.setSelection(mMark);
+        mGvPopContent.setAdapter(adapter);
+        mGvPopContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mMark = position;
+                //切换是否需要保存
+                saveBeforeDate();
+                clearbg();
+                //清空选项
+                clearSeletItem();
+                popAnswer.getPopupWindow().dismiss();
+                bindTextNumberData();
+            }
+        });
+
 
     }
 
@@ -1763,6 +1792,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             private TextView mTvAnswerTime;
             private TextView mTvAnswerLv;
             private RecyclerView mRlvAnswerResultBag;
+            private GridView mGvAnswerResultBag;
             private Button mBtnAnswerAgain;
             private Button mBtnAnswerJiexi;
 
@@ -1773,6 +1803,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mTvAnswerTime = (TextView) view.findViewById(R.id.tv_answer_time);
                 mTvAnswerLv = (TextView) view.findViewById(R.id.tv_answer_lv);
                 mRlvAnswerResultBag = (RecyclerView) view.findViewById(R.id.rlv_answer_result_bag);
+                mGvAnswerResultBag = view.findViewById(R.id.gv_answer_result_bag);
                 mBtnAnswerAgain = (Button) view.findViewById(R.id.btn_answer_again);
                 mBtnAnswerJiexi = (Button) view.findViewById(R.id.btn_answer_jiexi);
                 mIcPopBack = (ImageView) view.findViewById(R.id.ic_pop_result);
@@ -1808,7 +1839,24 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         bindTextNumberData();
                     }
                 });
-                initAdapter();
+//                initAdapter();
+                initGVAdapter();
+
+            }
+
+            private void initGVAdapter() {
+                GridViewResultAdapter adapter = new GridViewResultAdapter(mContext, mTextDetial);
+                mGvAnswerResultBag.setAdapter(adapter);
+                mGvAnswerResultBag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        clearbg();
+                        mMark = position;
+                        popResult.getPopupWindow().dismiss();
+                        bindTextNumberData();
+                    }
+                });
+
 
             }
 

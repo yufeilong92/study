@@ -11,8 +11,8 @@
     <LinearLayout style="@style/TitleBar">
 
         <ImageView
-            style="@style/TitleBarAction"
             android:id="@+id/ic_pop_result"
+            style="@style/TitleBarAction"
             android:src="@drawable/ic_back" />
 
         <TextView
@@ -110,7 +110,21 @@
         android:layout_marginBottom="@dimen/space_48"
         android:layout_weight="1"
         android:paddingLeft="@dimen/space_16"
-        android:paddingRight="@dimen/space_16" />
+        android:paddingRight="@dimen/space_16"
+        android:visibility="gone" />
+
+    <GridView
+        android:id="@+id/gv_answer_result_bag"
+        android:fastScrollEnabled="false"
+        android:numColumns="6"
+        android:columnWidth="48dp"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/space_16"
+        android:paddingRight="@dimen/space_16"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
