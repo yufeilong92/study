@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui.bank;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.multilevel.treelist.Node;
 import com.multilevel.treelist.OnTreeNodeClickListener;
+import com.nostra13.universalimageloader.utils.L;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AtricleTreeAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -18,6 +20,7 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.AtricleContentModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.AtriclePresenter;
 import com.xuechuan.xcedu.mvp.view.AtricleView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChildrenBeanVo;
 import com.xuechuan.xcedu.vo.SkillTextVo;
@@ -46,7 +49,14 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     private static String COURSEID = "courseid";
     private String mOid;
     private ArrayList<Node> mNodeLists;
+    private AlertDialog mAlertDialog;
 
+    /**
+     *
+     * @param context
+     * @param courseid 科目id
+     * @return
+     */
     public static Intent newInstance(Context context, String courseid) {
         Intent intent = new Intent(context, AtricleListActivity.class);
         intent.putExtra(COURSEID, courseid);
@@ -68,6 +78,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
         AtriclePresenter atriclePresenter = new AtriclePresenter(new AtricleContentModelImpl(), this);
         atriclePresenter.getAtricleContent(mContext, mOid);
         mNodeLists = new ArrayList<>();
+        mAlertDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
     }
 
     private void setAdapter() {
@@ -86,6 +97,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
                     int id = (int) node.getId();
                     Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id),
                             DataMessageVo.MARKTYPEORDER);
+
                     startActivity(intent);
                 }
             }
@@ -97,8 +109,12 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
         mContext = this;
         mRlvTreeContent = (RecyclerView) findViewById(R.id.rlv_tree_content);
     }
+
     @Override
     public void Success(String content) {
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
         Gson gson = new Gson();
         SkillTextVo vo = gson.fromJson(content, SkillTextVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -135,7 +151,10 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
 
     @Override
     public void Error(String content) {
-        T.showToast(mContext, content);
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+        L.e(content);
     }
 
     private void clearData() {

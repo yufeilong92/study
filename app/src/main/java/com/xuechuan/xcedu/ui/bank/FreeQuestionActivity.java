@@ -4,40 +4,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.andview.refreshview.callback.IFooterCallBack;
 import com.google.gson.Gson;
 import com.multilevel.treelist.Node;
-import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.Event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.FreeQuestionAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.mvp.model.AllQuestionModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.AllQuestionPresenter;
 import com.xuechuan.xcedu.mvp.presenter.QuestionListPresenter;
 import com.xuechuan.xcedu.mvp.view.AllQuestionView;
-import com.xuechuan.xcedu.mvp.view.QuestionListView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.QuestionAllVo;
-import com.xuechuan.xcedu.vo.SkillTextVo;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -114,6 +109,12 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
      * 困难 多选
      */
     private List<QuestionAllVo.DatasBean> mDifficultyMore = null;
+    private RadioButton mRdbSelect20;
+    private RadioButton mRdbSelect50;
+    private RadioButton mRdbSelect100;
+    private RadioButton mRdbSelecteasy;
+    private RadioButton mRdbSelectmedi;
+    private RadioButton mRdbSelectdif;
 
 
 /*    @Override
@@ -155,42 +156,56 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
             mAllQuestionPresenter.getcoursequestionid(mContext, mCourseid);
         }
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-        mRgQuestionNumber.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mRdbSelect20.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case 1:
-                        mPaperNumber = TWENTY;
-                        break;
-                    case 2:
-                        mPaperNumber = FIFTY;
-                        break;
-                    case 3:
-                        mPaperNumber = HUNDRED;
-                        break;
-                    default:
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mPaperNumber = TWENTY;
                 }
             }
         });
-        mRgDifficultyGrade.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mRdbSelect50.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case 4:
-                        mPaperGrader = EASY;
-                        break;
-                    case 5:
-                        mPaperGrader = MEDIUM;
-                        break;
-                    case 6:
-                        mPaperGrader = DIFFICULTY;
-                        break;
-                    default:
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mPaperNumber = FIFTY;
                 }
             }
         });
+        mRdbSelect100.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mPaperNumber = HUNDRED;
+                }
+            }
+        });
+
+        mRdbSelecteasy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mPaperGrader = EASY;
+                }
+            }
+        });
+        mRdbSelectmedi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mPaperGrader = MEDIUM;
+                }
+            }
+        });
+        mRdbSelectdif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mPaperGrader = DIFFICULTY;
+                }
+            }
+        });
+
 
     }
 
@@ -202,6 +217,18 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
         mRlvFreeTitle = (RecyclerView) findViewById(R.id.rlv_free_title);
         mBtnCreateQuestion = (Button) findViewById(R.id.btn_create_question);
         mBtnCreateQuestion.setOnClickListener(this);
+        mRdbSelect20 = (RadioButton) findViewById(R.id.rdb_select20);
+        mRdbSelect20.setOnClickListener(this);
+        mRdbSelect50 = (RadioButton) findViewById(R.id.rdb_select50);
+        mRdbSelect50.setOnClickListener(this);
+        mRdbSelect100 = (RadioButton) findViewById(R.id.rdb_select100);
+        mRdbSelect100.setOnClickListener(this);
+        mRdbSelecteasy = (RadioButton) findViewById(R.id.rdb_selecteasy);
+        mRdbSelecteasy.setOnClickListener(this);
+        mRdbSelectmedi = (RadioButton) findViewById(R.id.rdb_selectmedi);
+        mRdbSelectmedi.setOnClickListener(this);
+        mRdbSelectdif = (RadioButton) findViewById(R.id.rdb_selectdif);
+        mRdbSelectdif.setOnClickListener(this);
     }
 
 

@@ -6,18 +6,37 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
+import com.umeng.debug.log.D;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomeFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
+import com.xuechuan.xcedu.mvp.model.RefreshTokenModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.RefreshTokenPresenter;
+import com.xuechuan.xcedu.mvp.view.RefreshTokenView;
+import com.xuechuan.xcedu.mvp.view.RequestResulteView;
+import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.TokenVo;
+import com.xuechuan.xcedu.vo.UserBean;
+import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.util.ArrayList;
 
@@ -31,7 +50,7 @@ import java.util.ArrayList;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/17
  */
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomeActivity extends BaseActivity implements View.OnClickListener, RefreshTokenView {
 
     private FrameLayout mFlContent;
     private RadioButton mRdbHomeHome;
@@ -48,6 +67,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private int mFragmentLayout = R.id.fl_content;
     private static String Params = "Params";
     private static String Params1 = "Params";
+    private AlertDialog mDialog;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkGo.getInstance().cancelTag(mContext);
+    }
 
     public static void newInstance(Context context, String params1, String param2) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -55,7 +81,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         intent.putExtra(Params1, param2);
         context.startActivity(intent);
     }
-//        @Override
+
+    //        @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_home);
@@ -66,7 +93,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
         initView();
-        initData();
+        refreshToken();
+
+    }
+
+    /**
+     * 刷新token
+     */
+    private void refreshToken() {
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb userInfomDb = DbHelperAssist.getInstance().queryWithuuId(userId);
+        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+        if (userInfomDb.getVo() != null) {
+            userInfom = userInfomDb.getVo();
+        }
+        MyAppliction.getInstance().setUserInfom(userInfom);
+        RefreshTokenPresenter presenter = new RefreshTokenPresenter(new RefreshTokenModelImpl(), this);
+        presenter.refreshToken(mContext, userInfomDb.getToken());
+        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.login));
+
     }
 
 
@@ -130,9 +175,62 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        OkGo.getInstance().cancelTag(mContext);
+    public void TokenSuccess(String con) {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+
+        L.d(con);
+        Gson gson = new Gson();
+        TokenVo tokenVo = gson.fromJson(con, TokenVo.class);
+        if (tokenVo.getStatus().getCode() == 200) {
+            int statusX = tokenVo.getData().getStatusX();
+            TokenVo.DataBean data = tokenVo.getData();
+            switch (statusX) {
+                case -1:
+                    SaveUUidUtil.getInstance().delectUUid();
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                    this.finish();
+                    break;
+                case -2:
+                    SaveUUidUtil.getInstance().delectUUid();
+                    Intent intent1 = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent1);
+                    this.finish();
+                    break;
+                case 1:
+                    updataToken(data);
+                    break;
+                default:
+            }
+        } else {
+            if (mDialog != null) {
+                mDialog.dismiss();
+                SaveUUidUtil.getInstance().delectUUid();
+                Intent intent1 = new Intent(mContext, LoginActivity.class);
+                startActivity(intent1);
+                this.finish();
+            }
+            T.showToast(mContext, tokenVo.getStatus().getMessage());
+        }
+    }
+
+    private void updataToken(TokenVo.DataBean data) {
+        TokenVo.DataBean.TokenBean token = data.getToken();
+        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+        UserBean user = userInfom.getData().getUser();
+        user.setId(token.getStaffid());
+        user.setToken(token.getSigntoken());
+        user.setTokenexpire(token.getExpiretime());
+        DbHelperAssist.getInstance().saveUserInfom(userInfom);
+        initData();
+    }
+
+    @Override
+    public void TokenError(String con) {
+
     }
 }

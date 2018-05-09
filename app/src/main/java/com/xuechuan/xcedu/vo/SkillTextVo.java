@@ -8,7 +8,7 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.vo
- * @Description: todo
+ * @Description: 资讯
  * @author: L-BackPacker
  * @date: 2018/4/27 10:41
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

@@ -326,6 +326,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/_12"
+                    android:layout_marginRight="@dimen/space_8"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_14" />
 

@@ -54,6 +54,13 @@ public class MockTestActivity extends BaseActivity implements ExamView {
     private String mExtraType;
     private AlertDialog mDialog;
 
+    /**
+     *
+     * @param context
+     * @param questionoid  问题id
+     * @param type 类型
+     * @return
+     */
     public static Intent newInstance(Context context, String questionoid,String type) {
         Intent intent = new Intent(context, MockTestActivity.class);
         intent.putExtra(MQUESTIONOID, questionoid);
@@ -75,6 +82,7 @@ public class MockTestActivity extends BaseActivity implements ExamView {
         setContentView(R.layout.activity_mock_test);
         if (getIntent() != null) {
             mOid = getIntent().getStringExtra(MQUESTIONOID);
+           //类型
             mExtraType = getIntent().getStringExtra(MARKTYPE);
         }
         initView();
@@ -128,7 +136,7 @@ public class MockTestActivity extends BaseActivity implements ExamView {
             @Override
             public void onClickListener(Object obj, int position) {
                 ExamBeanVo vo = (ExamBeanVo) obj;
-                Intent intent = AnswerActivity.newInstance(mContext, String.valueOf(vo.getId()),
+                Intent intent = AnswerActivity.examInstance(mContext, String.valueOf(vo.getId()),
                         mExtraType);
                 startActivity(intent);
             }
@@ -150,7 +158,7 @@ public class MockTestActivity extends BaseActivity implements ExamView {
             @Override
             public void onClickListener(Object obj, int position) {
                 ExamBeanVo vo = (ExamBeanVo) obj;
-                Intent intent = AnswerActivity.newInstance(mContext, String.valueOf(vo.getId())
+                Intent intent = AnswerActivity.examInstance(mContext, String.valueOf(vo.getId())
                 ,mExtraType);
                 startActivity(intent);
             }

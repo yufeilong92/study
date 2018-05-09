@@ -67,6 +67,7 @@ public class QuestionListAdapter extends BaseRecyclerAdapter<QuestionListAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         ResultQuesitonVo.DatasBean datasBean = mData.get(position);
+        
         holder.mTvItemInfomlistTitel.setText(new HtmlSpanner().fromHtml(datasBean.getQuestion()));
 
     }

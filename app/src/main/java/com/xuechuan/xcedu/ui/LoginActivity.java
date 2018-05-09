@@ -29,6 +29,9 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.db.DbHelp.DBHelper;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.mvp.model.LoginModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.LoginPresenter;
 import com.xuechuan.xcedu.mvp.view.LoginView;
@@ -37,6 +40,7 @@ import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -70,27 +74,33 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private LoginPresenter mPresenter;
     private AlertDialog mDialog;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_login);
-//        initView();
-//    }
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        initView();
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        if (receiver != null)
+            unregisterReceiver(receiver);
     }
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         initView();
-
         regToWx();
-        initData();
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        if (StringUtil.isEmpty(userId)) {
+            initData();
+        } else {
+            HomeActivity.newInstance(mContext, null, null);
+            finishActivity();
+        }
+
     }
 
     //注册微信
@@ -150,14 +160,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * 处理微信登录回调
      */
     private void initData() {
-
-
         mPresenter = new LoginPresenter(new LoginModelImpl(), this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataMessageVo.WEI_LOGIN_ACTION);
         receiver = new BroadcastReceiver() {
-
-
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent != null) {
@@ -217,45 +223,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         });
     }
-
-    private void requestLogin(String extra, String code) {
-
-        WeiXinLoginSercvice instance = WeiXinLoginSercvice.getInstance(mContext);
-        instance.setIsShowDialog(true);
-        instance.setDialogContext(mContext, null, getString(R.string.loading));
-        instance.requestWeiCode(code, new StringCallBackView() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                String infom = response.body().toString();
-                JsonElement parse = new JsonParser().parse(infom);
-
-                L.d(infom);
-                Gson gson = new Gson();
-                UserInfomVo vo = gson.fromJson(infom, UserInfomVo.class);
-                UserInfomVo.DataBean voData = vo.getData();
-                if (vo.getStatus().getCode() != 200) {//失败情况
-                    T.showToast(mContext, vo.getStatus().getMessage());
-                    return;
-                }
-                if (voData.isIsbinduser()) {//已经绑定数据（手机）
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {//没有绑定手机
-                    Intent intent = RegisterActivity.newInstance(mContext, voData.getOpenid(), RegisterActivity.CEX_INT_TYPE_BIND, voData.getUnionid());
-                    intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-                L.e(response.message());
-            }
-        });
-
-    }
-
     //调用微信
     private void loginWeiXin() {
         final SendAuth.Req req = new SendAuth.Req();
@@ -284,71 +251,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         service.setDialogContext(null, getStringWithId(R.string.login_loading));
         mPresenter.getLoginContent(mContext, username, password);
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.login_loading));
-//        submitLogin(username, password, service);
-    }
-
-    private void submitLogin(String username, String password, LoginService service) {
-        service.requestlogin(username, password, new StringCallBackView() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                String message = response.body().toString();
-                L.d("登录成功", message);
-                String code = JSONObject.quote(message);
-                L.w(code);
-                Gson gson = new Gson();
-                UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
-                if (vo.getStatus().getCode() == 200) {
-                    UserInfomVo.DataBean voData = vo.getData();
-                    int status = voData.getStatus();
-                    if (status == -1) {
-                        T.showToast(mContext, "账号被禁用");
-                        return;
-                    }
-                    if (status == -2) {
-                        T.showToast(mContext, "账号密码错误");
-                        return;
-                    }
-                    if (status == -3) {
-                        T.showToast(mContext, "账号未注册");
-                        return;
-                    }
-
-
-                    MyAppliction.getInstance().setUserInfom(vo);
-                    HomeActivity.newInstance(mContext, null, null);
-                } else {
-                    T.showToast(mContext, vo.getStatus().getMessage());
-                }
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-            }
-        });
-    }
-
-    // TODO: 2018/4/18 刷新token
-    private void refreshToken(UserInfomVo vo, LoginService service) {
-        //刷新token
-        LoginService loginService = LoginService.getInstance(mContext);
-        int id = vo.getData().getUser().getId();
-        String token = vo.getData().getUser().getToken();
-        loginService.requestRefeshToken(String.valueOf(id), token, new StringCallBackView() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                L.e(response.body().toString());
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-
-            }
-        });
     }
 
     @Override
     public void WeiXinLoginSuccess(String infom) {
-//        String infom = response.body().toString();
         JsonElement parse = new JsonParser().parse(infom);
 
         L.d(infom);
@@ -360,9 +266,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             return;
         }
         if (voData.isIsbinduser()) {//已经绑定数据（手机）
+            //保存信息
+            DbHelperAssist.getInstance().saveUserInfom(vo);
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish();
+            finishActivity();
         } else {//没有绑定手机
             Intent intent = RegisterActivity.newInstance(mContext, voData.getOpenid(), RegisterActivity.CEX_INT_TYPE_BIND, voData.getUnionid());
             intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
@@ -400,9 +308,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 T.showToast(mContext, "账号未注册");
                 return;
             }
-            MyAppliction.getInstance().setUserInfom(vo);
-
+            DbHelperAssist.getInstance().saveUserInfom(vo);
             HomeActivity.newInstance(mContext, null, null);
+            finishActivity();
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
@@ -415,4 +323,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
         L.e(con);
     }
+    public void finishActivity(){
+        this.finish();
+    }
+
 }

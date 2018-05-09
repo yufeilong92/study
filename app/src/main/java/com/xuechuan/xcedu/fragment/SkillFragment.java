@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.mvp.model.SkillModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.SkillPresenter;
 import com.xuechuan.xcedu.mvp.view.SkillView;
@@ -26,6 +28,7 @@ import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
 import com.xuechuan.xcedu.ui.home.SpecasListActivity;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
@@ -80,14 +83,12 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
             mTypeOid = getArguments().getString(TYPEOID);
         }
     }
-
 /*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skill, container, false);
         initView(view);
-
         L.e(++i+"");
         initData();
         return view;
@@ -104,46 +105,14 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
         initData();
-//        requestBought();
+//      requestBought();
     }
-
     private void initData() {
         mPresenter = new SkillPresenter(new SkillModelImpl(), this);
         mPresenter.getErrOrCollNumber(mContext, mTypeOid);
         mPresenter.requestBuyInfom(mContext, mTypeOid);
 
     }
-
-    /**
-     * 初始化用购买的科目
-     */
-    private void requestBought() {
-        BankService bankService = new BankService(mContext);
-        bankService.requestIsBought(mTypeOid, new StringCallBackView() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                String msg = response.body().toString();
-                Gson gson = new Gson();
-                BuyVo vo = gson.fromJson(msg, BuyVo.class);
-                if (vo.getStatus().getCode() == 200) {
-                    BuyVo.DataBean data = vo.getData();
-                    boolean isbought = data.isIsbought();
-                    UserbuyOrInfomVo infomVo = new UserbuyOrInfomVo();
-                    infomVo.setSkillbook(isbought);
-                    SharedUserUtils.getInstance().putUserBuyVo(infomVo);
-                } else {
-                    T.showToast(mContext, vo.getStatus().getMessage());
-                }
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-                L.e(response.message());
-            }
-        });
-
-    }
-
     private void initView(View view) {
         mTvSkillWroing = (TextView) view.findViewById(R.id.tv_skill_wroing);
         mLlBSkillError = (LinearLayout) view.findViewById(R.id.ll_b_skill_error);
@@ -185,7 +154,6 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 }
                 break;
             case R.id.iv_b_order://章节
-//                Intent intent = AtricleTextListActivity.newInstance(mContext, mTypeOid);
                 Intent intent = AtricleListActivity.newInstance(mContext, mTypeOid);
                 intent.putExtra(AtricleListActivity.CSTR_EXTRA_TITLE_STR, "章节练习");
                 startActivity(intent);
@@ -217,7 +185,6 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void ErrorOrCollortNumberSuccess(String con) {
-        L.e("yfl", "ErrorOrCollortNumberSuccess: " + con);
         Gson gson = new Gson();
         ErrorOrColloctVo vo = gson.fromJson(con, ErrorOrColloctVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -251,10 +218,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         BuyVo vo = gson.fromJson(msg, BuyVo.class);
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
-            boolean isbought = data.isIsbought();
-            UserbuyOrInfomVo infomVo = new UserbuyOrInfomVo();
-            infomVo.setSkillbook(isbought);
-            SharedUserUtils.getInstance().putUserBuyVo(infomVo);
+            String userId = SaveUUidUtil.getInstance().getUserId();
+            DbHelperAssist.getInstance().upDataBuyInfom( String.valueOf(data.getCourseid()), data.isIsbought());
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }

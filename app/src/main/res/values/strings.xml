@@ -143,5 +143,6 @@
     <string name="medium">中等</string>
     <string name="hard">困难</string>
     <string name="again">从头开始</string>
+    <string name="pas_no_same">两次输入密码不一致</string>
 
 </resources>

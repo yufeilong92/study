@@ -17,6 +17,7 @@ import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
@@ -256,14 +257,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 //            return;
 //        }
         if (!paw.equals(paws)) {
-            T.showToast(mContext, "两次输入密码不一致");
+            T.showToast(mContext, getString(R.string.pas_no_same));
             return;
         }
         RegisterService service = RegisterService.getInstance(mContext);
 //        service.setIsShowDialog(true);
 //        service.setDialogContext(null, getString(R.string.login_loading));
-         final AlertDialog dialog = DialogUtil.showDialog(mContext, "", "提交数据中...");
+        final AlertDialog dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
 //        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
+        // TODO: 2018/5/9 验证码处理
         service.requestRegister(mType, phone, "1234", paw, mOpenid, mUuionid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
@@ -285,11 +287,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             T.showToast(mContext, getString(R.string.registerOK));
                             MyAppliction.getInstance().setUserInfom(vo);
                             Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                            UserBean user = vo.getData().getUser();
-                            UserbuyOrInfomVo vodata =new UserbuyOrInfomVo();
-                            vodata.setToken(user.getToken());
-                            vodata.setTime(user.getTokenexpire());
-                            SharedUserUtils.getInstance().putUserBuyVo(vodata);
+                            MyAppliction.getInstance().setUserInfom(vo);
+                            DbHelperAssist.getInstance().saveUserInfom(vo);
                             startActivity(intent);
                             break;
                         case -1:

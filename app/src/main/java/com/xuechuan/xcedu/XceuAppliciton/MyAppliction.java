@@ -23,6 +23,8 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.db.DbHelp.DBHelper;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.SharedSeletIdListUtil;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.SharedTextListUtil;
@@ -106,6 +108,8 @@ public class MyAppliction extends MultiDexApplication {
 //        initOkHttp();
 //        initJPush();
         initImagerLoader();
+        DBHelper.initDb(this);
+        SaveUUidUtil.initSharedPreference(this);
         SharedUserUtils.initSharedPreference(this);
         SharedTextListUtil.initSharedPreference(this);
         SharedSeletIdListUtil.initSharedPreference(this);

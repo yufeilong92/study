@@ -26,6 +26,11 @@ public class LoginPresenter {
         this.view = view;
     }
 
+    /**
+     * 微信登录
+     * @param context
+     * @param code
+     */
     public void getWeiXinLoginContent(Context context, String code) {
         if (StringUtil.isEmpty(code)) {
             return;
@@ -43,6 +48,12 @@ public class LoginPresenter {
         });
     }
 
+    /**
+     * 密码登录
+     * @param context
+     * @param username
+     * @param paw
+     */
     public void getLoginContent(Context context, String username, String paw) {
         if (StringUtil.isEmpty(username)) {
             return;

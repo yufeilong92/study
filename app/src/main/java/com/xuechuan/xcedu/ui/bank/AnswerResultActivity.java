@@ -29,12 +29,10 @@ public class AnswerResultActivity extends BaseActivity implements View.OnClickLi
     private Button mBtnAnswerAgain;
     private Button mBtnAnswerJiexi;
     private Context mContext;
-
 /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_answer_result);
         initView();
     }

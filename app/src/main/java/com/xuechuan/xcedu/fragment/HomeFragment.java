@@ -224,7 +224,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 } else {//失败
 //                    T.showToast(mContext, status.getMessage());
-                    mDialog.dismiss();
+                    if (mDialog == null)
+                        mDialog.dismiss();
                     requestData(code);
                 }
             }
@@ -331,6 +332,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     /**
      * banner图
+     *
      * @param strings
      * @param list
      */

@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.QuestionAllVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 
@@ -69,6 +71,7 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.e("yfl", "onBindViewHolder: "+position+selectItem );
         holder.setIsRecyclable(false);
         QuestionAllVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
@@ -80,7 +83,10 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
 //            判断是否做过
                 if (id.equalsIgnoreCase(String.valueOf(vo.getId()))) {//做过
                     String status = vo.getItemStatus();
-                    if (status.equals("0")) {//正确
+                    if (StringUtil.isEmpty(status)) {
+                        holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_su);
+                        holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.black));
+                    } else if (status.equals("0")) {//正确
                         holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
                         holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
                     } else if (status.equals("1")) {//错误
@@ -102,11 +108,15 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
 
         } else {//未提交
             if (selectItem == position) {//显示当前题
-                holder.mTvPopAnswerSelect.setBackgroundColor(mContext.getResources().getColor(R.color.black));
+                holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn);
                 holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.white));
             } else {
                 setBg(holder, bean, user);
             }
+        }
+        if (selectItem == position) {//显示当前题
+            holder.mTvPopAnswerSelect.setBackgroundResource(R.drawable.bg_select_answer_btn);
+            holder.mTvPopAnswerSelect.setTextColor(mContext.getResources().getColor(R.color.white));
         }
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);

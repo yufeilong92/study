@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.mvp.model.ColoctModelImpl;
 import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.ColoctPresenter;
@@ -21,7 +22,9 @@ import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.BuyVo;
 import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
 
 /**
@@ -54,10 +57,6 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     private ColoctPresenter colPresenter;
     private ErrorOrColloctVo.DataBean mData;
 
-
-    public ColligateFragment() {
-    }
-
     public static ColligateFragment newInstance(String id) {
         ColligateFragment fragment = new ColligateFragment();
         Bundle args = new Bundle();
@@ -82,7 +81,6 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
         return view;
     }
 */
-
     @Override
     protected int initInflateView() {
         return R.layout.fragment_colligate;
@@ -93,12 +91,9 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
         initView(view);
         initData();
     }
-
     private void initData() {
         colPresenter = new ColoctPresenter(new ColoctModelImpl(), this);
         colPresenter.getErrOrCollNumber(mContext, mTypeOid);
-//        colPresenter.getcoursequestionid(mContext,mTypeOid);
-//        colPresenter.getQuestionTags(mContext,mTypeOid);
 
     }
 
@@ -190,7 +185,15 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void BuySuccess(String con) {
-
+        Gson gson = new Gson();
+        BuyVo vo = gson.fromJson(con, BuyVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            BuyVo.DataBean data = vo.getData();
+            String userId = SaveUUidUtil.getInstance().getUserId();
+            DbHelperAssist.getInstance().upDataBuyInfom( String.valueOf(data.getCourseid()), data.isIsbought());
+        }else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
     }
 
     @Override
