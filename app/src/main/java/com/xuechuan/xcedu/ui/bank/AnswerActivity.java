@@ -57,11 +57,13 @@ import com.xuechuan.xcedu.mvp.view.AnswerView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColListView;
 import com.xuechuan.xcedu.mvp.view.EvalueView;
 import com.xuechuan.xcedu.mvp.view.SpecailDetailView;
+import com.xuechuan.xcedu.mvp.view.TimeShowView;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
-import com.xuechuan.xcedu.utils.AdvancedCountdownTimer;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.MyCount;
+import com.xuechuan.xcedu.utils.MyCountUtil;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -69,8 +71,8 @@ import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ErrOrColListVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
-import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.QuestionAllVo;
+import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.SmartScrollView;
@@ -93,7 +95,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/9
  */
-public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView, SpecailDetailView, ErrOrColListView {
+public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView, SpecailDetailView, ErrOrColListView, TimeShowView {
     /**
      * 科目id
      */
@@ -523,35 +525,22 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (!StringUtil.isEmpty(mStyleCase)) {
             if (mStyleCase.equals(DataMessageVo.MARKTYPECASE)) {//案例
                 isExam = false;
-                initTime("03", "00", "00");
+                MyCountUtil util = MyCountUtil.getInstance("03", "00", "00");
+                util.setTimwShowView(this);
+                util.start();
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPESKILL)) {//技术
                 isExam = false;
-                initTime("02", "30", "00");
+                MyCountUtil util = MyCountUtil.getInstance("02", "30", "00");
+                util.setTimwShowView(this);
+                util.start();
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPECOLLORT)) {//综合
                 isExam = false;
-                initTime("02", "30", "00");
+                MyCountUtil util = MyCountUtil.getInstance("02", "30", "00");
+                util.setTimwShowView(this);
+                util.start();
             }
         }
         clearSeletItem();
-    }
-
-
-    /**
-     * 设置考试时间
-     *
-     * @param hourtiem
-     * @param minTime
-     * @param secondTime
-     */
-    private void initTime(String hourtiem, String minTime, String secondTime) {
-        long hour = Long.parseLong(hourtiem);
-        long minute = Long.parseLong(minTime);
-        long second = Long.parseLong(secondTime);
-        long time = (hour * 3600 + minute * 60 + second) * 1000;  //因为以ms为单位，所以乘以1000.
-        TimeCount = new MyCount(time, 1000);
-        mActivityTitleText.setText(startTime);
-        mActivityTitleText.setTextSize(15);
-        TimeCount.start();
     }
 
     /**
@@ -2697,50 +2686,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         L.w(con);
     }
 
-    /**
-     * 实现倒计时功能的类
-     */
-    class MyCount extends AdvancedCountdownTimer {
-        public MyCount(long millisInFuture, long countDownInterval) {  //这两个参数在AdvancedCountdownTimer.java中均有(在“构造函数”中).
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onFinish() {
-            mActivityTitleText.setText("00：00：00");
-
-        }
-
-        //更新剩余时间
-        String a = null;
-
-        @Override
-        public void onTick(long millisUntilFinished, int percent) {
-            long myhour = (millisUntilFinished / 1000) / 3600;
-            long myminute = ((millisUntilFinished / 1000) - myhour * 3600) / 60;
-            long mysecond = millisUntilFinished / 1000 - myhour * 3600
-                    - myminute * 60;
-            if (mysecond < 10) {
-                a = "0" + mysecond;
-                if (myminute < 10) {
-                    mActivityTitleText.setText("0" + myhour + ":" + "0" + myminute + ":" + a);
-                } else
-                    mActivityTitleText.setText("0" + myhour + ":" + myminute + ":" + a);
-            } else {
-                if (myminute < 10) {
-                    mActivityTitleText.setText("0" + myhour + ":" + "0" + myminute + ":" + mysecond);
-                } else {
-                    mActivityTitleText.setText("0" + myhour + ":" + myminute + ":" + mysecond);
-                }
-
-            }
-
-            mActivityTitleText.setTextSize(15);
-
-        }
-
+    @Override
+    public void CurrentTime(String time) {
+        mActivityTitleText.setTextSize(15);
+        mActivityTitleText.setText(time);
     }
 
-
+    @Override
+    public void TimeFinish() {
+        mActivityTitleText.setText("00：00：00");
+    }
 }
 
