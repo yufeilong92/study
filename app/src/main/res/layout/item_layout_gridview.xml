@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/tv_pop_grdview_select"
         android:layout_width="@dimen/space_48"
-        android:layout_height="@dimen/space_48"
+        android:layout_height="40dp"
         android:background="@drawable/bg_select_answer_btn_ss"
         android:gravity="center"
         android:text="1"

@@ -398,6 +398,32 @@ public class BankService extends BaseHttpServcie {
         requestHttpServciePost(mContext, url, obj, true, callBackView);
     }
 
+
+    /**
+     * 提交收藏
+     *
+     * @param targetid     练习题编号
+     * @param callBackView
+     */
+    public void subimtDelectQuestionPost(String targetid, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JSONObject obj = getJsonObj();
+        try {
+            obj.put("staffid", user.getId());
+            obj.put("targetid", targetid);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getUrl(mContext, R.string.http_questionremoveerrsetpost);
+        requestHttpServciePost(mContext, url, obj, true, callBackView);
+    }
+
+
     /**
      * 提交做题记录
      *

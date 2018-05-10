@@ -1,13 +1,17 @@
 package com.xuechuan.xcedu.db.DbHelp;
 
+import com.umeng.debug.log.E;
+import com.umeng.debug.log.I;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.db.UserInfomDbDao;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.vo.UserLookVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,51 +64,101 @@ public class DbHelperAssist {
     /**
      * 更新技术
      *
-     * @param mUuid 用户uuid
      * @param mdata 跟新记录
      */
-    public void upDataSkillRecord(String mUuid, List<UserLookVo> mdata) {
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(mUuid)).unique();
+    public void upDataSkillRecord(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
-            upDataSkillRecord(mUuid, mdata);
+            upDataSkillRecord(mdata);
         }
-        infomDb.setSkillData(mdata);
+        List<UserLookVo> skillData = infomDb.getSkillData();
+
+        if (skillData == null) {
+            skillData = new ArrayList<>();
+        } else {
+            for (int i = 0; i < skillData.size(); i++) {
+                UserLookVo userLookVo = mdata.get(0);
+                UserLookVo lookVo = skillData.get(i);
+                if (userLookVo.getChapterId().equals(lookVo.getChapterId())) {
+                    skillData.remove(i);
+                }
+            }
+        }
+
+        skillData.addAll(mdata);
+        infomDb.setSkillData(skillData);
         dao.update(infomDb);
     }
 
     /**
      * 跟新综合记录
      *
-     * @param mUuid 用户uuid
      * @param mdata 跟新记录
      */
-    public void upDataColoctRecord(String mUuid, List<UserLookVo> mdata) {
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(mUuid)).unique();
+    public void upDataColoctRecord(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
-            upDataColoctRecord(mUuid, mdata);
+            upDataColoctRecord(mdata);
         }
-        infomDb.setColoctData(mdata);
+        List<UserLookVo> coloctData = infomDb.getColoctData();
+        if (coloctData == null) {
+            coloctData = new ArrayList<>();
+        } else {
+            for (int i = 0; i < coloctData.size(); i++) {
+                UserLookVo userLookVo = mdata.get(0);
+                UserLookVo lookVo = coloctData.get(i);
+                if (userLookVo.getChapterId().equals(lookVo.getChapterId())) {
+                    coloctData.remove(i);
+                }
+            }
+        }
+        coloctData.addAll(mdata);
+        infomDb.setColoctData(coloctData);
         dao.update(infomDb);
     }
 
     /**
      * 跟新案例
      *
-     * @param mUuid 用户uuid
      * @param mdata 跟新记录
      */
-    public void upDataCaseRecord(String mUuid, List<UserLookVo> mdata) {
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(mUuid)).unique();
+    public void upDataCaseRecord(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
-            upDataCaseRecord(mUuid, mdata);
+            upDataCaseRecord(mdata);
         }
-        infomDb.setCaseData(mdata);
+        List<UserLookVo> caselData = infomDb.getCaseData();
+        if (caselData == null) {
+            caselData = new ArrayList<>();
+        } else {
+            for (int i = 0; i < caselData.size(); i++) {
+                UserLookVo userLookVo = mdata.get(0);
+                UserLookVo lookVo = caselData.get(i);
+                if (userLookVo.getChapterId().equals(lookVo.getChapterId())) {
+                    caselData.remove(i);
+                }
+            }
+        }
+        caselData.addAll(mdata);
+        infomDb.setCaseData(caselData);
         dao.update(infomDb);
     }
 
@@ -154,6 +208,9 @@ public class DbHelperAssist {
      * @return
      */
     public UserInfomDb queryWithuuId(String id) {
+        if (StringUtil.isEmpty(id)) {
+            return null;
+        }
         UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(id)).unique();
         if (infomDb == null) {
             return null;
@@ -210,9 +267,17 @@ public class DbHelperAssist {
      *
      * @param day
      */
-    public void upDataDayOrNight( String day) {
+    public void upDataDayOrNight(String day) {
+        if (StringUtil.isEmpty(day)) {
+            return;
+        }
         String userId = SaveUUidUtil.getInstance().getUserId();
         UserInfomDb userInfomDb = queryWithuuId(userId);
+        if (userInfomDb == null) {
+            UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(vo);
+            upDataDayOrNight(day);
+        }
         userInfomDb.setShowDayOrNight(day);
         dao.update(userInfomDb);
     }
@@ -222,21 +287,37 @@ public class DbHelperAssist {
      *
      * @param isGo
      */
-    public void upDataNextGo( boolean isGo) {
+    public void upDataNextGo(boolean isGo) {
         String userId = SaveUUidUtil.getInstance().getUserId();
         UserInfomDb userInfomDb = queryWithuuId(userId);
+
+        if (userInfomDb == null) {
+            UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(vo);
+            upDataNextGo(isGo);
+        }
+
         userInfomDb.setUserNextGo(isGo);
         dao.update(userInfomDb);
     }
 
     /**
-     * 更新自动跳下一题
+     * 更新删除次数
      *
      * @param number
      */
-    public void upDataDelect( String number) {
+    public void upDataDelect(String number) {
+        if (StringUtil.isEmpty(number)) {
+            return;
+        }
         String userId = SaveUUidUtil.getInstance().getUserId();
         UserInfomDb userInfomDb = queryWithuuId(userId);
+        if (userInfomDb == null) {
+            UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            userInfomDb.setVo(vo);
+            saveUserInfom(vo);
+            upDataDelect(number);
+        }
         userInfomDb.setDelectQuestion(number);
         dao.update(userInfomDb);
     }
@@ -246,9 +327,18 @@ public class DbHelperAssist {
      *
      * @param number
      */
-    public void upDataBuyInfom( String number, boolean isbuy) {
+    public void upDataBuyInfom(String number, boolean isbuy) {
+        if (StringUtil.isEmpty(number)) {
+            return;
+        }
         String userId = SaveUUidUtil.getInstance().getUserId();
         UserInfomDb userInfomDb = queryWithuuId(userId);
+        if (userInfomDb == null) {
+            UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(vo);
+            upDataBuyInfom(number, isbuy);
+        }
+
         if (number.equals("1")) {
             userInfomDb.setSkillBook(isbuy);
         } else if (number.equals("2")) {
@@ -259,5 +349,315 @@ public class DbHelperAssist {
 
         dao.update(userInfomDb);
     }
+
+
+    /**
+     * 更新错误记录数据
+     */
+    public void upDataWoringSkill(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            upDataWoringSkill(mdata);
+        }
+        List<UserLookVo> skillData = infomDb.getWrongDataSkill();
+        if (skillData == null) {
+            skillData = mdata;
+            for (int i = 0; i < skillData.size(); i++) {
+                UserLookVo vo = skillData.get(i);
+                vo.setNextId("1");
+            }
+
+        } else {
+            for (int i = 0; i < skillData.size(); i++) {
+                UserLookVo woringvo = skillData.get(i);
+                for (int i1 = 0; i1 < mdata.size(); i1++) {
+                    if (woringvo.getChapterId().equals(woringvo.getChapterId())) {
+                        String nextId = woringvo.getNextId();
+                        if (StringUtil.isEmpty(nextId)) {
+                            woringvo.setNextId("1");
+                        } else {
+                            int number = Integer.parseInt(nextId);
+                            number += 1;
+                            woringvo.setNextId(String.valueOf(number));
+                        }
+                    }
+                }
+            }
+        }
+        infomDb.setWrongDataSkill(skillData);
+        dao.update(infomDb);
+    }
+
+    /***
+     * 跟新对数
+     * @param mdata
+     */
+    public void updateWoringCase(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            updateWoringCase(mdata);
+        }
+        List<UserLookVo> caselData = infomDb.getWrongDataCase();
+        if (caselData == null) {
+            caselData = mdata;
+            for (int i = 0; i < caselData.size(); i++) {
+                UserLookVo vo = caselData.get(i);
+                vo.setNextId("1");
+            }
+        } else {
+            for (int i = 0; i < caselData.size(); i++) {
+                UserLookVo woringvo = caselData.get(i);
+                for (int i1 = 0; i1 < mdata.size(); i1++) {
+                    if (woringvo.getChapterId().equals(woringvo.getChapterId())) {
+                        String nextId = woringvo.getNextId();
+                        if (StringUtil.isEmpty(nextId)) {
+                            woringvo.setNextId("1");
+                        } else {
+                            int number = Integer.parseInt(nextId);
+                            number += 1;
+                            woringvo.setNextId(String.valueOf(number));
+                        }
+                    }
+                }
+            }
+        }
+        infomDb.setWrongDataCase(caselData);
+        dao.update(infomDb);
+    }
+
+    /**
+     * 更新错题对数
+     *
+     * @param mdata
+     */
+    public void updataWoringColoct(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            updataWoringColoct(mdata);
+        }
+        List<UserLookVo> colocData = infomDb.getWrongDataColoct();
+        if (colocData == null) {
+            colocData = mdata;
+            for (int i = 0; i < colocData.size(); i++) {
+                UserLookVo vo = colocData.get(i);
+                vo.setNextId("1");
+            }
+        } else {
+            for (int i = 0; i < colocData.size(); i++) {
+                UserLookVo woringvo = colocData.get(i);
+                for (int i1 = 0; i1 < mdata.size(); i1++) {
+                    if (woringvo.getChapterId().equals(woringvo.getChapterId())) {
+                        String nextId = woringvo.getNextId();
+                        if (StringUtil.isEmpty(nextId)) {
+                            woringvo.setNextId("1");
+                        } else {
+                            int number = Integer.parseInt(nextId);
+                            number += 1;
+                            woringvo.setNextId(String.valueOf(number));
+                        }
+                    }
+                }
+            }
+        }
+        infomDb.setWrongDataColoct(colocData);
+        dao.update(infomDb);
+    }
+
+    /**
+     * 保存错题集合
+     *
+     * @param mdata
+     */
+    public void saveWoringSkill(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            saveWoringSkill(mdata);
+        }
+        List<UserLookVo> wrongDataSkill = infomDb.getWrongDataSkill();
+        if (wrongDataSkill == null || wrongDataSkill.isEmpty()) {
+            wrongDataSkill = new ArrayList<>();
+        } else {
+            for (int i = 0; i < wrongDataSkill.size(); i++) {
+                UserLookVo userLookVo = wrongDataSkill.get(i);
+                for (int j = 0; j < mdata.size(); j++) {
+                    UserLookVo userLookVo1 = mdata.get(j);
+                    if (userLookVo.getChapterId().equals(userLookVo1.getChapterId())) {
+                        String nextId = userLookVo.getNextId();
+                        if (StringUtil.isEmpty(nextId)) {
+                            wrongDataSkill.remove(i);
+                        } else {
+                            mdata.remove(j);
+                        }
+                    }
+                }
+            }
+        }
+        wrongDataSkill.addAll(mdata);
+        infomDb.setWrongDataSkill(wrongDataSkill);
+        dao.update(infomDb);
+    }
+
+    /***
+     *  保存错题集合
+     * @param mdata
+     */
+    public void saveWoringColoct(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            saveWoringColoct(mdata);
+        }
+        List<UserLookVo> wrongDatacoloct = infomDb.getWrongDataColoct();
+        if (wrongDatacoloct == null || wrongDatacoloct.isEmpty()) {
+            wrongDatacoloct = new ArrayList<>();
+        } else {
+            for (int i = 0; i < wrongDatacoloct.size(); i++) {
+                UserLookVo userLookVo = wrongDatacoloct.get(i);
+                for (int j = 0; j < mdata.size(); j++) {
+                    UserLookVo userLookVo1 = mdata.get(j);
+                    if (userLookVo.getChapterId().equals(userLookVo1.getChapterId())) {
+                        String nextId = userLookVo.getNextId();
+                        if (StringUtil.isEmpty(nextId)) {
+                            wrongDatacoloct.remove(i);
+                        } else {
+                            mdata.remove(j);
+                        }
+                    }
+                }
+            }
+        }
+        wrongDatacoloct.addAll(mdata);
+        infomDb.setWrongDataColoct(wrongDatacoloct);
+        dao.update(infomDb);
+    }
+
+    /**
+     * 保存错题集合
+     *
+     * @param mdata
+     */
+    public void saveWoringCase(List<UserLookVo> mdata) {
+        if (mdata == null || mdata.isEmpty()) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            saveWoringCase(mdata);
+        }
+        List<UserLookVo> wrongDataCase = infomDb.getWrongDataCase();
+        if (wrongDataCase == null || wrongDataCase.isEmpty()) {
+            wrongDataCase = new ArrayList<>();
+        } else {
+            for (int i = 0; i < wrongDataCase.size(); i++) {
+                UserLookVo userLookVo = wrongDataCase.get(i);
+                for (int j = 0; j < mdata.size(); j++) {
+                    UserLookVo userLookVo1 = mdata.get(j);
+                    if (userLookVo.getChapterId().equals(userLookVo1.getChapterId())) {
+                        String nextId = userLookVo.getNextId();
+                        if (StringUtil.isEmpty(nextId)) {
+                            wrongDataCase.remove(i);
+                        } else {
+                            mdata.remove(j);
+                        }
+                    }
+                }
+            }
+        }
+        wrongDataCase.addAll(mdata);
+        infomDb.setWrongDataCase(wrongDataCase);
+        dao.update(infomDb);
+    }
+
+    /***
+     * 删除满足条件id
+     * @param id id
+     * @param mark 类型
+     */
+    public void delectDBWring(String id, String mark) {
+        if (StringUtil.isEmpty(id)) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            return;
+        }
+        if (mark.equals("1")) {
+            List<UserLookVo> skill = infomDb.getWrongDataSkill();
+            if (skill == null || skill.isEmpty()) {
+                return;
+            }
+            for (int i = 0; i < skill.size(); i++) {
+                UserLookVo userLookVo = skill.get(i);
+                if (userLookVo.getChapterId().equals(id)) {
+                    skill.remove(i);
+                }
+            }
+            infomDb.setWrongDataSkill(skill);
+            dao.update(infomDb);
+        }
+        if (mark.equals("2")) {
+            List<UserLookVo> skill = infomDb.getWrongDataColoct();
+            if (skill == null || skill.isEmpty()) {
+                return;
+            }
+            for (int i = 0; i < skill.size(); i++) {
+                UserLookVo userLookVo = skill.get(i);
+                if (userLookVo.getChapterId().equals(id)) {
+                    skill.remove(i);
+                }
+            }
+            infomDb.setWrongDataColoct(skill);
+            dao.update(infomDb);
+        }
+
+        if (mark.equals("3")) {
+            List<UserLookVo> skill = infomDb.getWrongDataCase();
+            if (skill == null || skill.isEmpty()) {
+                return;
+            }
+            for (int i = 0; i < skill.size(); i++) {
+                UserLookVo userLookVo = skill.get(i);
+                if (userLookVo.getChapterId().equals(id)) {
+                    skill.remove(i);
+                }
+            }
+            infomDb.setWrongDataCase(skill);
+            dao.update(infomDb);
+        }
+    }
+
 
 }

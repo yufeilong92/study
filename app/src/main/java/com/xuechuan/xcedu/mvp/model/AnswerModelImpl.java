@@ -22,6 +22,7 @@ public class AnswerModelImpl implements AnswerModel {
 
     /**
      * 获取章节下所有练习题库题号
+     *
      * @param context
      * @param id
      * @param view
@@ -44,6 +45,7 @@ public class AnswerModelImpl implements AnswerModel {
 
     /**
      * 题干详情
+     *
      * @param context
      * @param id
      * @param view
@@ -66,6 +68,7 @@ public class AnswerModelImpl implements AnswerModel {
 
     /**
      * 提交收藏
+     *
      * @param context
      * @param isFav
      * @param id
@@ -89,6 +92,7 @@ public class AnswerModelImpl implements AnswerModel {
 
     /**
      * 提交做题结果
+     *
      * @param context
      * @param isRight
      * @param id
@@ -106,6 +110,28 @@ public class AnswerModelImpl implements AnswerModel {
             @Override
             public void onError(Response<String> response) {
                 view.success(response.message());
+            }
+        });
+    }
+
+    /***
+     * 移除错误
+     * @param context
+     * @param targetid
+     * @param view
+     */
+    @Override
+    public void SubmitWoringQuestionDelect(Context context, String targetid, final RequestResulteView view) {
+        BankService bankService = new BankService(context);
+        bankService.subimtDelectQuestionPost(targetid, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                view.error(response.message());
             }
         });
     }

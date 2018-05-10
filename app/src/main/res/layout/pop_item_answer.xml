@@ -128,6 +128,7 @@
         android:paddingRight="@dimen/space_16">
     </android.support.v7.widget.RecyclerView>
 <GridView
+    android:scrollbars="none"
     android:id="@+id/gv_pop_content"
     android:fastScrollEnabled="false"
     android:gravity="center"

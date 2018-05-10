@@ -214,7 +214,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(intent1);
                 this.finish();
             }
-            T.showToast(mContext, tokenVo.getStatus().getMessage());
+            L.e( tokenVo.getStatus().getMessage());
         }
     }
 

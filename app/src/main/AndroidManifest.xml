@@ -129,9 +129,6 @@
             android:name=".ui.User.FeedBackActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.bank.AtricleTextListActivity"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".ui.bank.AtricleListActivity"
             android:launchMode="singleTask" />
 

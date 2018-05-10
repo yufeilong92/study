@@ -38,5 +38,25 @@ public class AnswerCardUtil {
         }
         return "";
     }
+
+    public static String getSelectItem(String item) {
+        if (item.equalsIgnoreCase("A")) {
+            return "A";
+        }
+        if (item.equalsIgnoreCase("B")) {
+            return "B";
+        }
+        if (item.equalsIgnoreCase("C")) {
+            return "C";
+        }
+        if (item.equalsIgnoreCase("D")) {
+            return "D";
+        }
+        if (item.equalsIgnoreCase("E")) {
+            return "E";
+        }
+        return "";
+
+    }
 }
 

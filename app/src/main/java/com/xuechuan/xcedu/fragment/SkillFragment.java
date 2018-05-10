@@ -218,7 +218,6 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         BuyVo vo = gson.fromJson(msg, BuyVo.class);
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
-            String userId = SaveUUidUtil.getInstance().getUserId();
             DbHelperAssist.getInstance().upDataBuyInfom( String.valueOf(data.getCourseid()), data.isIsbought());
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());

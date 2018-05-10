@@ -33,6 +33,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_pop_answer_title_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_24"
@@ -93,11 +94,16 @@
                     android:src="@drawable/ic_accuracy" />
 
                 <TextView
+                    android:paddingLeft="@dimen/space_8"
                     android:id="@+id/tv_answer_lv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/space_8"
-                    android:text="85%" />
+                    android:text="85" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%" />
             </LinearLayout>
         </LinearLayout>
 
@@ -115,16 +121,18 @@
 
     <GridView
         android:id="@+id/gv_answer_result_bag"
-        android:fastScrollEnabled="false"
-        android:numColumns="6"
-        android:columnWidth="48dp"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="8dp"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fastScrollEnabled="false"
+        android:horizontalSpacing="8dp"
+        android:numColumns="6"
         android:paddingLeft="@dimen/space_16"
         android:paddingRight="@dimen/space_16"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:scrollbars="none"
+        android:verticalSpacing="8dp" />
+
+    <View style="@style/view_line_tab_line" />
 
     <LinearLayout
         android:layout_width="match_parent"

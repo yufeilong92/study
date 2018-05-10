@@ -96,7 +96,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
                 if (!node.isRoot()) {
                     int id = (int) node.getId();
                     Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id),
-                            DataMessageVo.MARKTYPEORDER);
+                            mOid );
 
                     startActivity(intent);
                 }

@@ -75,23 +75,27 @@
         android:paddingRight="@dimen/space_16">
 
         <RadioButton
+            android:id="@+id/rdb_pop_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/select_setting_one" />
 
         <RadioButton
+            android:id="@+id/rdb_pop_3"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/select_setting_three" />
 
         <RadioButton
+            android:id="@+id/rdb_pop_5"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/select_setting_five" />
 
         <RadioButton
+            android:id="@+id/rdb_pop_no"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

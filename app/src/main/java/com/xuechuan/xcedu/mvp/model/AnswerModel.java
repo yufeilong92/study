@@ -19,6 +19,7 @@ public interface AnswerModel {
     public void getTextDetailContent(Context context,String id,RequestResulteView view);
     public void SubmitCollectContent(Context context,boolean isFav, String id,RequestResulteView view);
     public void SubmitDoResult(Context context,boolean isRight, String id,RequestResulteView view);
+    public void SubmitWoringQuestionDelect(Context context,String targetid,RequestResulteView view);
 
 
 }

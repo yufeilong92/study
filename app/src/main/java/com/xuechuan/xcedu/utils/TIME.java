@@ -13,25 +13,25 @@ import com.xuechuan.xcedu.mvp.view.TimeShowView;
  * @Copyright: 2018/5/9 星期三
  * 注意：本内容仅限于学川教育有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class MyCountUtil extends AdvancedCountdownTimer {
+public class TIME extends AdvancedCountdownTimer {
     private TimeShowView showView;
-    private static MyCountUtil myCountUtil;
+    private static TIME TIME;
 
     public void setTimwShowView(TimeShowView showView) {
         this.showView = showView;
     }
 
-    public static MyCountUtil getInstance(String hourtiem, String minTime, String secondTime) {
+    public static TIME getInstancess(String hourtiem, String minTime, String secondTime) {
         long hour = Long.parseLong(hourtiem);
         long minute = Long.parseLong(minTime);
         long second = Long.parseLong(secondTime);
         long time = (hour * 3600 + minute * 60 + second) * 1000;  //因为以ms为单位，所以乘以1000.
-        if (myCountUtil == null)
-            myCountUtil = new MyCountUtil(time, 1000);
-        return myCountUtil;
+        if (TIME == null)
+            TIME = new TIME(time, 1000);
+        return TIME;
     }
 
-    public MyCountUtil(long millisInFuture, long countDownInterval) {
+    public TIME(long millisInFuture, long countDownInterval) {
         super(millisInFuture, countDownInterval);
     }
 

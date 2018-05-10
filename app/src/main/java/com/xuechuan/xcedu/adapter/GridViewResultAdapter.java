@@ -30,6 +30,7 @@ public class GridViewResultAdapter extends BaseAdapter {
     private List<QuestionAllVo.DatasBean> mData;
     private int selectItem = -1;
     private boolean isSubmit = false;
+
     public GridViewResultAdapter(Context mContext, List<QuestionAllVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
@@ -53,40 +54,42 @@ public class GridViewResultAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if (convertView == null) {
+//        if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_layout_gridview, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }else {
-            holder= (ViewHolder) convertView.getTag();
-        }
+      /*  } else {
+            holder = (ViewHolder) convertView.getTag();
+        }*/
         QuestionAllVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
         holder.mTvPopGrdviewSelect.setText((position + 1) + "");
         String id = String.valueOf(bean.getId());
-        for (int i = 0; i < user.size(); i++) {
-            UseSelectItemInfomVo vo = user.get(i);
+
+        if (user == null || user.isEmpty()) {
+            holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+            holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+        } else
+            for (int i = 0; i < user.size(); i++) {
+                UseSelectItemInfomVo vo = user.get(i);
 //            判断是否做过
-            if (id.equalsIgnoreCase(String.valueOf(vo.getId()))) {//做过
-                String status = vo.getItemStatus();
-                if (status.equals("0")) {//正确
-                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
-                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
-                } else if (status.equals("1")) {//错误
-                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.btn_answer_bg_error);
-                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.red_text));
-                } else if (status.equals("2")) {
-                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_miss);
-                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_miss_color));
-                } else {
-                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
-                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                if (id.equalsIgnoreCase(String.valueOf(vo.getId()))) {//做过
+                    String status = vo.getItemStatus();
+                    if (status.equals("0")) {//正确
+                        holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
+                        holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
+                    } else if (status.equals("1")) {//错误
+                        holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.btn_answer_bg_error);
+                        holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.red_text));
+                    } else if (status.equals("2")) {
+                        holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_miss);
+                        holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_miss_color));
+                    } else {
+                        holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+                        holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                    }
                 }
-            } else {//没有
-                holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
-                holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
             }
-        }
 
         return convertView;
     }

@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".ui.bank.AnswerActivity">
 
     <LinearLayout
@@ -235,7 +237,6 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/space_16"
-            android:paddingRight="@dimen/space_16"
             android:visibility="visible">
 
             <LinearLayout
@@ -300,15 +301,15 @@
 
                 <ImageView
                     android:id="@+id/iv_b_expand"
-                    android:layout_width="@dimen/space_24"
-                    android:layout_height="@dimen/space_24"
+                    android:layout_width="wrap_content"
+                    android:padding="@dimen/space_8"
+                    android:layout_height="match_parent"
                     android:src="@drawable/ic_b_card" />
 
                 <TextView
                     android:id="@+id/tv_b_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
                     android:text="12"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_14" />
@@ -322,19 +323,18 @@
 
                 <TextView
                     android:id="@+id/tv_b_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/_12"
-                    android:layout_marginRight="@dimen/space_8"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_14" />
 
                 <CheckBox
+                    android:padding="@dimen/space_8"
                     android:id="@+id/chb_b_collect"
-                    android:layout_width="@dimen/space_48"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                     android:padding="@dimen/space_16"
                     android:button="@drawable/select_b_collect_color" />
             </LinearLayout>
         </LinearLayout>

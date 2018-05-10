@@ -84,13 +84,30 @@ public class UserInfomDb {
     @Convert(converter = UserLookConverent.class, columnType = String.class)
     private List<UserLookVo> caseData;
 
+    /**
+     *错题 保存记录
+     */
+    @Convert(converter = UserLookConverent.class, columnType = String.class)
+    private List<UserLookVo> WrongDataSkill;
 
-    @Generated(hash = 688199630)
+    /**
+     *错题 保存记录
+     */
+    @Convert(converter = UserLookConverent.class, columnType = String.class)
+    private List<UserLookVo> WrongDataColoct;
+    /**
+     *错题 保存记录
+     */
+    @Convert(converter = UserLookConverent.class, columnType = String.class)
+    private List<UserLookVo> WrongDataCase;
+    @Generated(hash = 471990743)
     public UserInfomDb(Long id, UserInfomVo vo, String moid, boolean SkillBook,
             boolean ColligateBook, boolean CaseBook, String ShowDayOrNight,
             boolean userNextGo, String token, String tokenTime,
             String delectQuestion, List<UserLookVo> skillData,
-            List<UserLookVo> coloctData, List<UserLookVo> caseData) {
+            List<UserLookVo> coloctData, List<UserLookVo> caseData,
+            List<UserLookVo> WrongDataSkill, List<UserLookVo> WrongDataColoct,
+            List<UserLookVo> WrongDataCase) {
         this.id = id;
         this.vo = vo;
         this.moid = moid;
@@ -105,6 +122,9 @@ public class UserInfomDb {
         this.skillData = skillData;
         this.coloctData = coloctData;
         this.caseData = caseData;
+        this.WrongDataSkill = WrongDataSkill;
+        this.WrongDataColoct = WrongDataColoct;
+        this.WrongDataCase = WrongDataCase;
     }
     @Generated(hash = 1986169396)
     public UserInfomDb() {
@@ -192,6 +212,24 @@ public class UserInfomDb {
     }
     public void setCaseData(List<UserLookVo> caseData) {
         this.caseData = caseData;
+    }
+    public List<UserLookVo> getWrongDataSkill() {
+        return this.WrongDataSkill;
+    }
+    public void setWrongDataSkill(List<UserLookVo> WrongDataSkill) {
+        this.WrongDataSkill = WrongDataSkill;
+    }
+    public List<UserLookVo> getWrongDataColoct() {
+        return this.WrongDataColoct;
+    }
+    public void setWrongDataColoct(List<UserLookVo> WrongDataColoct) {
+        this.WrongDataColoct = WrongDataColoct;
+    }
+    public List<UserLookVo> getWrongDataCase() {
+        return this.WrongDataCase;
+    }
+    public void setWrongDataCase(List<UserLookVo> WrongDataCase) {
+        this.WrongDataCase = WrongDataCase;
     }
 
  

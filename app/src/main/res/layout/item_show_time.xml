@@ -31,6 +31,7 @@
             android:textSize="@dimen/text_size_14" />
 
   <Button
+      android:gravity="center"
       android:id="@+id/btn_stop_next"
       android:textColor="@color/white"
       android:text="继续答题"

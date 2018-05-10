@@ -21,6 +21,18 @@ import com.xuechuan.xcedu.R;
  * @Copyright: 2018
  */
 public class DialogUtil {
+
+    private static DialogUtil dialogUtil;
+
+    public DialogUtil() {
+    }
+
+    public static DialogUtil getInstance() {
+        if (dialogUtil == null)
+            dialogUtil = new DialogUtil();
+        return dialogUtil;
+    }
+
     /**
      * @param context
      * @param titel   标题
@@ -49,22 +61,22 @@ public class DialogUtil {
     /**
      * 继续答题
      */
-    private static onItemClickListener clickListener;
+    private onContincueClickListener continueClickListener;
 
-    public interface onItemClickListener {
+    public interface onContincueClickListener {
         public void onCancelClickListener();
 
         public void onNextClickListener();
     }
 
-    public void setClickListener(onItemClickListener clickListener) {
-        this.clickListener = clickListener;
+    public void setContinueClickListener(onContincueClickListener continueClickListener) {
+        this.continueClickListener = continueClickListener;
     }
 
     /**
      * 交卷
      */
-    private static onSubmitClickListener submitclickListener;
+    private onSubmitClickListener submitclickListener;
 
     public interface onSubmitClickListener {
         public void onCancelClickListener();
@@ -79,7 +91,7 @@ public class DialogUtil {
     /**
      * 交卷
      */
-    private static onStopClickListener stopclicklistener;
+    private onStopClickListener stopclicklistener;
 
     public interface onStopClickListener {
 
@@ -97,7 +109,7 @@ public class DialogUtil {
      * @param page    第几题
      * @return
      */
-    public static AlertDialog showContinueDialog(Context context, int page) {
+    public void showContinueDialog(Context context, String page) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_continue, null);
         TextView tv = view.findViewById(R.id.tv_number);
@@ -105,26 +117,29 @@ public class DialogUtil {
         builder.setView(view)
                 .setCancelable(true)
                 .create();
+        final AlertDialog show = builder.show();
         Button btnAgain = view.findViewById(R.id.btn_dialog_again);
         Button butGo = view.findViewById(R.id.btn_dialog_next);
         btnAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (clickListener != null)
-                    clickListener.onCancelClickListener();
+                if (continueClickListener != null)
+                    show.dismiss();
+                continueClickListener.onCancelClickListener();
 
             }
         });
         butGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (clickListener != null) {
-                    clickListener.onNextClickListener();
+                if (continueClickListener != null) {
+                    show.dismiss();
+                    continueClickListener.onNextClickListener();
                 }
             }
         });
 
-        return builder.show();
+
     }
 
     /**
@@ -133,19 +148,22 @@ public class DialogUtil {
      * @param context
      * @return
      */
-    public static AlertDialog showSubmitDialog(Context context) {
+    public void showSubmitDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_submit, null);
         builder.setView(view)
                 .setCancelable(true)
                 .create();
+        final AlertDialog dialog = builder.show();
         Button btnAgain = view.findViewById(R.id.btn_dialog_cancel);
         Button butGo = view.findViewById(R.id.btn_dialog_submit);
         btnAgain.setOnClickListener(new View.OnClickListener() {//取消
             @Override
             public void onClick(View v) {
-                if (submitclickListener != null)
+                if (submitclickListener != null) {
+                    dialog.dismiss();
                     submitclickListener.onCancelClickListener();
+                }
 
             }
         });
@@ -153,12 +171,13 @@ public class DialogUtil {
             @Override
             public void onClick(View v) {
                 if (submitclickListener != null) {
+                    dialog.dismiss();
                     submitclickListener.oSubmitClickListener();
                 }
             }
         });
 
-        return builder.show();
+
     }
 
     /**
@@ -167,35 +186,38 @@ public class DialogUtil {
      * @param context
      * @return
      */
-    public static AlertDialog showStopDialog(Context context) {
+    public void showStopDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_time, null);
         builder.setView(view)
                 .setCancelable(true)
                 .create();
+        final AlertDialog dialog = builder.show();
         Button butGo = view.findViewById(R.id.btn_stop_next);
         butGo.setOnClickListener(new View.OnClickListener() {//取消
             @Override
             public void onClick(View v) {
-                if (stopclicklistener != null)
+                if (stopclicklistener != null) {
+                    dialog.dismiss();
                     stopclicklistener.onNextClickListener();
+                }
 
             }
         });
 
 
-        return builder.show();
     }
 
-    private static onTitleClickListener titelclickListener;
+    private onTitleClickListener titelclickListener;
 
     public interface onTitleClickListener {
         public void onSureClickListener();
-        public void onCancelClickListener();
-        }
 
-        public void setClickListener(onTitleClickListener clickListener) {
-            this.titelclickListener = clickListener;
+        public void onCancelClickListener();
+    }
+
+    public void setClickListener(onTitleClickListener clickListener) {
+        this.titelclickListener = clickListener;
     }
 
     /**
@@ -204,7 +226,7 @@ public class DialogUtil {
      * @param context
      * @return
      */
-    public static AlertDialog showTitleDialog(Context context, String title, String btnSure, String cancale) {
+    public void showTitleDialog(Context context, String title, String btnSure, String cancale) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_continue, null);
         TextView tv = view.findViewById(R.id.tv_title);
@@ -216,11 +238,15 @@ public class DialogUtil {
         builder.setView(view)
                 .setCancelable(true)
                 .create();
+        final AlertDialog show = builder.show();
         sure.setOnClickListener(new View.OnClickListener() {//取消
             @Override
             public void onClick(View v) {
-                if (titelclickListener != null)
+                if (titelclickListener != null) {
+                    show.dismiss();
                     titelclickListener.onSureClickListener();
+
+                }
 
             }
         });
@@ -228,12 +254,11 @@ public class DialogUtil {
             @Override
             public void onClick(View v) {
                 if (titelclickListener != null) {
-                    titelclickListener. onCancelClickListener();
+                    show.dismiss();
+                    titelclickListener.onCancelClickListener();
                 }
             }
         });
-
-        return builder.show();
     }
 
 

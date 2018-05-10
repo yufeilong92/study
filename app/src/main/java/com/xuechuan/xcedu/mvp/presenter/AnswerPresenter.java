@@ -102,6 +102,13 @@ public class AnswerPresenter {
 
     }
 
+    /**
+     * 提交做题结果
+     *
+     * @param context
+     * @param targetid
+     * @param isright
+     */
     public void submitDoRecord(Context context, String targetid, boolean isright) {
         if (StringUtil.isEmpty(targetid)) {
             return;
@@ -118,4 +125,24 @@ public class AnswerPresenter {
             }
         });
     }
+
+
+    public void submitWoringQeustinDelect(Context context, String targetid) {
+        if (targetid == null) {
+            return;
+        }
+        model.SubmitWoringQuestionDelect(context, targetid, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.WoringSuccess(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.WoringError(result);
+            }
+        });
+
+    }
+
 }

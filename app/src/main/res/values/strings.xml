@@ -82,6 +82,9 @@
 
     <!--题库根据科目编号获取章节列表-->
     <string name="http_getCnapter">/api/question/getchapter</string>
+    <!--错题移除-->
+    <string name="http_questionremoveerrsetpost">/api/question/questionremoveerrsetpost</string>
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -144,5 +147,7 @@
     <string name="hard">困难</string>
     <string name="again">从头开始</string>
     <string name="pas_no_same">两次输入密码不一致</string>
+    <string name="score">分数</string>
+    <string name="answernubmer">答题数目</string>
 
 </resources>
