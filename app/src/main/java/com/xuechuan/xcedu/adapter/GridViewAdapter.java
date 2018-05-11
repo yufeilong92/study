@@ -69,24 +69,20 @@ public class GridViewAdapter extends BaseAdapter {
         ViewHolder holder = null;
         QuestionAllVo.DatasBean bean = mData.get(position);
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
-//        if (convertView == null) {
+        if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_layout_gridview, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-/*
         } else {
             holder = (ViewHolder) convertView.getTag();
-        }*/
+        }
+        mIsSelect.put(position, false);
         if (selectItem == position) {//显示当前题
-            Log.e("yfl", "getView: " + selectItem + "/////" + position);
             mIsSelect.put(position, true);
             holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn);
             holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.white));
-        } else {
-            mIsSelect.put(position, false);
         }
         if (mIsSelect.get(position)) {
-            Log.e("yfl", "getView: " + mIsSelect.get(position) + selectItem + "/////" + position);
             holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn);
             holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.white));
         } else {
@@ -126,23 +122,13 @@ public class GridViewAdapter extends BaseAdapter {
                             holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
                             holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
                         }
-//                        break;
-                    } /*else {//没有
-                        holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
-                        holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
-                    }*/
+                    }
                 }
             }
 
         } else {//未提交
-//            if (selectItem == position) {//显示当前题
-//                holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn);
-//                holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.white));
-//            } else {
             setBg(holder, bean, user);
-//            }
         }
-
 
     }
 
@@ -152,6 +138,8 @@ public class GridViewAdapter extends BaseAdapter {
             holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
         } else {
             String id = String.valueOf(bean.getId());
+            holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+            holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
             for (int i = 0; i < user.size(); i++) {
                 UseSelectItemInfomVo vo = user.get(i);
                 String id1 = String.valueOf(vo.getId());
@@ -159,10 +147,6 @@ public class GridViewAdapter extends BaseAdapter {
                     holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_su);
                     holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.black));
                 }
-//                } else {//没有
-//                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
-//                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
-//                }
             }
         }
     }
@@ -170,7 +154,6 @@ public class GridViewAdapter extends BaseAdapter {
     public static class ViewHolder {
         public View rootView;
         public TextView mTvPopGrdviewSelect;
-
         public ViewHolder(View rootView) {
             this.rootView = rootView;
             this.mTvPopGrdviewSelect = (TextView) rootView.findViewById(R.id.tv_pop_grdview_select);

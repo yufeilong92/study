@@ -196,8 +196,6 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         mXfvContent.setPullRefreshEnable(false);
         mXfvContent.setMoveForHorizontal(true);
         bindAdapter();
-
-
         mRlInfomLayout = (RelativeLayout) findViewById(R.id.rl_infom_layout);
         mRlInfomLayout.setOnClickListener(this);
     }
@@ -321,9 +319,11 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         WebView webview = view.findViewById(R.id.web_infom_detail);
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
         settings.setSupportZoom(true);
+        //设置自适应屏幕，两者合用
+        settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        settings.setDisplayZoomControls(false); //隐藏原生的缩放控件
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
         webview.loadUrl(mUrl);

@@ -12,7 +12,5 @@ package com.xuechuan.xcedu.mvp.view;
  * 注意：本内容仅限于学川教育有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 public interface TimeShowView {
-    public void CurrentTime(String time);
-
     public void TimeFinish();
 }

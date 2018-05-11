@@ -23,6 +23,7 @@ import com.xuechuan.xcedu.mvp.presenter.ErrorTextPresenter;
 import com.xuechuan.xcedu.mvp.view.ErrorTextView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ErrorOrColloctVo;
 import com.xuechuan.xcedu.vo.ErrorVo;
 
 import java.util.List;
@@ -101,6 +102,7 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
 
     private void initData() {
         mPresenter = new ErrorTextPresenter(new ErrorTextTextModelImpl(), this);
+        mPresenter.getErrOrCollNumber(mContext, mCouresid);
         //请求错误数据
         String con = null;
         if (mType.equals(ERRTYPE)) {
@@ -116,6 +118,7 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         mTvErrorText.setText(content);
         mTvErrorNumber.setText(mNumber);
+
 
     }
 
@@ -159,6 +162,51 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
         if (mDialog != null) {
             mDialog.dismiss();
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPresenter.getErrOrCollNumber(mContext, mCouresid);
+    }
+
+    @Override
+    public void ErrOrColNumberSuccess(String con) {
+        Gson gson = new Gson();
+        ErrorOrColloctVo vo = gson.fromJson(con, ErrorOrColloctVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            bindErrorOrCollortData(vo.getData());
+        } else {
+            L.e(vo.getStatus().getMessage());
+        }
+    }
+
+    private void bindErrorOrCollortData(ErrorOrColloctVo.DataBean data) {
+        if (mType.equals(ERRTYPE)) {
+            mTvErrorNumber.setText(data.getError() + "");
+            if (data.getError() == 0) {
+                mBtnGoDoText.setClickable(false);
+                mBtnGoDoText.setBackgroundResource(R.drawable.btn_errortext_no_bg);
+            }else {
+                mBtnGoDoText.setClickable(true);
+                mBtnGoDoText.setBackgroundResource(R.drawable.btn_errortext_go_bg);
+            }
+        } else if (mType.equals(FAVTYPE)) {
+            mTvErrorNumber.setText(data.getFavorite() + "");
+            if (data.getFavorite() == 0) {
+                mBtnGoDoText.setClickable(false);
+                mBtnGoDoText.setBackgroundResource(R.drawable.btn_errortext_no_bg);
+            }else {
+                mBtnGoDoText.setClickable(true);
+                mBtnGoDoText.setBackgroundResource(R.drawable.btn_errortext_go_bg);
+            }
+        }
+
+    }
+
+    @Override
+    public void ErrOrColNumberError(String con) {
+
     }
 
     private void initView() {

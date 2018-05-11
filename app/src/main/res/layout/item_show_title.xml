@@ -22,12 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_8"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="标题"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14" />
 
         <LinearLayout
+            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_32"
@@ -37,15 +38,18 @@
                 android:id="@+id/btn_cancal"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/space_32"
+                android:textColor="@color/text_fu_color"
                 android:background="@drawable/btn_dialog_canle_bg" />
 
             <Space style="@style/space_16_width" />
 
             <Button
+
+                android:textColor="@color/white"
                 android:id="@+id/btn_sure"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/space_32"
-                android:background="@drawable/btn_dialog_canle_bg" />
+                android:background="@drawable/btn_dialog_sure_bg" />
         </LinearLayout>
 
     </LinearLayout>

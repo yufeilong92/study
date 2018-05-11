@@ -23,6 +23,7 @@
 
     </LinearLayout>
 
+
     <com.andview.refreshview.XRefreshView
         android:id="@+id/xfv_content"
         android:layout_width="match_parent"

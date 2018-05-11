@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context=".ui.bank.AnswerActivity">
 
     <LinearLayout
@@ -22,30 +22,50 @@
         <ImageView
             android:id="@+id/iv_title_back"
             android:layout_width="@dimen/bottom_layout_height"
-            android:layout_height="@dimen/bottom_layout_height"
-            android:onClick="onHomeClick"
+            android:layout_height="match_parent"
             android:padding="12dp"
             android:src="@drawable/ic_back"
-            tools:ignore="OnClick" />
+          />
 
-        <TextView
-            android:id="@+id/activity_title_text"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/title_action_height"
-            android:layout_weight="1"
-            android:ellipsize="end"
+        <LinearLayout
             android:gravity="center"
-            android:paddingLeft="@dimen/space_8"
-            android:paddingRight="@dimen/space_8"
-            android:singleLine="true"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_18" />
+            android:id="@+id/v_b_lineBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_action_height"
+            android:layout_weight="1">
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_time_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/qbank_answer_icon_cont" />
 
+            <TextView
+                android:id="@+id/activity_title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/title_action_height"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:paddingLeft="@dimen/space_8"
+                android:paddingRight="@dimen/space_8"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_18" />
+
+        </LinearLayout>
+         <ImageView
+             android:visibility="gone"
+             android:id="@+id/iv_bar_delect"
+             android:src="@drawable/q_nav_delect_black"
+             android:layout_width="wrap_content"
+             android:padding="@dimen/space_8"
+             android:layout_height="match_parent" />
         <ImageView
             android:id="@+id/iv_b_more"
             android:layout_width="@dimen/bottom_layout_height"
-            android:layout_height="@dimen/bottom_layout_height"
+            android:layout_height="match_parent"
             android:padding="12dp"
             android:src="@drawable/ic_more" />
     </LinearLayout>
@@ -63,12 +83,13 @@
         android:visibility="gone" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.xuechuan.xcedu.weight.SmartScrollView
-            android:id="@+id/slv_root_show"
+            android:id="@+id/slv_view_show"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/space_56"
@@ -102,7 +123,6 @@
                     android:textColor="@color/black" />
 
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/btn_look_wen_answer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,39 +131,40 @@
                     android:layout_marginTop="@dimen/space_48"
                     android:background="@drawable/btn_look_answer_bg"
                     android:text="查看解析"
-                    android:textSize="@dimen/text_size_16" />
+                    android:textSize="@dimen/text_size_16"
+                    android:visibility="gone" />
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/ll_look_wen_da"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_48"
                     android:orientation="vertical"
-                  >
+                    android:visibility="gone">
+
                     <View
                         android:id="@+id/v_line4"
                         style="@style/view_line_10_gray" />
 
                     <TextView
                         android:id="@+id/tv_look_answer_can"
-                        android:paddingRight="@dimen/text_size_16"
-                        android:paddingLeft="@dimen/text_size_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/text_size_16"
+                        android:paddingRight="@dimen/text_size_16"
                         android:text="参考答案"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16" />
 
                     <TextView
                         android:id="@+id/tv_look_answer_wen"
-                        android:layout_marginTop="@dimen/text_size_16"
-                        android:paddingRight="@dimen/text_size_16"
-                        android:paddingLeft="@dimen/text_size_16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text_title_color"
-                        android:text="56454654654654654654654654654654446464464644646464646464644646464" />
+                        android:layout_marginTop="@dimen/text_size_16"
+                        android:paddingLeft="@dimen/text_size_16"
+                        android:paddingRight="@dimen/text_size_16"
+                        android:text="56454654654654654654654654654654446464464644646464646464644646464"
+                        android:textColor="@color/text_title_color" />
                 </LinearLayout>
 
                 <Space style="@style/space_30_height" />
@@ -157,7 +178,6 @@
                     layout="@layout/answer_layout_buy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
 
 
                 <LinearLayout
@@ -302,8 +322,8 @@
                 <ImageView
                     android:id="@+id/iv_b_expand"
                     android:layout_width="wrap_content"
-                    android:padding="@dimen/space_8"
                     android:layout_height="match_parent"
+                    android:padding="@dimen/space_8"
                     android:src="@drawable/ic_b_card" />
 
                 <TextView
@@ -331,11 +351,11 @@
                     android:textSize="@dimen/text_size_14" />
 
                 <CheckBox
-                    android:padding="@dimen/space_8"
                     android:id="@+id/chb_b_collect"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:button="@drawable/select_b_collect_color" />
+                    android:button="@drawable/select_b_collect_color"
+                    android:padding="@dimen/space_8" />
             </LinearLayout>
         </LinearLayout>
 

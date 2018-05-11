@@ -13,6 +13,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.mvp.model.ColoctModelImpl;
 import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.ColoctPresenter;
@@ -72,15 +73,16 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             mTypeOid = getArguments().getString(TYPEOID);
         }
     }
-/*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_colligate, container, false);
-        initView(view);
-        return view;
-    }
-*/
+
+    /*
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_colligate, container, false);
+            initView(view);
+            return view;
+        }
+    */
     @Override
     protected int initInflateView() {
         return R.layout.fragment_colligate;
@@ -91,6 +93,7 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
         initView(view);
         initData();
     }
+
     private void initData() {
         colPresenter = new ColoctPresenter(new ColoctModelImpl(), this);
         colPresenter.getErrOrCollNumber(mContext, mTypeOid);
@@ -142,14 +145,17 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.iv_b_co_text://模拟考试
-                Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPECOLLORT);
-                intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
-                startActivity(intent3);
+                if (ifBuyBook()) {
+                    Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPECOLLORT);
+                    intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
+                    startActivity(intent3);
+                } else {
+                    buyBook();
+                }
                 break;
             case R.id.tv_b_co_free://自由 组卷
                 break;
             case R.id.tv_b_co_shunxu://顺序练习
-
                 break;
             case R.id.tv_b_co_zhuanxiang://专项练习
                 break;
@@ -158,6 +164,15 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             default:
 
         }
+    }
+
+    public boolean ifBuyBook() {
+        UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
+        return db.getColligateBook();
+    }
+
+    public void buyBook() {
+
     }
 
     @Override
@@ -189,8 +204,8 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
         BuyVo vo = gson.fromJson(con, BuyVo.class);
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
-            DbHelperAssist.getInstance().upDataBuyInfom( String.valueOf(data.getCourseid()), data.isIsbought());
-        }else {
+            DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
+        } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
     }

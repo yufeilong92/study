@@ -10,11 +10,13 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
+import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.mvp.model.SkillModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.SkillPresenter;
 import com.xuechuan.xcedu.mvp.view.SkillView;
@@ -50,7 +52,6 @@ import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
  */
 public class SkillFragment extends BaseFragment implements View.OnClickListener, SkillView {
     private static final String TYPEOID = "typeoid";
-
     private String mTypeOid;
     private TextView mTvSkillWroing;
     private LinearLayout mLlBSkillError;
@@ -105,14 +106,15 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
         initData();
-//      requestBought();
     }
+
     private void initData() {
         mPresenter = new SkillPresenter(new SkillModelImpl(), this);
         mPresenter.getErrOrCollNumber(mContext, mTypeOid);
         mPresenter.requestBuyInfom(mContext, mTypeOid);
 
     }
+
     private void initView(View view) {
         mTvSkillWroing = (TextView) view.findViewById(R.id.tv_skill_wroing);
         mLlBSkillError = (LinearLayout) view.findViewById(R.id.ll_b_skill_error);
@@ -159,28 +161,52 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 startActivity(intent);
                 break;
             case R.id.iv_b_test://考试
+                if (ifBuyBook()){
                 Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPESKILL);
                 intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
                 startActivity(intent3);
+                }else {
+                    buyBook();
+                }
                 break;
             case R.id.tv_b_free://自由
+                if (ifBuyBook()){
                 Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
                 intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
                 startActivity(intent6);
+                }else {
+                    buyBook();
+                }
                 break;
             case R.id.tv_b_special://专项
+               if (ifBuyBook()){
                 Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
                 intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
                 startActivity(intent4);
+               }else {
+                   buyBook();
+               }
                 break;
             case R.id.tv_b_turn://顺序
+                if (ifBuyBook()){
                 Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
                 intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
                 startActivity(intent5);
+                }else {
+                    buyBook();
+                }
                 break;
             default:
 
         }
+    }
+
+    public boolean ifBuyBook() {
+        UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
+        return db.getSkillBook();
+    }
+    public void buyBook(){
+
     }
 
     @Override
@@ -218,7 +244,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         BuyVo vo = gson.fromJson(msg, BuyVo.class);
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
-            DbHelperAssist.getInstance().upDataBuyInfom( String.valueOf(data.getCourseid()), data.isIsbought());
+            DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
+
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }

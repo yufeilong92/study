@@ -271,7 +271,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         allAdapter.setClickListener(new HomeAllAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                T.showToast(mContext, position + "");
+//                T.showToast(mContext, position + "");
                 ArticleBean vo = (ArticleBean) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, String.valueOf(vo.getSupportcount()));
                 mContext.startActivity(intent);
@@ -297,7 +297,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClickListener(Object obj, int position) {
                 AdvisoryBean vo = (AdvisoryBean) obj;
-                T.showToast(mContext, position + "");
+//                T.showToast(mContext, position + "");
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
                 mContext.startActivity(intent);
             }

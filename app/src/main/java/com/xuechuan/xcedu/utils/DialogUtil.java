@@ -115,7 +115,7 @@ public class DialogUtil {
         TextView tv = view.findViewById(R.id.tv_number);
         tv.setText(page);
         builder.setView(view)
-                .setCancelable(true)
+                .setCancelable(false)
                 .create();
         final AlertDialog show = builder.show();
         Button btnAgain = view.findViewById(R.id.btn_dialog_again);
@@ -190,7 +190,7 @@ public class DialogUtil {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_time, null);
         builder.setView(view)
-                .setCancelable(true)
+                .setCancelable(false)
                 .create();
         final AlertDialog dialog = builder.show();
         Button butGo = view.findViewById(R.id.btn_stop_next);
@@ -216,7 +216,7 @@ public class DialogUtil {
         public void onCancelClickListener();
     }
 
-    public void setClickListener(onTitleClickListener clickListener) {
+    public void setTitleClickListener(onTitleClickListener clickListener) {
         this.titelclickListener = clickListener;
     }
 
@@ -226,17 +226,17 @@ public class DialogUtil {
      * @param context
      * @return
      */
-    public void showTitleDialog(Context context, String title, String btnSure, String cancale) {
+    public void showTitleDialog(Context context, String title, String btnSure, String cancale,boolean cancelable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.item_show_continue, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_show_title, null);
         TextView tv = view.findViewById(R.id.tv_title);
-        tv.setText(title);
+        tv.setText(title+"?");
         Button sure = view.findViewById(R.id.btn_sure);
         sure.setText(btnSure);
         Button cancel = view.findViewById(R.id.btn_cancal);
         cancel.setText(cancale);
         builder.setView(view)
-                .setCancelable(true)
+                .setCancelable(cancelable)
                 .create();
         final AlertDialog show = builder.show();
         sure.setOnClickListener(new View.OnClickListener() {//取消

@@ -22,7 +22,7 @@ import org.greenrobot.greendao.database.Database;
 public class DBHelper {
     private static final String TAG = "DBHelper";
     private static MyOpenHelper mHelper;
-    private static Database db;
+    private static    SQLiteDatabase db;
     private static DaoMaster mDaoMaster;
     private static DaoSession mDaoSession;
 
@@ -37,8 +37,8 @@ public class DBHelper {
         /**context 上下文
          * test-db 数据库名称
          */
-        mHelper = new MyOpenHelper(context, "userinfom_db", null);
-        db = mHelper.getWritableDb();
+        mHelper = new MyOpenHelper(context, "userinfom.db", null);
+        db = mHelper.getWritableDatabase();
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
     }
@@ -68,7 +68,7 @@ public class DBHelper {
 
         @Override
         public void onUpgrade(Database db, int oldVersion, int newVersion) {
-//            super.onUpgrade(db, oldVersion, newVersion);
+            super.onUpgrade(db, oldVersion, newVersion);
             Log.e(TAG, "onUpgrade: 更新啦");
 //            MigrationHelper.getInstance().migrate(db,userinfom.class, SchoolDao.class);
         }

@@ -13,6 +13,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.mvp.model.CaseModelImpl;
 import com.xuechuan.xcedu.mvp.model.ErrOrCollModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.CasePresenter;
@@ -21,6 +22,7 @@ import com.xuechuan.xcedu.mvp.view.CaseView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
+import com.xuechuan.xcedu.ui.bank.FreeQuestionActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
@@ -153,25 +155,53 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
                 startActivity(intent);
                 break;
             case R.id.iv_b_case_text://考试
+                if (ifBuyBook()){
                 Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPECASE);
                 intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
                 startActivity(intent3);
+                }else {
+                    buyBook();
+                }
                 break;
             case R.id.tv_b_case_free://自由
+                if (ifBuyBook()){
+                    Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
+                    intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
+                    startActivity(intent6);
+                }else {
+                    buyBook();
+                }
                 break;
             case R.id.tv_b_case_zhuanxiang://专项
+                if (ifBuyBook()){
                 Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
                 intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
                 startActivity(intent4);
+                }else {
+                    buyBook();
+                }
                 break;
             case R.id.tv_b_case_shunxu://顺序
+                if (ifBuyBook()){
+
                 Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
                 intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
                 startActivity(intent5);
+                }else {
+                    buyBook();
+                }
                 break;
             default:
                 break;
         }
+    }
+
+    public boolean ifBuyBook() {
+        UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
+        return db.getCaseBook();
+    }
+    public void buyBook(){
+
     }
 
     @Override

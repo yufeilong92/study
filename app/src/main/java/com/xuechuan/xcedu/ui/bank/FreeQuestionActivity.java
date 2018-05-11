@@ -151,11 +151,7 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
-        if (!StringUtil.isEmpty(mCourseid)) {
-            mAllQuestionPresenter = new AllQuestionPresenter(new AllQuestionModelImpl(), this);
-            mAllQuestionPresenter.getcoursequestionid(mContext, mCourseid);
-        }
-        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+
         mRdbSelect20.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -302,11 +298,52 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
         if (vo.getStatus().getCode() == 200) {
             List<QuestionAllVo.DatasBean> mQuestionAlldatas = vo.getDatas();
             outLinePager(mQuestionAlldatas);
+            CreateText();
 
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
 
+    }
+
+    /**
+     * 创建试卷
+     */
+    private void CreateText() {
+        List<QuestionAllVo.DatasBean> overList = null;
+        if (mPaperGrader == EASY) {//容易
+            if (mPaperNumber.equals(TWENTY)) {//20
+                overList = getPagerData(mEasyOnly, mEasyMore, 16, 4);
+            } else if (mPaperNumber.equals(FIFTY)) {//50
+                overList = getPagerData(mEasyOnly, mEasyMore, 40, 10);
+            } else if (mPaperNumber.equals(HUNDRED)) {//100
+                overList = getPagerData(mEasyOnly, mEasyMore, 80, 20);
+            }
+
+        }
+        if (mPaperGrader == MEDIUM) {//中等
+            if (mPaperNumber.equals(TWENTY)) {//20
+                overList = getPagerData(mMediumOnly, mMediumMore, 16, 4);
+            } else if (mPaperNumber.equals(FIFTY)) {//50
+                overList = getPagerData(mMediumOnly, mMediumMore, 40, 10);
+            } else if (mPaperNumber.equals(HUNDRED)) {//100
+                overList = getPagerData(mMediumOnly, mMediumMore, 80, 20);
+
+            }
+        }
+        if (mPaperGrader == DIFFICULTY) {//困难
+            if (mPaperNumber.equals(TWENTY)) {//20
+                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 16, 4);
+            } else if (mPaperNumber.equals(FIFTY)) {//50
+                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 40, 10);
+            } else if (mPaperNumber.equals(HUNDRED)) {//100
+                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 80, 20);
+            }
+        }
+        L.e(overList.size() + "传递的数据个数");
+        EventBus.getDefault().postSticky(new FreeDataEvent(overList));
+        Intent intent = new Intent(mContext, AnswerActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -370,8 +407,10 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
 
     }
 
+    /***
+     * 生成问题
+     */
     private void createrQuestion() {
-        List<QuestionAllVo.DatasBean> overList = null;
         if (StringUtil.isEmpty(mPaperNumber)) {
             T.showToast(mContext, "请选择试题数量");
             return;
@@ -380,39 +419,12 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
             T.showToast(mContext, "请选择试题难度");
             return;
         }
-        if (mPaperGrader == EASY) {//容易
-            if (mPaperNumber.equals(TWENTY)) {//20
-                overList = getPagerData(mEasyOnly, mEasyMore, 16, 4);
-            } else if (mPaperNumber.equals(FIFTY)) {//50
-                overList = getPagerData(mEasyOnly, mEasyMore, 40, 10);
-            } else if (mPaperNumber.equals(HUNDRED)) {//100
-                overList = getPagerData(mEasyOnly, mEasyMore, 80, 20);
-            }
+        if (!StringUtil.isEmpty(mCourseid)) {
+            mAllQuestionPresenter = new AllQuestionPresenter(new AllQuestionModelImpl(), this);
+            mAllQuestionPresenter.getcoursequestionid(mContext, mCourseid);
+        }
+        mDialog = DialogUtil.showDialog(mContext, "", "正在生成试卷...");
 
-        }
-        if (mPaperGrader == MEDIUM) {//中等
-            if (mPaperNumber.equals(TWENTY)) {//20
-                overList = getPagerData(mMediumOnly, mMediumMore, 16, 4);
-            } else if (mPaperNumber.equals(FIFTY)) {//50
-                overList = getPagerData(mMediumOnly, mMediumMore, 40, 10);
-            } else if (mPaperNumber.equals(HUNDRED)) {//100
-                overList = getPagerData(mMediumOnly, mMediumMore, 80, 20);
-
-            }
-        }
-        if (mPaperGrader == DIFFICULTY) {//困难
-            if (mPaperNumber.equals(TWENTY)) {//20
-                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 16, 4);
-            } else if (mPaperNumber.equals(FIFTY)) {//50
-                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 40, 10);
-            } else if (mPaperNumber.equals(HUNDRED)) {//100
-                overList = getPagerData(mDifficultyOnly, mDifficultyMore, 80, 20);
-            }
-        }
-        L.e(overList.size() + "传递的数据个数");
-        EventBus.getDefault().postSticky(new FreeDataEvent(overList));
-        Intent intent = new Intent(mContext, AnswerActivity.class);
-        startActivity(intent);
 
 
     }

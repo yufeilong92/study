@@ -29,12 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.umeng.debug.log.I;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.Event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AnswerEvaluateAdapter;
-import com.xuechuan.xcedu.adapter.AnswerTableAdapter;
-import com.xuechuan.xcedu.adapter.AnswerTableResultAdapter;
 import com.xuechuan.xcedu.adapter.GridViewAdapter;
 import com.xuechuan.xcedu.adapter.GridViewResultAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -56,13 +55,13 @@ import com.xuechuan.xcedu.mvp.view.AnswerView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColListView;
 import com.xuechuan.xcedu.mvp.view.EvalueView;
 import com.xuechuan.xcedu.mvp.view.SpecailDetailView;
+import com.xuechuan.xcedu.mvp.view.TimeShowView;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
-import com.xuechuan.xcedu.utils.AdvancedCountdownTimer;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.ArithUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.MyCount;
+import com.xuechuan.xcedu.utils.MyTimeUitl;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -71,20 +70,23 @@ import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ErrOrColListVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.QuestionAllVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 import com.xuechuan.xcedu.vo.UserLookVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.SmartScrollView;
 
+import net.nightwhistler.htmlspanner.HtmlSpanner;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -96,7 +98,8 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/9
  */
-public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView, EvalueView, AllQuestionView, SpecailDetailView, ErrOrColListView {
+public class AnswerActivity extends BaseActivity implements View.OnClickListener, AnswerView,
+        EvalueView, AllQuestionView, SpecailDetailView, ErrOrColListView, TimeShowView {
     /**
      * 科目id
      */
@@ -222,7 +225,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private Button mBtnBBuy;
     private LinearLayout mLiBResolveBuy;
     private RecyclerView mRlvEualeContent;
-    private SmartScrollView mSlvRootShow;
+    private SmartScrollView mSloViewShow;
     private LinearLayout mLlBBack;
     private LinearLayout mLlBGo;
     private ImageView mIvBExpand;
@@ -278,6 +281,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mLlSelectRootLayout;
     private RelativeLayout mRlLookEvalue;
     /**
+     * 做题时间
+     */
+    private String mDoTime = "00:00:00";
+    /**
+     * 用户是否购买
+     */
+    private boolean isBuy = false;
+    /**
      * 章节标识
      */
     private static String TYPEMARK = "typemark";
@@ -288,15 +299,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private String mTypeMark;
     //是否是模拟考试 ture 隐藏提交答题按钮
-    private boolean isExam = false;
+    private boolean isExamHine = false;
     //查看解析后的数据
     private String mResultMark;
     private CommonPopupWindow popResult;
     //科目id
     private String mTypeId;
     private AllQuestionPresenter mAllQuestion;
-    private MyCount TimeCount;
-    private String startTime = "00：00：00";
+    private String startTime = "00:00:00";
     /**
      * 科目id
      */
@@ -342,12 +352,36 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     /**
      * 用户提交卷否查看解析
      */
-    private boolean isUserResultJieXi;
-    private MyCountUtil util;
+    private boolean isUserLookResultJieXi = false;
     /**
      * 是否自由组卷
      */
-    private boolean mFreeQuestion;
+    private String mFreeQuestion = "";
+    /**
+     * 是否自由组卷
+     */
+    private String mFreeQuestionTrue = "true";
+    /**
+     * 是否自由组卷
+     */
+    private String mFreeQuestionFalse = "false";
+    private MyTimeUitl mTimeUitl;
+    private ImageView mIvTimePlay;
+    private LinearLayout mVBLineBar;
+    private SmartScrollView mSlvViewShow;
+    private ImageView mIvBarDelect;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("yfl", "onStart: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("yfl", "onPause: ");
+    }
 
     @Override
     protected void onDestroy() {
@@ -356,13 +390,16 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (EventBus.getDefault().isRegistered(mContext)) {
             EventBus.getDefault().unregister(mContext);
         }
+        if (mTimeUitl != null) {
+            mTimeUitl.cancel();
+        }
         saveChapterRecords();
     }
 
 
     //保存章节记录
     private void saveChapterRecords() {
-        if (StringUtil.isEmpty(mTypeMark)) {
+        if (StringUtil.isEmpty(mTypeMark) || StringUtil.isEmpty(mOid)) {
             return;
         }
         DbHelperAssist assist = DbHelperAssist.getInstance();
@@ -466,14 +503,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         return intent;
     }
 
-    /*
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_answer);
-            initView();
-        }
-    */
+
+  /*  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_answer);
+        initView();
+    }*/
+
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         SharedSeletResultListUtil.getInstance().DeleteUser();
@@ -499,6 +536,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mStyleCase = getIntent().getStringExtra(STYLECASE);
         }
         initView();
+        mIvTimePlay.setVisibility(View.GONE);
         initData();
         clearData();
         initShowSet();
@@ -506,6 +544,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (!EventBus.getDefault().isRegistered(mContext)) {
             EventBus.getDefault().register(mContext);
         }
+
 
     }
 
@@ -518,22 +557,74 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void Mainthread(FreeDataEvent event) {
         initShowSet();
-        isExam = false;
+        isExamHine = false;
         if (dialog != null && dialog.isShowing())
             dialog.dismiss();
         mTextDetial = event.getData();
         mTvBCount.setText(String.valueOf(mTextDetial.size()));
         bindTextNumberData();
-        mFreeQuestion = true;
+        mFreeQuestion = mFreeQuestionTrue;
+        mIvTimePlay.setVisibility(View.VISIBLE);
+        mTimeUitl = MyTimeUitl.getInstance(mContext);
+        mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
+        tabBarSetListener();
 
 
     }
 
     private void initShowSet() {
         initSetting();
+        Requestion();
+        clearSeletItem();
+
+    }
+
+    private void Requestion() {
         chapter();
         exam();
-        clearSeletItem();
+        errOrCol();
+        shunxu();
+        zhuanXiang();
+    }
+
+    /**
+     * 专项
+     */
+    private void zhuanXiang() {
+        //请求专项
+        if (!StringUtil.isEmpty(mCouresidKuMu) && !StringUtil.isEmpty(mTagid)) {
+            mDetailPresenter = new SpecailDetailPresenter(new SpecailDetailModelImpl(), this);
+            mDetailPresenter.requestSpecailDetail(mContext, mCouresidKuMu, mTagid);
+            isExamHine = true;
+        }
+    }
+
+    /**
+     * 顺序练习
+     */
+    private void shunxu() {
+        //请求所有问题
+        if (!StringUtil.isEmpty(mTypeId)) {
+            isExamHine = true;
+            mAllQuestion = new AllQuestionPresenter(new AllQuestionModelImpl(), this);
+            mAllQuestion.getcoursequestionid(mContext, mTypeId);
+        }
+    }
+
+    /**
+     * 错题请求
+     */
+    private void errOrCol() {
+        if (!StringUtil.isEmpty(mTagType) && !StringUtil.isEmpty(mCouresidUser) &&
+                !StringUtil.isEmpty(mUserTagid)) {
+            //请求错题和收藏题集合
+            mListPresenter = new ErrOrColListPresenter(new ErrOrColListModelImpl(), this);
+            mListPresenter.requestionErrOrColCont(mContext, mCouresidUser, mUserTagid, mTagType);
+        }
+        isExamHine = true;
+        if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {//错题模式
+            mIvBarDelect.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -571,28 +662,50 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private void exam() {
         if (!StringUtil.isEmpty(mStyleCase)) {
+            mIvTimePlay.setVisibility(View.VISIBLE);
+            mTimeUitl = MyTimeUitl.getInstance(mContext);
             if (mStyleCase.equals(DataMessageVo.MARKTYPECASE)) {//案例
-                isExam = false;
-                util = MyCountUtil.getInstance("03", "00", "00");
-                util.start();
+                isExamHine = false;
+                mTimeUitl.start(mActivityTitleText, 3, 0, 0, this);
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPESKILL)) {//技术
-                isExam = false;
-                util = MyCountUtil.getInstance("02", "30", "00");
-                util.start();
+                isExamHine = false;
+                mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPECOLLORT)) {//综合
-                isExam = false;
-                util = MyCountUtil.getInstance("02", "30", "00");
-                util.start();
+                isExamHine = false;
+                mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
             }
+            tabBarSetListener();
         }
+    }
+
+    /**
+     * 状态栏
+     */
+    private void tabBarSetListener() {
+        mVBLineBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_pau);
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showStopDialog(mContext);
+                mTimeUitl.pause();
+                dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
+                    @Override
+                    public void onNextClickListener() {
+                        mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_cont);
+                        mTimeUitl.resume();
+                    }
+                });
+            }
+        });
     }
 
     /***
      * 章节
      */
     private void chapter() {
-        if (!StringUtil.isEmpty(mTypeMark)) {
-            isExam = true;
+        if (!StringUtil.isEmpty(mTypeMark) && !StringUtil.isEmpty(mOid)) {
+            isExamHine = true;
             UserInfomDb userInfomDb = DbHelperAssist.getInstance().queryWithuuUserInfom();
             if (mTypeMark.equals("1")) {//技术章节
                 if (userInfomDb != null) {
@@ -682,29 +795,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mEvaluePresenter = new EvaluePresenter(new EvalueModelImpl(), this);
         //请求答案
         mPresnter = new AnswerPresenter(new AnswerModelImpl(), this);
-        //请求所有问题
-        mAllQuestion = new AllQuestionPresenter(new AllQuestionModelImpl(), this);
-        //请求专项
-        mDetailPresenter = new SpecailDetailPresenter(new SpecailDetailModelImpl(), this);
-        //请求错题和收藏题集合
-        mListPresenter = new ErrOrColListPresenter(new ErrOrColListModelImpl(), this);
-
-        if (!StringUtil.isEmpty(mCouresidKuMu) && !StringUtil.isEmpty(mTagid)) {
-            mDetailPresenter.requestSpecailDetail(mContext, mCouresidKuMu, mTagid);
-        }
-        if (!StringUtil.isEmpty(mTypeId)) {
-            isExam = true;
-            mAllQuestion.getcoursequestionid(mContext, mTypeId);
-        }
-
         if (!StringUtil.isEmpty(mOid)) {
             mPresnter.getTextContent(mContext, mOid);
         }
-        if (!StringUtil.isEmpty(mTagType) && !StringUtil.isEmpty(mCouresidUser) &&
-                !StringUtil.isEmpty(mUserTagid)) {
-            mListPresenter.requestionErrOrColCont(mContext, mCouresidUser, mUserTagid, mTagType);
-        }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+
 
 
     }
@@ -851,8 +946,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLiBResolveBuy.setOnClickListener(this);
         mRlvEualeContent = (RecyclerView) findViewById(R.id.rlv_euale_content);
         mRlvEualeContent.setOnClickListener(this);
-        mSlvRootShow = (SmartScrollView) findViewById(R.id.slv_root_show);
-        mSlvRootShow.setOnClickListener(this);
+        mSloViewShow = (SmartScrollView) findViewById(R.id.slv_view_show);
+        mSloViewShow.setOnClickListener(this);
         mLlBBack = (LinearLayout) findViewById(R.id.ll_b_back);
         mLlBBack.setOnClickListener(this);
         mLlBGo = (LinearLayout) findViewById(R.id.ll_b_go);
@@ -894,7 +989,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mIvTitleBack = (ImageView) findViewById(R.id.iv_title_back);
         mIvTitleBack.setOnClickListener(this);
         mActivityTitleText = (TextView) findViewById(R.id.activity_title_text);
-        mActivityTitleText.setOnClickListener(this);
         mLlTitleBar = (LinearLayout) findViewById(R.id.ll_title_bar);
         mLlTitleBar.setOnClickListener(this);
         mTvAnswerAnswer = (TextView) findViewById(R.id.tv_answer_answer);
@@ -923,6 +1017,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLlSelectRootLayout.setOnClickListener(this);
         mRlLookEvalue = (RelativeLayout) findViewById(R.id.rl_look_evalue);
         mRlLookEvalue.setOnClickListener(this);
+        mIvTimePlay = (ImageView) findViewById(R.id.iv_time_play);
+        mVBLineBar = (LinearLayout) findViewById(R.id.v_b_lineBar);
+        mVBLineBar.setOnClickListener(this);
+        mIvBarDelect = (ImageView) findViewById(R.id.iv_bar_delect);
+        mIvBarDelect.setOnClickListener(this);
     }
 
     /**
@@ -940,8 +1039,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         UseSelectItemInfomVo item = null;
         this.mTextDetialNew = vo;
         mResultData = vo.getData();
-
-//        获取用户做过信息
         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
         if (user != null && !user.isEmpty()) {
             for (int i = 0; i < user.size(); i++) {
@@ -954,18 +1051,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
 
         }
-        //todo 判断是否正确
-        //todo 正确 -显示解析
-        //todo 错误 -显示解析(显示答案)
-
         //赋值
-        if (true) {// 已购买显示解析
+        if (isBuy) {// 已购买显示解析
             mLiBResolveBuy.setVisibility(View.GONE);
             mLlBJiexi.setVisibility(View.VISIBLE);
             mLlBRightLu.setVisibility(View.VISIBLE);
             mRlLookEvalue.setVisibility(View.GONE);
-
         } else {//未购买 隐藏解析
+            mLlBAnswerKey.setVisibility(View.GONE);
             mLiBResolveBuy.setVisibility(View.VISIBLE);
             mLlBJiexi.setVisibility(View.GONE);
             mLlBRightLu.setVisibility(View.GONE);
@@ -996,23 +1089,38 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         /**
          * 判断是否答题界面
          */
-        if (!StringUtil.isEmpty(mStyleCase) && !isUserResultJieXi) {
+        if (!StringUtil.isEmpty(mStyleCase) && !isUserLookResultJieXi) {
             bindResultExamData(isdo, item);
             return;
         }
 
-        if (isUserResultJieXi) {
-            bindResultWithJieXi();
-        } else {
+        /***
+         * 是否自由组卷界面
+         */
+        if (!StringUtil.isEmpty(mFreeQuestion) && mFreeQuestion.equals(mFreeQuestionTrue) && !isUserLookResultJieXi) {
+            bindResultExamData(isdo, item);
+            return;
+        }
+
+        /**
+         * 是否查看解析界面
+         */
+        if (isUserLookResultJieXi&&isBuy) {
+            bindResultWithJieXi(item);
+        } else if (isBuy){
             bindResultData(isdo, item);
+        }else  {
+            bindNoResultData(isdo, item);
         }
 
     }
 
     /**
      * 绑定解析界面
+     *
+     * @param item
      */
-    private void bindResultWithJieXi() {
+    private void bindResultWithJieXi(UseSelectItemInfomVo item) {
         mLlBAnswerKey.setVisibility(View.VISIBLE);
         mLlBJiexi.setVisibility(View.VISIBLE);
         mLlBRightLu.setVisibility(View.VISIBLE);
@@ -1025,12 +1133,31 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mLlSelectRootLayout.setVisibility(View.VISIBLE);
             setIsClick(false);
             setResultItemBG(mResultData.getChoiceanswer(), mResultData.getChoiceanswer(), mSelectViewBgZC);
+            if (item != null && !StringUtil.isEmpty(item.getItem())) {
+                setResultItemBG(item.getItem(), mResultData.getChoiceanswer(), mSelectViewBgZC);
+            }
+
         } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
             mBtnLookWenAnswer.setVisibility(View.GONE);
             mLlLookWenDa.setVisibility(View.GONE);
             mLlSelectRootLayout.setVisibility(View.VISIBLE);
             setIsClick(false);
             setReusltWithJieXi(mResultData.getChoiceanswer());
+            if (item != null) {
+                if (!StringUtil.isEmpty(item.getSelectItemA()) ||
+                        !StringUtil.isEmpty(item.getSelectItemB()) ||
+                        !StringUtil.isEmpty(item.getSelectItemC()) ||
+                        !StringUtil.isEmpty(item.getSelectItemD()) ||
+                        !StringUtil.isEmpty(item.getSelectItemE())) {
+                    String a = item.getSelectItemA();
+                    String b = item.getSelectItemB();
+                    String c = item.getSelectItemC();
+                    String d = item.getSelectItemD();
+                    String e = item.getSelectItemE();
+                    setResultItemBG(a, b, c, d, e, mResultData.getChoiceanswer(), mSelectViewBgZC);
+                }
+            }
+
         } else if (mTitleType.equals(mTitleTypeWrite)) {//问答
             mLlSelectRootLayout.setVisibility(View.GONE);
             mBtnLookWenAnswer.setVisibility(View.GONE);
@@ -1039,7 +1166,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
         Spanned html = Html.fromHtml(mResultData.getQuestion());
-        mTvBMatter.setText(html);
+        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1055,19 +1182,19 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
         mTvBAnswer.setText(mResultData.getChoiceanswer());
         Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
-        mTvBRosoleContent.setText(spanned);
+        mTvBRosoleContent.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
         mTvBAccuracy.setText(mResultData.getAccuracy());
         mChbBCollect.setChecked(mResultData.isIsfav());
         //正确答案
         mRightItem = mResultData.getChoiceanswer();
         Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
-        mTvLookAnswerWen.setText(fromHtml);
+        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
     }
 
     /**
-     * 绑定数据
+     * 绑定数据 用户购买
      *
      * @param isdo
      * @param item
@@ -1156,7 +1283,82 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
     }
+    /**
+     * 用户未购买
+     *
+     * @param isdo
+     * @param item
+     */
+    private void bindNoResultData(boolean isdo, UseSelectItemInfomVo item) {
+        if (isdo) {//用户做过 未做不处理
+            mLlBAnswerKey.setVisibility(View.VISIBLE);
+            if (mTitleType.equals(mTitleTypeOnly)) {//单选模式
+                mBtnLookWenAnswer.setVisibility(View.GONE);
+                mLlLookWenDa.setVisibility(View.GONE);
+                mLlSelectRootLayout.setVisibility(View.VISIBLE);
+                String onlyitme = item.getItem();
+                setIsClick(false);
+                setResultItemBG(onlyitme, mResultData.getChoiceanswer(), mSelectViewBgZC);
+            } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+                mBtnLookWenAnswer.setVisibility(View.GONE);
+                mLlLookWenDa.setVisibility(View.GONE);
+                mLlSelectRootLayout.setVisibility(View.VISIBLE);
+                String a = item.getSelectItemA();
+                String b = item.getSelectItemB();
+                String c = item.getSelectItemC();
+                String d = item.getSelectItemD();
+                String e = item.getSelectItemE();
+                setIsClick(false);
+                setResultItemBG(a, b, c, d, e, mResultData.getChoiceanswer(), mSelectViewBgZC);
 
+            } else if (mTitleType.equals(mTitleTypeWrite)) {//问答
+                mLlSelectRootLayout.setVisibility(View.GONE);
+                mBtnLookWenAnswer.setVisibility(View.GONE);
+                mLlLookWenDa.setVisibility(View.GONE);
+            }
+        } else {
+            if (mTitleType.equals(mTitleTypeWrite)) {
+                mLlLookWenDa.setVisibility(View.GONE);
+                mBtnLookWenAnswer.setVisibility(View.VISIBLE);
+                mLlBAnswerKey.setVisibility(View.GONE);
+                mLlBJiexi.setVisibility(View.GONE);
+                mLlBRightLu.setVisibility(View.GONE);
+                mRlLookEvalue.setVisibility(View.GONE);
+                mLlSelectRootLayout.setVisibility(View.GONE);
+                mRlvEualeContent.setVisibility(View.GONE);
+            } else {
+                mLlBAnswerKey.setVisibility(View.GONE);
+                mLlBJiexi.setVisibility(View.GONE);
+                mLlLookWenDa.setVisibility(View.GONE);
+                mBtnLookWenAnswer.setVisibility(View.GONE);
+                mLlBRightLu.setVisibility(View.GONE);
+                mRlvEualeContent.setVisibility(View.GONE);
+                mRlLookEvalue.setVisibility(View.GONE);
+                mLlSelectRootLayout.setVisibility(View.VISIBLE);
+            }
+            setIsClick(true);
+        }
+
+        mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
+//        Spanned html = Html.fromHtml(mResultData.getQuestion());
+        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
+        mTvBAContent.setText(mResultData.getA());
+        mTvBBContent.setText(mResultData.getB());
+        mTvBCContent.setText(mResultData.getC());
+        mTvBDContent.setText(mResultData.getD());
+        if (StringUtil.isEmpty(mResultData.getE())) {//是否有e选项
+            mIvBE.setVisibility(View.GONE);
+            mTvBEContent.setVisibility(View.GONE);
+        } else {
+            mIvBE.setVisibility(View.VISIBLE);
+            mTvBEContent.setVisibility(View.VISIBLE);
+            mTvBEContent.setText(mResultData.getE());
+        }
+        //正确答案
+        mTvBAnswer.setText(mResultData.getChoiceanswer());
+        mChbBCollect.setChecked(mResultData.isIsfav());
+
+    }
     /**
      * 绑定数据
      *
@@ -1217,7 +1419,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
         Spanned html = Html.fromHtml(mResultData.getQuestion());
-        mTvBMatter.setText(html);
+        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1235,7 +1437,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void setShowLayout() {
         mTvRootEmpty.setVisibility(View.GONE);
         mRlRootLayout.setVisibility(View.VISIBLE);
-        mSlvRootShow.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -1294,7 +1495,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = A;
                     setSelectOnlyItemBG(true, false, false, false, false);
-                    if (isExam) {
+                    if (isExamHine) {
                         setGoNextDan();
                     }
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
@@ -1313,7 +1514,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {             //单选
                     mSelectOnlyitem = B;
                     setSelectOnlyItemBG(false, true, false, false, false);
-                    if (isExam) {
+                    if (isExamHine) {
                         setGoNextDan();
                     }
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
@@ -1331,7 +1532,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {     //单选
                     mSelectOnlyitem = C;
                     setSelectOnlyItemBG(false, false, true, false, false);
-                    if (isExam) {
+                    if (isExamHine) {
                         setGoNextDan();
                     }
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
@@ -1349,7 +1550,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = D;
                     setSelectOnlyItemBG(false, false, false, true, false);
-                    if (isExam) {
+                    if (isExamHine) {
                         setGoNextDan();
                     }
 
@@ -1370,7 +1571,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (mTitleType.equals(mTitleTypeOnly)) {        //单选
                     mSelectOnlyitem = E;
                     setSelectOnlyItemBG(false, false, false, false, true);
-                    if (isExam) {
+                    if (isExamHine) {
                         setGoNextDan();
                     }
                 } else if (mTitleType.equals(mTitleTypeMore)) {//多选
@@ -1390,7 +1591,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_b_sure_key://多选确认
                 isSure = true;
-                if (isExam) {
+                if (isExamHine) {
                     setGoNextDan();
                 }
                 break;
@@ -1403,15 +1604,46 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 submitEvalue();
                 break;
             case R.id.iv_title_back:
-                finish();
+                if (!isExamHine || !StringUtil.isEmpty(mFreeQuestion)) {
+                    DialogUtil instance = DialogUtil.getInstance();
+                    instance.showTitleDialog(mContext, "确定退出答题", "退出答题"
+                            , "取消", true);
+                    instance.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                        @Override
+                        public void onSureClickListener() {
+                            finish();
+                        }
+
+                        @Override
+                        public void onCancelClickListener() {
+                        }
+                    });
+
+                } else {
+                    this.finish();
+                }
                 break;
             case R.id.btn_look_wen_answer:
                 isUserLookWenJieXi = true;
                 mLlLookWenDa.setVisibility(View.VISIBLE);
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 break;
-            case R.id.activity_title_text:
 
+            case R.id.iv_bar_delect:
+
+                DialogUtil dialogUtil11 = DialogUtil.getInstance();
+                dialogUtil11.showTitleDialog(mContext, "确认删除", "删除", "取消", false);
+                dialogUtil11.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        T.showToast(mContext, getString(R.string.delect_Success));
+                        mPresnter.submitWoringQeustinDelect(mContext, String.valueOf(mResultData.getId()));
+                    }
+
+                    @Override
+                    public void onCancelClickListener() {
+                    }
+                });
                 break;
         }
     }
@@ -1538,6 +1770,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     private void saveBeforeDate() {
 
+        if (isUserLookResultJieXi) {
+            return;
+        }
         //用户是否选中 没有选中不保存
         if (mTitleType.equals(mTitleTypeOnly)) {
             if (StringUtil.isEmpty(mSelectOnlyitem)) {
@@ -1555,100 +1790,113 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
 
         }
-        //读取上次保存结果
+
+        if (mTextDetialNew == null)
+            return;
+        SharedSeletResultListUtil sp = SharedSeletResultListUtil.getInstance();
+        int id = mTextDetialNew.getData().getId();
+        //保存用户选中结果
+        if (mSeletList == null) {
+            mSeletList = new ArrayList<>();
+        }
+        //保存结果
         UseSelectItemInfomVo vo = new UseSelectItemInfomVo();
         vo.setType(mTitleType);
-        if (mTextDetialNew != null) {
-            SharedSeletResultListUtil sp = SharedSeletResultListUtil.getInstance();
-            int id = mTextDetialNew.getData().getId();
-            //保存用户选中结果
-            if (mSeletList == null) {
-                mSeletList = new ArrayList<>();
-            }
-            //获取上次保存内容
-            if (StringUtil.isEmpty(mStyleCase)) {//不是考试就不重复保存
-                List<UseSelectItemInfomVo> user = sp.getUser();
-                if (user != null && !user.isEmpty() && user.size() != 0) {
-                    int size = user.size();
-                    for (int i = 0; i < size; i++) {
-                        if (vo.getId() == mTextDetialNew.getData().getId()) {
-                            return;
+        //获取上次保存内容
+        List<UseSelectItemInfomVo> user = sp.getUser();
+        if (user != null && !user.isEmpty() && user.size() != 0) {
+            for (int i = 0; i < user.size(); i++) {
+                UseSelectItemInfomVo infomVo = user.get(i);
+                if (infomVo.getId() == mTextDetialNew.getData().getId()) {
+                    if (StringUtil.isEmpty(mStyleCase) && StringUtil.isEmpty(mFreeQuestion)) {//不是考试/自由组卷就不重复保存
+                        return;
+                    } else {//删除旧的保存新的
+                        if (mSeletList != null && !mSeletList.isEmpty()) {//删除集合
+                            for (int j = 0; j < mSeletList.size(); j++) {
+                                if (mSeletList.get(j).getId() == mTextDetialNew.getData().getId()) {
+                                    mSeletList.remove(j);
+                                    vo = infomVo;
+                                }
+                            }
                         }
                     }
                 }
+
             }
+        }
 //            问题id
-            vo.setId(id);
-            if (!StringUtil.isEmpty(mSelectOnlyitem)) {//单选保存正确
-                if (mSelectOnlyitem.equalsIgnoreCase(mResultData.getChoiceanswer())) {//正确
+        vo.setId(id);
+        if (!StringUtil.isEmpty(mSelectOnlyitem)) {//单选保存正确
+            if (mSelectOnlyitem.equalsIgnoreCase(mResultData.getChoiceanswer())) {//正确
+                vo.setItemStatus("0");
+                submitQuestionResult(true);
+                UserLookVo userLookVo = new UserLookVo();
+                userLookVo.setChapterId(String.valueOf(id));
+                updataRightQuestion(userLookVo);
+            } else {//错误
+                vo.setItemStatus("1");
+                submitQuestionResult(false);
+            }
+            vo.setItem(mSelectOnlyitem);
+        }
+        List<String> list = getAnswerKeyList(mResultData.getChoiceanswer());
+        ArrayList<String> mResult = new ArrayList<>();
+
+        if (!StringUtil.isEmpty(mSelectMorItemA)) {//单选
+            vo.setSelectItemA(mSelectMorItemA);
+            mResult.add(mSelectMorItemA);
+        }
+        if (!StringUtil.isEmpty(mSelectMorItemB)) {
+            vo.setSelectItemB(mSelectMorItemB);
+            mResult.add(mSelectMorItemB);
+        }
+
+        if (!StringUtil.isEmpty(mSelectMorItemC)) {
+            vo.setSelectItemC(mSelectMorItemC);
+            mResult.add(mSelectMorItemC);
+        }
+        if (!StringUtil.isEmpty(mSelectMorItemD)) {
+            vo.setSelectItemD(mSelectMorItemD);
+            mResult.add(mSelectMorItemD);
+        }
+
+        if (!StringUtil.isEmpty(mSelectMorItemE)) {
+            vo.setSelectItemE(mSelectMorItemE);
+            mResult.add(mSelectMorItemE);
+        }
+        if (mTitleType.equals(mTitleTypeMore)) {//多选 保存正确
+            if (mResult.size() > list.size()) {
+                vo.setItemStatus("1");
+                submitQuestionResult(false);
+            } else if (mResult.size() == list.size()) {
+                boolean b = list.containsAll(mResult);
+                if (b) {
                     vo.setItemStatus("0");
-                    submitQuestionResult(true);
                     UserLookVo userLookVo = new UserLookVo();
                     userLookVo.setChapterId(String.valueOf(id));
                     updataRightQuestion(userLookVo);
-                } else {//错误
+                    submitQuestionResult(true);
+                } else {
                     vo.setItemStatus("1");
                     submitQuestionResult(false);
                 }
-                vo.setItem(mSelectOnlyitem);
-            }
-            List<String> list = getAnswerKeyList(mResultData.getChoiceanswer());
-            ArrayList<String> mResult = new ArrayList<>();
-
-            if (!StringUtil.isEmpty(mSelectMorItemA)) {//单选
-                vo.setSelectItemA(mSelectMorItemA);
-                mResult.add(mSelectMorItemA);
-            }
-            if (!StringUtil.isEmpty(mSelectMorItemB)) {
-                vo.setSelectItemB(mSelectMorItemB);
-                mResult.add(mSelectMorItemB);
-            }
-
-            if (!StringUtil.isEmpty(mSelectMorItemC)) {
-                vo.setSelectItemC(mSelectMorItemC);
-                mResult.add(mSelectMorItemC);
-            }
-            if (!StringUtil.isEmpty(mSelectMorItemD)) {
-                vo.setSelectItemD(mSelectMorItemD);
-                mResult.add(mSelectMorItemD);
-            }
-
-            if (!StringUtil.isEmpty(mSelectMorItemE)) {
-                vo.setSelectItemE(mSelectMorItemE);
-                mResult.add(mSelectMorItemE);
-            }
-            if (mTitleType.equals(mTitleTypeMore)) {//多选 保存正确
-                if (mResult.size() > list.size()) {
+            } else if (mResult.size() < list.size()) {
+                if (list.containsAll(mResult)) {
+                    vo.setItemStatus("2");
+                } else {
                     vo.setItemStatus("1");
                     submitQuestionResult(false);
-                } else if (mResult.size() == list.size()) {
-                    boolean b = list.containsAll(mResult);
-                    if (b) {
-                        vo.setItemStatus("0");
-                        UserLookVo userLookVo = new UserLookVo();
-                        userLookVo.setChapterId(String.valueOf(id));
-                        updataRightQuestion(userLookVo);
-                        submitQuestionResult(true);
-                    } else {
-                        vo.setItemStatus("1");
-                        submitQuestionResult(false);
-                    }
-                } else if (mResult.size() < list.size()) {
-                    if (list.containsAll(mResult)) {
-                        vo.setItemStatus("2");
-                    } else {
-                        vo.setItemStatus("1");
-                        submitQuestionResult(false);
-                    }
                 }
             }
-            //保存题号
-            vo.setItemSelect(mMark);
-            mSeletList.add(vo);
-            //保存
-            sp.putListAdd(mSeletList);
-
         }
+        //保存题号
+        vo.setItemSelect(mMark);
+        mSeletList.add(vo);
+
+        //保存
+        sp.DeleteUser();
+        sp.putListAdd(mSeletList);
+
     }
 
     private void updataRightQuestion(UserLookVo vo) {
@@ -1657,7 +1905,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             data.clear();
         }
         data.add(vo);
-        if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {
+        if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {//错题模式
             UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
             if (mCouresidUser.equals("1")) {//技术
                 if (db == null) {
@@ -1722,7 +1970,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param isRight
      */
     private void submitQuestionResult(boolean isRight) {
-        if (isExam)
+        if (isExamHine)
             mPresnter.submitDoRecord(mContext, String.valueOf(mResultData.getId()), isRight);
     }
 
@@ -1738,7 +1986,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mSelectMorItemE = null;
         isMoreData = true;
         isUserLookWenJieXi = false;
-        isUserResultJieXi = false;
+        if (StringUtil.isEmpty(mStyleCase)) {//处理是否是考试界面
+            isUserLookResultJieXi = false;
+        }
         clearClick();
     }
 
@@ -1836,6 +2086,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRdbPop3 = view.findViewById(R.id.rdb_pop_3);
                 mRdbPop5 = view.findViewById(R.id.rdb_pop_5);
                 mRdbPopNo = view.findViewById(R.id.rdb_pop_no);
+            }
+
+            @Override
+
+            protected void initEvent() {
                 UserInfomDb userInfomDb = DbHelperAssist.getInstance().queryWithuuUserInfom();
                 if (userInfomDb != null) {
                     String question = userInfomDb.getDelectQuestion();
@@ -1854,11 +2109,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                 }
-            }
-
-            @Override
-
-            protected void initEvent() {
                 mRdbPop1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1977,19 +2227,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRlvPopContent = view.findViewById(R.id.rlv_pop_content);
                 mGvPopContent = view.findViewById(R.id.gv_pop_content);
                 mBtnSubmit = (Button) view.findViewById(R.id.btn_pop_answer_sumbit);
-                if (isExam) {
-                    mBtnSubmit.setVisibility(View.GONE);
-                } else {
-                    mBtnSubmit.setVisibility(View.VISIBLE);
-                }
             }
 
             @Override
             protected void initEvent() {
-                mBtnSubmit.setOnClickListener(new View.OnClickListener() {
+                mBtnSubmit.setOnClickListener(new View.OnClickListener() {//交卷
                     @Override
                     public void onClick(View v) {
-                        isSubmit = true;
+
                         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
                         if (user.size() < mTextDetial.size()) {
                             DialogUtil dialogUtil = DialogUtil.getInstance();
@@ -1998,30 +2243,32 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                 @Override
                                 public void onCancelClickListener() {
                                 }
+
                                 @Override
                                 public void oSubmitClickListener() {
+                                    mDoTime = getTextStr(mActivityTitleText);
+                                    isSubmit = true;
+                                    saveBeforeDate();
                                     showAnswerCardResultLayout();
                                     //取消时间
-                                    util.cancel();
+                                    mTimeUitl.cancel();
+                                    mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_cont);
+                                    mVBLineBar.setClickable(false);
                                     mActivityTitleText.setText(startTime);
                                     popAnswer.getPopupWindow().dismiss();
-                                    mActivityTitleText.setText(startTime);
                                 }
                             });
                         }
-               /*         EventBus.getDefault().postSticky(new AnswerResultEvent(mTextDetial));
-                        Intent intent = new Intent(AnswerActivity.this, AnswerResultActivity.class);
-                        intent.putExtra(AnswerResultActivity.CSTR_EXTRA_TITLE_STR, "答题结果");
-                        startActivity(intent);*/
                     }
                 });
-
+                if (isExamHine) {
+                    mBtnSubmit.setVisibility(View.GONE);
+                } else {
+                    mBtnSubmit.setVisibility(View.VISIBLE);
+                }
                 mTvPopNew.setText(String.valueOf(mMark + 1));
                 mTvPopCount.setText(String.valueOf(mTextDetial.size()));
-//                bindAdapter();
                 bindGridViewAdapter();
-
-
             }
 
             @Override
@@ -2043,7 +2290,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     private void bindGridViewAdapter() {
         GridViewAdapter adapter = new GridViewAdapter(mContext, mTextDetial);
-        adapter.setItemSelect(isExam, mMark);
+        adapter.setItemSelect(isExamHine, mMark);
         mGvPopContent.setSelection(mMark);
         mGvPopContent.setAdapter(adapter);
         mGvPopContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -2062,35 +2309,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
 
     }
-
-    /**
-     * 绑定答题卡表适配器
-     */
-    private void bindAdapter() {
-        GridLayoutManager manager = new GridLayoutManager(mContext, 6);
-        manager.setOrientation(GridLayoutManager.VERTICAL);
-        mRlvPopContent.setLayoutManager(manager);
-        AnswerTableAdapter adapter = new AnswerTableAdapter(mContext, mTextDetial);
-        mRlvPopContent.setAdapter(adapter);
-        adapter.setItemSelect(isExam, mMark);
-        mRlvPopContent.scrollToPosition(mMark);
-        adapter.setClickListener(new AnswerTableAdapter.onItemClickListener() {
-            @Override
-            public void onClickListener(Object obj, int position) {
-                QuestionAllVo.DatasBean bean = (QuestionAllVo.DatasBean) obj;
-                mMark = position;
-                //切换是否需要保存
-                saveBeforeDate();
-                clearbg();
-                //清空选项
-                clearSeletItem();
-                popAnswer.getPopupWindow().dismiss();
-                bindTextNumberData();
-            }
-        });
-
-    }
-
 
     /**
      * 答案布局
@@ -2120,27 +2338,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mBtnAnswerJiexi = (Button) view.findViewById(R.id.btn_answer_jiexi);
                 mIcPopBack = (ImageView) view.findViewById(R.id.ic_pop_result);
                 mTvPopTitle = (TextView) view.findViewById(R.id.tv_pop_answer_title_question);
-                user = SharedSeletResultListUtil.getInstance().getUser();
-                int size = user.size();
-                if (mFreeQuestion) {//自由组卷
-                    mTvPopTitle.setText(R.string.answernubmer);
-                    mTvResultNumber.setText(size + "");
-                } else {//模拟考试
-                    mTvPopTitle.setText(R.string.score);
-                    showUserScore(mTvResultNumber, user);
-                }
-                int right = 0;
-                for (int i = 0; i < size; i++) {
-                    UseSelectItemInfomVo vo = user.get(i);
-                    if (vo.getItemStatus().equals("0")) {
-                        right += 1;
-                    }
-                }
-                mTvAnswerTime.setText(getTextStr(mActivityTitleText));
-                //正确率
-                String number = ArithUtil.divNumber(right, mTextDetial.size(), 2);
-                mTvAnswerLv.setText(number + "");
-
             }
 
             /**
@@ -2196,30 +2393,64 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             protected void initEvent() {
+                user = SharedSeletResultListUtil.getInstance().getUser();
+                int size = user.size();
+                if (!StringUtil.isEmpty(mFreeQuestion) && mFreeQuestion.equals(mFreeQuestionTrue)) {//自由组卷
+                    mTvPopTitle.setText(R.string.answernubmer);
+                    mTvResultNumber.setText(size + "");
+                } else {//模拟考试
+                    mTvPopTitle.setText(R.string.score);
+                    showUserScore(mTvResultNumber, user);
+                }
+                int right = 0;
+                for (int i = 0; i < size; i++) {
+                    UseSelectItemInfomVo vo = user.get(i);
+                    if (vo.getItemStatus().equals("0")) {
+                        right += 1;
+                    }
+                }
+                mTvAnswerTime.setText(mDoTime);
+                //正确率
+                String number = ArithUtil.divNumber(right, mTextDetial.size(), 2);
+                mTvAnswerLv.setText(number + "");
                 mIcPopBack.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         popResult.getPopupWindow().dismiss();
                     }
                 });
-                mBtnAnswerAgain.setOnClickListener(new View.OnClickListener() {
+                mBtnAnswerAgain.setOnClickListener(new View.OnClickListener() {//重新做题
                     @Override
                     public void onClick(View v) {
+                        SharedSeletResultListUtil.getInstance().DeleteUser();
+                        if (mSeletList != null && !mSeletList.isEmpty()) {
+                            mSeletList.clear();
+                        }
+                        SharedSeletResultListUtil.getInstance().DeleteUser();
                         mMark = 0;
+                        setIsClick(true);
+                        clearbg();
+                        clearSeletItem();
                         isSubmit = false;
+                        mTimeUitl.restart();
+                        mVBLineBar.setClickable(true);
+                        isUserLookResultJieXi = false;
                         popResult.getPopupWindow().dismiss();
                         bindTextNumberData();
                     }
                 });
-                mBtnAnswerJiexi.setOnClickListener(new View.OnClickListener() {
+                mBtnAnswerJiexi.setOnClickListener(new View.OnClickListener() {//查看解析
                     @Override
                     public void onClick(View v) {
-                        isUserResultJieXi = true;
+                   /*     if (mSeletList != null && !mSeletList.isEmpty()) {
+                            mSeletList.clear();
+                        }*/
+                        isUserLookResultJieXi = true;
+                        mMark = 0;
                         popResult.getPopupWindow().dismiss();
                         bindTextNumberData();
                     }
                 });
-//                initAdapter();
                 initGVResultAdapter();
 
 
@@ -2236,31 +2467,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         clearbg();
                         mMark = position;
+                        setIsClick(false);
                         popResult.getPopupWindow().dismiss();
                         bindTextNumberData();
                     }
                 });
 
 
-            }
-
-            private void initAdapter() {
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 6);
-                gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-                AnswerTableResultAdapter adapter = new AnswerTableResultAdapter(mContext, mTextDetial);
-                mRlvAnswerResultBag.setLayoutManager(gridLayoutManager);
-                mRlvAnswerResultBag.setAdapter(adapter);
-                adapter.setClickListener(new AnswerTableResultAdapter.onItemClickListener() {
-                    @Override
-                    public void onClickListener(Object obj, int position) {
-                        QuestionAllVo.DatasBean bean = (QuestionAllVo.DatasBean) obj;
-                        clearbg();
-                        mMark = position;
-                        popResult.getPopupWindow().dismiss();
-                        bindTextNumberData();
-
-                    }
-                });
             }
 
             @Override
@@ -2792,13 +3005,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (vo.getStatus().getCode() == 200) {
 //            mRlRootLayout.setVisibility(View.VISIBLE);
             if (vo.getDatas() == null || vo.getDatas().size() == 0) {
-                mSlvRootShow.setVisibility(View.GONE);
+                mRlRootLayout.setVisibility(View.GONE);
                 dialog.dismiss();
                 mTvRootEmpty.setVisibility(View.VISIBLE);
                 return;
             } else {
                 mTvRootEmpty.setVisibility(View.GONE);
-                mSlvRootShow.setVisibility(View.VISIBLE);
+                mRlRootLayout.setVisibility(View.VISIBLE);
             }
             mTextDetial = vo.getDatas();
             mTvBCount.setText(String.valueOf(mTextDetial.size()));
@@ -2863,6 +3076,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void WoringSuccess(String con) {
+        Gson gson = new Gson();
+        ResultVo resultVo = gson.fromJson(con, ResultVo.class);
+        if (resultVo.getStatus().getCode() == 200) {
+            if (resultVo.getData().getStatusX() == 1) {
+                T.showToast(mContext, getString(R.string.delect_Success));
+            }
+        } else {
+            L.e(resultVo.getStatus().getMessage());
+        }
         L.d("错题移除" + con);
     }
 
@@ -2990,6 +3212,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLlTitleBar.setBackgroundColor(getLayoutColor(R.color.night_title_bar));
         mLlRootLayout.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
         mLlLookWenDa.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
+        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
         setTvColor(mTvBType, R.color.night_text_color);
         setTvColor(mTvBMatter, R.color.night_text_color);
         setTvColor(mTvBAContent, R.color.night_text_color);
@@ -3005,23 +3228,32 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         setTvColor(mTvAnswerNumberevlue, R.color.night_text_color);
         mLlBSubmitEvalue.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
         mLiXia.setBackgroundColor(getLayoutColor(R.color.night_title_bar));
-        setLinebg(mVLine, R.color.night_line_bg);
+        setLinebg(mVLine, R.color.night_layout_bg);
         setLinebg(mVLine1, R.color.night_line_bg);
         setLinebg(mVLine2, R.color.night_line_bg);
         setLinebg(mVLine3, R.color.night_line_bg);
         setLinebg(mVLine4, R.color.night_line_bg);
+        setIvBG(mIvTitleBack, R.color.night_layout_bg);
+        setIvBG(mIvBMore, R.color.night_layout_bg);
+        setIvBG(mIvTimePlay, R.color.night_layout_bg);
+        setIvBG(mIvBarDelect, R.color.night_layout_bg);
+
         if (adapter != null)
             adapter.setBGLayout(mSelectViewBgZC);
 
 
     }
 
+    private void setIvBG(ImageView iv, int id) {
+        iv.setBackgroundColor(mContext.getResources().getColor(id));
+    }
 
     /**
      * 设置护眼
      */
     private void setHuYanLayout() {
         mLlTitleBar.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
+        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLlRootLayout.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLlBSubmitEvalue.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLiXia.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
@@ -3043,6 +3275,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLlTitleBar.setBackgroundColor(getLayoutColor(R.color.white));
         mLlRootLayout.setBackgroundColor(getLayoutColor(R.color.white));
         mLlLookWenDa.setBackgroundColor(getLayoutColor(R.color.white));
+        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.white));
         setTvColor(mTvBType, R.color.text_fu_color);
         setTvColor(mTvBMatter, R.color.black);
         setTvColor(mTvBAContent, R.color.black);
@@ -3154,7 +3387,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
                 }
             }
-
             mTextDetial = list;
             setShowLayout();
             mTvBCount.setText(String.valueOf(mUserData.size()));
@@ -3172,57 +3404,37 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         L.w(con);
     }
 
-
-    static class MyCountUtil extends AdvancedCountdownTimer {
-
-        private static MyCountUtil util;
-
-        public static MyCountUtil getInstance(String hourtiem, String minTime, String secondTime) {
-            long hour = Long.parseLong(hourtiem);
-            long minute = Long.parseLong(minTime);
-            long second = Long.parseLong(secondTime);
-            long time = (hour * 3600 + minute * 60 + second) * 1000;  //因为以ms为单位，所以乘以1000.
-            if (util == null)
-                util = new MyCountUtil(time, 1000);
-            return util;
+    /**
+     * 时间结果回调
+     */
+    @Override
+    public void TimeFinish() {
+        if (mTimeUitl != null) {
+            mTimeUitl.cancel();
         }
 
-        public MyCountUtil(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        //更新剩余时间
-        String a = null;
-        private String contentime;
-
-        @Override
-        public void onTick(long millisUntilFinished, int percent) {
-            long myhour = (millisUntilFinished / 1000) / 3600;
-            long myminute = ((millisUntilFinished / 1000) - myhour * 3600) / 60;
-            long mysecond = millisUntilFinished / 1000 - myhour * 3600
-                    - myminute * 60;
-            if (mysecond < 10) {
-                a = "0" + mysecond;
-                if (myminute < 10) {
-                    contentime = "0" + myhour + ":" + "0" + myminute + ":" + a;
-                } else
-                    contentime = "0" + myhour + ":" + myminute + ":" + a;
-            } else {
-                if (myminute < 10) {
-                    contentime = "0" + myhour + ":" + "0" + myminute + ":" + mysecond;
-                } else {
-                    contentime = "0" + myhour + ":" + myminute + ":" + mysecond;
-                }
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, "考试时间结束,请交卷", "交卷", "取消", false);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                mDoTime = getTextStr(mActivityTitleText);
+                isSubmit = true;
+                saveBeforeDate();
+                showAnswerCardResultLayout();
+                //取消时间
+                mTimeUitl.cancel();
+                mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_cont);
+                mVBLineBar.setClickable(false);
+                mActivityTitleText.setText(startTime);
+                popAnswer.getPopupWindow().dismiss();
             }
-            mActivityTitleText.setText(contentime);
-            mActivityTitleText.setTextSize(15);
-        }
 
-        @Override
-        public void onFinish() {
-
-            mActivityTitleText.setText("00：00：00");
-        }
+            @Override
+            public void onCancelClickListener() {
+            }
+        });
     }
+
 }
 

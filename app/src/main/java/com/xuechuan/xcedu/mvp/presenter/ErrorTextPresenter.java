@@ -26,12 +26,14 @@ public class ErrorTextPresenter {
         this.view = view;
     }
 
-    /**请求错题数
+    /**
+     * 请求错题数
+     *
      * @param context
      * @param courseid
      * @param tagtype
      */
-    public void reqeusetQuestionCount(Context context, String courseid,String tagid, String tagtype) {
+    public void reqeusetQuestionCount(Context context, String courseid, String tagid, String tagtype) {
         if (StringUtil.isEmpty(tagtype)) {
             return;
         }
@@ -48,5 +50,27 @@ public class ErrorTextPresenter {
         });
     }
 
+    /**
+     * 获取错题数据和收数
+     *
+     * @param context
+     * @param courseid
+     */
+    public void getErrOrCollNumber(Context context, String courseid) {
+        if (StringUtil.isEmpty(courseid)) {
+            return;
+        }
+        model.reqeustErrOrCoNumber(context, courseid, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.ErrOrColNumberSuccess(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.ErrOrColNumberError(result);
+            }
+        });
+    }
 
 }

@@ -150,7 +150,8 @@
             android:launchMode="singleTask" />
         <activity android:name=".ui.bank.SpecialListActivity" />
         <activity android:name=".ui.bank.FreeQuestionActivity" />
-        <activity android:name=".ui.home.SpecalTabActivity"></activity>
+        <activity android:name=".ui.home.SpecalTabActivity" />
+        <activity android:name=".ui.home.AtirlceListActivity"></activity>
     </application>
 
 </manifest>

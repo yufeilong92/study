@@ -149,5 +149,6 @@
     <string name="pas_no_same">两次输入密码不一致</string>
     <string name="score">分数</string>
     <string name="answernubmer">答题数目</string>
+    <string name="delect_Success">删除成功</string>
 
 </resources>

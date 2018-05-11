@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.XceuAppliciton;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
@@ -56,12 +57,19 @@ public class MyAppliction extends MultiDexApplication {
     private PolyvSDKClient mPolyclient;
     private UserInfomVo infomVo;
     private static MyAppliction application;
-
     public static MyAppliction getInstance() {
         if (application == null)
             application = new MyAppliction();
         return application;
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+
 
     /**
      * 保存用户信息
@@ -110,9 +118,6 @@ public class MyAppliction extends MultiDexApplication {
         initImagerLoader();
         DBHelper.initDb(this);
         SaveUUidUtil.initSharedPreference(this);
-        SharedUserUtils.initSharedPreference(this);
-        SharedTextListUtil.initSharedPreference(this);
-        SharedSeletIdListUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
 
     }

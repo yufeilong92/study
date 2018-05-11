@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.home.SpecasListActivity">
+    android:background="@color/white"
+    tools:context=".ui.home.AtirlceListActivity">
 
     <LinearLayout style="@style/TitleBar">
 
@@ -17,21 +17,15 @@
 
         <TextView
             style="@style/TitleBarText"
-            android:text="" />
+             />
 
         <ImageView style="@style/TitleBarAction" />
 
     </LinearLayout>
-    <com.andview.refreshview.XRefreshView
-        android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
-        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_speca_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <View style="@style/view_line_tab_line" />
 
-        </android.support.v7.widget.RecyclerView>
-    </com.andview.refreshview.XRefreshView>
+
+
+
 </LinearLayout>

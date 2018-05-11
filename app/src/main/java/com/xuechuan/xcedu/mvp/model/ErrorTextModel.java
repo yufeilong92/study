@@ -16,4 +16,5 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
  */
 public interface ErrorTextModel {
     public void requestErrorNumber(Context context, String  courseid, String tagtype, RequestResulteView view);
+    public void reqeustErrOrCoNumber(Context context, String courseid, RequestResulteView view);
 }

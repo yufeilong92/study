@@ -14,4 +14,9 @@ public interface ErrorTextView  {
     public void ErrorSuccess(String con);
     public void ErrorError(String con);
 
+    public void ErrOrColNumberSuccess(String con);
+    public void ErrOrColNumberError(String con);
+
+
+
 }
