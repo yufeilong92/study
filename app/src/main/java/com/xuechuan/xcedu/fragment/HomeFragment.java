@@ -30,6 +30,7 @@ import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.ui.home.AddressShowActivity;
 import com.xuechuan.xcedu.ui.home.AdvisoryListActivity;
 import com.xuechuan.xcedu.ui.home.ArticleListActivity;
+import com.xuechuan.xcedu.ui.home.AtirlceListActivity;
 import com.xuechuan.xcedu.ui.home.BookActivity;
 import com.xuechuan.xcedu.ui.home.SearchActivity;
 import com.xuechuan.xcedu.ui.home.SpecasListActivity;
@@ -410,8 +411,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent1);
                 break;
             case R.id.tv_article_more://全部更多
-                UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
-                Intent instance = ArticleListActivity.newInstance(mContext, vo.getData().getUser().getId());
+//                UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+                Intent instance = AtirlceListActivity.newInstance(mContext,"");
                 instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_infom_all));
                 startActivity(instance);
                 break;

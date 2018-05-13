@@ -27,6 +27,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.umeng.debug.log.I;
@@ -60,6 +61,7 @@ import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.ArithUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
+
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.MyTimeUitl;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
@@ -287,7 +289,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     /**
      * 用户是否购买
      */
-    private boolean isBuy = false;
+    private boolean isBuy = true;
     /**
      * 章节标识
      */
@@ -370,19 +372,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mVBLineBar;
     private SmartScrollView mSlvViewShow;
     private ImageView mIvBarDelect;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("yfl", "onStart: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("yfl", "onPause: ");
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -395,6 +384,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         saveChapterRecords();
     }
+
 
 
     //保存章节记录
@@ -621,9 +611,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mListPresenter = new ErrOrColListPresenter(new ErrOrColListModelImpl(), this);
             mListPresenter.requestionErrOrColCont(mContext, mCouresidUser, mUserTagid, mTagType);
         }
-        isExamHine = true;
+
         if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {//错题模式
             mIvBarDelect.setVisibility(View.VISIBLE);
+            isExamHine = true;
         }
     }
 
@@ -662,16 +653,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private void exam() {
         if (!StringUtil.isEmpty(mStyleCase)) {
+            isExamHine = false;
             mIvTimePlay.setVisibility(View.VISIBLE);
             mTimeUitl = MyTimeUitl.getInstance(mContext);
             if (mStyleCase.equals(DataMessageVo.MARKTYPECASE)) {//案例
-                isExamHine = false;
+
                 mTimeUitl.start(mActivityTitleText, 3, 0, 0, this);
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPESKILL)) {//技术
-                isExamHine = false;
                 mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPECOLLORT)) {//综合
-                isExamHine = false;
                 mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
             }
             tabBarSetListener();
@@ -799,7 +789,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mPresnter.getTextContent(mContext, mOid);
         }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-
 
 
     }
@@ -1022,6 +1011,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mVBLineBar.setOnClickListener(this);
         mIvBarDelect = (ImageView) findViewById(R.id.iv_bar_delect);
         mIvBarDelect.setOnClickListener(this);
+
     }
 
     /**
@@ -1105,11 +1095,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         /**
          * 是否查看解析界面
          */
-        if (isUserLookResultJieXi&&isBuy) {
+        if (isUserLookResultJieXi && isBuy) {
             bindResultWithJieXi(item);
-        } else if (isBuy){
+        } else if (isBuy) {
             bindResultData(isdo, item);
-        }else  {
+        } else {
             bindNoResultData(isdo, item);
         }
 
@@ -1283,6 +1273,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
     }
+
     /**
      * 用户未购买
      *
@@ -1359,6 +1350,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mChbBCollect.setChecked(mResultData.isIsfav());
 
     }
+
     /**
      * 绑定数据
      *
@@ -3252,12 +3244,17 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 设置护眼
      */
     private void setHuYanLayout() {
+        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLlTitleBar.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mVBLineBar.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLlRootLayout.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLlBSubmitEvalue.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLiXia.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
         mLlLookWenDa.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
+        setIvBG(mIvTitleBack, R.color.eye_layout_bg);
+        setIvBG(mIvBMore, R.color.eye_layout_bg);
+        setIvBG(mIvTimePlay, R.color.eye_layout_bg);
+        setIvBG(mIvBarDelect, R.color.eye_layout_bg);
         setLinebg(mVLine, R.color.eye_line_bg);
         setLinebg(mVLine1, R.color.eye_line_bg);
         setLinebg(mVLine2, R.color.eye_line_bg);
@@ -3272,10 +3269,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
 
     private void setZhLayout() {
+        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.white));
         mLlTitleBar.setBackgroundColor(getLayoutColor(R.color.white));
         mLlRootLayout.setBackgroundColor(getLayoutColor(R.color.white));
         mLlLookWenDa.setBackgroundColor(getLayoutColor(R.color.white));
         mVBLineBar.setBackgroundColor(getLayoutColor(R.color.white));
+        setIvBG(mIvTitleBack, R.color.white);
+        setIvBG(mIvBMore, R.color.white);
+        setIvBG(mIvTimePlay, R.color.white);
+        setIvBG(mIvBarDelect, R.color.white);
         setTvColor(mTvBType, R.color.text_fu_color);
         setTvColor(mTvBMatter, R.color.black);
         setTvColor(mTvBAContent, R.color.black);
@@ -3435,6 +3437,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
         });
     }
+
+
+
 
 }
 

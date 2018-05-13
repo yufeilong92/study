@@ -152,6 +152,7 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
                 ErrorVo.DatasBean vo = (ErrorVo.DatasBean) obj;
                 Intent intent = AnswerActivity.newInstance(mContext, mCouresid, String.valueOf(vo.getTagid()), mType);
                 startActivity(intent);
+
             }
         });
 

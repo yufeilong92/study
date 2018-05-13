@@ -148,10 +148,16 @@
         <activity
             android:name=".ui.bank.AnswerResultActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".ui.bank.SpecialListActivity" />
-        <activity android:name=".ui.bank.FreeQuestionActivity" />
-        <activity android:name=".ui.home.SpecalTabActivity" />
-        <activity android:name=".ui.home.AtirlceListActivity"></activity>
+        <activity
+            android:name=".ui.bank.SpecialListActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.bank.FreeQuestionActivity"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".ui.home.AtirlceListActivity"
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

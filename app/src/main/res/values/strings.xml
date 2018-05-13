@@ -85,6 +85,15 @@
     <!--错题移除-->
     <string name="http_questionremoveerrsetpost">/api/question/questionremoveerrsetpost</string>
 
+    <!--//网课-->
+    <!--获取网课首页内容-->
+    <string name="http_getclassandproducts">/api/video/getclassandproducts</string>
+    <!--根据课程编号获取课程详情-->
+    <string name="http_getproductdetail">/api/video/getproductdetail</string>
+    <!--网课进度提交-->
+    <string name="http_playprogresspost">/api/video/playprogresspost</string>
+    <!--网课下载视频提交-->
+    <string name="http_videodownloadpost">/api/video/videodownloadpost</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>

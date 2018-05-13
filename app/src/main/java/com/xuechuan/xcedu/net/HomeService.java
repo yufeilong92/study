@@ -279,7 +279,6 @@ public class HomeService extends BaseHttpServcie {
      * @param callBackView
      */
     public void requestArticletagList(StringCallBackView callBackView) {
-
         String url = getUrl(mContext, R.string.http_getarticletag);
         requestHttpServiceGet(mContext, url, null, true, callBackView);
     }
@@ -287,7 +286,7 @@ public class HomeService extends BaseHttpServcie {
     /**
      * 根据文章tagid获取文章列表
      */
-    public void requestArticleWithTagaList(String tagid, StringCallBackView callBackView) {
+    public void requestArticleWithTagaList(int page,String tagid, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -302,14 +301,22 @@ public class HomeService extends BaseHttpServcie {
         paramVo.setParam("tagid");
         paramVo.setValue(tagid);
         listParamVo.add(paramVo);
-        String url = getUrl(mContext, R.string.http_getarticletag);
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("page");
+        paramVo3.setValue(String.valueOf(page));
+        listParamVo.add(paramVo3);
+        GetParamVo paramVo4 = getParamVo();
+        paramVo4.setParam("pagesize");
+        paramVo4.setValue("10");
+        listParamVo.add(paramVo4);
+        String url = getUrl(mContext, R.string.http_getarticlelistbytag);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }
 
     /**
      * 获取搜索内容
      */
-    public void requestResultList(int page,String key, String usetype, StringCallBackView callBackView) {
+    public void requestResultList(int page, String key, String usetype, StringCallBackView callBackView) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -394,5 +401,6 @@ public class HomeService extends BaseHttpServcie {
     private String getUrl(int str) {
         return mContext.getResources().getString(str);
     }
+
 
 }

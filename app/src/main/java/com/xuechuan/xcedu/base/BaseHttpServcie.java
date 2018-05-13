@@ -25,8 +25,10 @@ import com.xuechuan.xcedu.vo.UserInfomVo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -73,11 +75,11 @@ public class BaseHttpServcie {
     }
 
     protected void requestHttpServciePost(Context context, final String url, final JSONObject params, boolean isWithToken, final StringCallBackView callBackView) {
-       UserBean user = null;
+        UserBean user = null;
         if (isWithToken) {
             UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
             if (vo == null) {
-                if (dialog!=null){
+                if (dialog != null) {
                     dialog.dismiss();
                 }
                 T.showToast(context, context.getString(R.string.please_login));
@@ -105,15 +107,15 @@ public class BaseHttpServcie {
     }
 
     protected void requestHttpServiceGet(Context context, String url, ArrayList<GetParamVo> obj, boolean isWithToken, final StringCallBackView callBackView) {
-         if (obj==null){
-             obj=getListParamVo();
-         }
+        if (obj == null) {
+            obj = getListParamVo();
+        }
         UserBean user = null;
         if (isWithToken) {
             UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();
             if (userInfomVo == null) {
-                if (dialog!=null){
-                dialog.dismiss();
+                if (dialog != null) {
+                    dialog.dismiss();
                 }
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
@@ -222,7 +224,7 @@ public class BaseHttpServcie {
                     @Override
                     public void onSuccess(Response<String> response) {
                         if (isShow) {
-                            if (dialog!=null){
+                            if (dialog != null) {
                                 dialog.dismiss();
                             }
                         }
@@ -231,7 +233,7 @@ public class BaseHttpServcie {
                             OkGo.getInstance().cancelTag(mContext);
                             callBackView.onSuccess(response);
                         } catch (JsonParseException e) {
-                            L.e( "数据异常");
+                            L.e("数据异常");
                             e.printStackTrace();
                         }
                     }
@@ -239,7 +241,7 @@ public class BaseHttpServcie {
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if (dialog!=null) {
+                        if (dialog != null) {
                             dialog.dismiss();
                         }
                         L.e(response.message());
@@ -267,7 +269,7 @@ public class BaseHttpServcie {
                     @Override
                     public void onSuccess(Response<String> response) {
                         if (isShow) {
-                            if (dialog!=null){
+                            if (dialog != null) {
                                 dialog.dismiss();
                             }
                         }
@@ -284,7 +286,7 @@ public class BaseHttpServcie {
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if (dialog!=null) {
+                        if (dialog != null) {
                             dialog.dismiss();
                         }
                         L.e("数据异常");
@@ -419,4 +421,15 @@ public class BaseHttpServcie {
         return new JSONObject();
     }
 
+
+    public void  addPage(ArrayList<GetParamVo> list, int page) {
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("page");
+        paramVo.setValue(String.valueOf(page));
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("pagesize");
+        paramVo1.setValue("10");
+        list.add(paramVo);
+        list.add(paramVo1);
+    }
 }

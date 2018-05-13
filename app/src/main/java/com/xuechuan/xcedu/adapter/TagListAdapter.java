@@ -14,6 +14,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.ArticleBean;
+import com.xuechuan.xcedu.vo.TagListVo;
 
 import java.util.List;
 
@@ -27,9 +28,9 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolder> implements View.OnClickListener {
+public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolder> implements View.OnClickListener {
     private Context mContext;
-    private List<ArticleBean> mData;
+    private List<TagListVo.DatasBean> mData;
     private final LayoutInflater mInflater;
 
     private onItemClickListener clickListener;
@@ -42,7 +43,7 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         this.clickListener = clickListener;
     }
 
-    public HomeAllAdapter(Context mContext, List<ArticleBean> mData) {
+    public TagListAdapter(Context mContext, List<TagListVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
@@ -63,15 +64,17 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        ArticleBean bean = mData.get(position);
+        TagListVo.DatasBean bean = mData.get(position);
         holder.mTvItemHomeTitleAll.setText(bean.getTitle());
         holder.mTvItemHomeLookAll.setText(bean.getViewcount() + "");
         holder.mTvItemHomeLaudAll.setText(bean.getSupportcount() + "");
-        if (StringUtil.isEmpty( bean.getThumbnailimg())) {
+        if (StringUtil.isEmpty(bean.getThumbnailimg())) {
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
-            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll, bean.getThumbnailimg(), false);
+            String thumbnailimg = bean.getThumbnailimg();
+            String string = mContext.getResources().getString(R.string.app_content_heat);
+            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll,string+thumbnailimg, false);
         }
 
         holder.mChbIsSupper.setChecked(bean.isIssupport());

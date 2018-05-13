@@ -105,6 +105,7 @@ public class MyAppliction extends MultiDexApplication {
         }
     }
 
+    private static ImageLoader imageLoader = ImageLoader.getInstance();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -147,7 +148,6 @@ public class MyAppliction extends MultiDexApplication {
         JPushInterface.init(this);
     }
 
-    private static ImageLoader imageLoader = ImageLoader.getInstance();
 
     /**
      * 调用该方法下载图片

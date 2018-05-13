@@ -2,6 +2,8 @@ package com.xuechuan.xcedu.vo;
 
 import com.xuechuan.xcedu.utils.TimeUtil;
 
+import java.util.List;
+
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
@@ -118,4 +120,5 @@ public class ArticleBean extends HomePageVo {
     public void setViewcount(int viewcount) {
         this.viewcount = viewcount;
     }
+
 }
