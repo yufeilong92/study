@@ -87,13 +87,16 @@
 
     <!--//网课-->
     <!--获取网课首页内容-->
-    <string name="http_getclassandproducts">/api/video/getclassandproducts</string>
+    <string name="http_getclassandproducts">/api/video/getclass</string>
     <!--根据课程编号获取课程详情-->
     <string name="http_getproductdetail">/api/video/getproductdetail</string>
     <!--网课进度提交-->
     <string name="http_playprogresspost">/api/video/playprogresspost</string>
     <!--网课下载视频提交-->
     <string name="http_videodownloadpost">/api/video/videodownloadpost</string>
+    <!--获取所有在售网课列表-->
+    <string name="http_getproduct">/api/video/getproduct</string>
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -159,5 +162,10 @@
     <string name="score">分数</string>
     <string name="answernubmer">答题数目</string>
     <string name="delect_Success">删除成功</string>
+    <string name="net_error">网络异常</string>
+    <string name="suggest_net">推荐网课</string>
+    <string name="my_net">我的网课</string>
+    <string name="go_look">去看看</string>
+    <string name="user_no_buy">您还未购买课程</string>
 
 </resources>

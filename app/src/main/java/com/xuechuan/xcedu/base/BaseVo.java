@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class BaseVo implements Serializable, Cloneable, Parcelable {
+public class BaseVo implements Serializable {
 
     private static final long serialVersionUID = -4316564845660466881L;
 
@@ -74,30 +74,4 @@ public class BaseVo implements Serializable, Cloneable, Parcelable {
         }
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-    }
-
-    public BaseVo() {
-    }
-
-    protected BaseVo(Parcel in) {
-    }
-
-    public static final Parcelable.Creator<BaseVo> CREATOR = new Parcelable.Creator<BaseVo>() {
-        @Override
-        public BaseVo createFromParcel(Parcel source) {
-            return new BaseVo(source);
-        }
-
-        @Override
-        public BaseVo[] newArray(int size) {
-            return new BaseVo[size];
-        }
-    };
 }

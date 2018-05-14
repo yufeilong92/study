@@ -42,14 +42,41 @@ public class NetService extends BaseHttpServcie {
         return service;
     }
 
-    /***
-     * 获取网课首页内容
+      /***
+     * 获取我的网课
      * @param view
      */
     public void requestClassAndproductsList(StringCallBackView view) {
-        String url = getUrl(R.string.http_getclassandproducts);
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
-        addPage(listParamVo,1);
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("staffid");
+        paramVo.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo);
+        String url = getUrl(R.string.http_getclassandproducts);
+        requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
+
+    /***
+     * 获取我的网课
+     * @param view
+     */
+    public void requestAllproductList(StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("staffid");
+        paramVo.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo);
+        String url = getUrl(R.string.http_getproduct);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);
     }
 
@@ -111,11 +138,12 @@ public class NetService extends BaseHttpServcie {
 
     /**
      * 网课下载视频提交
+     *
      * @param videoid 当前视频编号
-     * @param classid  所属课程（产品）
+     * @param classid 所属课程（产品）
      * @param view
      */
-    public void submitDownLoadVideo(String videoid,String classid,StringCallBackView view){
+    public void submitDownLoadVideo(String videoid, String classid, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -131,7 +159,7 @@ public class NetService extends BaseHttpServcie {
             e.printStackTrace();
         }
         String url = getUrl(R.string.http_videodownloadpost);
-        requestHttpServciePost(mContext,url,obj,true,view);
+        requestHttpServciePost(mContext, url, obj, true, view);
 
     }
 

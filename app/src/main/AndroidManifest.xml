@@ -69,13 +69,7 @@
         </activity>
         <activity
             android:name=".ui.LoginActivity"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.AddressShowActivity"
             android:launchMode="singleTask" />
@@ -154,10 +148,28 @@
         <activity
             android:name=".ui.bank.FreeQuestionActivity"
             android:launchMode="singleTask" />
-
         <activity
             android:name=".ui.home.AtirlceListActivity"
             android:launchMode="singleTask" />
+        <activity
+            android:name=".PiloActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.net.NetBookInfomActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.net.NetAllBookActivity"></activity>
     </application>
 
 </manifest>

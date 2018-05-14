@@ -57,6 +57,7 @@ public class MyAppliction extends MultiDexApplication {
     private PolyvSDKClient mPolyclient;
     private UserInfomVo infomVo;
     private static MyAppliction application;
+
     public static MyAppliction getInstance() {
         if (application == null)
             application = new MyAppliction();
@@ -68,7 +69,6 @@ public class MyAppliction extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
-
 
 
     /**
@@ -106,6 +106,7 @@ public class MyAppliction extends MultiDexApplication {
     }
 
     private static ImageLoader imageLoader = ImageLoader.getInstance();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -138,6 +139,7 @@ public class MyAppliction extends MultiDexApplication {
                 .diskCacheFileCount(100)  // 可以缓存的文件数量
                 // default为使用HASHCODE对UIL进行加密命名， 还可以用MD5(new Md5FileNameGenerator())加密
                 .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
                 .writeDebugLogs() // 打印debug log
                 .build(); //开始构建
         imageLoader.init(config);
@@ -148,6 +150,14 @@ public class MyAppliction extends MultiDexApplication {
         JPushInterface.init(this);
     }
 
+
+    public void displayImagesWithOutHear(ImageView iv, String uri, boolean isRound) {
+        String string = "http://192.168.1.111/8080";
+        StringBuilder builder = new StringBuilder();
+        builder.append(string);
+        builder.append(uri);
+        displayImages(iv, builder.toString(), isRound);
+    }
 
     /**
      * 调用该方法下载图片
@@ -160,15 +170,16 @@ public class MyAppliction extends MultiDexApplication {
     public void displayImages(ImageView iv, String url, boolean isRound) {
 //配置一些图片选项
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_show_erro)// 设置图片在下载期间显示的图片
-                .showImageForEmptyUri(R.mipmap.ic_show_erro)// 设置图片Uri为空或是错误的时候显示的图片
-                .showImageOnFail(R.mipmap.ic_show_erro)// 设置图片加载/解码过程中错误时候显示的图片
-                .cacheInMemory(false)// 设置下载的图片是否缓存在内存中
+                .showImageOnLoading(R.mipmap.s_n)// 设置图片在下载期间显示的图片
+                .showImageForEmptyUri(R.mipmap.s_n)// 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.mipmap.s_n)// 设置图片加载/解码过程中错误时候显示的图片
+                .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
                 .considerExifParams(true)//是否考虑JPEG图像EXIF参数（旋转，翻转）
                 .displayer(isRound ? new CircleBitmapDisplayer() : new SimpleBitmapDisplayer())//FadeInBitmapDisplayer(200)listview加载闪烁问题
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)//图片将降低2倍，直到下一减少步骤，使图像更小的目标大小
                 .bitmapConfig(Bitmap.Config.RGB_565)//图片色彩565
+                .resetViewBeforeLoading(true)
                 .build();
 //        String string ="http://192.168.1.110/8080";
 //        url = string.concat(url);

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -46,6 +47,8 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     private Activity videoActivity;
     //播放器的ParentView
     private View parentView;
+    //自定义状态栏
+    private LinearLayout mTitleBarlayout;
     //显示的状态
     private boolean isShowing;
     //控制栏显示的时间
@@ -211,7 +214,12 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     public void initConfig(ViewGroup parentView) {
         this.parentView = parentView;
     }
-
+    /**
+     * 状态栏
+     */
+    public void initTitltBar(LinearLayout parentView) {
+        this.mTitleBarlayout = parentView;
+    }
 
     private void findIdAndNew() {
         //竖屏的view
@@ -477,6 +485,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         PolyvScreenUtils.setLandscape(videoActivity);
         //初始为横屏时，状态栏需要隐藏
         PolyvScreenUtils.hideStatusBar(videoActivity);
+        mTitleBarlayout.setVisibility(GONE);
         //初始为横屏时，控制栏的宽高需要设置
         initLandScapeWH();
     }
@@ -494,6 +503,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
      */
     public void changeToPortrait() {
         PolyvScreenUtils.setPortrait(videoActivity);
+        mTitleBarlayout.setVisibility(VISIBLE);
         initPortraitWH();
     }
 

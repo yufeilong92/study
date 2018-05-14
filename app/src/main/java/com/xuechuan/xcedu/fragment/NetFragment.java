@@ -1,19 +1,33 @@
 package com.xuechuan.xcedu.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import com.andview.refreshview.XRefreshView;
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.adapter.NetHomeAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.mvp.model.NetHomeModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.NetHomePresenter;
 import com.xuechuan.xcedu.mvp.view.NetHomeView;
+import com.xuechuan.xcedu.ui.net.NetAllBookActivity;
+import com.xuechuan.xcedu.ui.net.NetBookInfomActivity;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.CoursesBeanVo;
+import com.xuechuan.xcedu.vo.NetHomeVo;
+
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -25,15 +39,20 @@ import com.xuechuan.xcedu.utils.L;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/11
  */
-public class NetFragment extends BaseFragment implements NetHomeView {
+public class NetFragment extends BaseFragment implements NetHomeView, View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-    private RecyclerView mRlvInfomList;
-    private XRefreshView mXfvContent;
     private NetHomePresenter mPresenter;
     private Context mContext;
+    private RecyclerView mRlvNetBuyList;
+    private LinearLayout mLlNetBuy;
+    private Button mBtnNetGoLook;
+    private LinearLayout mLlNoBuy;
+    private ImageView mIvNetMydown;
+    private ImageView mIvNetAll;
+
 
     public NetFragment() {
     }
@@ -47,12 +66,13 @@ public class NetFragment extends BaseFragment implements NetHomeView {
         return fragment;
     }
 
-    /*    @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = View.inflate(getActivity(), R.layout.fragment_net, null);
-            initView(view);
-            return view;
-        }*/
+/*    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = View.inflate(getActivity(), R.layout.fragment_net, null);
+        initView(view);
+        return view;
+    }*/
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +91,7 @@ public class NetFragment extends BaseFragment implements NetHomeView {
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
         initData();
+
     }
 
     private void initData() {
@@ -80,17 +101,80 @@ public class NetFragment extends BaseFragment implements NetHomeView {
 
     private void initView(View view) {
         mContext = getActivity();
-        mRlvInfomList = (RecyclerView) view.findViewById(R.id.rlv_infom_list);
-        mXfvContent = (XRefreshView) view.findViewById(R.id.xfv_content);
+        mRlvNetBuyList = (RecyclerView) view.findViewById(R.id.rlv_net_buy_list);
+        mRlvNetBuyList.setOnClickListener(this);
+        mLlNetBuy = (LinearLayout) view.findViewById(R.id.ll_net_buy);
+        mLlNetBuy.setOnClickListener(this);
+        mBtnNetGoLook = (Button) view.findViewById(R.id.btn_net_go_look);
+        mBtnNetGoLook.setOnClickListener(this);
+        mLlNoBuy = (LinearLayout) view.findViewById(R.id.ll_no_buy);
+        mLlNoBuy.setOnClickListener(this);
+        mIvNetMydown = (ImageView) view.findViewById(R.id.iv_net_mydown);
+        mIvNetMydown.setOnClickListener(this);
+        mIvNetAll = (ImageView) view.findViewById(R.id.iv_net_all);
+        mIvNetAll.setOnClickListener(this);
     }
 
     @Override
     public void ClassListContSuccess(String msg) {
-        L.d("Class"+msg);
+        L.d("Class" + msg);
+        Gson gson = new Gson();
+        NetHomeVo homeVo = gson.fromJson(msg, NetHomeVo.class);
+        if (homeVo.getStatus().getCode() == 200) {
+            List<CoursesBeanVo> datas = homeVo.getDatas();
+            if (datas == null || datas.isEmpty()) {//未购买
+                mLlNetBuy.setVisibility(View.GONE);
+                mLlNoBuy.setVisibility(View.VISIBLE);
+            } else {//已有购买
+                mLlNetBuy.setVisibility(View.VISIBLE);
+                mLlNoBuy.setVisibility(View.GONE);
+                bindBuyView(datas);
+
+            }
+        } else {
+            T.showToast(mContext, getString(R.string.net_error));
+            L.e(homeVo.getStatus().getMessage());
+        }
+
     }
+
+    private void bindBuyView(List<CoursesBeanVo> datas) {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        mRlvNetBuyList.setLayoutManager(gridLayoutManager);
+        mRlvNetBuyList.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
+        NetHomeAdapter adapter = new NetHomeAdapter(mContext, datas);
+        mRlvNetBuyList.setAdapter(adapter);
+        adapter.setClickListener(new NetHomeAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(CoursesBeanVo vo, int position) {
+                Intent intent = NetBookInfomActivity.newInstance(mContext, vo);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     @Override
     public void ClassListContError(String msg) {
-        L.e("Class"+msg);
+        L.e("Class" + msg);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_net_go_look:
+                startActivity(new Intent(mContext, NetAllBookActivity.class));
+                break;
+            case R.id.iv_net_mydown:
+
+                break;
+            case R.id.iv_net_all:
+                startActivity(new Intent(mContext, NetAllBookActivity.class));
+                break;
+            default:
+
+        }
+
     }
 }

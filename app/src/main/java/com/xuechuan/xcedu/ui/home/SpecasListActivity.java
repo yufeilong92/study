@@ -188,7 +188,7 @@ public class SpecasListActivity extends BaseActivity {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new SpecsOrderAdapter(mContext, mArrary, gridLayoutManager);
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
-        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext,2));
+        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
         mRlvSpecaContent.setAdapter(adapter);
 
 

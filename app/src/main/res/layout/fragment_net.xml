@@ -16,15 +16,48 @@
 
         <TextView
             style="@style/TitleBarText"
-            android:text="" />
+            android:text="网课" />
 
-        <ImageView style="@style/TitleBarAction" />
+        <ImageView
+            android:id="@+id/iv_net_mydown"
+            style="@style/TitleBarAction"
+            android:src="@mipmap/c_nav_icon_myd" />
+        <ImageView
+            android:id="@+id/iv_net_all"
+            style="@style/TitleBarAction"
+            android:src="@mipmap/c_nav_icon_all" />
 
     </LinearLayout>
 
     <View style="@style/view_line_tab_line" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rlv_net_home"
+    <include layout="@layout/net_layout_buy" />
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/spance_50"
+        android:id="@+id/ll_no_buy"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:padding="@dimen/space_8"
+            android:layout_width="@dimen/space_100"
+            android:layout_height="@dimen/space_100"
+            android:src="@mipmap/s_n" />
+        <TextView
+            android:text="@string/user_no_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_marginTop="@dimen/space_32"
+            android:id="@+id/btn_net_go_look"
+            android:layout_width="@dimen/spance_120"
+            android:layout_height="@dimen/space_32"
+            android:background="@drawable/bg_select_answer_evalue"
+            android:text="@string/go_look"
+            android:textColor="@color/red_text" />
+    </LinearLayout>
+
 </LinearLayout>

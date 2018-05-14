@@ -10,9 +10,11 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="@dimen/space_8">
+       android:layout_marginRight="@dimen/space_16"
+       >
 
         <TextView
+            android:text="22222222222"
             android:id="@+id/tv_item_home_title_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,6 +66,6 @@
         android:id="@+id/iv_item_home_all"
         android:layout_width="@dimen/space_100dp"
         android:layout_height="match_parent"
-        android:padding="@dimen/space_8"
+        android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher_round" />
 </LinearLayout>
