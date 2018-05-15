@@ -341,6 +341,7 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
             }
         }
         L.e(overList.size() + "传递的数据个数");
+
         EventBus.getDefault().postSticky(new FreeDataEvent(overList));
         Intent intent = new Intent(mContext, AnswerActivity.class);
         startActivity(intent);

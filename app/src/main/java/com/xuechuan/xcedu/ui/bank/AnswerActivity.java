@@ -122,6 +122,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 考试类型
      */
     private static final String STYLECASE = "STYLECASE";
+    private static final String TAG = "====================";
     private Context mContext;
     /**
      * 问题父id
@@ -376,13 +377,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e(TAG, "onDestroy: ");
 
-        if (EventBus.getDefault().isRegistered(mContext)) {
-            EventBus.getDefault().unregister(mContext);
-        }
         if (mTimeUitl != null) {
             mTimeUitl.cancel();
         }
+        clearAll();
         saveChapterRecords();
     }
 
@@ -493,8 +493,35 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         return intent;
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop: ");
+        EventBus.getDefault().removeStickyEvent(FreeDataEvent.class);
+        EventBus.getDefault().unregister(mContext);
+    }
 
-  /*  @Override
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart: ");
+
+        EventBus.getDefault().register(mContext);
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause: ");
+    }
+    /*  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
@@ -504,6 +531,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         SharedSeletResultListUtil.getInstance().DeleteUser();
+        Log.e(TAG, "initContentView: ");
         setContentView(R.layout.activity_answer);
         if (getIntent() != null) {
             //问题id
@@ -526,16 +554,28 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mStyleCase = getIntent().getStringExtra(STYLECASE);
         }
         initView();
+        clearAll();
         mIvTimePlay.setVisibility(View.GONE);
         initData();
         clearData();
         initShowSet();
         initEvalueAdapter();
-        if (!EventBus.getDefault().isRegistered(mContext)) {
-            EventBus.getDefault().register(mContext);
+
+
+    }
+
+    private void clearAll() {
+        clearbg();
+        clearClick();
+        clearSeletItem();
+        isExamHine = false;
+        mFreeQuestion = null;
+        mStyleCase = null;
+        if (mTimeUitl != null) {
+            mTimeUitl.cancel();
+            mActivityTitleText.setText("");
+            mTimeUitl = null;
         }
-
-
     }
 
 
@@ -545,7 +585,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void Mainthread(FreeDataEvent event) {
+    public void Mainthreaddata(FreeDataEvent event) {
         initShowSet();
         isExamHine = false;
         if (dialog != null && dialog.isShowing())
@@ -785,8 +825,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mEvaluePresenter = new EvaluePresenter(new EvalueModelImpl(), this);
         //请求答案
         mPresnter = new AnswerPresenter(new AnswerModelImpl(), this);
-        if (!StringUtil.isEmpty(mOid)) {
+        if (!StringUtil.isEmpty(mOid) && !StringUtil.isEmpty(mTypeMark)) {//章节练习
             mPresnter.getTextContent(mContext, mOid);
+            isExamHine = true;
         }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
 
@@ -1557,8 +1598,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 isSure = true;
                 if (isExamHine) {
                     setGoNextDan();
+                } else {
+                    NextGo();
                 }
-//                NextGo();
+
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
@@ -1995,10 +2038,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mSelectMorItemD = null;
         mSelectMorItemE = null;
         isMoreData = true;
-        if (StringUtil.isEmpty(mFreeQuestion)&&StringUtil.isEmpty(mStyleCase)){//处理是否是考试界面
+        if (StringUtil.isEmpty(mFreeQuestion) && StringUtil.isEmpty(mStyleCase)) {//处理是否是考试界面
             isUserLookResultJieXi = false;
         }
-
         clearClick();
     }
 
