@@ -6,17 +6,11 @@
     android:orientation="vertical"
     tools:context=".fragment.NetBooKListFragment">
 
-    <com.andview.refreshview.XRefreshView
+    <ListView
+        android:layout_marginRight="@dimen/space_16"
+        android:layout_marginLeft="@dimen/space_16"
+        android:id="@+id/lv_net_book_content"
         android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_speca_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
-    </com.andview.refreshview.XRefreshView>
-
+        android:layout_height="wrap_content">
+    </ListView>
 </LinearLayout>

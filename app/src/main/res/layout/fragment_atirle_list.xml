@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <TextView
-        android:visibility="gone"
         android:textColor="@color/black"
         android:gravity="center"
         android:id="@+id/tv_empty"

@@ -154,6 +154,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             }
         }
     };
+    private RelativeLayout mRlPlayLayout;
 
     // 更新显示的播放进度，以及暂停/播放按钮
     private void showProgress() {
@@ -217,8 +218,9 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     /**
      * 状态栏
      */
-    public void initTitltBar(LinearLayout parentView) {
+    public void initTitltBar(LinearLayout parentView, RelativeLayout mRlPlaylayout) {
         this.mTitleBarlayout = parentView;
+        this.mRlPlayLayout=mRlPlaylayout;
     }
 
     private void findIdAndNew() {
@@ -486,6 +488,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         //初始为横屏时，状态栏需要隐藏
         PolyvScreenUtils.hideStatusBar(videoActivity);
         mTitleBarlayout.setVisibility(GONE);
+        mRlPlayLayout.setVisibility(GONE);
         //初始为横屏时，控制栏的宽高需要设置
         initLandScapeWH();
     }
@@ -504,6 +507,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     public void changeToPortrait() {
         PolyvScreenUtils.setPortrait(videoActivity);
         mTitleBarlayout.setVisibility(VISIBLE);
+        mRlPlayLayout.setVisibility(VISIBLE);
         initPortraitWH();
     }
 

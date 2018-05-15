@@ -9,17 +9,26 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /**
  * 与屏幕相关的工具类
  */
 public class PolyvScreenUtils {
 	private static int height16_9;
+	private static LinearLayout mTitleBar;
+	private static RelativeLayout mrlplaylayout;
 
+	public static void initTitleBar(LinearLayout titleBar, RelativeLayout mRlPlaylayout){
+    	mTitleBar=titleBar;
+    	mrlplaylayout=mRlPlaylayout;
+	};
 	// 生成竖屏下w:h=16:9的高
 	public static int generateHeight16_9(Activity activity) {
 		return height16_9 != 0 ? height16_9 : (height16_9 = getNormalWH(activity)[isPortrait(activity) ? 0 : 1] * 9 / 16);
 	}
+
 
 	// 获取竖屏下w:h=16:9的高
 	public static int getHeight16_9() {
@@ -39,11 +48,15 @@ public class PolyvScreenUtils {
 
 	// 设置竖屏
 	public static void setPortrait(Activity activity) {
+         mTitleBar.setVisibility(View.VISIBLE);
+		mrlplaylayout.setVisibility(View.VISIBLE);
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 	}
 
 	// 设置横屏
 	public static void setLandscape(Activity activity) {
+		mTitleBar.setVisibility(View.GONE);
+		mrlplaylayout.setVisibility(View.GONE);
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 	}
 
@@ -80,6 +93,8 @@ public class PolyvScreenUtils {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
 			activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			mTitleBar.setVisibility(View.GONE);
+			mrlplaylayout.setVisibility(View.GONE);
 		} else {
 			View decorView = activity.getWindow().getDecorView();
 			activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -87,6 +102,8 @@ public class PolyvScreenUtils {
 			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 			decorView.setSystemUiVisibility(uiOptions);
+			mTitleBar.setVisibility(View.GONE);
+			mrlplaylayout.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -94,11 +111,13 @@ public class PolyvScreenUtils {
 	public static void setDecorVisible(Activity activity) {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
 			activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			mTitleBar.setVisibility(View.VISIBLE);
 		} else {
 			View decorView = activity.getWindow().getDecorView();
 			activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
 			decorView.setSystemUiVisibility(uiOptions);
+			mTitleBar.setVisibility(View.VISIBLE);
 		}
 	}
 }

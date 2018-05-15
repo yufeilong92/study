@@ -168,7 +168,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
-        initBaiduLocation();
+//        initBaiduLocation();
+        initData();
+    }
+
+    private void initData() {
+        code = PushXmlUtil.getInstance().getLocationCode(mContext, "河南省");
+        if (!StringUtil.isEmpty(code))
+            requestData(code);
     }
 
     /**

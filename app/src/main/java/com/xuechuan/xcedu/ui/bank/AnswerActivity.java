@@ -372,6 +372,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mVBLineBar;
     private SmartScrollView mSlvViewShow;
     private ImageView mIvBarDelect;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -384,7 +385,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         saveChapterRecords();
     }
-
 
 
     //保存章节记录
@@ -1156,7 +1156,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
         Spanned html = Html.fromHtml(mResultData.getQuestion());
-        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
+//        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
+        mTvBMatter.setText(html);
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1172,13 +1173,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
         mTvBAnswer.setText(mResultData.getChoiceanswer());
         Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
-        mTvBRosoleContent.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
+        mTvBRosoleContent.setText(spanned);
+//        mTvBRosoleContent.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
         mTvBAccuracy.setText(mResultData.getAccuracy());
         mChbBCollect.setChecked(mResultData.isIsfav());
         //正确答案
         mRightItem = mResultData.getChoiceanswer();
         Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
-        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
+//        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
+        mTvLookAnswerWen.setText(fromHtml);
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
     }
@@ -1331,8 +1334,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
-//        Spanned html = Html.fromHtml(mResultData.getQuestion());
-        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
+        Spanned html = Html.fromHtml(mResultData.getQuestion());
+//        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
+        mTvBMatter.setText(html);
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1411,7 +1415,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
         Spanned html = Html.fromHtml(mResultData.getQuestion());
-        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
+        mTvBMatter.setText(html);
+//        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1438,43 +1443,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 showPopwindow();
                 break;
             case R.id.ll_b_back://上一题
-                if (mTitleType.equals(mTitleTypeMore)) {//多选
-                    if (!isSure) {
-                        T.showToast(mContext, "请点击确认");
-                        return;
-                    }
-                }
-                saveBeforeDate();
-                if (mMark != 0) {
-                    --mMark;
-                } else if (mMark == 0) {
-                    T.showToast(mContext, "已经是第一题");
-                    break;
-                }
-                clearbg();
-                //清空选项
-                clearSeletItem();
-                bindTextNumberData();
+                goBefore();
                 break;
             case R.id.ll_b_go://下一题
-
-                if (mTitleType.equals(mTitleTypeMore)) {//多选
-                    if (!isSure) {
-                        T.showToast(mContext, "请点击确认");
-                        return;
-                    }
-                }
-                saveBeforeDate();
-                if (mMark <= mTextDetial.size() - 2) {
-                    ++mMark;
-                } else {//没有题了
-                    T.showToast(mContext, "已经是最后一题 ");
-                    break;
-                }
-                clearbg();
-                //清空选项
-                clearSeletItem();
-                bindTextNumberData();
+                NextGo();
                 break;
             case R.id.iv_b_expand://扩展文件夹
                 if (isSubmit) {
@@ -1586,6 +1558,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 if (isExamHine) {
                     setGoNextDan();
                 }
+//                NextGo();
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
@@ -1638,6 +1611,51 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 });
                 break;
         }
+    }
+
+    private void NextGo() {
+        if (mTitleType.equals(mTitleTypeMore)) {//多选
+            if (!isSure) {
+                T.showToast(mContext, "请点击确认");
+                return;
+            }
+        }
+        saveBeforeDate();
+        if (mMark <= mTextDetial.size() - 2) {
+            ++mMark;
+        } else {//没有题了
+            if (!StringUtil.isEmpty(mFreeQuestion) || !StringUtil.isEmpty(mStyleCase)) {
+                T.showToast(mContext, "已经是最后一题,请交卷");
+            } else {
+                T.showToast(mContext, "已经是最后一题 ");
+            }
+
+            return;
+        }
+        clearbg();
+        //清空选项
+        clearSeletItem();
+        bindTextNumberData();
+    }
+
+    private void goBefore() {
+        if (mTitleType.equals(mTitleTypeMore)) {//多选
+            if (!isSure) {
+                T.showToast(mContext, "请点击确认");
+                return;
+            }
+        }
+        saveBeforeDate();
+        if (mMark != 0) {
+            --mMark;
+        } else if (mMark == 0) {
+            T.showToast(mContext, "已经是第一题");
+            return;
+        }
+        clearbg();
+        //清空选项
+        clearSeletItem();
+        bindTextNumberData();
     }
 
     /**
@@ -1977,10 +1995,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mSelectMorItemD = null;
         mSelectMorItemE = null;
         isMoreData = true;
-        isUserLookWenJieXi = false;
-        if (StringUtil.isEmpty(mStyleCase)) {//处理是否是考试界面
+        if (StringUtil.isEmpty(mFreeQuestion)&&StringUtil.isEmpty(mStyleCase)){//处理是否是考试界面
             isUserLookResultJieXi = false;
         }
+
         clearClick();
     }
 
@@ -2379,8 +2397,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     }
                 }
                 mTvResultNumber.setText(String.valueOf(score));
-
-
             }
 
             @Override
@@ -2462,6 +2478,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         setIsClick(false);
                         popResult.getPopupWindow().dismiss();
                         bindTextNumberData();
+                        isUserLookResultJieXi = true;
                     }
                 });
 
@@ -3437,8 +3454,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
         });
     }
-
-
 
 
 }

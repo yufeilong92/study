@@ -144,6 +144,14 @@ public class Node<T,B> {
         this.parent = parent;
     }
 
+    public B getBean() {
+        return bean;
+    }
+
+    public void setBean(B bean) {
+        this.bean = bean;
+    }
+
     /**
      * 是否为跟节点
      *

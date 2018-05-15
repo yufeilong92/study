@@ -115,8 +115,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvReasultContent.setLayoutManager(gridLayoutManager);
-        mRlvReasultContent.addItemDecoration(new android.support.v7.widget.DividerItemDecoration(mContext,2));
-        mRlvReasultContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
+        mRlvReasultContent.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
         mRlvReasultContent.setAdapter(adapter);
         adapter.setClickListener(new ArticleListAdapter.onItemClickListener() {
             @Override
@@ -134,7 +133,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
         mXrfResultContent.setAutoRefresh(true);
         mXrfResultContent.setAutoLoadMore(true);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
-
+       mXrfResultContent.setEmptyView(mTvEmpty);
         mXrfResultContent.restoreLastRefreshTime(lastRefreshtime);
         mXrfResultContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override

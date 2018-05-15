@@ -54,13 +54,17 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView {
     private void initData() {
         String userId = SaveUUidUtil.getInstance().getUserId();
         UserInfomDb userInfomDb = DbHelperAssist.getInstance().queryWithuuId(userId);
-        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
-        if (userInfomDb.getVo() != null) {
-            userInfom = userInfomDb.getVo();
+        if (userInfomDb != null && userInfomDb.getVo() != null) {
+            MyAppliction.getInstance().setUserInfom(userInfomDb.getVo());
+            RefreshTokenPresenter presenter = new RefreshTokenPresenter(new RefreshTokenModelImpl(), this);
+            presenter.refreshToken(mContext, userInfomDb.getToken());
+        } else {
+            Intent intent1 = new Intent(mContext, LoginActivity.class);
+            startActivity(intent1);
+            this.finish();
         }
-        MyAppliction.getInstance().setUserInfom(userInfom);
-        RefreshTokenPresenter presenter = new RefreshTokenPresenter(new RefreshTokenModelImpl(), this);
-        presenter.refreshToken(mContext, userInfomDb.getToken());
+
+
     }
 
 

@@ -140,9 +140,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     // TODO: 2018/4/19 处理缓存问题 
     private void bingHostData() {
         HomeService service = HomeService.getInstance(mContext);
-//        service.setIsShowDialog(true);
-//        service.setDialogContext("",getStringWithId(R.string.loading));
         service.requestHost("10", new StringCallBackView() {
+
             @Override
             public void onSuccess(Response<String> response) {
                 String hot = response.body().toString();
@@ -150,6 +149,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 Gson gson = new Gson();
                 HotKeyVo vo = gson.fromJson(hot, HotKeyVo.class);
                 BaseVo.StatusBean status = vo.getStatus();
+
                 if (status.getCode() == 200) {
                     List<String> datas = vo.getDatas();
                     BuildTextViewData(mFlSearchHost, datas);
@@ -253,6 +253,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         if (status.getCode() == 200) {
             clearData();
             addList(vo.getDatas());
+            mFlSearchHost.removeAllViews();
             BuildTextViewData(mFlSearchHost, mLists);
         } else {
             T.showToast(mContext, status.getMessage());

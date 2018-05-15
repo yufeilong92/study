@@ -2,17 +2,29 @@ package com.xuechuan.xcedu.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
-import com.andview.refreshview.XRefreshView;
+import com.google.gson.Gson;
+import com.multilevel.treelist.Node;
+import com.multilevel.treelist.OnTreeNodeClickListener;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.adapter.NetBookTableTreeAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.NetBookInfomModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.NetBookInfomPresenter;
 import com.xuechuan.xcedu.mvp.view.NetBookInfomView;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.NetBookTableVo;
+import com.xuechuan.xcedu.vo.VideosBeanVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +44,27 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
     private static final String ARG_PARAM2 = "param2";
 
     private String mCalssId;
-    private RecyclerView mRlvSpecaContent;
-    private XRefreshView mXrfvSpecaRefresh;
-
-    private List mArrary;
+    /***
+     * 添加集合
+     */
+    private List<Node> mArrary = new ArrayList<>();
     private NetBookInfomPresenter mPresenter;
     private Context mContext;
+    private NetBookTableTreeAdapter adapter;
+    private ListView mLvNetBookContent;
+    /**
+     * 加载更多布局
+     */
+    private LinearLayout li_more_loading;
+    /**
+     * 是否加载更多
+     */
+    boolean isLoading;
+    /**
+     * 记录数据
+     */
+    private List<ChaptersBeanVo> mArrayData;
+    private View footview;
 
     public NetBooKListFragment() {
     }
@@ -58,14 +85,16 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
             mCalssId = getArguments().getString(CLASSID);
         }
     }
+/*
 
-/*    @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_net_boo_klist, container, false);
         initView(view);
         return view;
-    }*/
+    }
+*/
 
     @Override
     protected int initInflateView() {
@@ -75,24 +104,36 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
-        initData();
         clearData();
-
-//        bindAdapterData();
-//        initXrfresh();
-//        mXrfvSpecaRefresh.startRefresh();
+        clearDataNumber();
+        initData();
     }
 
     private void initData() {
         mPresenter = new NetBookInfomPresenter(new NetBookInfomModelImpl(), this);
         mPresenter.requestVideoBookOneList(mContext, 1, mCalssId);
+
     }
 
 
     private void initView(View view) {
         mContext = getActivity();
-        mRlvSpecaContent = (RecyclerView) view.findViewById(R.id.rlv_speca_content);
-        mXrfvSpecaRefresh = (XRefreshView) view.findViewById(R.id.xrfv_speca_refresh);
+        mLvNetBookContent = (ListView) view.findViewById(R.id.lv_net_book_content);
+    }
+
+    /**
+     * 绑定适配器数据
+     */
+    private void bindAdapterData() {
+        adapter = new NetBookTableTreeAdapter(mLvNetBookContent, mContext, mArrary,
+                0, R.mipmap.ic_spread_gray, R.mipmap.ic_more_go);
+        mLvNetBookContent.setAdapter(adapter);
+        adapter.setOnTreeNodeClickListener(new OnTreeNodeClickListener() {
+            @Override
+            public void onClick(Node node, int position) {
+
+            }
+        });
     }
 
     private void clearData() {
@@ -103,7 +144,15 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
         }
     }
 
-    private void addListData(List<?> list) {
+    private void clearDataNumber() {
+        if (mArrayData == null) {
+            mArrayData = new ArrayList();
+        } else {
+            mArrayData.clear();
+        }
+    }
+
+    private void addListData(List<Node> list) {
         if (list == null || list.isEmpty()) {
             return;
         }
@@ -113,24 +162,73 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
         mArrary.addAll(list);
     }
 
+    private void addListDataNumber(List<ChaptersBeanVo> list) {
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        if (mArrayData == null) {
+            clearDataNumber();
+        }
+        mArrayData.addAll(list);
+    }
+
     /**
      * 当前数据有几页
      *
      * @return
      */
     private int getNowPage() {
-        if (mArrary == null || mArrary.isEmpty())
+        if (mArrayData == null || mArrayData.isEmpty())
             return 0;
-        if (mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0)
-            return mArrary.size() / DataMessageVo.CINT_PANGE_SIZE;
+        if (mArrayData.size() % DataMessageVo.CINT_PANGE_SIZE == 0)
+            return mArrayData.size() / DataMessageVo.CINT_PANGE_SIZE;
         else
-            return mArrary.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
+            return mArrayData.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
     }
 
     @Override
     public void VideoInfomSuccess(String result) {
+        isLoading = false;
         L.d(result);
+        Gson gson = new Gson();
+        NetBookTableVo tableVo = gson.fromJson(result, NetBookTableVo.class);
+        if (tableVo.getStatus().getCode() == 200) {
+            NetBookTableVo.DataBean data = tableVo.getData();
+            List<ChaptersBeanVo> chapters = data.getChapters();
+            clearData();
+            clearDataNumber();
+            addListDataNumber(chapters);
+            bindNodeList();
+            bindAdapterData();
+        } else {
+            L.e(tableVo.getStatus().getMessage());
+        }
+
     }
+
+    /**
+     * 向集合添加数据
+     */
+    private void bindNodeList() {
+        List<Node> objects = new ArrayList<>();
+        for (int i = 0; i < mArrayData.size(); i++) {
+            ChaptersBeanVo vo = mArrayData.get(i);
+            int chapterid = vo.getChapterid();
+            objects.add(new Node(chapterid + "", "-1", vo.getChaptername()));
+            if (vo.getVideos() != null && !vo.getVideos().isEmpty()) {
+                List<VideosBeanVo> videos = vo.getVideos();
+                if (videos != null && !videos.isEmpty()) {
+                    for (int j = 0; j < videos.size(); j++) {
+                        VideosBeanVo beanVo = videos.get(j);
+                        objects.add(new Node(beanVo.getVideoid() + "", chapterid + "", beanVo.getVideoname(), beanVo));
+                    }
+                }
+            }
+        }
+        addListData(objects);
+
+    }
+
 
     @Override
     public void VideoInfomError(String msg) {
@@ -139,6 +237,30 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
 
     @Override
     public void VideoInfomMoreSuccess(String result) {
+        footview.setVisibility(View.GONE);
+        Gson gson = new Gson();
+        NetBookTableVo tableVo = gson.fromJson(result, NetBookTableVo.class);
+        if (tableVo.getStatus().getCode() == 200) {
+            NetBookTableVo.DataBean data = tableVo.getData();
+            List<ChaptersBeanVo> chapters = data.getChapters();
+            if (chapters == null || chapters.isEmpty()) {
+                isLoading = false;
+                return;
+            } else {
+                //判断是否能整除
+                if (!mArrayData.isEmpty() && mArrayData.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                    isLoading = false;
+                } else {
+                    isLoading = true;
+                }
+            }
+            addListDataNumber(chapters);
+            bindNodeList();
+            adapter.notifyDataSetChanged();
+        } else {
+            L.e(tableVo.getStatus().getMessage());
+        }
+
 
     }
 

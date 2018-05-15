@@ -127,7 +127,7 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
         mXrfResultContent.setAutoRefresh(true);
         mXrfResultContent.setAutoLoadMore(true);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
-
+        mXrfResultContent.setEmptyView(mTvEmpty);
         mXrfResultContent.restoreLastRefreshTime(lastRefreshtime);
         mXrfResultContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
