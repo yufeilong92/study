@@ -26,6 +26,7 @@
     <View style="@style/view_line_tab_line" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_infom_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

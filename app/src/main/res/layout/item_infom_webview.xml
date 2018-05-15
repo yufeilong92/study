@@ -7,8 +7,19 @@
     <WebView
         android:id="@+id/web_infom_detail"
         android:layout_width="match_parent"
+        android:minHeight="200dp"
+        android:layout_marginLeft="@dimen/space_16"
+        android:layout_marginRight="@dimen/space_16"
         android:layout_height="wrap_content">
     </WebView>
+<LinearLayout
+    android:visibility="gone"
+    android:id="@+id/ll_webview_after"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+
     <LinearLayout
         android:id="@+id/li_supperNumber"
         android:layout_width="@dimen/space_100dp"
@@ -51,4 +62,5 @@
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+</LinearLayout>
 </LinearLayout>

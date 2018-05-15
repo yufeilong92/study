@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -151,6 +152,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 if (mDialog != null) {
                     mDialog.dismiss();
                 }
+                mRlInfomLayout.setVisibility(View.VISIBLE);
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();
@@ -228,7 +230,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 EvalueVo.DatasBean vo = (EvalueVo.DatasBean) obj;
                 Intent intent = EvalueDetialActivity.newInstance(mContext, String.valueOf(vo.getTargetid()),
                         String.valueOf(vo.getCommentid()));
-                intent.putExtra(EvalueDetialActivity.CSTR_EXTRA_TITLE_STR,"评论详情");
+                intent.putExtra(EvalueDetialActivity.CSTR_EXTRA_TITLE_STR, "评论详情");
                 startActivity(intent);
             }
         });
@@ -317,6 +319,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
      */
     private void initWebView(View view) {
         WebView webview = view.findViewById(R.id.web_infom_detail);
+        final LinearLayout li = view.findViewById(R.id.ll_webview_after);
+
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
@@ -344,6 +348,18 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 } catch (Exception e) { //防止crash (如果手机上没有安装处理某个scheme开头的url的APP, 会导致crash)
                     return false;
                 }
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                li.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                li.setVisibility(View.VISIBLE);
             }
         });
     }
