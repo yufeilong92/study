@@ -22,6 +22,7 @@ import com.xuechuan.xcedu.mvp.presenter.NetHomePresenter;
 import com.xuechuan.xcedu.mvp.view.NetHomeView;
 import com.xuechuan.xcedu.ui.net.NetAllBookActivity;
 import com.xuechuan.xcedu.ui.net.NetBookInfomActivity;
+import com.xuechuan.xcedu.ui.net.NetBookMyInfomActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
@@ -148,10 +149,11 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
         adapter.setClickListener(new NetHomeAdapter.onItemClickListener() {
             @Override
             public void onClickListener(CoursesBeanVo vo, int position) {
-                Intent intent = NetBookInfomActivity.newInstance(mContext, vo);
+                Intent intent = NetBookMyInfomActivity.newInstance(mContext, vo);
                 startActivity(intent);
             }
         });
+
     }
 
 
@@ -167,7 +169,7 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
                 startActivity(new Intent(mContext, NetAllBookActivity.class));
                 break;
             case R.id.iv_net_mydown:
-
+                
                 break;
             case R.id.iv_net_all:
                 startActivity(new Intent(mContext, NetAllBookActivity.class));

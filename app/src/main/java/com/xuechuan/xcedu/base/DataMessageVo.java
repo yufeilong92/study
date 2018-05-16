@@ -1,5 +1,7 @@
 package com.xuechuan.xcedu.base;
 
+import android.Manifest;
+
 import java.util.ArrayList;
 
 /**
@@ -81,6 +83,13 @@ public class DataMessageVo {
     public static String MARKTYPECOLLORT = "typecoloct";
     //文章标识
     public static String MARKTYPEORDER= "typeorder";
-
+    //需要的权限
+    public static  String[] permissionList={
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CALL_PHONE,
+    };
 
 }

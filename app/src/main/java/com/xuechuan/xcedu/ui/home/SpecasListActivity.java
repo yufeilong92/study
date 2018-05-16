@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
@@ -54,6 +55,7 @@ public class SpecasListActivity extends BaseActivity {
      * 防止冲突
      */
     private boolean isRefresh = false;
+    private TextView mTvNetEmptyContent;
 
     public static Intent newInstance(Context context, String parame, String parame1) {
         Intent intent = new Intent(context, SpecasListActivity.class);
@@ -61,14 +63,13 @@ public class SpecasListActivity extends BaseActivity {
         intent.putExtra(PARAME1, parame1);
         return intent;
     }
-/*
-    @Override
+
+/*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specas);
         initView();
-    }
-*/
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -188,7 +189,7 @@ public class SpecasListActivity extends BaseActivity {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new SpecsOrderAdapter(mContext, mArrary, gridLayoutManager);
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
-        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
+        mRlvSpecaContent.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvSpecaContent.setAdapter(adapter);
 
 
@@ -199,6 +200,7 @@ public class SpecasListActivity extends BaseActivity {
         mXrfvSpecaRefresh.setPullLoadEnable(true);
         mXrfvSpecaRefresh.setAutoLoadMore(true);
         mXrfvSpecaRefresh.setPullRefreshEnable(true);
+        mXrfvSpecaRefresh.setEmptyView(mTvNetEmptyContent);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(this));
         mXrfvSpecaRefresh.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
@@ -225,6 +227,7 @@ public class SpecasListActivity extends BaseActivity {
         mRlvSpecaContent = (RecyclerView) findViewById(R.id.rlv_speca_content);
         mXrfvSpecaRefresh = (XRefreshView) findViewById(R.id.xrfv_speca_refresh);
 
+        mTvNetEmptyContent = (TextView) findViewById(R.id.tv_net_empty_content);
     }
 
     private void initRefresh(SpecsOrderAdapter adapter) {

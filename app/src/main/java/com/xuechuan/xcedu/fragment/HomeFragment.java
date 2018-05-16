@@ -109,6 +109,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private TextView mTvInfomMore;
     private TextView mTvArticleMore;
     private String code;
+    private LinearLayout mLiRoot;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -218,6 +219,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 HomePageVo homePageVo = gson.fromJson(message, HomePageVo.class);
                 BaseVo.StatusBean status = homePageVo.getStatus();
                 if (status.getCode() == 200) {//成功
+                    mLiRoot.setVisibility(View.VISIBLE);
                     if (mDialog != null) {
                         mDialog.dismiss();
                     }
@@ -234,7 +236,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //                    T.showToast(mContext, status.getMessage());
                     if (mDialog == null)
                         mDialog.dismiss();
-                    requestData(code);
+                    L.e(status.getMessage());
+//                    requestData(code);
                 }
             }
 
@@ -314,6 +317,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
+        mLiRoot = view.findViewById(R.id.ll_home_root);
         mBanHome = view.findViewById(R.id.ban_home);
         mContext = getActivity();
         mTvAddress = (AddressTextView) view.findViewById(R.id.tv_address);
@@ -419,7 +423,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.tv_article_more://全部更多
 //                UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
-                Intent instance = AtirlceListActivity.newInstance(mContext,"");
+                Intent instance = AtirlceListActivity.newInstance(mContext, "");
                 instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_infom_all));
                 startActivity(instance);
                 break;

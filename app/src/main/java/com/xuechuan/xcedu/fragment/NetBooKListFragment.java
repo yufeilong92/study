@@ -126,7 +126,7 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
      */
     private void bindAdapterData() {
         adapter = new NetBookTableTreeAdapter(mLvNetBookContent, mContext, mArrary,
-                0, R.mipmap.ic_spread_gray, R.mipmap.ic_more_go);
+                1, R.mipmap.ic_spread_gray, R.mipmap.ic_more_go);
         mLvNetBookContent.setAdapter(adapter);
         adapter.setOnTreeNodeClickListener(new OnTreeNodeClickListener() {
             @Override

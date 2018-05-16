@@ -39,12 +39,14 @@ public class NetBookTableTreeAdapter extends TreeListViewAdapter {
         ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_net_table_list, null);
+
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         if (node.getpId().equals("-1")) {
+            holder.rootView.setClickable(false);
             holder.mChbNetPlay.setVisibility(View.GONE);
         }else {
 

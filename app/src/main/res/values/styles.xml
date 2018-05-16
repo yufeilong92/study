@@ -98,6 +98,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!--边框-->
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">false</item><!--半透明-->
+        <item name="android:windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowBackground">@color/transparent</item><!--背景透明-->
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
+    </style>
+
     <style name="tv_click_controller_land_center_not_click">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -164,6 +173,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">8dp</item>
     </style>
+
     <style name="space_4_height">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">4dp</item>
@@ -183,6 +193,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
     </style>
+
     <style name="space_20_width">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -192,10 +203,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">100dp</item>
     </style>
+
     <style name="space_10_height">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">10dp</item>
-</style>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+    </style>
+
     <style name="space_10_width">
         <item name="android:layout_width">10dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -215,10 +228,12 @@
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
     <style name="space_12_width">
         <item name="android:layout_width">12dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
     <style name="space_12_height">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">12dp</item>
@@ -254,12 +269,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
     </style>
+
     <style name="chb_paw">
         <item name="android:button">@drawable/select_login_paw_bg</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
     <style name="title_line_style">
         <item name="android:background">@drawable/ic_title_line</item>
         <item name="android:layout_width">match_parent</item>
@@ -278,31 +295,37 @@
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:background">@drawable/btn_home_search_bg</item>
     </style>
+
     <style name="view_line">
         <item name="android:background">@color/input_bg</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
     </style>
+
     <style name="view_line_1">
         <item name="android:background">@color/input_bg</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
     </style>
+
     <style name="view_line_1_gray">
         <item name="android:background">@color/input_bg</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
     </style>
+
     <style name="view_line_titel_line">
         <item name="android:background">@drawable/ic_title_line</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">5dp</item>
     </style>
+
     <style name="view_line_tab_line">
         <item name="android:background">@drawable/ic_title_line</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">5dp</item>
     </style>
+
     <style name="view_line_10_gray">
         <item name="android:background">@color/input_bg</item>
         <item name="android:layout_width">match_parent</item>

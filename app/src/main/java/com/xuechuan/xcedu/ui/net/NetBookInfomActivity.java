@@ -54,6 +54,7 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.fragment.NetBooKListFragment;
 import com.xuechuan.xcedu.fragment.NetBookinfomFragment;
 import com.xuechuan.xcedu.fragment.NetTableFragment;
 import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
@@ -62,7 +63,6 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerProgressView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
-import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -236,6 +236,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         }
         List<Fragment> fragments = new ArrayList<>();
         NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance("", "");
+//        NetBooKListFragment booKListFragment = NetBooKListFragment.newInstance(String.valueOf(dataVo.getId()));
         NetTableFragment booKListFragment = NetTableFragment.newInstance(String.valueOf(dataVo.getId()));
         fragments.add(bookinfomFragment);
         fragments.add(booKListFragment);
@@ -601,6 +602,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         videoView.destroy();
+        EventBus.getDefault().removeAllStickyEvents();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
@@ -720,44 +722,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    /**
-     * 显示pop
-     */
-    private void showPopwindow() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screenHeight = metrics.heightPixels;
-        popDown = new CommonPopupWindow(this, R.layout.pop_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
-            private TextView mTvSettring;
-            private TextView mTvShare;
 
-            @Override
-            protected void initView() {
-                View view = getContentView();
-
-            }
-
-            @Override
-            protected void initEvent() {
-
-            }
-
-            @Override
-            protected void initWindow() {
-                super.initWindow();
-                PopupWindow instance = getPopupWindow();
-                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        setBackgroundAlpha(1f, NetBookInfomActivity.this);
-                    }
-                });
-            }
-        };
-
-        popDown.showAtLocation(mLlNetPlayRoot, Gravity.BOTTOM, 0, 0);
-        setBackgroundAlpha(0.5f, NetBookInfomActivity.this);
-    }
 
     /**
      * 设置背景颜色

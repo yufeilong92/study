@@ -167,5 +167,6 @@
     <string name="my_net">我的网课</string>
     <string name="go_look">去看看</string>
     <string name="user_no_buy">您还未购买课程</string>
+    <string name="delect">删除</string>
 
 </resources>

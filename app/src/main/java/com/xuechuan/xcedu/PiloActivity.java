@@ -1,13 +1,18 @@
 package com.xuechuan.xcedu;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.mvp.model.RefreshTokenModelImpl;
@@ -21,6 +26,12 @@ import com.xuechuan.xcedu.vo.TokenVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: PiloActivity
@@ -32,10 +43,11 @@ import com.xuechuan.xcedu.vo.UserInfomVo;
  * @Copyright: 2018/5/14
  */
 
-public class PiloActivity extends BaseActivity implements RefreshTokenView {
+public class PiloActivity extends BaseActivity implements RefreshTokenView, EasyPermissions.PermissionCallbacks{
 
     private ImageView mIvPilo;
     private Context mContext;
+    private static final int RC_CAMERA_PERM = 488;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,45 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView {
         setContentView(R.layout.activity_pilo);
         initView();
         initData();
+//        reques();
+
+    }
+    private boolean hasWrithSdPermission() {//写内容存
+        return EasyPermissions.hasPermissions(this, DataMessageVo.permissionList[0]);
+    }
+
+    private boolean hasReadSdAndContactsPermissions() {//读内存
+        return EasyPermissions.hasPermissions(this,DataMessageVo.permissionList[1]);
+    }
+
+    private boolean hasLocationPermission() {//定位
+        return EasyPermissions.hasPermissions(this,DataMessageVo.permissionList[2]);
+    }
+
+    private boolean hasLoadLocationPermission() {//获取定位
+        return EasyPermissions.hasPermissions(this, DataMessageVo.permissionList[3]);
+    }
+    private boolean hasPhonePermission() {//打电话
+        return EasyPermissions.hasPermissions(this, DataMessageVo.permissionList[4]);
+    }
+    @AfterPermissionGranted(RC_CAMERA_PERM)
+    private void reques() {
+        if (EasyPermissions.hasPermissions(this,DataMessageVo.permissionList)){
+            initData();
+        }else {
+            EasyPermissions.requestPermissions(
+                    this,
+                   "",
+                    RC_CAMERA_PERM,
+                    Manifest.permission.CAMERA);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     private void initData() {
@@ -63,8 +114,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView {
             startActivity(intent1);
             this.finish();
         }
-
-
     }
 
 
@@ -123,5 +172,18 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView {
     private void initView() {
         mContext = this;
         mIvPilo = (ImageView) findViewById(R.id.iv_pilo);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {//某些权限已被授予
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {//某些权限已被拒绝
+        if (requestCode == RC_CAMERA_PERM) {
+            //显示dialog来提示用户去设置
+            new AppSettingsDialog.Builder(this).setRationale(perms.toString()).setTitle("权限申请").build().show();
+        }
     }
 }

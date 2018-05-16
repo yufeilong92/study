@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andview.refreshview.callback.IFooterCallBack;
 import com.google.gson.Gson;
 import com.umeng.debug.log.I;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
@@ -371,7 +373,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private MyTimeUitl mTimeUitl;
     private ImageView mIvTimePlay;
     private LinearLayout mVBLineBar;
-    private SmartScrollView mSlvViewShow;
     private ImageView mIvBarDelect;
 
     @Override
@@ -386,39 +387,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         saveChapterRecords();
     }
 
-
-    //保存章节记录
-    private void saveChapterRecords() {
-        if (StringUtil.isEmpty(mTypeMark) || StringUtil.isEmpty(mOid)) {
-            return;
-        }
-        DbHelperAssist assist = DbHelperAssist.getInstance();
-        List<UserLookVo> lookVos = new ArrayList<>();
-        UserLookVo userLookVo = new UserLookVo();
-        if (mTypeMark.equals("1")) {
-            userLookVo.setChapterId(mOid);
-            userLookVo.setNextId(String.valueOf(mMark));
-            lookVos.add(userLookVo);
-            assist.upDataSkillRecord(lookVos);
-            return;
-        }
-        if (mTypeMark.equals("2")) {
-            userLookVo.setChapterId(mOid);
-            userLookVo.setNextId(String.valueOf(mMark));
-            lookVos.add(userLookVo);
-            assist.upDataColoctRecord(lookVos);
-            return;
-        }
-        if (mTypeMark.equals("3")) {
-            userLookVo.setChapterId(mOid);
-            userLookVo.setNextId(String.valueOf(mMark));
-            lookVos.add(userLookVo);
-            assist.upDataCaseRecord(lookVos);
-            return;
-        }
-
-
-    }
 
     /***
      * 章节练习
@@ -493,34 +461,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         return intent;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop: ");
-        EventBus.getDefault().removeStickyEvent(FreeDataEvent.class);
-        EventBus.getDefault().unregister(mContext);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "onStart: ");
-
-        EventBus.getDefault().register(mContext);
-
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e(TAG, "onRestart: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e(TAG, "onPause: ");
-    }
     /*  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -564,20 +504,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    private void clearAll() {
-        clearbg();
-        clearClick();
-        clearSeletItem();
-        isExamHine = false;
-        mFreeQuestion = null;
-        mStyleCase = null;
-        if (mTimeUitl != null) {
-            mTimeUitl.cancel();
-            mActivityTitleText.setText("");
-            mTimeUitl = null;
-        }
-    }
-
 
     /**
      * 自由组卷
@@ -606,7 +532,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         initSetting();
         Requestion();
         clearSeletItem();
-
     }
 
     private void Requestion() {
@@ -830,7 +755,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             isExamHine = true;
         }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-
 
     }
 
@@ -3263,7 +3187,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLlTitleBar.setBackgroundColor(getLayoutColor(R.color.night_title_bar));
         mLlRootLayout.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
         mLlLookWenDa.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
-        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
+        mVBLineBar.setBackgroundColor(getLayoutColor(R.color.night_title_bar));
         setTvColor(mTvBType, R.color.night_text_color);
         setTvColor(mTvBMatter, R.color.night_text_color);
         setTvColor(mTvBAContent, R.color.night_text_color);
@@ -3284,10 +3208,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         setLinebg(mVLine2, R.color.night_line_bg);
         setLinebg(mVLine3, R.color.night_line_bg);
         setLinebg(mVLine4, R.color.night_line_bg);
-        setIvBG(mIvTitleBack, R.color.night_layout_bg);
-        setIvBG(mIvBMore, R.color.night_layout_bg);
-        setIvBG(mIvTimePlay, R.color.night_layout_bg);
-        setIvBG(mIvBarDelect, R.color.night_layout_bg);
+        setIvBG(mIvTitleBack, R.color.night_title_bar);
+        setIvBG(mIvBMore, R.color.night_title_bar);
+        setIvBG(mIvTimePlay, R.color.night_title_bar);
+        setIvBG(mIvBarDelect, R.color.night_title_bar);
 
         if (adapter != null)
             adapter.setBGLayout(mSelectViewBgZC);
@@ -3498,5 +3422,126 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop: ");
+        EventBus.getDefault().removeStickyEvent(FreeDataEvent.class);
+        EventBus.getDefault().unregister(mContext);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart: ");
+
+        EventBus.getDefault().register(mContext);
+
+    }
+
+    private void clearAll() {
+        clearbg();
+        clearClick();
+        clearSeletItem();
+        isExamHine = false;
+        mFreeQuestion = null;
+        mStyleCase = null;
+        if (mTimeUitl != null) {
+            mTimeUitl.cancel();
+            mActivityTitleText.setText("");
+            mTimeUitl = null;
+        }
+    }
+
+    float xStant = 0.0f;
+    float yStart = 0.0f;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xStant = ev.getX();
+                yStart = ev.getY();
+                break;
+        /*    case MotionEvent.ACTION_MOVE:
+                float x = ev.getX();
+                float v = x - xStant;
+                float y = ev.getY();
+                float y1 = y - yStart;
+                if (y1 > 200 && y1 < -200) {
+                    return false;
+                } else if (v > 0 && v > 300) {//正的
+                    goBefore();
+                    return true;
+                } else if (v < 0 && v < -300) {//负的
+                    NextGo();
+                    return true;
+                }*/
+            case MotionEvent.ACTION_UP:
+                float x = ev.getX();
+                float v = x - xStant;
+                float y = ev.getY();
+                float y1 = y - yStart;
+                if (y1 > 200 && y1 < -200) {
+                    return false;
+                } else if (v > 0 && v > 300) {//正的
+                    goBefore();
+                    return true;
+                } else if (v < 0 && v < -300) {//负的
+                    NextGo();
+                    return true;
+                }
+            default:
+        }
+
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause: ");
+    }
+
+    //保存章节记录
+    private void saveChapterRecords() {
+        if (StringUtil.isEmpty(mTypeMark) || StringUtil.isEmpty(mOid)) {
+            return;
+        }
+        DbHelperAssist assist = DbHelperAssist.getInstance();
+        List<UserLookVo> lookVos = new ArrayList<>();
+        UserLookVo userLookVo = new UserLookVo();
+        if (mTypeMark.equals("1")) {
+            userLookVo.setChapterId(mOid);
+            userLookVo.setNextId(String.valueOf(mMark));
+            lookVos.add(userLookVo);
+            assist.upDataSkillRecord(lookVos);
+            return;
+        }
+        if (mTypeMark.equals("2")) {
+            userLookVo.setChapterId(mOid);
+            userLookVo.setNextId(String.valueOf(mMark));
+            lookVos.add(userLookVo);
+            assist.upDataColoctRecord(lookVos);
+            return;
+        }
+        if (mTypeMark.equals("3")) {
+            userLookVo.setChapterId(mOid);
+            userLookVo.setNextId(String.valueOf(mMark));
+            lookVos.add(userLookVo);
+            assist.upDataCaseRecord(lookVos);
+            return;
+        }
+
+
+    }
 }
 

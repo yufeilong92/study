@@ -13,4 +13,8 @@
         <item>详情</item>
         <item>课程表</item>
     </string-array>
+    <string-array name="net_mybook_title">
+        <item>课程表</item>
+        <item>评价</item>
+    </string-array>
 </resources>

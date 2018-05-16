@@ -48,9 +48,6 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
         this.clickListener = clickListener;
     }
 
-
-
-
     @NonNull
     @Override
     public ViewHoler onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,6 +64,8 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
         }
 
         holder.mTvNetMyhomeTitle.setText(vo.getName());
+        holder.itemView.setTag(vo);
+        holder.itemView.setId(position);
         // TODO: 2018/5/14 上次看到是时间
 
     }

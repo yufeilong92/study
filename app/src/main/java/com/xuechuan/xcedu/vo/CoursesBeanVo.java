@@ -41,6 +41,30 @@ public class CoursesBeanVo implements Serializable {
      *
      */
     private String description;
+    /**
+     * 最后播放时间
+     */
+    private String lastmodifytime;
+    /**
+     * 开始时间
+     */
+    private String  createtime;
+
+    public String getLastmodifytime() {
+        return lastmodifytime;
+    }
+
+    public void setLastmodifytime(String lastmodifytime) {
+        this.lastmodifytime = lastmodifytime;
+    }
+
+    public String getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
+    }
 
     public int getId() {
         return id;

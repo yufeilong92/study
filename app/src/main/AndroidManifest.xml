@@ -169,7 +169,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.net.NetAllBookActivity"></activity>
+        <activity android:name=".ui.net.NetAllBookActivity" />
+        <activity android:name=".ui.net.NetBookMyInfomActivity" />
+        <activity android:name=".ui.net.NetBookDownActivity" />
+        <activity android:name=".ui.net.NetBookDownInfonActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

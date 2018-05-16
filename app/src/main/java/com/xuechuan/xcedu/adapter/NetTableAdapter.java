@@ -78,7 +78,6 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
             holder.mRlvNetBookJie.setVisibility(View.GONE);
         }
 
-
         /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

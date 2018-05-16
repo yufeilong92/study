@@ -54,6 +54,7 @@ public class NetTableFragment extends BaseFragment implements NetBookInfomView {
     private long lastRefreshTime;
     private NetBookInfomPresenter mPresenter;
     private boolean isRefresh;
+    private View empty;
 
 
     public NetTableFragment() {
@@ -97,7 +98,8 @@ public class NetTableFragment extends BaseFragment implements NetBookInfomView {
         clearData();
         bindAdapterData();
         initXrfresh();
-        mXrfvSpecaRefresh.startRefresh();
+        loadNewData();
+//        mXrfvSpecaRefresh.startRefresh();
     }
 
     private void initData() {
@@ -108,7 +110,8 @@ public class NetTableFragment extends BaseFragment implements NetBookInfomView {
         mXrfvSpecaRefresh.restoreLastRefreshTime(lastRefreshTime);
         mXrfvSpecaRefresh.setPullLoadEnable(true);
         mXrfvSpecaRefresh.setAutoLoadMore(true);
-        mXrfvSpecaRefresh.setPullRefreshEnable(true);
+        mXrfvSpecaRefresh.setPullRefreshEnable(false);
+        mXrfvSpecaRefresh.setEmptyView(empty);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
         mXrfvSpecaRefresh.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
@@ -154,6 +157,7 @@ public class NetTableFragment extends BaseFragment implements NetBookInfomView {
 
     private void initView(View view) {
         mContext = getActivity();
+        empty = view.findViewById(R.id.tv_net_empty_content);
         mRlvSpecaContent = (RecyclerView) view.findViewById(R.id.rlv_speca_content);
         mXrfvSpecaRefresh = (XRefreshView) view.findViewById(R.id.xrfv_speca_refresh);
     }

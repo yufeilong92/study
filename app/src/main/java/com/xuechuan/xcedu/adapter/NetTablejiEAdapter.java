@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
@@ -66,6 +67,7 @@ public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.V
         } else {
             holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_login_password);
         }
+
         holder.mChbNetPlay.setChecked(false);
         holder.mChbNetPlay.setVisibility(View.VISIBLE);
         holder.mTvNetTitle.setText(vo.getVideoname());
@@ -73,10 +75,13 @@ public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.V
             @Override
             public void onClick(View v) {
                 holder.mChbNetPlay.setChecked(true);
-                EventBus.getDefault().postSticky(new NetPlayEvent(vo));
+                if (vo.isIstrysee()) {
+                    EventBus.getDefault().postSticky(new NetPlayEvent(vo));
+                } else {
+                    T.showToast(mContext, "该视频提供试看");
+                }
             }
         });
-
 
 
     }

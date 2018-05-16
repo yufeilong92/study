@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.net.NetBookDownInfonActivity">
+
+    <LinearLayout style="@style/TitleBar">
+
+        <ImageView
+            style="@style/TitleBarAction"
+            android:onClick="onHomeClick"
+            android:src="@mipmap/ic_back"
+            tools:ignore="OnClick" />
+
+        <TextView style="@style/TitleBarText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/space_8"
+            android:text="编辑"
+            android:textColor="@color/btn_bg_register"
+            android:textSize="@dimen/text_size_18" />
+
+    </LinearLayout>
+
+    <View style="@style/view_line_tab_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_16"
+        android:layout_marginTop="@dimen/space_30"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/spance_120"
+            android:layout_height="@dimen/space_70"
+            android:paddingLeft="@dimen/space_16"
+            android:paddingRight="@dimen/space_16"
+            android:scaleType="fitXY"
+            android:src="@mipmap/f_t" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_down_book_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2222"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_14" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_net_down_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/hint_text"
+                    android:textSize="@dimen/text_size_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="个视频"
+                    android:textColor="@color/hint_text"
+                    android:textSize="@dimen/text_size_14" />
+
+                <TextView
+                    android:id="@+id/tv_net_down_cout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/space_16"
+                    android:text="1.3"
+                    android:textColor="@color/hint_text"
+                    android:textSize="@dimen/text_size_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="G"
+                    android:textColor="@color/hint_text"
+                    android:textSize="@dimen/text_size_14" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View style="@style/view_line_1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv_net_down_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/space_16"
+                android:paddingLeft="@dimen/space_16"
+                android:paddingRight="@dimen/space_16" />
+        </ScrollView>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_net_down_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <View style="@style/view_line_tab_line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_48"
+                android:paddingLeft="@dimen/space_16"
+                android:paddingRight="@dimen/space_16">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="全选"
+                    android:textColor="@color/hint_text"
+                    android:textSize="@dimen/text_size_14" />
+
+                <Button
+                    android:id="@+id/btn_net_down_delect"
+                    android:layout_width="@dimen/space_70"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/space_8"
+                    android:layout_marginTop="@dimen/space_8"
+                    android:background="@drawable/btn_login_bg_normal"
+                    android:text="@string/delect"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

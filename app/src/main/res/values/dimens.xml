@@ -101,4 +101,5 @@
     <dimen name="space_70">70dp</dimen>
     <dimen name="space_b_selectimg_width">30dp</dimen>
     <dimen name="b_card_with">44dp</dimen>
+    <dimen name="pop_clarity">60dp</dimen>
 </resources>

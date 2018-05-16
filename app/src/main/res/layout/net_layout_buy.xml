@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/space_16">
 
     <TextView
+        android:paddingTop="@dimen/space_16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/my_net"

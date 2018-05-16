@@ -15,6 +15,7 @@ import java.util.List;
  * @Copyright: 2018
  */
 public class NetHomeVo extends BaseVo {
+
     private List<CoursesBeanVo> datas;
 
     public List<CoursesBeanVo> getDatas() {
