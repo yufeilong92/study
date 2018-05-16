@@ -1,13 +1,10 @@
 package com.xuechuan.xcedu;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
@@ -19,18 +16,18 @@ import com.xuechuan.xcedu.mvp.model.RefreshTokenModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.RefreshTokenPresenter;
 import com.xuechuan.xcedu.mvp.view.RefreshTokenView;
 import com.xuechuan.xcedu.ui.LoginActivity;
-import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.vo.TokenVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
+import java.util.Arrays;
 import java.util.List;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -60,40 +57,22 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_pilo);
         initView();
-        initData();
-//        reques();
+
+        requesPermission();
 
     }
-    private boolean hasWrithSdPermission() {//写内容存
-        return EasyPermissions.hasPermissions(this, DataMessageVo.permissionList[0]);
-    }
 
-    private boolean hasReadSdAndContactsPermissions() {//读内存
-        return EasyPermissions.hasPermissions(this,DataMessageVo.permissionList[1]);
-    }
-
-    private boolean hasLocationPermission() {//定位
-        return EasyPermissions.hasPermissions(this,DataMessageVo.permissionList[2]);
-    }
-
-    private boolean hasLoadLocationPermission() {//获取定位
-        return EasyPermissions.hasPermissions(this, DataMessageVo.permissionList[3]);
-    }
-    private boolean hasPhonePermission() {//打电话
-        return EasyPermissions.hasPermissions(this, DataMessageVo.permissionList[4]);
-    }
-    @AfterPermissionGranted(RC_CAMERA_PERM)
-    private void reques() {
-        if (EasyPermissions.hasPermissions(this,DataMessageVo.permissionList)){
+    private void requesPermission() {
+        if (EasyPermissions.hasPermissions(this, DataMessageVo.Persmission)) {
             initData();
-        }else {
-            EasyPermissions.requestPermissions(
-                    this,
-                   "",
-                    RC_CAMERA_PERM,
-                    Manifest.permission.CAMERA);
+        } else {
+            PermissionRequest build = new PermissionRequest.Builder(this, 0, DataMessageVo.Persmission)
+                    .setRationale("请允许使用该app申请的权限，否则，该APP无法正常使用")
+                    .setNegativeButtonText(R.string.cancel)
+                    .setPositiveButtonText(R.string.allow)
+                    .build();
+            EasyPermissions.requestPermissions(build);
         }
-
     }
 
     @Override
@@ -176,14 +155,30 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {//某些权限已被授予
-
+        List<String> mDATA = Arrays.asList(DataMessageVo.Persmission);
+        if (perms.contains(mDATA)) {
+            initData();
+        } else {
+            requesPermission();
+        }
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {//某些权限已被拒绝
-        if (requestCode == RC_CAMERA_PERM) {
-            //显示dialog来提示用户去设置
-            new AppSettingsDialog.Builder(this).setRationale(perms.toString()).setTitle("权限申请").build().show();
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this)
+                    .setPositiveButton(R.string.allow)
+                    .setNegativeButton(R.string.cancel)
+                    .setRationale("请允许使用该app申请的权限，否则，该APP无法正常使用")
+                    .build()
+                    .show();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
+            requesPermission();
         }
     }
 }

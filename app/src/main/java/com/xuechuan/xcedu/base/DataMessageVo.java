@@ -2,8 +2,6 @@ package com.xuechuan.xcedu.base;
 
 import android.Manifest;
 
-import java.util.ArrayList;
-
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
@@ -84,7 +82,7 @@ public class DataMessageVo {
     //文章标识
     public static String MARKTYPEORDER= "typeorder";
     //需要的权限
-    public static  String[] permissionList={
+    public static  String[] Persmission ={
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
