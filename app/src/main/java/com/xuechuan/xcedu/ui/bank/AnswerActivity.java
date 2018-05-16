@@ -28,11 +28,8 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.andview.refreshview.callback.IFooterCallBack;
 import com.google.gson.Gson;
-import com.umeng.debug.log.I;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.Event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
@@ -63,7 +60,6 @@ import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.ArithUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
-
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.MyTimeUitl;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
@@ -79,9 +75,8 @@ import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 import com.xuechuan.xcedu.vo.UserLookVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
+import com.xuechuan.xcedu.weight.MyRecyclerView;
 import com.xuechuan.xcedu.weight.SmartScrollView;
-
-import net.nightwhistler.htmlspanner.HtmlSpanner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -229,7 +224,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mLlBRightLu;
     private Button mBtnBBuy;
     private LinearLayout mLiBResolveBuy;
-    private RecyclerView mRlvEualeContent;
+    private MyRecyclerView mRlvEualeContent;
+//    private RecyclerView mRlvEualeContent;
     private SmartScrollView mSloViewShow;
     private LinearLayout mLlBBack;
     private LinearLayout mLlBGo;
@@ -471,7 +467,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         SharedSeletResultListUtil.getInstance().DeleteUser();
-        Log.e(TAG, "initContentView: ");
         setContentView(R.layout.activity_answer);
         if (getIntent() != null) {
             //问题id
@@ -898,7 +893,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mBtnBBuy.setOnClickListener(this);
         mLiBResolveBuy = (LinearLayout) findViewById(R.id.li_b_resolve_buy);
         mLiBResolveBuy.setOnClickListener(this);
-        mRlvEualeContent = (RecyclerView) findViewById(R.id.rlv_euale_content);
+//        mRlvEualeContent = (RecyclerView) findViewById(R.id.rlv_euale_content);
+        mRlvEualeContent = (MyRecyclerView) findViewById(R.id.rlv_euale_content);
         mRlvEualeContent.setOnClickListener(this);
         mSloViewShow = (SmartScrollView) findViewById(R.id.slv_view_show);
         mSloViewShow.setOnClickListener(this);
