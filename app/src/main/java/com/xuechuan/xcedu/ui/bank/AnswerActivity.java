@@ -895,7 +895,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mLiBResolveBuy.setOnClickListener(this);
 //        mRlvEualeContent = (RecyclerView) findViewById(R.id.rlv_euale_content);
         mRlvEualeContent = (MyRecyclerView) findViewById(R.id.rlv_euale_content);
-        mRlvEualeContent.setOnClickListener(this);
+
         mSloViewShow = (SmartScrollView) findViewById(R.id.slv_view_show);
         mSloViewShow.setOnClickListener(this);
         mLlBBack = (LinearLayout) findViewById(R.id.ll_b_back);
@@ -972,7 +972,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mVBLineBar.setOnClickListener(this);
         mIvBarDelect = (ImageView) findViewById(R.id.iv_bar_delect);
         mIvBarDelect.setOnClickListener(this);
-
+        mRlvEualeContent.setParentScrollView(mSloViewShow);
     }
 
     /**
