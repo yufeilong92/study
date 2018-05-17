@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
@@ -18,6 +19,7 @@ import com.xuechuan.xcedu.mvp.view.RefreshTokenView;
 import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.TokenVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
@@ -40,7 +42,7 @@ import pub.devrel.easypermissions.PermissionRequest;
  * @Copyright: 2018/5/14
  */
 
-public class PiloActivity extends BaseActivity implements RefreshTokenView, EasyPermissions.PermissionCallbacks{
+public class PiloActivity extends BaseActivity implements RefreshTokenView, EasyPermissions.PermissionCallbacks {
 
     private ImageView mIvPilo;
     private Context mContext;
@@ -57,7 +59,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_pilo);
         initView();
-
         requesPermission();
 
     }
@@ -165,19 +166,26 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {//某些权限已被拒绝
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < perms.size(); i++) {
+            builder.append(perms.get(i).toString().trim()+"\n");
+        }
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             new AppSettingsDialog.Builder(this)
                     .setPositiveButton(R.string.allow)
+                    .setTitle("权限申请")
                     .setNegativeButton(R.string.cancel)
-                    .setRationale("请允许使用该app申请的权限，否则，该APP无法正常使用")
+                    .setRationale("请允许使用该app申请的权限，否则，该APP无法正常使用\n" + builder.toString())
                     .build()
                     .show();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             requesPermission();
         }
     }

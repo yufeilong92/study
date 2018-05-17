@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:paddingTop="@dimen/space_20">
 
@@ -18,10 +19,12 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:layout_width="60dp"
+                android:id="@+id/chb_net_pop_down_chao"
+                android:layout_width="@dimen/space_60"
                 android:layout_height="@dimen/space_30"
                 android:background="@drawable/select_net_pop_clarity_btn"
                 android:button="@null"
+                android:checked="true"
                 android:gravity="center"
                 android:padding="@dimen/space_4"
                 android:text="超清"
@@ -29,26 +32,28 @@
                 android:textSize="@dimen/text_size_16" />
 
             <RadioButton
-                android:layout_width="60dp"
+                android:id="@+id/chb_net_pop_down_gao"
+                android:layout_width="@dimen/space_60"
                 android:layout_height="@dimen/space_30"
                 android:layout_marginLeft="@dimen/space_10"
                 android:layout_marginRight="@dimen/space_10"
-                android:background="@drawable/btn_net_pop_clarity_bg_n"
+                android:background="@drawable/select_net_pop_clarity_btn"
                 android:button="@null"
                 android:gravity="center"
                 android:padding="@dimen/space_4"
                 android:text="高清"
-                android:textColor="@color/hint_text"
+                android:textColor="@drawable/select_net_pop_rdb_textcolor"
                 android:textSize="@dimen/text_size_16" />
 
             <RadioButton
-                android:layout_width="@dimen/pop_clarity"
+                android:id="@+id/chb_net_pop_down_liu"
+                android:layout_width="@dimen/space_60"
                 android:layout_height="@dimen/space_30"
-                android:background="@drawable/btn_net_pop_clarity_bg_n"
+                android:background="@drawable/select_net_pop_clarity_btn"
                 android:button="@null"
                 android:gravity="center"
                 android:text="流畅"
-                android:textColor="@color/hint_text"
+                android:textColor="@drawable/select_net_pop_rdb_textcolor"
                 android:textSize="@dimen/text_size_16" />
         </RadioGroup>
 
@@ -73,6 +78,15 @@
             android:paddingLeft="@dimen/space_20"
             android:paddingRight="@dimen/space_20" />
 
+        <TextView
+            android:id="@+id/tv_net_pop_empty"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="暂无课程"
+            android:textSize="@dimen/text_size_14" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -81,20 +95,48 @@
 
             <View style="@style/view_line_tab_line" />
 
+            <Button
+                android:id="@+id/btn_pop_down_look"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:text="查看缓存"
+                android:textColor="@color/text_title_color"
+                android:textSize="@dimen/text_size_18"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/ll_pop_down_down"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <Button
-
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
 
                 <Button
+                    android:id="@+id/btn_pop_down_cancel"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="@string/cancel"
+                    android:textColor="@color/text_title_color"
+                    android:textSize="@dimen/text_size_16" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/space_4"
+                    android:layout_marginTop="@dimen/space_4"
+                    android:background="@color/login_line_color" />
+
+                <Button
+                    android:id="@+id/btn_pop_down_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="全部下载"
+                    android:textColor="@color/text_title_color"
+                    android:textSize="@dimen/text_size_16" />
             </LinearLayout>
 
         </LinearLayout>

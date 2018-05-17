@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
+import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.NetMyTableAdapter;
 import com.xuechuan.xcedu.adapter.NetTableAdapter;
@@ -23,6 +24,8 @@ import com.xuechuan.xcedu.mvp.view.NetBookInfomView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.NetBookTableVo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,6 +214,7 @@ public class NetMyBokTableFragment extends BaseFragment implements NetBookInfomV
                 mXrfvSpecaRefresh.setPullLoadEnable(true);
                 mXrfvSpecaRefresh.setLoadComplete(false);
             }
+            EventBus.getDefault().postSticky(new BookTableEvent(mArrary));
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
@@ -247,6 +251,7 @@ public class NetMyBokTableFragment extends BaseFragment implements NetBookInfomV
             } else {
                 mXrfvSpecaRefresh.setLoadComplete(true);
             }
+            EventBus.getDefault().postSticky(new BookTableEvent(mArrary));
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;

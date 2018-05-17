@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class ChaptersBeanVo {
+public class ChaptersBeanVo implements Serializable {
     /***
      * 所属章节编号
      */

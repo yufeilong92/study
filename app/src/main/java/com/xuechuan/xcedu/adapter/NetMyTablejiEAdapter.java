@@ -13,6 +13,8 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ItemSelectVo;
+import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,31 +26,40 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: todo
+ * @Description: 节点适配器
  * @author: L-BackPacker
  * @date: 2018/5/15 15:52
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
 public class NetMyTablejiEAdapter extends BaseRecyclerAdapter<NetMyTablejiEAdapter.ViewHolder> {
-    private final int faterperason;
+    private final int mFatherPosition;
     private Context mContext;
     private List<VideosBeanVo> mData;
     private final LayoutInflater mInflater;
     private CheckBox mChbNetPlay;
     private TextView mTvNetTitle;
     private ImageView mIvNetGoorbuy;
-    private HashMap<Integer, HashMap<Integer, Boolean>> mSelectMap;
-    private  NetMyTableAdapter netMyTableAdapter;
+    private List<SelectVo> mSelect;
 
-    public NetMyTablejiEAdapter(Context mContext, NetMyTableAdapter netMyTableAdapter, List<VideosBeanVo> mData, int postion, HashMap<Integer, HashMap<Integer, Boolean>> mSelectMap) {
+    public NetMyTablejiEAdapter(Context mContext, List<VideosBeanVo> mData, int postion,
+                                List<SelectVo> mSelect) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
-        this.mSelectMap = mSelectMap;
-        this.faterperason = postion;
-        this.netMyTableAdapter=netMyTableAdapter;
+        this.mFatherPosition = postion;
+        this.mSelect = mSelect;
 
+    }
+
+    private onItemClickListener clickListener;
+
+    public interface onItemClickListener {
+        public void onClickListener(VideosBeanVo vo, int position);
+    }
+
+    public void setClickListener(onItemClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -67,22 +78,22 @@ public class NetMyTablejiEAdapter extends BaseRecyclerAdapter<NetMyTablejiEAdapt
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final VideosBeanVo vo = mData.get(position);
-        holder.mChbNetPlay.setVisibility(View.VISIBLE);
         holder.mTvNetTitle.setText(vo.getVideoname());
-        final HashMap<Integer, Boolean> map = mSelectMap.get(faterperason);
-        if (map.get(position)) {
+        SelectVo selectVo = mSelect.get(mFatherPosition);
+        ItemSelectVo itemSelect = selectVo.getData().get(position);
+        if (itemSelect.isSelect()) {
             holder.mChbNetPlay.setChecked(true);
         } else {
             holder.mChbNetPlay.setChecked(false);
         }
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.mChbNetPlay.setChecked(true);
-                map.put(position,true);
-                mSelectMap.put(faterperason,map);
-                netMyTableAdapter.setOnClick(mSelectMap);
-//                EventBus.getDefault().postSticky(new NetMyPlayEvent(vo));
+                if (clickListener!=null){
+                    clickListener.onClickListener(vo,position);
+                }
             }
         });
 

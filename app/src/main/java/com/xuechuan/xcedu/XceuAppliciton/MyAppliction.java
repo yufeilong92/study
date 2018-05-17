@@ -188,7 +188,7 @@ public class MyAppliction extends MultiDexApplication {
     }
 
     private void initPolyCilent() {
-        PolyvSDKClient mPolyclient = PolyvSDKClient.getInstance();
+        mPolyclient = PolyvSDKClient.getInstance();
         mPolyclient.initCrashReport(mContext);
         MessageData data = MessageData.getInstance();
         //配置加密
@@ -197,6 +197,13 @@ public class MyAppliction extends MultiDexApplication {
         mPolyclient.initSetting(mContext);
         mPolyclient.initCrashReport(mContext);
         //使用SDK加密串来配置
+    }
+
+    public PolyvSDKClient getPolyColent() {
+        if (mPolyclient == null) {
+            initPolyCilent();
+        }
+        return mPolyclient;
     }
 
     private void initOkGo() {

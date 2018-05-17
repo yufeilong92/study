@@ -1,5 +1,7 @@
 package com.xuechuan.xcedu.vo;
 
+import java.io.Serializable;
+
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
@@ -10,7 +12,7 @@ package com.xuechuan.xcedu.vo;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class VideosBeanVo {
+public class VideosBeanVo implements Serializable{
     /**
      * s所属章节id
      */

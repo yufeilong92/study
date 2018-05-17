@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.ui.net;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,10 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,10 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,28 +52,29 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnQuestionAnswerTipsListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoPlayErrorListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
+import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
-import com.xuechuan.xcedu.Event.NetPlayEvent;
-import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
+import com.xuechuan.xcedu.adapter.NetMyDownTableAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.fragment.NetBookinfomFragment;
 import com.xuechuan.xcedu.fragment.NetMyBokTableFragment;
 import com.xuechuan.xcedu.fragment.NetMyBookVualueFragment;
-import com.xuechuan.xcedu.fragment.NetTableFragment;
+import com.xuechuan.xcedu.player.BaolIHttp.PolyvVlmsHelper;
 import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerMediaController;
 import com.xuechuan.xcedu.player.player.PolyvPlayerProgressView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
+import com.xuechuan.xcedu.service.NetBookService;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
@@ -87,17 +92,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
- * @Title:  NetBookMyInfomActivity
+ * @version V 1.0 xxxxxxxx
+ * @Title: NetBookMyInfomActivity
  * @Package com.xuechuan.xcedu.ui.net
  * @Description: 我的网课
  * @author: L-BackPacker
- * @date:   2018/5/16 17:46
- * @version V 1.0 xxxxxxxx
- * @verdescript  版本号 修改时间  修改人 修改的概要说明
+ * @date: 2018/5/16 17:46
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/16
  */
-public class NetBookMyInfomActivity extends BaseActivity implements View.OnClickListener {
+public class NetBookMyInfomActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String TAG = NetBookMyInfomActivity.class.getSimpleName();
     /**
@@ -148,15 +154,60 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private MagicIndicator mNetMagicIndicator;
     private NoScrollViewPager mVpNetBar;
     private Context mContext;
-    private TextView mTvNetBookAllprice;
-    private TextView mTvNetContactService;
-    private Button mBtnNetGoBuy;
     private ImageView mIvNetPlay;
     private ImageView mIvNetBookPlay;
     private RelativeLayout mRlPlaylayout;
     private String vid;
     private CommonPopupWindow popDown;
     private LinearLayout mLlNetPlayRoot;
+    private ImageView mIvNetMybookDown;
+    /**
+     * 科目章集合
+     */
+    private List mTableList;
+    private NetMyDownTableAdapter mDownAdapter;
+    /**
+     * 保利视频请求
+     */
+    private PolyvVlmsHelper helper;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //回来后继续播放
+        if (isPlay) {
+            videoView.onActivityResume();
+//            danmuFragment.resume();
+
+        }
+        mediaController.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        clearGestureInfo();
+        mediaController.pause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //弹出去暂停
+        isPlay = videoView.onActivityStop();
+//        danmuFragment.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        videoView.destroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+        mediaController.disable();
+    }
 
     public static Intent newInstance(Context context, CoursesBeanVo o) {
         Intent intent = new Intent(context, NetBookMyInfomActivity.class);
@@ -164,7 +215,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         return intent;
     }
 
-  /*  @Override
+/*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_net_book_infom);
@@ -177,6 +228,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             savedInstanceState.putParcelable("android:support:fragments", null);
         }
         setContentView(R.layout.activity_net_mybook_infom);
+
         if (getIntent() != null) {
             dataVo = (CoursesBeanVo) getIntent().getSerializableExtra(SERIALIZABLELIST);
         }
@@ -184,10 +236,10 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         initViewData();
         PolyvScreenUtils.generateHeight16_9(this);
         PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout);
-        int playModeCode = getIntent().getIntExtra("playMode", NetBookMyInfomActivity.PlayMode.portrait.getCode());
-        NetBookMyInfomActivity.PlayMode playMode = NetBookMyInfomActivity.PlayMode.getPlayMode(playModeCode);
+        int playModeCode = getIntent().getIntExtra("playMode", PlayMode.portrait.getCode());
+        PlayMode playMode = PlayMode.getPlayMode(playModeCode);
         if (playMode == null)
-            playMode = NetBookMyInfomActivity.PlayMode.portrait;
+            playMode = PlayMode.portrait;
         //视频id
         String vid = getIntent().getStringExtra("value");
         int bitrate = getIntent().getIntExtra("bitrate", PolyvBitRate.ziDong.getNum());
@@ -211,6 +263,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     private void initData() {
         if (dataVo != null) {
+            helper = new PolyvVlmsHelper();
             mTvNetBookTitle.setText(dataVo.getName());
             List<String> list = ArrayToListUtil.arraytoList(mContext, R.array.net_mybook_title);
             mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -225,22 +278,26 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             mVpNetBar.setAdapter(tagPagerAdapter);
             mVpNetBar.setOffscreenPageLimit(4);
             ViewPagerHelper.bind(mNetMagicIndicator, mVpNetBar);
-            mTvNetBookAllprice.setText("￥" + dataVo.getPrice() + "");
             if (!StringUtil.isEmpty(dataVo.getCoverimg())) {
                 MyAppliction.getInstance().displayImages(mIvNetPlay, dataVo.getCoverimg(), false);
-
             }
 
         }
     }
 
+    /**
+     * 添加fragment
+     *
+     * @param list
+     * @return
+     */
     private List<Fragment> creartFragment(List<String> list) {
         if (list.size() < 2) {
             mNetMagicIndicator.setVisibility(View.GONE);
         }
         List<Fragment> fragments = new ArrayList<>();
         NetMyBokTableFragment tableFragment = NetMyBokTableFragment.newInstance(String.valueOf(dataVo.getId()));
-        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance("","");
+        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance("", "");
         fragments.add(tableFragment);
         fragments.add(bookVualueFragment);
         return fragments;
@@ -268,27 +325,34 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         vid = vo.getVid();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void getBookTableList(BookTableEvent event) {
+        List list = event.getArrary();
+        if (list != null && list.size() > 0) {
+            mTableList = list;
+            if (mDownAdapter != null) {
+                mDownAdapter.notifyDataSetChanged();
+            }
+        }
+
+    }
+
     private void initView() {
         mContext = this;
-        mLlNetPlayRoot = (LinearLayout) findViewById(R.id.ll_net_play_root);
+        mLlNetPlayRoot = (LinearLayout) findViewById(R.id.ll_net_play_my_root);
         mLlNetPlayRoot.setOnClickListener(this);
-        mIvNetBookPlay = (ImageView) findViewById(R.id.iv_net_book_play);
+        mIvNetBookPlay = (ImageView) findViewById(R.id.iv_net_my_book_play);
         mIvNetBookPlay.setOnClickListener(this);
-        mRlPlaylayout = (RelativeLayout) findViewById(R.id.rl_play_layout);
+        mIvNetMybookDown = (ImageView) findViewById(R.id.iv_net_icon_my_down);
+        mIvNetMybookDown.setOnClickListener(this);
+        mRlPlaylayout = (RelativeLayout) findViewById(R.id.rl_play_my_layout);
         mRlPlaylayout.setOnClickListener(this);
-        mIvNetPlay = (ImageView) findViewById(R.id.iv_net_play);
-        mIvNetPlay.setOnClickListener(this);
-        mTvNetBookAllprice = (TextView) findViewById(R.id.tv_net_book_allprice);
-        mTvNetBookAllprice.setOnClickListener(this);
-        mTvNetContactService = (TextView) findViewById(R.id.tv_net_contact_service);
-        mTvNetContactService.setOnClickListener(this);
-        mBtnNetGoBuy = (Button) findViewById(R.id.btn_net_go_buy);
-        mBtnNetGoBuy.setOnClickListener(this);
-        mTvNetBookTitle = (TextView) findViewById(R.id.tv_net_book_title);
+        mIvNetPlay = (ImageView) findViewById(R.id.iv_net_my_play);
+        mTvNetBookTitle = (TextView) findViewById(R.id.tv_net_my_book_title);
         mTvNetBookTitle.setOnClickListener(this);
-        mNetMagicIndicator = (MagicIndicator) findViewById(R.id.net_magic_indicator);
+        mNetMagicIndicator = (MagicIndicator) findViewById(R.id.net_magic_my_indicator);
         mNetMagicIndicator.setOnClickListener(this);
-        mVpNetBar = (NoScrollViewPager) findViewById(R.id.vp_net_bar);
+        mVpNetBar = (NoScrollViewPager) findViewById(R.id.vp_net_my_bar);
         mVpNetBar.setOnClickListener(this);
         ll_title_bar = findViewById(R.id.activity_title_container);
         viewLayout = (RelativeLayout) findViewById(R.id.view_layout);
@@ -320,6 +384,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 .setStrokeWidth(3) //描边宽度
                 .setStrokeColor(Color.MAGENTA) //描边颜色
                 .setStrokeAlpha(70)); //描边透明度
+
     }
 
 
@@ -575,44 +640,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //回来后继续播放
-        if (isPlay) {
-            videoView.onActivityResume();
-//            danmuFragment.resume();
-
-        }
-        mediaController.resume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        clearGestureInfo();
-        mediaController.pause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //弹出去暂停
-        isPlay = videoView.onActivityStop();
-//        danmuFragment.pause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        videoView.destroy();
-        EventBus.getDefault().removeAllStickyEvents();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-        mediaController.disable();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (PolyvScreenUtils.isLandscape(this) && mediaController != null) {
@@ -624,19 +651,19 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         return super.onKeyDown(keyCode, event);
     }
 
-    public static Intent newIntent(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid) {
+    public static Intent newIntent(Context context, PlayMode playMode, String vid) {
         return newIntent(context, playMode, vid, PolyvBitRate.ziDong.getNum());
     }
 
-    public static Intent newIntent(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid, int bitrate) {
+    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate) {
         return newIntent(context, playMode, vid, bitrate, false);
     }
 
-    public static Intent newIntent(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid, int bitrate, boolean startNow) {
+    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow) {
         return newIntent(context, playMode, vid, bitrate, startNow, false);
     }
 
-    public static Intent newIntent(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid, int bitrate, boolean startNow,
+    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow,
                                    boolean isMustFromLocal) {
         Intent intent = new Intent(context, NetBookMyInfomActivity.class);
         intent.putExtra("playMode", playMode.getCode());
@@ -647,19 +674,19 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         return intent;
     }
 
-    public static void intentTo(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid) {
+    public static void intentTo(Context context, PlayMode playMode, String vid) {
         intentTo(context, playMode, vid, PolyvBitRate.ziDong.getNum());
     }
 
-    public static void intentTo(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid, int bitrate) {
+    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate) {
         intentTo(context, playMode, vid, bitrate, false);
     }
 
-    public static void intentTo(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid, int bitrate, boolean startNow) {
+    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow) {
         intentTo(context, playMode, vid, bitrate, startNow, false);
     }
 
-    public static void intentTo(Context context, NetBookMyInfomActivity.PlayMode playMode, String vid, int bitrate, boolean startNow,
+    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow,
                                 boolean isMustFromLocal) {
         context.startActivity(newIntent(context, playMode, vid, bitrate, startNow, isMustFromLocal));
     }
@@ -667,21 +694,29 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_net_contact_service://客服
-                break;
-            case R.id.btn_net_go_buy://购买
-                break;
-            case R.id.iv_net_play:
-                break;
-            case R.id.iv_net_book_play:
-                mRlPlaylayout.setVisibility(View.GONE);
-                if (!StringUtil.isEmpty(vid))
+            case R.id.iv_net_my_book_play://播放按钮
+                if (StringUtil.isEmpty(vid)) {
+                    T.showToast(mContext, "暂无课观看");
+                    return;
+                }
+                if (!StringUtil.isEmpty(vid)) {
+                    mRlPlaylayout.setVisibility(View.GONE);
                     play(vid, 0, true, false);
+                }
+                break;
+            case R.id.iv_net_icon_my_down://我的下载
+                if (mTableList == null || mTableList.isEmpty()) {
+                    T.showToast(mContext, "暂无课下载");
+                    return;
+                }
+                showPopwindow();
                 break;
             default:
 
         }
     }
+
+
 
     /**
      * 播放模式
@@ -713,7 +748,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             return code;
         }
 
-        public static NetBookMyInfomActivity.PlayMode getPlayMode(int code) {
+        public static PlayMode getPlayMode(int code) {
             switch (code) {
                 case 3:
                     return landScape;
@@ -733,17 +768,82 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
-            private TextView mTvSettring;
-            private TextView mTvShare;
+            private TextView mTvNetPopEmpty;
+            private LinearLayout mLlPopDownDown;
+            private Button mBtnPopDownAll;
+            private Button mBtnPopDownCancel;
+            private Button mBtnPopDownLook;
+            private RecyclerView mRlvTableList;
+            private ImageView mIvNetPopBack;
+            private RadioButton mChbNetPopDownLiu;
+            private RadioButton mChbNetPopDownGao;
+            private RadioButton mChbNetPopDownChao;
 
             @Override
             protected void initView() {
                 View view = getContentView();
+                mLlPopDownDown = view.findViewById(R.id.ll_pop_down_down);
+                mBtnPopDownAll = view.findViewById(R.id.btn_pop_down_all);
+                mBtnPopDownCancel = view.findViewById(R.id.btn_pop_down_cancel);
+                mBtnPopDownLook = view.findViewById(R.id.btn_pop_down_look);
+                mRlvTableList = view.findViewById(R.id.rlv_table_list);
+                mIvNetPopBack = view.findViewById(R.id.iv_net_pop_back);
+                mChbNetPopDownLiu = view.findViewById(R.id.chb_net_pop_down_liu);
+                mChbNetPopDownGao = view.findViewById(R.id.chb_net_pop_down_gao);
+                mChbNetPopDownChao = view.findViewById(R.id.chb_net_pop_down_chao);
+                mTvNetPopEmpty = view.findViewById(R.id.tv_net_pop_empty);
+                if (mTableList == null || mTableList.isEmpty()) {
+                    mTvNetPopEmpty.setVisibility(View.VISIBLE);
+                    mRlvTableList.setVisibility(View.GONE);
+                }
+
 
             }
 
             @Override
             protected void initEvent() {
+                mIvNetPopBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popDown.getPopupWindow().dismiss();
+                    }
+                });
+                bindAdapter();
+                mChbNetPopDownChao.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            GetNetBookService(3);
+                        }
+                    }
+                });
+                mChbNetPopDownGao.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            GetNetBookService(2);
+                        }
+                    }
+                });
+                mChbNetPopDownLiu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            GetNetBookService(1);
+                        }
+                    }
+                });
+                GetNetBookService(3);
+
+            }
+
+            private void bindAdapter() {
+                GridLayoutManager manager = new GridLayoutManager(mContext, 1);
+                manager.setOrientation(GridLayoutManager.VERTICAL);
+                mRlvTableList.setLayoutManager(manager);
+                mDownAdapter = new NetMyDownTableAdapter(mContext, mTableList);
+                mRlvTableList.setAdapter(mDownAdapter);
+
 
             }
 
@@ -764,6 +864,27 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         setBackgroundAlpha(0.5f, NetBookMyInfomActivity.this);
     }
 
+    private void GetNetBookService(int i) {
+        if (mTableList == null || mTableList.isEmpty()) {
+            return;
+        }
+        NetBookService.startActionBaz(mContext, mTableList, i);
+        NetBookService service = new NetBookService();
+        service.setBookResult(new NetBookService.RequestNetBookResult() {
+            @Override
+            public void netBookInfomSuccess(List<PolyvVlmsHelper.CurriculumsDetail> curriculumsDetails) {
+
+            }
+
+            @Override
+            public void fail(List<VideosBeanVo> vos) {
+
+            }
+        });
+
+    }
+
+
     /**
      * 设置背景颜色
      *
@@ -776,4 +897,5 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         ((Activity) mContext).getWindow().setAttributes(lp);
 
     }
+
 }

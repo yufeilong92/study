@@ -11,13 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
+import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.ItemSelectVo;
+import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,26 +38,38 @@ import java.util.List;
 public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.ViewHolder> {
     private Context mContext;
     private List<ChaptersBeanVo> mData;
-    private  LayoutInflater mInflater;
+    private LayoutInflater mInflater;
     private CheckBox mChbNetPlay;
     private TextView mTvNetTitle;
     private ImageView mIvNetGoorbuy;
-
-    private HashMap<Integer, HashMap<Integer, Boolean>> mSelectMap;
+    //    用户选中集合
+    public static List<SelectVo> mSelect = new ArrayList<>();
 
     public NetMyTableAdapter(Context mContext, List<ChaptersBeanVo> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        init(mData);
         mInflater = LayoutInflater.from(mContext);
-        mSelectMap = new HashMap<>();
     }
 
-    public NetMyTableAdapter() {
-    }
-
-    public void setOnClick(HashMap<Integer, HashMap<Integer, Boolean>> mSelectMap) {
-        this.mSelectMap = mSelectMap;
-        notifyDataSetChanged();
+    private void init(List<ChaptersBeanVo> mData) {
+        if (mSelect.size() > 0) {
+            mSelect.clear();
+        }
+        for (int i = 0; i < mData.size(); i++) {
+            ChaptersBeanVo vo = mData.get(i);
+            SelectVo selectVo = new SelectVo();
+            selectVo.setParenid(i + "");
+            ArrayList<ItemSelectVo> list = new ArrayList<>();
+            for (int j = 0; j < vo.getVideos().size(); j++) {
+                ItemSelectVo itemSelect = new ItemSelectVo();
+                itemSelect.setId(j + "");
+                itemSelect.setSelect(false);
+                list.add(itemSelect);
+            }
+            selectVo.setData(list);
+            mSelect.add(selectVo);
+        }
     }
 
     @Override
@@ -72,15 +88,9 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
     public void onBindViewHolder(final ViewHolder holder, int position, boolean isItem) {
         ChaptersBeanVo vo = mData.get(position);
         holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_more_go);
-
         holder.mTvNetTitle.setText(vo.getChaptername());
         List<VideosBeanVo> videos = vo.getVideos();
         if (videos != null && !videos.isEmpty()) {
-            for (int i = 0; i < videos.size(); i++) {
-                HashMap<Integer, Boolean> map = new HashMap<>();
-                map.put(i, false);
-                mSelectMap.put(position, map);
-            }
             if (position == 0) {
                 VideosBeanVo videosBeanVo = videos.get(0);
                 if (videosBeanVo.isIstrysee()) {
@@ -88,7 +98,10 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
                 }
             }
             holder.mRlvNetBookJie.setVisibility(View.VISIBLE);
-            bindjieAdaper(holder, videos,position);
+            if (mSelect.size() <= 0) {
+                init(mData);
+            }
+            bindjieAdaper(holder, videos, position);
         } else {
             holder.mRlvNetBookJie.setVisibility(View.GONE);
         }
@@ -108,12 +121,24 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
 
     }
 
-    private void bindjieAdaper(ViewHolder holder, List<VideosBeanVo> videos, int position) {
+    private void bindjieAdaper(ViewHolder holder, List<VideosBeanVo> videos, final int aftherPosition) {
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
         holder.mRlvNetBookJie.setLayoutManager(manager);
-        NetMyTablejiEAdapter adapter = new NetMyTablejiEAdapter(mContext,new NetMyTableAdapter(), videos,position,mSelectMap);
+        NetMyTablejiEAdapter adapter = new NetMyTablejiEAdapter(mContext, videos, aftherPosition, mSelect);
         holder.mRlvNetBookJie.setAdapter(adapter);
+        adapter.setClickListener(new NetMyTablejiEAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(VideosBeanVo vo, int position) {
+                init(mData);
+                SelectVo vo1 = mSelect.get(aftherPosition);
+                ItemSelectVo itemSelect = vo1.getData().get(position);
+                itemSelect.setSelect(true);
+//                EventBus.getDefault().postSticky(new NetMyPlayTrySeeEvent(vo));
+                notifyDataSetChanged();
+
+            }
+        });
 
     }
 

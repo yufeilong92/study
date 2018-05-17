@@ -20,6 +20,7 @@
         <TextView style="@style/TitleBarText" />
 
         <ImageView
+            android:id="@+id/iv_net_book_down"
             style="@style/TitleBarAction"
             android:src="@mipmap/c_paly_icon_download" />
 
