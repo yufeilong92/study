@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/pop_img_handin" />
+            android:src="@mipmap/pop_img_handin" />
 
         <TextView
             android:layout_width="match_parent"

@@ -10,7 +10,7 @@
         android:layout_height="@dimen/space_18"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/space_16"
-        android:src="@drawable/ic_node" />
+        android:src="@mipmap/ic_node" />
 
     <TextView
         android:id="@+id/tv_atricle_tree"
@@ -25,7 +25,7 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:src="@drawable/ic_more_go"
+        android:src="@mipmap/ic_more_go"
         android:padding="@dimen/space_8"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"

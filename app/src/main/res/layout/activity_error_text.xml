@@ -13,7 +13,7 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@drawable/ic_back"
+            android:src="@mipmap/ic_back"
             tools:ignore="OnClick" />
 
         <TextView style="@style/TitleBarText" />
@@ -38,7 +38,7 @@
                 android:id="@+id/ll_error_hear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_wt_bg"
+                android:background="@mipmap/ic_wt_bg"
                 android:gravity="center"
                 android:orientation="vertical">
 

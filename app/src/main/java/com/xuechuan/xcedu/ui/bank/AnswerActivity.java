@@ -635,14 +635,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mVBLineBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_pau);
+                mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
                 DialogUtil dialogUtil = DialogUtil.getInstance();
                 dialogUtil.showStopDialog(mContext);
                 mTimeUitl.pause();
                 dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
                     @Override
                     public void onNextClickListener() {
-                        mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_cont);
+                        mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_cont);
                         mTimeUitl.resume();
                     }
                 });
@@ -2224,7 +2224,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                     showAnswerCardResultLayout();
                                     //取消时间
                                     mTimeUitl.cancel();
-                                    mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_cont);
+                                    mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_cont);
                                     mVBLineBar.setClickable(false);
                                     mActivityTitleText.setText(startTime);
                                     popAnswer.getPopupWindow().dismiss();
@@ -2552,11 +2552,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private void setSelectOnlyItemBG(boolean a, boolean b, boolean c, boolean d,
                                      boolean e) {
-        setImgBg(mIvBA, a, R.drawable.ic_b_single_a_s, R.drawable.ic_b_single_a_n);
-        setImgBg(mIvBB, b, R.drawable.ic_b_single_b_s, R.drawable.ic_b_single_b_n);
-        setImgBg(mIvBC, c, R.drawable.ic_b_single_c_s, R.drawable.ic_b_single_c_n);
-        setImgBg(mIvBD, d, R.drawable.ic_b_single_d_s, R.drawable.ic_b_single_d_n);
-        setImgBg(mIvBE, e, R.drawable.ic_b_e_s, R.drawable.ic_b_e_n);
+        setImgBg(mIvBA, a, R.mipmap.ic_b_single_a_s, R.mipmap.ic_b_single_a_n);
+        setImgBg(mIvBB, b, R.mipmap.ic_b_single_b_s, R.mipmap.ic_b_single_b_n);
+        setImgBg(mIvBC, c, R.mipmap.ic_b_single_c_s, R.mipmap.ic_b_single_c_n);
+        setImgBg(mIvBD, d, R.mipmap.ic_b_single_d_s, R.mipmap.ic_b_single_d_n);
+        setImgBg(mIvBE, e, R.mipmap.ic_b_e_s, R.mipmap.ic_b_e_n);
     }
 
     private void clearMoreBG() {
@@ -2574,15 +2574,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private void setSelectMoreItemBG(int id, boolean isSelect) {
         if (id == 0) {
-            setImgBg(mIvBA, isSelect, R.drawable.ic_b_a_s, R.drawable.ic_b_a_n);
+            setImgBg(mIvBA, isSelect, R.mipmap.ic_b_a_s, R.mipmap.ic_b_a_n);
         } else if (id == 1) {
-            setImgBg(mIvBB, isSelect, R.drawable.ic_b_b_s, R.drawable.ic_b_b_n);
+            setImgBg(mIvBB, isSelect, R.mipmap.ic_b_b_s, R.mipmap.ic_b_b_n);
         } else if (id == 2) {
-            setImgBg(mIvBC, isSelect, R.drawable.ic_b_c_s, R.drawable.ic_b_c_n);
+            setImgBg(mIvBC, isSelect, R.mipmap.ic_b_c_s, R.mipmap.ic_b_c_n);
         } else if (id == 3) {
-            setImgBg(mIvBD, isSelect, R.drawable.ic_b_d_s, R.drawable.ic_b_d_n);
+            setImgBg(mIvBD, isSelect, R.mipmap.ic_b_d_s, R.mipmap.ic_b_d_n);
         } else if (id == 4) {
-            setImgBg(mIvBE, isSelect, R.drawable.ic_b_e_s, R.drawable.ic_b_e_n);
+            setImgBg(mIvBE, isSelect, R.mipmap.ic_b_e_s, R.mipmap.ic_b_e_n);
         }
 
     }
@@ -2599,7 +2599,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (select.equalsIgnoreCase(answer)) {//选项正确
             ImageView imageView0 = selectItemName(select);
             if (imageView0 != null) {
-                imageView0.setImageResource(R.drawable.ic_b_right);
+                imageView0.setImageResource(R.mipmap.ic_b_right);
             }
             TextView textView = selectTextView(select);
             if (textView != null) {
@@ -2608,11 +2608,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         } else {
             ImageView imageView1 = selectItemName(select);
             if (imageView1 != null) {
-                imageView1.setImageResource(R.drawable.ic_b_singlewrong);
+                imageView1.setImageResource(R.mipmap.ic_b_singlewrong);
             }
             ImageView imageView2 = selectItemName(answer);
             if (imageView2 != null) {
-                imageView2.setImageResource(R.drawable.ic_b_right);
+                imageView2.setImageResource(R.mipmap.ic_b_right);
             }
             TextView textView = selectTextView(select);
             if (textView != null)
@@ -2859,7 +2859,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param imgRight
      */
     private void setImgRight(ImageView imgRight) {
-        imgRight.setImageResource(R.drawable.ic_b_text_right);
+        imgRight.setImageResource(R.mipmap.ic_b_text_right);
     }
 
     /**
@@ -2877,7 +2877,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param imgError
      */
     private void setImgError(ImageView imgError) {
-        imgError.setImageResource(R.drawable.ic_b_erro);
+        imgError.setImageResource(R.mipmap.ic_b_erro);
     }
 
     /**
@@ -2895,7 +2895,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param imgMiss
      */
     private void setImgMiss(ImageView imgMiss) {
-        imgMiss.setImageResource(R.drawable.ic_b_miss);
+        imgMiss.setImageResource(R.mipmap.ic_b_miss);
     }
 
     /**
@@ -3074,7 +3074,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         list.add(mIvBStar5);
         for (int i = 0; i < number; i++) {
             ImageView imageView = list.get(i);
-            imageView.setImageResource(R.drawable.ic_b_difficulty_s);
+            imageView.setImageResource(R.mipmap.ic_b_difficulty_s);
         }
 
     }
@@ -3405,7 +3405,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 showAnswerCardResultLayout();
                 //取消时间
                 mTimeUitl.cancel();
-                mIvTimePlay.setImageResource(R.drawable.qbank_answer_icon_cont);
+                mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_cont);
                 mVBLineBar.setClickable(false);
                 mActivityTitleText.setText(startTime);
                 popAnswer.getPopupWindow().dismiss();

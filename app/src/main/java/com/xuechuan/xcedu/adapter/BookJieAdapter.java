@@ -66,10 +66,10 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
         holder.mTvItemJieTitle.setText(vo.getTitle());
         if (mClickList.contains(position)) {
             holder.mRlvJieContent.setVisibility(View.VISIBLE);
-            holder.mIvJieGo.setImageResource(R.drawable.ic_spread_gray);
+            holder.mIvJieGo.setImageResource(R.mipmap.ic_spread_gray);
             requestJieData(holder, vo);
         } else {
-            holder.mIvJieGo.setImageResource(R.drawable.ic_more_go);
+            holder.mIvJieGo.setImageResource(R.mipmap.ic_more_go);
             holder.mRlvJieContent.setVisibility(View.GONE);
         }
 
@@ -85,14 +85,14 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
                 }
                 if (!mClickList.contains(position)) {
                     mClickList.add(position);
-                    holder.mIvJieGo.setImageResource(R.drawable.ic_spread_gray);
+                    holder.mIvJieGo.setImageResource(R.mipmap.ic_spread_gray);
                     holder.mRlvJieContent.setVisibility(View.VISIBLE);
                     requestJieData(holder, vo);
                 } else {
                     for (int i = 0; i < mClickList.size(); i++) {
                         if (mClickList.get(i) == position) {
                             mClickList.remove(i);
-                            holder.mIvJieGo.setImageResource(R.drawable.ic_more_go);
+                            holder.mIvJieGo.setImageResource(R.mipmap.ic_more_go);
                             holder.mRlvJieContent.setVisibility(View.GONE);
                         }
                     }

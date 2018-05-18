@@ -14,7 +14,7 @@
         <ImageView
             android:onClick="onHomeClick"
             style="@style/TitleBarAction"
-            android:src="@drawable/ic_back"
+            android:src="@mipmap/ic_back"
             tools:ignore="OnClick" />
 
         <TextView

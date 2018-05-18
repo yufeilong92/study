@@ -205,23 +205,23 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
         mChbBCase.setChecked(cased);
         Drawable homeDrawable;
         if (skill) {
-            homeDrawable = getResources().getDrawable(R.drawable.ic_tab_line_s);
+            homeDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_s);
         } else {
-            homeDrawable = getResources().getDrawable(R.drawable.ic_tab_line_n);
+            homeDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_n);
         }
         mIvBLineBg.setImageDrawable(homeDrawable);
         Drawable banDrawable;
         if (co) {
-            banDrawable = getResources().getDrawable(R.drawable.ic_tab_line_s);
+            banDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_s);
         } else {
-            banDrawable = getResources().getDrawable(R.drawable.ic_tab_line_n);
+            banDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_n);
         }
         mIvBLineBg1.setImageDrawable(banDrawable);
         Drawable netDrawable;
         if (cased) {
-            netDrawable = getResources().getDrawable(R.drawable.ic_tab_line_s);
+            netDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_s);
         } else {
-            netDrawable = getResources().getDrawable(R.drawable.ic_tab_line_n);
+            netDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_n);
         }
         mIvBLineBg2.setImageDrawable(netDrawable);
 

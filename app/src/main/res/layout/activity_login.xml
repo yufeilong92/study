@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_login_phone" />
+                android:src="@mipmap/ic_login_phone" />
 
             <EditText
 
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_login_password" />
+                android:src="@mipmap/ic_login_password" />
 
             <EditText
                 android:id="@+id/et_login_password"
@@ -159,6 +159,6 @@
         android:layout_width="@dimen/spance_50"
         android:layout_height="@dimen/spance_50"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_login_wechat" />
+        android:src="@mipmap/ic_login_wechat" />
 
 </LinearLayout>

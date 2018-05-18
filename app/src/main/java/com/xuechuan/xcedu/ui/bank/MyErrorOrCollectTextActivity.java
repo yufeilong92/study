@@ -108,11 +108,11 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
         if (mType.equals(ERRTYPE)) {
             con = ERRTYPE;
             content = getString(R.string.myError);
-            mLlErrorHear.setBackgroundResource(R.drawable.ic_wt_bg);
+            mLlErrorHear.setBackgroundResource(R.mipmap.ic_wt_bg);
         } else if (mType.equals(FAVTYPE)) {
             con = FAVTYPE;
             content = getString(R.string.MyCollor);
-            mLlErrorHear.setBackgroundResource(R.drawable.ic_col_bg);
+            mLlErrorHear.setBackgroundResource(R.mipmap.ic_col_bg);
         }
         mPresenter.reqeusetQuestionCount(mContext, mCouresid, mQuestion, con);
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));

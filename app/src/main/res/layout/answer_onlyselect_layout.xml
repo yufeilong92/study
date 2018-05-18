@@ -276,34 +276,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/space_4"
-                        android:src="@drawable/ic_b_difficulty_n" />
+                        android:src="@mipmap/ic_b_difficulty_n" />
 
                     <ImageView
                         android:id="@+id/iv_b_star2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/space_4"
-                        android:src="@drawable/ic_b_difficulty_n" />
+                        android:src="@mipmap/ic_b_difficulty_n" />
 
                     <ImageView
                         android:id="@+id/iv_b_star3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/space_4"
-                        android:src="@drawable/ic_b_difficulty_n" />
+                        android:src="@mipmap/ic_b_difficulty_n" />
 
                     <ImageView
                         android:id="@+id/iv_b_star4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/space_4"
-                        android:src="@drawable/ic_b_difficulty_n" />
+                        android:src="@mipmap/ic_b_difficulty_n" />
 
                     <ImageView
                         android:id="@+id/iv_b_star5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_b_difficulty_n" />
+                        android:src="@mipmap/ic_b_difficulty_n" />
                 </LinearLayout>
 
             </LinearLayout>

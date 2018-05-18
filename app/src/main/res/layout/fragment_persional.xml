@@ -21,7 +21,7 @@
             android:id="@+id/iv_m_hear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_m_hear" />
+            android:src="@mipmap/ic_m_hear" />
 
         <Space style="@style/space_16_height" />
 
@@ -46,7 +46,7 @@
                 android:id="@+id/iv_m_edith"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_m_edit" />
+                android:src="@mipmap/ic_m_edit" />
         </LinearLayout>
 
         <Space style="@style/space_16_height" />
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_marginRight="@dimen/space_16"
-            android:background="@drawable/ics_m_bg"
+            android:background="@mipmap/ics_m_bg"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -80,7 +80,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_m_massage" />
+                    android:src="@mipmap/ic_m_massage" />
 
                 <Space style="@style/space_8_height" />
 
@@ -101,7 +101,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_m_download" />
+                    android:src="@mipmap/ic_m_download" />
 
                 <Space style="@style/space_8_height" />
 
@@ -122,7 +122,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_m_oder" />
+                    android:src="@mipmap/ic_m_oder" />
 
                 <Space style="@style/space_8_height" />
 
@@ -148,7 +148,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_m_added_value" />
+            android:src="@mipmap/ic_m_added_value" />
 
         <Space style="@style/space_8_width" />
 
@@ -165,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:drawablePadding="@dimen/space_8"
-            android:drawableRight="@drawable/ic_more_go"
+            android:drawableRight="@mipmap/ic_more_go"
             android:gravity="center"
             android:text="服务陈总之"
             android:textColor="@color/hint_text"
@@ -185,7 +185,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_m_confirm" />
+            android:src="@mipmap/ic_m_confirm" />
 
         <Space style="@style/space_8_width" />
 
@@ -202,7 +202,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:drawablePadding="@dimen/space_8"
-            android:drawableRight="@drawable/ic_more_go"
+            android:drawableRight="@mipmap/ic_more_go"
             android:gravity="center"
             android:text="服务陈总之"
             android:textColor="@color/hint_text"
@@ -225,7 +225,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_m_feedback" />
+            android:src="@mipmap/ic_m_feedback" />
 
         <Space style="@style/space_8_width" />
 
@@ -253,7 +253,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_m_notice" />
+            android:src="@mipmap/ic_m_notice" />
 
         <Space style="@style/space_8_width" />
 
@@ -280,7 +280,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_m_setting" />
+            android:src="@mipmap/ic_m_setting" />
 
         <Space style="@style/space_8_width" />
 

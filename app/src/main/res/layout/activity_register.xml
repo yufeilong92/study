@@ -15,7 +15,7 @@
         <ImageView
             style="@style/TitleBarAction"
             android:onClick="onHomeClick"
-            android:src="@mipmap/back" />
+            android:src="@mipmap/ic_back" />
 
         <TextView
             style="@style/TitleBarText"
@@ -61,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_login_phone" />
+                        android:src="@mipmap/ic_login_phone" />
 
                     <EditText
                         android:id="@+id/et_register_phone"
@@ -83,7 +83,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_login_code" />
+                        android:src="@mipmap/ic_login_code" />
 
                     <EditText
                         android:id="@+id/et_register_code"
@@ -137,7 +137,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_login_password" />
+                        android:src="@mipmap/ic_login_password" />
 
                     <EditText
                         android:id="@+id/et_register_paw"
@@ -159,7 +159,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_login_password" />
+                        android:src="@mipmap/ic_login_password" />
 
                     <EditText
                         android:id="@+id/et_register_paws"

@@ -62,7 +62,7 @@
                     android:id="@+id/tv_evalue_evalue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_comment"
+                    android:drawableLeft="@mipmap/ic_comment"
                     android:drawablePadding="@dimen/space_8"
                     android:text="评论" />
 

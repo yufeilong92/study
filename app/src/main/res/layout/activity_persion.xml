@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/space_8"
-        android:src="@drawable/ic_m_hear" />
+        android:src="@mipmap/ic_m_hear" />
 
     <View style="@style/view_line_1_gray" />
 

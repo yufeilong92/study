@@ -25,7 +25,7 @@
             <ImageView
                 android:layout_width="@dimen/space_56"
                 android:layout_height="@dimen/space_56"
-                android:src="@drawable/ic_wrong_topic" />
+                android:src="@mipmap/ic_wrong_topic" />
 
             <Space style="@style/space_8_width" />
 
@@ -63,7 +63,7 @@
             <ImageView
                 android:layout_width="@dimen/space_56"
                 android:layout_height="@dimen/space_56"
-                android:src="@drawable/ic_collection_bank" />
+                android:src="@mipmap/ic_collection_bank" />
 
             <Space style="@style/space_8_width" />
 
@@ -105,7 +105,7 @@
             android:layout_width="166dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_chapter_practice" />
+            android:src="@mipmap/ic_chapter_practice" />
 
         <Space style="@style/space_8_width" />
 
@@ -114,7 +114,7 @@
             android:layout_width="166dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_mocke_xam" />
+            android:src="@mipmap/ic_mocke_xam" />
 
     </LinearLayout>
     <Space style="@style/space_20_height"/>
@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_compo_site"
+            android:drawableTop="@mipmap/ic_compo_site"
             android:gravity="center_horizontal"
             android:text="@string/skill_free_composition" />
 
@@ -139,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_special_zhuan"
+            android:drawableTop="@mipmap/ic_special_zhuan"
             android:gravity="center_horizontal"
             android:text="@string/special_practice" />
 
@@ -148,7 +148,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_sequence_shun"
+            android:drawableTop="@mipmap/ic_sequence_shun"
             android:gravity="center_horizontal"
             android:text="@string/sequential_exercise" />
     </LinearLayout>

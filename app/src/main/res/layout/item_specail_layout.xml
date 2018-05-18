@@ -10,7 +10,7 @@
         android:layout_height="@dimen/space_18"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/space_16"
-        android:src="@drawable/ic_node" />
+        android:src="@mipmap/ic_node" />
 
     <TextView
         android:layout_weight="1"
@@ -25,7 +25,7 @@
     <ImageView
         android:layout_gravity="center_vertical"
         android:id="@+id/iv_speacl_next"
-        android:src="@drawable/ic_more_go"
+        android:src="@mipmap/ic_more_go"
         android:layout_width="@dimen/space_48"
         android:layout_height="@dimen/space_16" />
 </LinearLayout>

@@ -24,7 +24,7 @@
             android:layout_width="@dimen/bottom_layout_height"
             android:layout_height="match_parent"
             android:padding="12dp"
-            android:src="@drawable/ic_back"
+            android:src="@mipmap/ic_back"
           />
 
         <LinearLayout
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/qbank_answer_icon_cont" />
+                android:src="@mipmap/qbank_answer_icon_cont" />
 
             <TextView
                 android:id="@+id/activity_title_text"
@@ -58,7 +58,7 @@
          <ImageView
              android:visibility="gone"
              android:id="@+id/iv_bar_delect"
-             android:src="@drawable/q_nav_delect_black"
+             android:src="@mipmap/q_nav_delect_black"
              android:layout_width="wrap_content"
              android:padding="@dimen/space_8"
              android:layout_height="match_parent" />
@@ -67,7 +67,7 @@
             android:layout_width="@dimen/bottom_layout_height"
             android:layout_height="match_parent"
             android:padding="12dp"
-            android:src="@drawable/ic_more" />
+            android:src="@mipmap/ic_more" />
     </LinearLayout>
 
     <View
@@ -278,7 +278,7 @@
                     <ImageView
                         android:layout_width="@dimen/space_18"
                         android:layout_height="@dimen/space_18"
-                        android:src="@drawable/ic_b_last" />
+                        android:src="@mipmap/ic_b_last" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -307,7 +307,7 @@
                     <ImageView
                         android:layout_width="@dimen/space_18"
                         android:layout_height="@dimen/space_18"
-                        android:src="@drawable/ic_b_next" />
+                        android:src="@mipmap/ic_b_next" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -324,7 +324,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:padding="@dimen/space_8"
-                    android:src="@drawable/ic_b_card" />
+                    android:src="@mipmap/ic_b_card" />
 
                 <TextView
                     android:id="@+id/tv_b_new"

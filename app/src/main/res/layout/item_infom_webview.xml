@@ -25,7 +25,7 @@
         android:layout_width="@dimen/space_100dp"
         android:layout_height="@dimen/space_100dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/ic_home_supper"
+        android:background="@mipmap/ic_home_supper"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="@dimen/space_16">
