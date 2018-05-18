@@ -73,7 +73,7 @@ import com.xuechuan.xcedu.vo.QuestionAllVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 import com.xuechuan.xcedu.vo.TextDetailVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
-import com.xuechuan.xcedu.vo.UserLookVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.MyRecyclerView;
 import com.xuechuan.xcedu.weight.SmartScrollView;

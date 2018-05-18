@@ -154,7 +154,14 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             }
         }
     };
+    //显示框的布局
     private RelativeLayout mRlPlayLayout;
+    //购买布局
+    private LinearLayout mLiNetBuyLayout;
+    /**
+     * 是否播放
+     */
+    private boolean mIsplay;
 
     // 更新显示的播放进度，以及暂停/播放按钮
     private void showProgress() {
@@ -215,12 +222,15 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     public void initConfig(ViewGroup parentView) {
         this.parentView = parentView;
     }
+
     /**
      * 状态栏
      */
-    public void initTitltBar(LinearLayout parentView, RelativeLayout mRlPlaylayout) {
+    public void initTitltBar(LinearLayout parentView, RelativeLayout mRlPlaylayout, LinearLayout mLlNetBuyLayou) {
         this.mTitleBarlayout = parentView;
-        this.mRlPlayLayout=mRlPlaylayout;
+        this.mRlPlayLayout = mRlPlaylayout;
+        if (mLlNetBuyLayou != null)
+            this.mLiNetBuyLayout = mLlNetBuyLayou;
     }
 
     private void findIdAndNew() {
@@ -488,7 +498,13 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         //初始为横屏时，状态栏需要隐藏
         PolyvScreenUtils.hideStatusBar(videoActivity);
         mTitleBarlayout.setVisibility(GONE);
-        mRlPlayLayout.setVisibility(GONE);
+        if (mIsplay) {
+            mRlPlayLayout.setVisibility(GONE);
+        } else {
+            mRlPlayLayout.setVisibility(VISIBLE);
+        }
+        if (mLiNetBuyLayout != null)
+            mLiNetBuyLayout.setVisibility(GONE);
         //初始为横屏时，控制栏的宽高需要设置
         initLandScapeWH();
     }
@@ -507,8 +523,18 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     public void changeToPortrait() {
         PolyvScreenUtils.setPortrait(videoActivity);
         mTitleBarlayout.setVisibility(VISIBLE);
-        mRlPlayLayout.setVisibility(VISIBLE);
+        if (mIsplay) {
+            mRlPlayLayout.setVisibility(GONE);
+        } else {
+            mRlPlayLayout.setVisibility(VISIBLE);
+        }
+        if (mLiNetBuyLayout != null)
+            mLiNetBuyLayout.setVisibility(VISIBLE);
         initPortraitWH();
+    }
+
+    public void setIsPlay(boolean isPlay) {
+        this.mIsplay = isPlay;
     }
 
     private void initPortraitWH() {
@@ -642,7 +668,6 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             sb_play_land.setVisibility(isVisible);
         }
     }
-
 
 
     //重置设置布局的显示状态
@@ -1039,7 +1064,6 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             hide();
         }
     }
-
 
 
     //网络截图

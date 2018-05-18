@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/ll_net_play_root"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
@@ -82,23 +82,25 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
                 android:visibility="gone" />
+
             <RelativeLayout
                 android:id="@+id/rl_play_layout"
-                android:background="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/white">
 
-            <ImageView
-                android:id="@+id/iv_net_play"
-                android:src="@mipmap/banner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_200" />
-             <ImageView
-                 android:id="@+id/iv_net_book_play"
-                 android:layout_centerInParent="true"
-                 android:src="@mipmap/c_np_icon_try"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/iv_net_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_200"
+                    android:src="@mipmap/banner" />
+
+                <ImageView
+                    android:id="@+id/iv_net_book_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/c_np_icon_try" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -127,56 +129,62 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <View style="@style/view_line_tab_line" />
-
     <LinearLayout
+        android:id="@+id/ll_net_buy_layou"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/space_48"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/text_size_16"
-        android:paddingRight="@dimen/text_size_16">
+        android:layout_height="wrap_content">
+        <View style="@style/view_line_tab_line" />
+        <LinearLayout
 
-        <TextView
-            android:id="@+id/tv_net_book_allprice"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="tttttttt"
-            android:textColor="@color/red_text"
-            android:textSize="@dimen/text_size_20" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:id="@+id/tv_net_contact_service"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/c_n_p_icon_service"
-            android:drawablePadding="@dimen/space_8"
+            android:layout_height="@dimen/space_48"
+            android:layout_alignParentBottom="true"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/text_size_16"
+            android:paddingRight="@dimen/text_size_16">
 
-            android:text="练习客服"
-            android:textColor="@color/text_fu_color"
-            android:textSize="@dimen/text_size_12" />
+            <TextView
+                android:id="@+id/tv_net_book_allprice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="tttttttt"
+                android:textColor="@color/red_text"
+                android:textSize="@dimen/text_size_20" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="@dimen/space_16"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8"
-            android:layout_marginTop="@dimen/space_16"
-            android:background="@color/login_line_color" />
+            <TextView
+                android:id="@+id/tv_net_contact_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/c_n_p_icon_service"
+                android:drawablePadding="@dimen/space_8"
+                android:gravity="center_vertical"
 
-        <Button
-            android:id="@+id/btn_net_go_buy"
-            android:layout_width="110dp"
-            android:layout_height="32dp"
-            android:background="@drawable/btn_login_bg_normal"
-            android:paddingLeft="@dimen/space_8"
-            android:text="立即购买"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_18" />
+                android:text="练习客服"
+                android:textColor="@color/text_fu_color"
+                android:textSize="@dimen/text_size_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/space_16"
+                android:layout_marginLeft="@dimen/space_8"
+                android:layout_marginRight="@dimen/space_8"
+                android:layout_marginTop="@dimen/space_16"
+                android:background="@color/login_line_color" />
+
+            <Button
+                android:id="@+id/btn_net_go_buy"
+                android:layout_width="110dp"
+                android:layout_height="32dp"
+                android:background="@drawable/btn_login_bg_normal"
+                android:paddingLeft="@dimen/space_8"
+                android:text="立即购买"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_18" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

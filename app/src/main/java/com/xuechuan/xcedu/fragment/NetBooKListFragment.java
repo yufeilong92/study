@@ -33,7 +33,7 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: NetBooKListFragment
  * @Package com.xuechuan.xcedu.fragment
- * @Description: 课程表。
+ * @Description: 未购买课程表。
  * @author: L-BackPacker
  * @date: 2018/5/14 17:07
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

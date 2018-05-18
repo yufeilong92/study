@@ -14,18 +14,22 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.ItemSelectVo;
+import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: todo
+ * @Description: 未购买适配器
  * @author: L-BackPacker
  * @date: 2018/5/15 15:52
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
@@ -35,15 +39,33 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
     private Context mContext;
     private List<ChaptersBeanVo> mData;
     private final LayoutInflater mInflater;
-    private CheckBox mChbNetPlay;
-    private TextView mTvNetTitle;
-    private ImageView mIvNetGoorbuy;
-
+    //    用户选中集合
+    public static List<SelectVo> mSelect = new ArrayList<>();
 
     public NetTableAdapter(Context mContext, List<ChaptersBeanVo> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
+        init(mData);
+    }
+    private void init(List<ChaptersBeanVo> mData) {
+        if (mSelect.size() > 0) {
+            mSelect.clear();
+        }
+        for (int i = 0; i < mData.size(); i++) {
+            ChaptersBeanVo vo = mData.get(i);
+            SelectVo selectVo = new SelectVo();
+            selectVo.setParenid(i + "");
+            ArrayList<ItemSelectVo> list = new ArrayList<>();
+            for (int j = 0; j < vo.getVideos().size(); j++) {
+                ItemSelectVo itemSelect = new ItemSelectVo();
+                itemSelect.setId(j + "");
+                itemSelect.setSelect(false);
+                list.add(itemSelect);
+            }
+            selectVo.setData(list);
+            mSelect.add(selectVo);
+        }
     }
 
     @Override
@@ -61,7 +83,6 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position, boolean isItem) {
         ChaptersBeanVo vo = mData.get(position);
-        holder.mChbNetPlay.setVisibility(View.GONE);
         holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_more_go);
         holder.mTvNetTitle.setText(vo.getChaptername());
         List<VideosBeanVo> videos = vo.getVideos();
@@ -73,7 +94,10 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
                 }
             }
             holder.mRlvNetBookJie.setVisibility(View.VISIBLE);
-            bindjieAdaper(holder, videos);
+            if (mSelect.size() <= 0) {
+                init(mData);
+            }
+            bindjieAdaper(holder, videos, position);
         } else {
             holder.mRlvNetBookJie.setVisibility(View.GONE);
         }
@@ -93,12 +117,27 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
 
     }
 
-    private void bindjieAdaper(ViewHolder holder, List<VideosBeanVo> videos) {
+    private void bindjieAdaper(ViewHolder holder, List<VideosBeanVo> videos,final int fatherPosition) {
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
         holder.mRlvNetBookJie.setLayoutManager(manager);
-        NetTablejiEAdapter adapter = new NetTablejiEAdapter(mContext, videos);
+        NetTablejiEAdapter adapter = new NetTablejiEAdapter(mContext, videos,fatherPosition,mSelect);
         holder.mRlvNetBookJie.setAdapter(adapter);
+        adapter.setClickListener(new NetMyTablejiEAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(VideosBeanVo vo, int position) {
+                init(mData);
+                SelectVo vo1 = mSelect.get(fatherPosition);
+                ItemSelectVo itemSelect = vo1.getData().get(position);
+                itemSelect.setSelect(true);
+                notifyDataSetChanged();
+                if (vo.isIstrysee()) {
+                    EventBus.getDefault().postSticky(new NetPlayEvent(vo));
+                } else {
+                    T.showToast(mContext, "该视频提供试看");
+                }
+            }
+        });
     }
 
     @Override
@@ -107,7 +146,6 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public CheckBox mChbNetPlay;
         public TextView mTvNetTitle;
         public ImageView mIvNetGoorbuy;
         public RecyclerView mRlvNetBookJie;
@@ -115,7 +153,6 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
         public ViewHolder(View itemView) {
             super(itemView);
             this.mRlvNetBookJie = (RecyclerView) itemView.findViewById(R.id.rlv_net_book_jie);
-            this.mChbNetPlay = (CheckBox) itemView.findViewById(R.id.chb_net_play);
             this.mTvNetTitle = (TextView) itemView.findViewById(R.id.tv_net_title);
             this.mIvNetGoorbuy = (ImageView) itemView.findViewById(R.id.iv_net_goorbuy);
         }

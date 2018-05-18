@@ -1,14 +1,16 @@
 package com.xuechuan.xcedu.ui.net;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -75,6 +77,7 @@ import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
@@ -103,7 +106,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/16
  */
-public class NetBookMyInfomActivity extends BaseActivity implements View.OnClickListener{
+public class NetBookMyInfomActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = NetBookMyInfomActivity.class.getSimpleName();
     /**
@@ -235,7 +238,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         initView();
         initViewData();
         PolyvScreenUtils.generateHeight16_9(this);
-        PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout);
+        PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout, null);
         int playModeCode = getIntent().getIntExtra("playMode", PlayMode.portrait.getCode());
         PlayMode playMode = PlayMode.getPlayMode(playModeCode);
         if (playMode == null)
@@ -364,7 +367,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         volumeView = (PolyvPlayerVolumeView) findViewById(R.id.polyv_player_volume_view);
         progressView = (PolyvPlayerProgressView) findViewById(R.id.polyv_player_progress_view);
         loadingProgress = (ProgressBar) findViewById(R.id.loading_progress);
-        mediaController.initTitltBar(ll_title_bar, mRlPlaylayout);
+        mediaController.initTitltBar(ll_title_bar, mRlPlaylayout, null);
         mediaController.initConfig(viewLayout);
         videoView.setMediaController(mediaController);
         videoView.setPlayerBufferingIndicator(loadingProgress);
@@ -700,8 +703,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if (!StringUtil.isEmpty(vid)) {
-                    mRlPlaylayout.setVisibility(View.GONE);
-                    play(vid, 0, true, false);
+                    play();
                 }
                 break;
             case R.id.iv_net_icon_my_down://我的下载
@@ -716,6 +718,12 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    private void play() {
+        mRlPlaylayout.setVisibility(View.GONE);
+        play(vid, 0, true, false);
+        mediaController.setIsPlay(true);
+        PolyvScreenUtils.IsPlay(true);
+    }
 
 
     /**
@@ -778,6 +786,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             private RadioButton mChbNetPopDownLiu;
             private RadioButton mChbNetPopDownGao;
             private RadioButton mChbNetPopDownChao;
+            int bitrer = 3;
 
             @Override
             protected void initView() {
@@ -813,7 +822,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            GetNetBookService(3);
+                            bitrer = 3;
                         }
                     }
                 });
@@ -821,7 +830,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            GetNetBookService(2);
+                            bitrer = 2;
                         }
                     }
                 });
@@ -829,11 +838,16 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            GetNetBookService(1);
+                            bitrer = 1;
                         }
                     }
                 });
-                GetNetBookService(3);
+                mBtnPopDownAll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        GetNetBookService(mTableList, bitrer);
+                    }
+                });
 
             }
 
@@ -841,11 +855,45 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 GridLayoutManager manager = new GridLayoutManager(mContext, 1);
                 manager.setOrientation(GridLayoutManager.VERTICAL);
                 mRlvTableList.setLayoutManager(manager);
-                mDownAdapter = new NetMyDownTableAdapter(mContext, mTableList);
+                mDownAdapter = new NetMyDownTableAdapter(mContext, mTableList, dataVo.getId());
                 mRlvTableList.setAdapter(mDownAdapter);
+                mDownAdapter.setClickListener(new NetMyDownTableAdapter.onItemClickListener() {
+                    @Override
+                    public void onClickListener(ChaptersBeanVo obj, int position) {
+                        //添加到数据库
+                        List<ChaptersBeanVo> list = new ArrayList<>();
+                        ChaptersBeanVo vo = new ChaptersBeanVo();
+                        vo.setChapterid(obj.getChapterid());
+                        vo.setChaptername(obj.getChaptername());
+                        vo.setCourseid(obj.getCourseid());
+                        List<VideosBeanVo> vos = new ArrayList<>();
+                        VideosBeanVo beanVo = obj.getVideos().get(position);
+                        vos.add(beanVo);
+                        vo.setVideos(vos);
+                        list.add(vo);
+                        GetNetBookService(list, bitrer);
+                        ServiceConnection serviceConnection = new ServiceConnection() {
+                            @Override
+                            public void onServiceConnected(ComponentName name, IBinder service) {
+
+                            }
+
+                            @Override
+                            public void onServiceDisconnected(ComponentName name) {
+
+                            }
+                        };
+                        mDownAdapter.notify();
+                        mDownAdapter.notifyDataSetChanged();
+
+
+                    }
+                });
 
 
             }
+
+
 
             @Override
             protected void initWindow() {
@@ -864,23 +912,18 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         setBackgroundAlpha(0.5f, NetBookMyInfomActivity.this);
     }
 
-    private void GetNetBookService(int i) {
-        if (mTableList == null || mTableList.isEmpty()) {
+    /**
+     * @param list
+     * @param bitrate 编码
+     */
+    private void GetNetBookService(List list, int bitrate) {
+        if (this.mTableList == null || this.mTableList.isEmpty()) {
             return;
         }
-        NetBookService.startActionBaz(mContext, mTableList, i);
-        NetBookService service = new NetBookService();
-        service.setBookResult(new NetBookService.RequestNetBookResult() {
-            @Override
-            public void netBookInfomSuccess(List<PolyvVlmsHelper.CurriculumsDetail> curriculumsDetails) {
 
-            }
+        NetBookService.startActionBaz(mContext, list, bitrate, String.valueOf(dataVo.getId()));
 
-            @Override
-            public void fail(List<VideosBeanVo> vos) {
 
-            }
-        });
 
     }
 
@@ -896,6 +939,12 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         lp.alpha = bgAlpha;
         ((Activity) mContext).getWindow().setAttributes(lp);
 
+    }
+
+    public void submitPlayProgress() {
+        PolyvVideoView view = new PolyvVideoView(mContext);
+        int position = view.getCurrentPosition();
+        Log.e(TAG, "submitPlayProgress: " + position);
     }
 
 }

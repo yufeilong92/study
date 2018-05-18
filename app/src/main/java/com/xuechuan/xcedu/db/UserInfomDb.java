@@ -3,7 +3,7 @@ package com.xuechuan.xcedu.db;
 import com.xuechuan.xcedu.db.Converent.UserConverent;
 import com.xuechuan.xcedu.db.Converent.UserLookConverent;
 import com.xuechuan.xcedu.vo.UserInfomVo;
-import com.xuechuan.xcedu.vo.UserLookVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVo;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;

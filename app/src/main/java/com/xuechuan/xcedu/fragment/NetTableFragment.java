@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * @Title:  NetTableFragment
  * @Package com.xuechuan.xcedu.fragment
- * @Description: 课程表
+ * @Description: 未购买课程表
  * @author: L-BackPacker
  * @date:   2018/5/15 16:40
  * @version V 1.0 xxxxxxxx

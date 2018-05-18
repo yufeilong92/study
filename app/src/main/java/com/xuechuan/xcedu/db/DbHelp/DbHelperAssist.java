@@ -1,7 +1,5 @@
 package com.xuechuan.xcedu.db.DbHelp;
 
-import com.umeng.debug.log.E;
-import com.umeng.debug.log.I;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.db.UserInfomDbDao;
@@ -9,7 +7,7 @@ import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
-import com.xuechuan.xcedu.vo.UserLookVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVo;
 
 import java.util.ArrayList;
 import java.util.List;

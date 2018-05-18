@@ -29,7 +29,7 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: todo
+ * @Description: 用户购买的课程表
  * @author: L-BackPacker
  * @date: 2018/5/15 15:52
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

@@ -241,7 +241,6 @@ public class MyAppliction extends MultiDexApplication {
                     Log.e(TAG, "没有可用的存储设备,后续不能使用视频缓存功能");
                     return;
                 }
-
                 //可移除的存储介质（例如 SD 卡），需要写入特定目录/storage/sdcard1/Android/data/包名/。
                 String externalSDCardPath = PolyvDevMountInfo.getInstance().getExternalSDCardPath();
                 if (!TextUtils.isEmpty(externalSDCardPath)) {

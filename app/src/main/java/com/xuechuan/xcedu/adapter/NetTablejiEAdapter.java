@@ -15,6 +15,8 @@ import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.ItemSelectVo;
+import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,24 +29,35 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.adapter
- * @Description: todo
+ * @Description: 未购买节适配器
  * @author: L-BackPacker
  * @date: 2018/5/15 15:52
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
 public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.ViewHolder> {
+    private final int mFatherPosition;
+    private final List<SelectVo> mSelect;
     private Context mContext;
     private List<VideosBeanVo> mData;
     private final LayoutInflater mInflater;
-    private CheckBox mChbNetPlay;
-    private TextView mTvNetTitle;
-    private ImageView mIvNetGoorbuy;
 
-    public NetTablejiEAdapter(Context mContext, List<VideosBeanVo> mData) {
+    public NetTablejiEAdapter(Context mContext, List<VideosBeanVo> mData, int fatherPosition, List<SelectVo> mSelect) {
         this.mContext = mContext;
         this.mData = mData;
+        this.mFatherPosition = fatherPosition;
+        this.mSelect = mSelect;
         mInflater = LayoutInflater.from(mContext);
+    }
+
+    private NetMyTablejiEAdapter.onItemClickListener clickListener;
+
+    public interface onItemClickListener {
+        public void onClickListener(VideosBeanVo vo, int position);
+    }
+
+    public void setClickListener(NetMyTablejiEAdapter.onItemClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -62,24 +75,27 @@ public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.V
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final VideosBeanVo vo = mData.get(position);
+        SelectVo selectVo = mSelect.get(mFatherPosition);
+        ItemSelectVo itemSelect = selectVo.getData().get(position);
+        holder.mChbNetPlay.setVisibility(View.VISIBLE);
+        if (itemSelect.isSelect()) {
+            holder.mChbNetPlay.setChecked(true);
+        } else {
+            holder.mChbNetPlay.setChecked(false);
+        }
         if (vo.isIstrysee()) {
             holder.mIvNetGoorbuy.setVisibility(View.GONE);
         } else {
             holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_login_password);
         }
-
-        holder.mChbNetPlay.setChecked(false);
-        holder.mChbNetPlay.setVisibility(View.VISIBLE);
         holder.mTvNetTitle.setText(vo.getVideoname());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.mChbNetPlay.setChecked(true);
-                if (vo.isIstrysee()) {
-                    EventBus.getDefault().postSticky(new NetPlayEvent(vo));
-                } else {
-                    T.showToast(mContext, "该视频提供试看");
+                if (clickListener!=null){
+                    clickListener.onClickListener(vo,position);
                 }
+
             }
         });
 
@@ -96,14 +112,12 @@ public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.V
         public CheckBox mChbNetPlay;
         public TextView mTvNetTitle;
         public ImageView mIvNetGoorbuy;
-        public RecyclerView mRlvNetBookJie;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mRlvNetBookJie = (RecyclerView) itemView.findViewById(R.id.rlv_net_book_jie);
-            this.mChbNetPlay = (CheckBox) itemView.findViewById(R.id.chb_net_play);
-            this.mTvNetTitle = (TextView) itemView.findViewById(R.id.tv_net_title);
-            this.mIvNetGoorbuy = (ImageView) itemView.findViewById(R.id.iv_net_goorbuy);
+            this.mChbNetPlay = (CheckBox) itemView.findViewById(R.id.chb_net_play_jie);
+            this.mTvNetTitle = (TextView) itemView.findViewById(R.id.tv_net_title_jie);
+            this.mIvNetGoorbuy = (ImageView) itemView.findViewById(R.id.iv_net_goorbuy_jie);
         }
     }
 

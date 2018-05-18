@@ -184,7 +184,15 @@
 
         <service
             android:name=".service.NetBookService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".DownActivity" />
+        <activity android:name=".ui.net.NetBookDowningActivity" />
+
+        <service
+            android:name=".service.DownBookService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

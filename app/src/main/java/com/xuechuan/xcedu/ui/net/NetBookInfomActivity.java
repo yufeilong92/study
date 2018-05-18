@@ -11,17 +11,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,7 +50,6 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.fragment.NetBooKListFragment;
 import com.xuechuan.xcedu.fragment.NetBookinfomFragment;
 import com.xuechuan.xcedu.fragment.NetTableFragment;
 import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
@@ -153,6 +148,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     private String vid;
     private CommonPopupWindow popDown;
     private LinearLayout mLlNetPlayRoot;
+    private LinearLayout mLlNetBuyLayou;
 
     public static Intent newInstance(Context context, CoursesBeanVo o) {
         Intent intent = new Intent(context, NetBookInfomActivity.class);
@@ -160,13 +156,13 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         return intent;
     }
 
-  /*  @Override
+ /*   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_net_book_infom);
         initView();
-    }*/
-
+    }
+*/
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
@@ -179,7 +175,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         initView();
         initViewData();
         PolyvScreenUtils.generateHeight16_9(this);
-        PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout);
+        PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout,mLlNetBuyLayou);
         int playModeCode = getIntent().getIntExtra("playMode", PlayMode.portrait.getCode());
         PlayMode playMode = PlayMode.getPlayMode(playModeCode);
         if (playMode == null)
@@ -202,9 +198,21 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         }
         initData();
         EventBus.getDefault().register(this);
+        initVideo();
 //        play("d740a56357c361f76cdd800b204e9800_d", 0, true, false);
     }
 
+    private void initVideo() {
+        submitPlayProgress();
+
+    }
+    public void submitPlayProgress(){
+        PolyvVideoView view = new PolyvVideoView(mContext);
+        int position = view.getCurrentPosition();
+        String  vid = view.getCurrentVid();
+        Log.e(TAG, "视频播放进度: "+position+"\n"+vid );
+
+    }
     private void initData() {
         if (dataVo != null) {
             mTvNetBookTitle.setText(dataVo.getName());
@@ -297,7 +305,9 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         volumeView = (PolyvPlayerVolumeView) findViewById(R.id.polyv_player_volume_view);
         progressView = (PolyvPlayerProgressView) findViewById(R.id.polyv_player_progress_view);
         loadingProgress = (ProgressBar) findViewById(R.id.loading_progress);
-        mediaController.initTitltBar(ll_title_bar, mRlPlaylayout);
+        mLlNetBuyLayou = (LinearLayout) findViewById(R.id.ll_net_buy_layou);
+        mLlNetBuyLayou.setOnClickListener(this);
+        mediaController.initTitltBar(ll_title_bar, mRlPlaylayout, mLlNetBuyLayou);
         mediaController.initConfig(viewLayout);
         videoView.setMediaController(mediaController);
         videoView.setPlayerBufferingIndicator(loadingProgress);
@@ -317,6 +327,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                 .setStrokeWidth(3) //描边宽度
                 .setStrokeColor(Color.MAGENTA) //描边颜色
                 .setStrokeAlpha(70)); //描边透明度
+
     }
 
 
@@ -672,12 +683,23 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.iv_net_book_play:
                 mRlPlaylayout.setVisibility(View.GONE);
-                if (!StringUtil.isEmpty(vid))
-                    play(vid, 0, true, false);
+                play();
                 break;
             default:
 
         }
+    }
+
+    /**
+     * 播放视频
+     */
+    private void play() {
+        if (!StringUtil.isEmpty(vid)) {
+            play(vid, 0, true, false);
+            mediaController.setIsPlay(true);
+            PolyvScreenUtils.IsPlay(true);
+        }
+
     }
 
     /**
@@ -721,7 +743,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             return null;
         }
     }
-
 
 
     /**

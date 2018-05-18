@@ -5,14 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.vo.ItemSelectVo;
-import com.xuechuan.xcedu.vo.SelectVo;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
+import com.xuechuan.xcedu.db.DownVideoDb;
+import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
 import java.util.List;
@@ -28,19 +28,16 @@ import java.util.List;
  * @Copyright: 2018
  */
 public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTablejiEAdapter.ViewHolder> {
-    private final int mFatherPosition;
+    private final int kid;
     private Context mContext;
     private List<VideosBeanVo> mData;
     private final LayoutInflater mInflater;
-    private List<SelectVo> mSelect;
 
-    public NetMyDownTablejiEAdapter(Context mContext, List<VideosBeanVo> mData, int postion,
-                                    List<SelectVo> mSelect) {
+    public NetMyDownTablejiEAdapter(Context mContext, List<VideosBeanVo> mData, int kid) {
         this.mContext = mContext;
         this.mData = mData;
+        this.kid = kid;
         mInflater = LayoutInflater.from(mContext);
-        this.mFatherPosition = postion;
-        this.mSelect = mSelect;
 
     }
 
@@ -65,10 +62,33 @@ public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTable
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final VideosBeanVo vo = mData.get(position);
         holder.mTvNetTitle.setText(vo.getVideoname());
+        List<DownVideoDb> dbList = DbHelperDownAssist.getInstance().queryUserDownInfom(kid);
+        holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));
+        if (dbList == null || dbList.isEmpty()) {
+            holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));
+        } else {
+            for (DownVideoDb db : dbList) {
+                for (DownVideoVo videoVo : db.getDownlist()) {//遍历是否有已经缓存的
+                    if (videoVo.getPid().equals(String.valueOf(vo.getChapterid())) && videoVo.getZid().equals(String.valueOf(vo.getVideoid()))) {
+                        String status = videoVo.getStatus();
+                        if (status.equals("0")) {
+                            holder.mTvPoPDownStatus.setText("已缓存");
+                        } else  if (status.equals("1")){
+                            holder.mTvPoPDownStatus.setText("正在缓存");
+                        }else if (status.equals("2")){
+                            holder.mTvPoPDownStatus.setText("正在准备");
+                        }
+                        holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.hint_text));
+                    }
+
+                }
+            }
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

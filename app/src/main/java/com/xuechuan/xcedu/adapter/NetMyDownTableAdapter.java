@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
+import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
@@ -34,37 +35,28 @@ import java.util.List;
  * @Copyright: 2018
  */
 public class NetMyDownTableAdapter extends BaseRecyclerAdapter<NetMyDownTableAdapter.ViewHolder> {
+    private final int kId;
     private Context mContext;
     private List<ChaptersBeanVo> mData;
     private LayoutInflater mInflater;
-    //    用户选中集合
-    public static List<SelectVo> mSelect = new ArrayList<>();
 
-    public NetMyDownTableAdapter(Context mContext, List<ChaptersBeanVo> mData) {
+
+    public NetMyDownTableAdapter(Context mContext, List<ChaptersBeanVo> mData, int id) {
         this.mContext = mContext;
         this.mData = mData;
-        init(mData);
+        this.kId=id;
         mInflater = LayoutInflater.from(mContext);
     }
 
-    private void init(List<ChaptersBeanVo> mData) {
-        if (mSelect.size() > 0) {
-            mSelect.clear();
-        }
-        for (int i = 0; i < mData.size(); i++) {
-            ChaptersBeanVo vo = mData.get(i);
-            SelectVo selectVo = new SelectVo();
-            selectVo.setParenid(i + "");
-            ArrayList<ItemSelectVo> list = new ArrayList<>();
-            for (int j = 0; j < vo.getVideos().size(); j++) {
-                ItemSelectVo itemSelect = new ItemSelectVo();
-                itemSelect.setId(j + "");
-                itemSelect.setSelect(false);
-                list.add(itemSelect);
-            }
-            selectVo.setData(list);
-            mSelect.add(selectVo);
-        }
+    private onItemClickListener clickListener;
+
+    public interface onItemClickListener {
+        public void onClickListener(ChaptersBeanVo obj, int position);
+
+    }
+    public void setClickListener(onItemClickListener clickListener) {
+        this.clickListener = clickListener;
+
     }
 
     @Override
@@ -86,50 +78,42 @@ public class NetMyDownTableAdapter extends BaseRecyclerAdapter<NetMyDownTableAda
         holder.mTvNetTitle.setText(vo.getChaptername());
         List<VideosBeanVo> videos = vo.getVideos();
         if (videos != null && !videos.isEmpty()) {
-            if (position == 0) {
-                VideosBeanVo videosBeanVo = videos.get(0);
-                if (videosBeanVo.isIstrysee()) {
-                    EventBus.getDefault().postSticky(new NetPlayTrySeeEvent(videosBeanVo));
-                }
-            }
             holder.mRlvNetBookJie.setVisibility(View.VISIBLE);
-            if (mSelect.size() <= 0) {
-                init(mData);
-            }
-            bindjieAdaper(holder, videos, position);
+            bindjieAdaper(holder, videos, vo);
         } else {
             holder.mRlvNetBookJie.setVisibility(View.GONE);
         }
-        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.mRlvNetBookJie.getVisibility() == View.GONE) {
-                    holder.mRlvNetBookJie.setVisibility(View.VISIBLE);
-                    holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_spread_gray);
-                } else {
-                    holder.mRlvNetBookJie.setVisibility(View.GONE);
-                    holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_more_go);
-                }
-            }
-        });*/
+        hine();
 
     }
 
-    private void bindjieAdaper(ViewHolder holder, List<VideosBeanVo> videos, final int aftherPosition) {
+    private void hine() {
+    /*holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (holder.mRlvNetBookJie.getVisibility() == View.GONE) {
+                holder.mRlvNetBookJie.setVisibility(View.VISIBLE);
+                holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_spread_gray);
+            } else {
+                holder.mRlvNetBookJie.setVisibility(View.GONE);
+                holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_more_go);
+            }
+        }
+    });*/
+    }
+
+    private void bindjieAdaper(ViewHolder holder, final List<VideosBeanVo> videos, final ChaptersBeanVo aftherPosition) {
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
         holder.mRlvNetBookJie.setLayoutManager(manager);
-        NetMyDownTablejiEAdapter adapter = new NetMyDownTablejiEAdapter(mContext, videos, aftherPosition, mSelect);
+        NetMyDownTablejiEAdapter adapter = new NetMyDownTablejiEAdapter(mContext, videos, kId);
         holder.mRlvNetBookJie.setAdapter(adapter);
         adapter.setClickListener(new NetMyDownTablejiEAdapter.onItemClickListener() {
             @Override
             public void onClickListener(VideosBeanVo vo, int position) {
-                init(mData);
-                SelectVo vo1 = mSelect.get(aftherPosition);
-                ItemSelectVo itemSelect = vo1.getData().get(position);
-                itemSelect.setSelect(true);
-                notifyDataSetChanged();
-
+                if (clickListener != null) {
+                    clickListener.onClickListener(aftherPosition, position);
+                }
             }
         });
 

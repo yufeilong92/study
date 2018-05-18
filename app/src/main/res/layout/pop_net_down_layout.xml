@@ -127,7 +127,6 @@
                     android:layout_marginBottom="@dimen/space_4"
                     android:layout_marginTop="@dimen/space_4"
                     android:background="@color/login_line_color" />
-
                 <Button
                     android:id="@+id/btn_pop_down_all"
                     android:layout_width="match_parent"

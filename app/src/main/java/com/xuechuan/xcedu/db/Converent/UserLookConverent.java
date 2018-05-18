@@ -2,7 +2,7 @@ package com.xuechuan.xcedu.db.Converent;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.xuechuan.xcedu.vo.UserLookVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVo;
 
 import org.greenrobot.greendao.converter.PropertyConverter;
 

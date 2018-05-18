@@ -21,6 +21,7 @@ import com.xuechuan.xcedu.mvp.model.NetHomeModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.NetHomePresenter;
 import com.xuechuan.xcedu.mvp.view.NetHomeView;
 import com.xuechuan.xcedu.ui.net.NetAllBookActivity;
+import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
 import com.xuechuan.xcedu.ui.net.NetBookInfomActivity;
 import com.xuechuan.xcedu.ui.net.NetBookMyInfomActivity;
 import com.xuechuan.xcedu.utils.L;
@@ -169,7 +170,7 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
                 startActivity(new Intent(mContext, NetAllBookActivity.class));
                 break;
             case R.id.iv_net_mydown:
-                
+                startActivity(new Intent(mContext, NetBookDownActivity.class));
                 break;
             case R.id.iv_net_all:
                 startActivity(new Intent(mContext, NetAllBookActivity.class));

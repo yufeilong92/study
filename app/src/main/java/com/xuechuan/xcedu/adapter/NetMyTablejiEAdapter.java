@@ -37,9 +37,6 @@ public class NetMyTablejiEAdapter extends BaseRecyclerAdapter<NetMyTablejiEAdapt
     private Context mContext;
     private List<VideosBeanVo> mData;
     private final LayoutInflater mInflater;
-    private CheckBox mChbNetPlay;
-    private TextView mTvNetTitle;
-    private ImageView mIvNetGoorbuy;
     private List<SelectVo> mSelect;
 
     public NetMyTablejiEAdapter(Context mContext, List<VideosBeanVo> mData, int postion,

@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.vo;
+package com.xuechuan.xcedu.vo.Db;
 
 /**
  * @version V 1.0 xxxxxxxx
