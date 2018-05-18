@@ -32,7 +32,7 @@
         <ImageView
             android:id="@+id/iv_adviistory_location"
             style="@style/TitleBarAction"
-            android:src="@mipmap/ic_infom_location" />
+            android:src="@mipmap/nav_icon_location" />
 
     </LinearLayout>
 

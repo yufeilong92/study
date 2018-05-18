@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_speca_node" />
+            android:src="@mipmap/ic_node" />
 
         <Space style="@style/space_16_width" />
 
