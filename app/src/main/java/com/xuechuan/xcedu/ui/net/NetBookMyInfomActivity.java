@@ -2,15 +2,12 @@ package com.xuechuan.xcedu.ui.net;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -72,9 +69,9 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerProgressView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
-import com.xuechuan.xcedu.service.NetBookService;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.NetDownUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
@@ -872,28 +869,11 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                         vo.setVideos(vos);
                         list.add(vo);
                         GetNetBookService(list, bitrer);
-                        ServiceConnection serviceConnection = new ServiceConnection() {
-                            @Override
-                            public void onServiceConnected(ComponentName name, IBinder service) {
-
-                            }
-
-                            @Override
-                            public void onServiceDisconnected(ComponentName name) {
-
-                            }
-                        };
                         mDownAdapter.notify();
                         mDownAdapter.notifyDataSetChanged();
-
-
                     }
                 });
-
-
             }
-
-
 
             @Override
             protected void initWindow() {
@@ -920,8 +900,15 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         if (this.mTableList == null || this.mTableList.isEmpty()) {
             return;
         }
+        NetDownUtil downUtil = NetDownUtil.getInstance();
+        downUtil.setItemListener(new NetDownUtil.onItemListener() {
+            @Override
+            public void onDone() {
 
-        NetBookService.startActionBaz(mContext, list, bitrate, String.valueOf(dataVo.getId()));
+            }
+        });
+        downUtil.startAddData(mContext,list,bitrate, String.valueOf(dataVo.getId()));
+//        NetBookService.startActionBaz(mContext, list, bitrate, String.valueOf(dataVo.getId()));
 
 
 
