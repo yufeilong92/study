@@ -30,17 +30,28 @@ public class DownVideoDb {
      */
     private String staffid;
     /**
-     * 科目id
+     * 课目id
      */
     private String kid;
+    /**
+     * 课目封面
+     */
+    private String urlImg;
+    /**
+     * 课目名字
+     */
+    private String kName;
+
     @Convert(converter = DownVideoConverent.class, columnType = String.class)
     private List<DownVideoVo> downlist;
-    @Generated(hash = 1439020414)
-    public DownVideoDb(Long id, String staffid, String kid,
-            List<DownVideoVo> downlist) {
+    @Generated(hash = 1181835707)
+    public DownVideoDb(Long id, String staffid, String kid, String urlImg,
+            String kName, List<DownVideoVo> downlist) {
         this.id = id;
         this.staffid = staffid;
         this.kid = kid;
+        this.urlImg = urlImg;
+        this.kName = kName;
         this.downlist = downlist;
     }
     @Generated(hash = 1189966955)
@@ -69,6 +80,18 @@ public class DownVideoDb {
     }
     public void setStaffid(String staffid) {
         this.staffid = staffid;
+    }
+    public String getUrlImg() {
+        return this.urlImg;
+    }
+    public void setUrlImg(String urlImg) {
+        this.urlImg = urlImg;
+    }
+    public String getKName() {
+        return this.kName;
+    }
+    public void setKName(String kName) {
+        this.kName = kName;
     }
 
 

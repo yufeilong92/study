@@ -11,7 +11,6 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
-import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
@@ -67,13 +66,12 @@ public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTable
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final VideosBeanVo vo = mData.get(position);
         holder.mTvNetTitle.setText(vo.getVideoname());
-        List<DownVideoDb> dbList = DbHelperDownAssist.getInstance().queryUserDownInfom(kid);
+        DownVideoDb dbList = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(String.valueOf(kid));
         holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));
-        if (dbList == null || dbList.isEmpty()) {
+        if (dbList == null) {
             holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));
         } else {
-            for (DownVideoDb db : dbList) {
-                for (DownVideoVo videoVo : db.getDownlist()) {//遍历是否有已经缓存的
+                for (DownVideoVo videoVo : dbList.getDownlist()) {//遍历是否有已经缓存的
                     if (videoVo.getPid().equals(String.valueOf(vo.getChapterid())) && videoVo.getZid().equals(String.valueOf(vo.getVideoid()))) {
                         String status = videoVo.getStatus();
                         if (status.equals("0")) {
@@ -85,8 +83,6 @@ public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTable
                         }
                         holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.hint_text));
                     }
-
-                }
             }
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {

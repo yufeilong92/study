@@ -19,18 +19,27 @@
         <TextView style="@style/TitleBarText" />
 
         <TextView
+            android:id="@+id/tv_net_down_infom_make"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/space_8"
-            android:text="编辑"
+            android:text="@string/edit"
             android:textColor="@color/btn_bg_register"
             android:textSize="@dimen/text_size_18" />
 
     </LinearLayout>
 
     <View style="@style/view_line_tab_line" />
-
+<TextView
+    android:visibility="gone"
+    android:id="@+id/tv_infom_empty"
+    android:gravity="center"
+    android:textSize="@dimen/text_size_14"
+    android:textColor="@color/text_title_color"
+    android:text="查询不到该课目"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,6 +48,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_net_down_infom_img"
             android:layout_width="@dimen/spance_120"
             android:layout_height="@dimen/space_70"
             android:paddingLeft="@dimen/space_16"
@@ -52,7 +62,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_down_book_name"
+                android:id="@+id/tv_down_book_infome_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2222"
@@ -66,7 +76,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_net_down_number"
+                    android:id="@+id/tv_net_down_infome_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1"
@@ -81,7 +91,7 @@
                     android:textSize="@dimen/text_size_14" />
 
                 <TextView
-                    android:id="@+id/tv_net_down_cout"
+                    android:id="@+id/tv_net_down_infome_cout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/space_16"
@@ -89,12 +99,6 @@
                     android:textColor="@color/hint_text"
                     android:textSize="@dimen/text_size_14" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="G"
-                    android:textColor="@color/hint_text"
-                    android:textSize="@dimen/text_size_14" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -111,7 +115,7 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rlv_net_down_list"
+                android:id="@+id/rlv_net_down_infome_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/space_16"
@@ -120,12 +124,11 @@
         </ScrollView>
         <LinearLayout
             android:visibility="gone"
-            android:id="@+id/ll_net_down_all"
+            android:id="@+id/ll_net_down_infome_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
-
             <View style="@style/view_line_tab_line" />
 
             <RelativeLayout
@@ -135,14 +138,16 @@
                 android:paddingRight="@dimen/space_16">
 
                 <CheckBox
+                    android:button="@drawable/select_free_chb_bg"
+                    android:id="@+id/chb_net_down_infome_all"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="全选"
+                    android:paddingLeft="@dimen/space_10"
                     android:textColor="@color/hint_text"
                     android:textSize="@dimen/text_size_14" />
-
                 <Button
-                    android:id="@+id/btn_net_down_delect"
+                    android:id="@+id/btn_net_down_infome_delect"
                     android:layout_width="@dimen/space_70"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"

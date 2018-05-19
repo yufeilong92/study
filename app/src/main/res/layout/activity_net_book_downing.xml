@@ -18,6 +18,7 @@
         <TextView
             style="@style/TitleBarText"
             android:text="我的缓存" />
+
         <TextView
             android:id="@+id/tv_net_downing_make"
             android:layout_width="wrap_content"
@@ -59,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="M，可用空间"
+            android:text="，可用空间"
             android:textColor="@color/white"
             android:textSize="@dimen/space_16" />
 
@@ -72,13 +73,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/space_16" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="G"
-            android:textColor="@color/white"
-            android:textSize="@dimen/space_16" />
     </LinearLayout>
 
     <RelativeLayout
@@ -86,12 +80,20 @@
         android:layout_height="match_parent"
         android:background="@color/input_bg">
 
-        <android.support.v7.widget.RecyclerView
+        <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rlv_net_downing_list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="@dimen/space_48"-->
+        <!--android:background="@color/white" />-->
+        <ListView
             android:id="@+id/rlv_net_downing_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space_48"
-            android:background="@color/white" />
+            android:background="@color/white">
+
+        </ListView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,21 +103,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16"
-                android:gravity="center"
-                android:text="暂停下载"
                 android:id="@+id/tv_net_downing_stop"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="暂停下载"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16" />
 
             <RelativeLayout
                 android:id="@+id/rl_net_down_delect"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_48"
                 android:paddingLeft="@dimen/space_16"
-                android:paddingRight="@dimen/space_16">
+                android:paddingRight="@dimen/space_16"
+                android:visibility="gone">
 
                 <CheckBox
                     android:id="@+id/chb_net_down_all"

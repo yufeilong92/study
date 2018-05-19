@@ -36,6 +36,8 @@ public class NetDownUtil {
     private int mBitrate;
     private String mkid;
     private static NetDownUtil ansyTask;
+    private String kname;
+    private String kImg;
 
     public interface onItemListener {
         public void onDone();
@@ -58,16 +60,17 @@ public class NetDownUtil {
     }
 
     /**
-     *
      * @param context
-     * @param table 课程表
+     * @param table   课程表
      * @param bitrate 码率
-     * @param Kid 课目id
+     * @param Kid     课目id
      */
-    public void startAddData(Context context, List table, int bitrate, String Kid) {
+    public void startAddData(Context context, List table, int bitrate, String Kid, String kName, String kimg) {
         mDataList = (List<ChaptersBeanVo>) table;
         this.mkid = Kid;
         this.mBitrate = bitrate;
+        this.kname = kName;
+        this.kImg = kimg;
         start();
     }
 
@@ -75,9 +78,10 @@ public class NetDownUtil {
         if (vos.size() > 0) {
             vos.clear();
         }
-
         DownVideoDb db = new DownVideoDb();
         db.setKid(mkid);
+        db.setKName(kname);
+        db.setUrlImg(kImg);
         List<DownVideoVo> list = new ArrayList<>();
         for (int i = 0; i < mDataList.size(); i++) {
             ChaptersBeanVo vo = mDataList.get(i);
@@ -106,6 +110,9 @@ public class NetDownUtil {
         PolyvSDKUtil sdkUtil = new PolyvSDKUtil();
         PolyvVideoVO video = sdkUtil.loadVideoJSON2Video(beanVo.getVid());
         //总时长
+        if (video == null) {
+            return;
+        }
         String duration = video.getDuration();
         //大小
         long type = video.getFileSizeMatchVideoType(mBitrate);

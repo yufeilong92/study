@@ -1,6 +1,5 @@
 package com.xuechuan.xcedu.db.DbHelp;
 
-import com.andview.refreshview.callback.IFooterCallBack;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.db.DownVideoDbDao;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
@@ -44,38 +43,25 @@ public class DbHelperDownAssist {
         if (db == null) {
             return;
         }
-        List<DownVideoDb> dbs = queryUserDownInfom();
-        if (dbs == null || dbs.isEmpty()) {
-            savaUserId(db.getKid());
-            addDownItem(db);
-            return;
-        }
         //判断当前课目是否有缓存过
-        List<DownVideoDb> list = queryUserDownInfom(db.getKid());
-        if (list == null || list.isEmpty()) {
-            savaUserId(db.getKid());
+        DownVideoDb list = queryUserDownInfomWithKid(db.getKid());
+        if (list == null) {
+            savaUserId(db);
             addDownItem(db);
             return;
         }
-
-        for (DownVideoDb videoDb : dbs) {
-            if (videoDb.getKid().equals(db.getKid())) {
-                List<DownVideoVo> downlist = videoDb.getDownlist();
-                if (downlist != null && !downlist.isEmpty()) {//已有情况
-                    for (DownVideoVo vo : db.getDownlist()) {
-                        if (!downlist.contains(vo)) {
-                            downlist.add(vo);
-                        }
-                    }
-                } else {//没有
-                    downlist = db.getDownlist();
+        List<DownVideoVo> downlist = list.getDownlist();
+        if (downlist != null && !downlist.isEmpty()) {//已有情况
+            for (DownVideoVo vo : db.getDownlist()) {
+                if (!downlist.contains(vo)) {
+                    downlist.add(vo);
                 }
-                videoDb.setDownlist(downlist);
-                dao.update(videoDb);
-            } else {
-
             }
+        } else {//没有
+            downlist = db.getDownlist();
         }
+        list.setDownlist(downlist);
+        dao.update(list);
 
     }
 
@@ -129,13 +115,6 @@ public class DbHelperDownAssist {
         }
     }
 
-    private void addDownItemVo(DownVideoDb db) {
-        if (db == null) {
-            return;
-        }
-        dao.insert(db);
-
-    }
 
     /**
      * 删除全部
@@ -154,39 +133,90 @@ public class DbHelperDownAssist {
      *
      * @param db
      */
-    public void addUpDataItem(DownVideoDb db) {
-        if (db == null) {
+    public void addUpDataItem(DownVideoDb db, DownVideoVo vo, long current, long total) {
+        if (db == null || vo == null) {
             return;
         }
-        List<DownVideoDb> dbs = queryUserDownInfom();
-        if (dbs == null || dbs.isEmpty()) {
-            savaUserId(db.getKid());
-            addUpDataItem(db);
+        DownVideoDb videoDb = queryUserDownInfomWithKid(db.getKid());
+        if (videoDb == null) {
             return;
         }
-        for (DownVideoDb videoDb : dbs) {
-            if (videoDb.getKid().equals(db.getKid())) {
-                videoDb.setKid(db.getKid());
-                videoDb.setDownlist(db.getDownlist());
-                dao.update(videoDb);
+        List<DownVideoVo> downlist = videoDb.getDownlist();
+        if (downlist == null || downlist.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < downlist.size(); i++) {
+            DownVideoVo videoVo = downlist.get(i);
+            if (videoVo.getPid().equals(vo.getPid()) && videoVo.getZid().equals(vo.getZid())) {
+                if (current == 0) {
+                    videoVo.setStatus("2");
+                }
+                if (current == total) {
+                    videoVo.setStatus("0");
+                } else {
+                    videoVo.setStatus("1");
+                }
+
+                videoVo.setPercent(current);
+                videoVo.setTotal(total);
+            }
+        }
+        dao.update(videoDb);
+
+
+    }
+
+    public void delectItem(DownVideoDb db, DownVideoVo vo) {
+        DownVideoDb videoDb = queryUserDownInfomWithKid(db.getKid());
+        if (videoDb == null) {
+            return;
+        }
+        List<DownVideoVo> downlist = videoDb.getDownlist();
+        if (downlist == null || downlist.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < downlist.size(); i++) {
+            DownVideoVo vo1 = downlist.get(i);
+            if (vo1.getPid().equals(vo.getPid()) && vo1.getZid().equals(vo.getZid())) {
+                downlist.remove(i);
+            }
+        }
+    }
+    public void delectItem(String kid, String pid,String zid) {
+        DownVideoDb videoDb = queryUserDownInfomWithKid(kid);
+        if (videoDb == null) {
+            return;
+        }
+        List<DownVideoVo> downlist = videoDb.getDownlist();
+        if (downlist == null || downlist.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < downlist.size(); i++) {
+            DownVideoVo vo1 = downlist.get(i);
+            if (vo1.getPid().equals(pid) && vo1.getZid().equals(zid)) {
+                downlist.remove(i);
             }
         }
     }
 
-
-    public void savaUserId(String kid) {
+    public void savaUserId(DownVideoDb db) {
         String userId = SaveUUidUtil.getInstance().getUserId();
-        DownVideoDb videoDb = dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId)).unique();
-        if (videoDb == null) {
+//        DownVideoDb videoDb = dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId)).unique();
+//        if (videoDb == null) {
             DownVideoDb downVideoDb = new DownVideoDb();
             downVideoDb.setStaffid(userId);
-            downVideoDb.setKid(kid);
+            downVideoDb.setKid(db.getKid());
+            downVideoDb.setUrlImg(db.getUrlImg());
+            downVideoDb.setKName(db.getKName());
             dao.insert(downVideoDb);
-        } else {
-            videoDb.setStaffid(userId);
-            videoDb.setKid(kid);
-            dao.update(videoDb);
-        }
+//        }
+//        else {
+//            videoDb.setStaffid(userId);
+//            videoDb.setKid(db.getKid());
+//            videoDb.setUrlImg(db.getUrlImg());
+//            videoDb.setKName(db.getKName());
+//            dao.update(videoDb);
+//        }
 
     }
 
@@ -205,21 +235,10 @@ public class DbHelperDownAssist {
      *
      * @return
      */
-    public List<DownVideoDb> queryUserDownInfom(int kid) {
+    public DownVideoDb queryUserDownInfomWithKid(String kid) {
         String userId = SaveUUidUtil.getInstance().getUserId();
         return dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId),
-                DownVideoDbDao.Properties.Kid.eq(String.valueOf(kid))).list();
-    }
-
-    /**
-     * 查询该用户的所有下载数据
-     *
-     * @return
-     */
-    public List<DownVideoDb> queryUserDownInfom(String kid) {
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        return dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId),
-                DownVideoDbDao.Properties.Kid.eq(kid)).list();
+                DownVideoDbDao.Properties.Kid.eq(kid)).unique();
     }
 
 

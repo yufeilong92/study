@@ -1,15 +1,17 @@
 package com.xuechuan.xcedu.ui.net;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -51,6 +53,7 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnQuestionAnswerTipsListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoPlayErrorListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
+import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
@@ -60,6 +63,8 @@ import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.adapter.NetMyDownTableAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
+import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.fragment.NetMyBokTableFragment;
 import com.xuechuan.xcedu.fragment.NetMyBookVualueFragment;
 import com.xuechuan.xcedu.player.BaolIHttp.PolyvVlmsHelper;
@@ -70,12 +75,13 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.NetDownUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
+import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
@@ -87,6 +93,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigat
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -769,29 +776,61 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      * 显示pop
      */
     private void showPopwindow() {
-        DisplayMetrics metrics = new DisplayMetrics();
+        final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
-            private TextView mTvNetPopEmpty;
+            private boolean isRuning = true;
+            private Thread thread;
             private LinearLayout mLlPopDownDown;
-            private Button mBtnPopDownAll;
-            private Button mBtnPopDownCancel;
+            private Button mBtnPopDownRun;
             private Button mBtnPopDownLook;
+            private Button mBtnPopDownAll;
+            private Button mBtnPopDownSureAll;
+            private Button mBtnPopDownCancel;
+            private TextView mTvNetPopEmpty;
             private RecyclerView mRlvTableList;
             private ImageView mIvNetPopBack;
             private RadioButton mChbNetPopDownLiu;
             private RadioButton mChbNetPopDownGao;
             private RadioButton mChbNetPopDownChao;
             int bitrer = 3;
+            boolean isSure = false;
+            private DownVideoDb vo;
+            private AlertDialog dialog;
+            private Handler handler = new Handler() {
+
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    if (msg.arg1 == 1) {
+                        vo = (DownVideoDb) msg.obj;
+//                      DbHelperDownAssist.getInstance().addDownItem(vo);
+                        if (dialog != null) {
+                            dialog.dismiss();
+                            isRuning = false;
+                            isShow(false, true, false, true, false);
+                            mBtnPopDownSureAll.setText("全部缓存(" + vo.getDownlist().size() + ")");
+                            mDownAdapter.notifyDataSetChanged();
+                        } else {
+                            isRuning = false;
+                            DbHelperDownAssist.getInstance().addDownItem(vo);
+                            mBtnPopDownRun.setText("正在缓存(" + vo.getDownlist().size() + ")");
+                            mDownAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            };
 
             @Override
             protected void initView() {
                 View view = getContentView();
+                mBtnPopDownLook = view.findViewById(R.id.btn_pop_down_look);
                 mLlPopDownDown = view.findViewById(R.id.ll_pop_down_down);
                 mBtnPopDownAll = view.findViewById(R.id.btn_pop_down_all);
+                mBtnPopDownSureAll = view.findViewById(R.id.btn_pop_down_sure_all);
                 mBtnPopDownCancel = view.findViewById(R.id.btn_pop_down_cancel);
-                mBtnPopDownLook = view.findViewById(R.id.btn_pop_down_look);
+                mBtnPopDownRun = view.findViewById(R.id.btn_pop_down_run);
                 mRlvTableList = view.findViewById(R.id.rlv_table_list);
                 mIvNetPopBack = view.findViewById(R.id.iv_net_pop_back);
                 mChbNetPopDownLiu = view.findViewById(R.id.chb_net_pop_down_liu);
@@ -802,8 +841,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     mTvNetPopEmpty.setVisibility(View.VISIBLE);
                     mRlvTableList.setVisibility(View.GONE);
                 }
-
-
+                isShow(true, false, true, false, false);
             }
 
             @Override
@@ -839,12 +877,44 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                         }
                     }
                 });
+                //全部缓存确认
+                mBtnPopDownSureAll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isShow(true, false, true, false, false);
+                        DbHelperDownAssist.getInstance().addDownItem(vo);
+                    }
+                });
+                //全选
                 mBtnPopDownAll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
                         GetNetBookService(mTableList, bitrer);
                     }
                 });
+                //取消按钮
+                mBtnPopDownCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isShow(true, false, true, false, false);
+                    }
+                });
+                //正在缓存
+                mBtnPopDownRun.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(NetBookMyInfomActivity.this, NetBookDowningActivity.class));
+                    }
+                });
+                //查看缓存
+                mBtnPopDownLook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(NetBookMyInfomActivity.this, NetBookDownActivity.class));
+                    }
+                });
+
 
             }
 
@@ -868,11 +938,36 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                         vos.add(beanVo);
                         vo.setVideos(vos);
                         list.add(vo);
+                        isRuning = true;
                         GetNetBookService(list, bitrer);
-                        mDownAdapter.notify();
-                        mDownAdapter.notifyDataSetChanged();
+
+
                     }
                 });
+            }
+
+            /**
+             * @param list
+             * @param bitrate 编码
+             */
+            private void GetNetBookService(final List list, final int bitrate) {
+                if (mTableList == null || mTableList.isEmpty()) {
+                    return;
+                }
+                thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isRuning) {
+                            DownVideoDb db = addListData(list, bitrate);
+                            Message message = new Message();
+                            message.arg1 = 1;
+                            message.obj = db;
+                            handler.sendMessage(message);
+                        }
+                    }
+                });
+                thread.start();
+                //NetBookService.startActionBaz(mContext, list, bitrate, String.valueOf(dataVo.getId()));
             }
 
             @Override
@@ -886,34 +981,53 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     }
                 });
             }
+
+            private void isShow(boolean all, boolean cancel, boolean look, boolean sureall, boolean run) {
+                mBtnPopDownAll.setVisibility(all ? View.VISIBLE : View.GONE);
+                mBtnPopDownCancel.setVisibility(cancel ? View.VISIBLE : View.GONE);
+                mBtnPopDownLook.setVisibility(look ? View.VISIBLE : View.GONE);
+                mBtnPopDownSureAll.setVisibility(sureall ? View.VISIBLE : View.GONE);
+                mBtnPopDownRun.setVisibility(run ? View.VISIBLE : View.GONE);
+            }
         };
 
         popDown.showAtLocation(mLlNetPlayRoot, Gravity.BOTTOM, 0, 0);
         setBackgroundAlpha(0.5f, NetBookMyInfomActivity.this);
     }
 
+
     /**
-     * @param list
-     * @param bitrate 编码
+     * 添加数据
+     *
+     * @param table
+     * @param bitrate
+     * @return
      */
-    private void GetNetBookService(List list, int bitrate) {
-        if (this.mTableList == null || this.mTableList.isEmpty()) {
-            return;
-        }
-        NetDownUtil downUtil = NetDownUtil.getInstance();
-        downUtil.setItemListener(new NetDownUtil.onItemListener() {
-            @Override
-            public void onDone() {
-
+    public DownVideoDb addListData(List table, int bitrate) {
+        List<ChaptersBeanVo> mDataList = (List<ChaptersBeanVo>) table;
+        DownVideoDb db = new DownVideoDb();
+        db.setKid(String.valueOf(dataVo.getId()));
+        db.setKName(dataVo.getName());
+        db.setUrlImg(dataVo.getCoverimg());
+        List<DownVideoVo> list = new ArrayList<>();
+        for (int i = 0; i < mDataList.size(); i++) {
+            ChaptersBeanVo vo = mDataList.get(i);
+            List<VideosBeanVo> videos = vo.getVideos();
+            if (videos != null && !videos.isEmpty()) {
+                for (int j = 0; j < videos.size(); j++) {
+                    final VideosBeanVo beanVo = videos.get(j);
+                    try {
+                        addData(bitrate, beanVo, list);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        });
-        downUtil.startAddData(mContext,list,bitrate, String.valueOf(dataVo.getId()));
-//        NetBookService.startActionBaz(mContext, list, bitrate, String.valueOf(dataVo.getId()));
-
-
-
+        }
+        db.setDownlist(list);
+//        DbHelperDownAssist.getInstance().addDownItem(db);
+        return db;
     }
-
 
     /**
      * 设置背景颜色
@@ -932,6 +1046,40 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         PolyvVideoView view = new PolyvVideoView(mContext);
         int position = view.getCurrentPosition();
         Log.e(TAG, "submitPlayProgress: " + position);
+    }
+
+
+    private void addData(int mBitrate, VideosBeanVo beanVo, List<DownVideoVo> db) throws JSONException {
+        DownVideoVo vo = new DownVideoVo();
+        PolyvSDKUtil sdkUtil = new PolyvSDKUtil();
+        PolyvVideoVO video = sdkUtil.loadVideoJSON2Video(beanVo.getVid());
+        //总时长
+        if (video == null) {
+            return;
+        }
+        String duration = video.getDuration();
+        //大小
+        long type = video.getFileSizeMatchVideoType(mBitrate);
+        vo.setDuration(duration);
+
+        vo.setBitRate(String.valueOf(mBitrate));
+
+        vo.setFileSize(type);
+        //视频id
+        vo.setZid(String.valueOf(beanVo.getVideoid()));
+        //篇id
+        vo.setPid(String.valueOf(beanVo.getChapterid()));
+        //保利视频id
+        vo.setVid(beanVo.getVid());
+        //视频名字
+        vo.setTitle(beanVo.getVideoname());
+        vo.setStatus("2");
+        db.add(vo);
+        Log.e("==视频信息==", mBitrate + "\naddData:总时长 " + duration + "\n"
+                + "总大小" + type + "\n"
+                + beanVo.getVideoname() + "\n"
+                + beanVo.getVid() + "\n");
+
     }
 
 }
