@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/space_8"
-            android:text="编辑"
+            android:text="@string/edit"
             android:textColor="@color/btn_bg_register"
             android:textSize="@dimen/text_size_18" />
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="122"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="@dimen/space_16" />
 
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="2"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/space_16" />
 
@@ -87,9 +87,11 @@
         <!--android:layout_marginBottom="@dimen/space_48"-->
         <!--android:background="@color/white" />-->
         <ListView
+            android:paddingLeft="@dimen/space_16"
+            android:paddingRight="@dimen/space_16"
             android:id="@+id/rlv_net_downing_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/space_48"
             android:background="@color/white">
 
@@ -101,25 +103,27 @@
             android:layout_alignParentBottom="true"
             android:background="@color/white"
             android:orientation="vertical">
-
+          <View
+            style="@style/view_line_tab_line"/>
             <TextView
                 android:id="@+id/tv_net_downing_stop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="暂停下载"
+                android:text="@string/start_down"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16" />
 
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/rl_net_down_delect"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/space_48"
+                android:layout_height="match_parent"
                 android:paddingLeft="@dimen/space_16"
                 android:paddingRight="@dimen/space_16"
-                android:visibility="gone">
-
+              >
                 <CheckBox
+                    android:button="@drawable/select_free_chb_bg"
                     android:id="@+id/chb_net_down_all"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

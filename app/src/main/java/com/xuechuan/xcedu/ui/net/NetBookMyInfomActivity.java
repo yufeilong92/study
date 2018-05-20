@@ -904,13 +904,16 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 mBtnPopDownRun.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(NetBookMyInfomActivity.this, NetBookDowningActivity.class));
+                        popDown.getPopupWindow().dismiss();
+                        Intent intent = NetBookDowningActivity.newInstance(mContext, String.valueOf(dataVo.getId()));
+                        startActivity(intent);
                     }
                 });
                 //查看缓存
                 mBtnPopDownLook.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        popDown.getPopupWindow().dismiss();
                         startActivity(new Intent(NetBookMyInfomActivity.this, NetBookDownActivity.class));
                     }
                 });

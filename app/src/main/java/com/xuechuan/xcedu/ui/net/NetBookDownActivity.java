@@ -16,6 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easefun.polyvsdk.PolyvDownloader;
+import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
 import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
 import com.xuechuan.xcedu.Event.NetDownDoneEvent;
@@ -40,7 +42,7 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: NetBookDownActivity
  * @Package com.xuechuan.xcedu.ui.net
- * @Description: 下载详情
+ * @Description: 下载课目缓存界面
  * @author: L-BackPacker
  * @date: 2018/5/16 11:07
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
@@ -79,6 +81,12 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         initView();
         initData(false, false);
         initKong();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initData(false, false);
     }
 
     private void initKong() {
@@ -224,8 +232,8 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         mNoDoneAdapter.setClickListener(new NetDownGoingAdapter.onItemClickListener() {
             @Override
             public void onClickListener(DownVideoDb db, int position) {
-                EventBus.getDefault().postSticky(new NetDownEvent(db));
-                startActivity(new Intent(NetBookDownActivity.this, NetBookDowningActivity.class));
+                Intent intent = NetBookDowningActivity.newInstance(mContext, db.getKid());
+                startActivity(intent);
             }
         });
         mNoDoneAdapter.setChbClickListener(new NetDownGoingAdapter.onItemChbClickListener() {
@@ -249,11 +257,12 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
     private void computeStorage() {
         long externalSize = 0;
         if (Utils.hasSDCard()) {
-            File downloadDir = PolyvSDKClient.getInstance().getDownloadDir();
-            StatFs statfs = new StatFs(downloadDir.getPath());
-            long blocSize = statfs.getBlockSize();
-            long availaBlock = statfs.getAvailableBlocks();
-            externalSize = availaBlock * blocSize;
+/*            File downloadDir = PolyvSDKClient.getInstance().getDownloadDir();
+            StatFs statFs = new StatFs(downloadDir.getPath());
+            long blocSize = statFs.getBlockSize();
+            long availaBlock = statFs.getAvailableBlocks();
+                    externalSize = availaBlock * blocSize;*/
+            externalSize = Utils.getSDCardAvailableSize();
         } else {
             externalSize = Utils.getSystemAvailableSize();
         }
@@ -288,6 +297,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                 if (mSelectDoneVos != null && !mSelectDoneVos.isEmpty())
                     for (NetDownSelectVo vo : mSelectDoneVos) {
                         if (vo.isSelect()) {
+                            mSelectDoneVos.remove(vo);
                             DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
                             delectVideo(db.getDownlist());
                             mDao.delectKItem(vo.getId());
@@ -297,6 +307,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                 if (mSelectNOVos != null && !mSelectNOVos.isEmpty())
                     for (NetDownSelectVo vo : mSelectNOVos) {
                         if (vo.isSelect()) {
+                            mSelectDoneVos.remove(vo);
                             DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
                             delectVideo(db.getDownlist());
                             mDao.delectKItem(vo.getId());
@@ -364,23 +375,22 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         }
         for (DownVideoVo vo : vid) {
             if (vo.getPercent() > 0) {
-                delectVideo(vo.getVid());
+                delectVideo(vo.getVid(), vo.getBitRate());
             }
         }
     }
 
-    private void delectVideo(String vid) {
+    private void delectVideo(String vid, String bitrate) {
         AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... strings) {
-                String string = strings[0];
-                Log.e("=====", "删除视频id: " + string);
-                PolyvDownloaderUtils utils = new PolyvDownloaderUtils();
-                int i = utils.deleteVideo(string);
-                Log.e("yfl", "删除视频结果: " + i);
+                String vid = strings[0];
+                String bitrates = strings[1];
+                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
+                downloader.deleteVideo();
                 return null;
             }
         };
-        asyncTask.execute(vid);
+        asyncTask.execute(vid, bitrate);
     }
 }

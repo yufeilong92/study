@@ -172,5 +172,7 @@
     <string name="cancel">取消</string>
     <string name="complete">完成</string>
     <string name="edit">编辑</string>
+    <string name="start_down">开始下载</string>
+    <string name="stopdown">暂停下载</string>
 
 </resources>

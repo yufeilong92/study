@@ -11,6 +11,8 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
+import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
@@ -71,23 +73,27 @@ public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTable
         if (dbList == null) {
             holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));
         } else {
-                for (DownVideoVo videoVo : dbList.getDownlist()) {//遍历是否有已经缓存的
-                    if (videoVo.getPid().equals(String.valueOf(vo.getChapterid())) && videoVo.getZid().equals(String.valueOf(vo.getVideoid()))) {
-                        String status = videoVo.getStatus();
-                        if (status.equals("0")) {
-                            holder.mTvPoPDownStatus.setText("已缓存");
-                        } else  if (status.equals("1")){
-                            holder.mTvPoPDownStatus.setText("正在缓存");
-                        }else if (status.equals("2")){
-                            holder.mTvPoPDownStatus.setText("正在准备");
-                        }
-                        holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.hint_text));
+            for (DownVideoVo videoVo : dbList.getDownlist()) {//遍历是否有已经缓存的
+                if (videoVo.getPid().equals(String.valueOf(vo.getChapterid())) && videoVo.getZid().equals(String.valueOf(vo.getVideoid()))) {
+                    String status = videoVo.getStatus();
+                    if (status.equals("0")) {
+                        holder.mTvPoPDownStatus.setText("已下载");
+                    } else if (status.equals("1")) {
+                        holder.mTvPoPDownStatus.setText("正在缓存");
+                    } else if (status.equals("2")) {
+                        holder.mTvPoPDownStatus.setText("正在缓存");
                     }
+                    holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.hint_text));
+                }
             }
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!StringUtil.isEmpty(holder.mTvPoPDownStatus.getText().toString().trim())) {
+                    T.showToast(mContext, "已经添加到缓存队列了");
+                    return;
+                }
                 if (clickListener != null) {
                     clickListener.onClickListener(vo, position);
                 }

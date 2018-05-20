@@ -23,6 +23,11 @@ public class DownInfomSelectVo {
      * 视频id保利
      */
     private String vid;
+    /**
+     * 清晰度
+     */
+    private String bitrate;
+
 
     /**
      * 选择按钮是否选中
@@ -95,5 +100,13 @@ public class DownInfomSelectVo {
 
     public void setPlaySelect(boolean playSelect) {
         isPlaySelect = playSelect;
+    }
+
+    public String getBitrate() {
+        return bitrate;
+    }
+
+    public void setBitrate(String bitrate) {
+        this.bitrate = bitrate;
     }
 }

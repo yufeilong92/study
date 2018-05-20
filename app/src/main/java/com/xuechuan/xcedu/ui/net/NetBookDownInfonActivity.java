@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easefun.polyvsdk.PolyvDownloader;
+import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
 import com.xuechuan.xcedu.Event.NetDownDoneEvent;
 import com.xuechuan.xcedu.R;
@@ -119,6 +121,7 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
             selectVo.setPid(vo.getPid());
             selectVo.setZid(vo.getZid());
             selectVo.setVid(vo.getVid());
+            selectVo.setBitrate(vo.getBitRate());
             selectVo.setChbSelect(false);
             selectVo.setShowChb(false);
             selectVo.setShowPlay(true);
@@ -205,7 +208,7 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
                     DownInfomSelectVo selectVo = mDataSelectList.get(i);
                     if (selectVo.isChbSelect()) {
                         mDao.delectItem(mVideoDb.getKid(), selectVo.getPid(), selectVo.getZid());
-                        delectVideo(selectVo.getVid());
+                        delectVideo(selectVo.getVid(), selectVo.getBitrate());
                     }
                 }
                 initData();
@@ -260,18 +263,17 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
      *
      * @param vid
      */
-    private void delectVideo(String vid) {
+    private void delectVideo(String vid, String bitrate) {
         AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... strings) {
-                String string = strings[0];
-                Log.e("=====", "删除视频id: " + string);
-                PolyvDownloaderUtils utils = new PolyvDownloaderUtils();
-                int i = utils.deleteVideo(string);
-                Log.e("yfl", "删除视频结果: " + i);
+                String vid = strings[0];
+                String bitrates = strings[1];
+                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
+                downloader.deleteVideo();
                 return null;
             }
         };
-        asyncTask.execute(vid);
+        asyncTask.execute(vid, bitrate);
     }
 }
