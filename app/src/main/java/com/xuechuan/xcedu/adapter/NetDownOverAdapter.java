@@ -87,11 +87,12 @@ public class NetDownOverAdapter extends RecyclerView.Adapter<NetDownOverAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHodle holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHodle holder, final int position) {
         final DownVideoDb db = mData.get(position);
         holder.mChbNetDownIng.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!holder.mChbNetDownIng.isPressed()) return;
                 if (chbClickListener != null) {
                     chbClickListener.onChecaListener(db, isChecked, position);
                 }

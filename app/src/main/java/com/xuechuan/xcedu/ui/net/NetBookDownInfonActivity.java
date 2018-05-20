@@ -167,6 +167,7 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
                 }
                 if (mInfomAdapter != null)
                     mInfomAdapter.notifyDataSetChanged();
+
             }
         });
         mInfomAdapter.setClickListener(new DownDoneInfomAdapter.onItemClickListener() {

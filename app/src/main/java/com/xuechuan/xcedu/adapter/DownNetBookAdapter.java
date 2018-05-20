@@ -1,37 +1,18 @@
 package com.xuechuan.xcedu.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.easefun.polyvsdk.PolyvDownloader;
-import com.easefun.polyvsdk.PolyvDownloaderErrorReason;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
-import com.easefun.polyvsdk.download.listener.IPolyvDownloaderProgressListener;
-import com.easefun.polyvsdk.download.listener.IPolyvDownloaderSpeedListener;
-import com.easefun.polyvsdk.download.listener.IPolyvDownloaderStartListener;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
-import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
-import com.xuechuan.xcedu.ui.net.NetBookMyInfomActivity;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DownNetBookAdapter extends BaseAdapter {
@@ -43,18 +24,18 @@ public class DownNetBookAdapter extends BaseAdapter {
 
     private static Context appContext;
     private final DownVideoDb mDownVideo;
-    private Context context;
+    private Context mContext;
     private ListView lv_download;
     private List<DownVideoVo> lists;
-    private LayoutInflater inflater;
+    private LayoutInflater mInflater;
     private final DbHelperDownAssist mDao;
 
-    public DownNetBookAdapter(DownVideoDb lists, Context context, ListView lv_download) {
+    public DownNetBookAdapter(Context context,DownVideoDb lists,  ListView lv_download) {
         this.lists = lists.getDownlist();
         this.mDownVideo=lists;
-        this.context = context;
+        this.mContext = context;
         appContext = context.getApplicationContext();
-        this.inflater = LayoutInflater.from(this.context);
+        this.mInflater = LayoutInflater.from(this.mContext);
         this.lv_download = lv_download;
         mDao = DbHelperDownAssist.getInstance();
         init();
@@ -86,7 +67,10 @@ public class DownNetBookAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView==null){
+            convertView=mInflater.inflate(R.layout.item_net_down_infom,null);
 
+        }
         return null;
     }
 }
