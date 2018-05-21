@@ -173,7 +173,7 @@
         <activity android:name=".ui.net.NetBookMyInfomActivity" />
         <activity android:name=".ui.net.NetBookDownActivity" />
         <activity
-            android:name=".ui.net.NetBookDownInfonActivity"
+            android:name=".ui.net.NetBookDownOverActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
@@ -181,14 +181,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".service.NetBookService"
-            android:exported="false" />
-
         <activity android:name=".DownActivity" />
         <activity android:name=".ui.net.NetBookDowningActivity" />
+        <activity
+            android:name=".ui.net.NetBookPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.net.NetBookEvalueInfomActivity" />
 
+        <service
+            android:name=".service.SubmitProgressService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

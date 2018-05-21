@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,8 +16,6 @@ import android.widget.TextView;
 
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
-import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
-import com.xuechuan.xcedu.Event.NetDownDoneEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.DownDoneInfomAdapter;
@@ -28,9 +25,6 @@ import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +39,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/16
  */
-public class NetBookDownInfonActivity extends BaseActivity implements View.OnClickListener {
+public class NetBookDownOverActivity extends BaseActivity implements View.OnClickListener {
 
 
     private TextView mTvNetDownInfomMake;
@@ -82,14 +76,14 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
      * @return
      */
     public static Intent newInstance(Context context, String kid) {
-        Intent intent = new Intent(context, NetBookDownInfonActivity.class);
+        Intent intent = new Intent(context, NetBookDownOverActivity.class);
         intent.putExtra(KID, kid);
         return intent;
     }
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_net_book_down_infon);
+        setContentView(R.layout.activity_net_book_down_over);
         if (getIntent() != null) {
             mKid = getIntent().getStringExtra(KID);
         }
@@ -148,7 +142,7 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
     }
 
     private void bindAdapter() {
-        GridLayoutManager manager = new GridLayoutManager(NetBookDownInfonActivity.this, 1);
+        GridLayoutManager manager = new GridLayoutManager(NetBookDownOverActivity.this, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvNetDownInfomeList.setLayoutManager(manager);
         mInfomAdapter = new DownDoneInfomAdapter(mContext, mVideoDb, mDataSelectList);
@@ -175,8 +169,10 @@ public class NetBookDownInfonActivity extends BaseActivity implements View.OnCli
         });
         mInfomAdapter.setClickListener(new DownDoneInfomAdapter.onItemClickListener() {
             @Override
-            public void onClickListener(Object obj, int position) {
-
+            public void onClickListener(DownVideoVo vo, int position) {
+                Intent intent = NetBookPlayActivity.newIntent(mContext, NetBookPlayActivity.PlayMode.portrait, vo.getVid(), Integer.parseInt(vo.getBitRate()), true, true);
+                // 在线视频和下载的视频播放的时候只显示播放器窗口，用该参数来控制
+                mContext.startActivity(intent);
             }
         });
 

@@ -126,15 +126,15 @@ public class NetTableAdapter extends BaseRecyclerAdapter<NetTableAdapter.ViewHol
         adapter.setClickListener(new NetMyTablejiEAdapter.onItemClickListener() {
             @Override
             public void onClickListener(VideosBeanVo vo, int position) {
-                init(mData);
-                SelectVo vo1 = mSelect.get(fatherPosition);
-                ItemSelectVo itemSelect = vo1.getData().get(position);
-                itemSelect.setSelect(true);
-                notifyDataSetChanged();
                 if (vo.isIstrysee()) {
+                    init(mData);
+                    SelectVo vo1 = mSelect.get(fatherPosition);
+                    ItemSelectVo itemSelect = vo1.getData().get(position);
+                    itemSelect.setSelect(true);
+                    notifyDataSetChanged();
                     EventBus.getDefault().postSticky(new NetPlayEvent(vo));
                 } else {
-                    T.showToast(mContext, "该视频提供试看");
+                    T.showToast(mContext, "该视频不提供试看");
                 }
             }
         });

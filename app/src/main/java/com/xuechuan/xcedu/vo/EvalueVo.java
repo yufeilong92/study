@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.vo;
 
 import com.xuechuan.xcedu.base.BaseVo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class EvalueVo extends BaseVo {
         this.datas = datas;
     }
 
-    public static class DatasBean {
+    public static class DatasBean implements Serializable {
 
         /**
          * 评论编号

@@ -11,6 +11,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 
 import com.xuechuan.xcedu.db.Converent.UserConverent;
 import com.xuechuan.xcedu.db.Converent.UserLookConverent;
+import com.xuechuan.xcedu.db.Converent.UserLookVideoConverent;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
         public final static Property WrongDataSkill = new Property(14, String.class, "WrongDataSkill", false, "WRONG_DATA_SKILL");
         public final static Property WrongDataColoct = new Property(15, String.class, "WrongDataColoct", false, "WRONG_DATA_COLOCT");
         public final static Property WrongDataCase = new Property(16, String.class, "WrongDataCase", false, "WRONG_DATA_CASE");
+        public final static Property LookVideolist = new Property(17, String.class, "lookVideolist", false, "LOOK_VIDEOLIST");
     }
 
     private final UserConverent voConverter = new UserConverent();
@@ -53,6 +55,7 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
     private final UserLookConverent WrongDataSkillConverter = new UserLookConverent();
     private final UserLookConverent WrongDataColoctConverter = new UserLookConverent();
     private final UserLookConverent WrongDataCaseConverter = new UserLookConverent();
+    private final UserLookVideoConverent lookVideolistConverter = new UserLookVideoConverent();
 
     public UserInfomDbDao(DaoConfig config) {
         super(config);
@@ -82,7 +85,8 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
                 "\"CASE_DATA\" TEXT," + // 13: caseData
                 "\"WRONG_DATA_SKILL\" TEXT," + // 14: WrongDataSkill
                 "\"WRONG_DATA_COLOCT\" TEXT," + // 15: WrongDataColoct
-                "\"WRONG_DATA_CASE\" TEXT);"); // 16: WrongDataCase
+                "\"WRONG_DATA_CASE\" TEXT," + // 16: WrongDataCase
+                "\"LOOK_VIDEOLIST\" TEXT);"); // 17: lookVideolist
     }
 
     /** Drops the underlying database table. */
@@ -163,6 +167,11 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
         if (WrongDataCase != null) {
             stmt.bindString(17, WrongDataCaseConverter.convertToDatabaseValue(WrongDataCase));
         }
+ 
+        List lookVideolist = entity.getLookVideolist();
+        if (lookVideolist != null) {
+            stmt.bindString(18, lookVideolistConverter.convertToDatabaseValue(lookVideolist));
+        }
     }
 
     @Override
@@ -237,6 +246,11 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
         if (WrongDataCase != null) {
             stmt.bindString(17, WrongDataCaseConverter.convertToDatabaseValue(WrongDataCase));
         }
+ 
+        List lookVideolist = entity.getLookVideolist();
+        if (lookVideolist != null) {
+            stmt.bindString(18, lookVideolistConverter.convertToDatabaseValue(lookVideolist));
+        }
     }
 
     @Override
@@ -263,7 +277,8 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
             cursor.isNull(offset + 13) ? null : caseDataConverter.convertToEntityProperty(cursor.getString(offset + 13)), // caseData
             cursor.isNull(offset + 14) ? null : WrongDataSkillConverter.convertToEntityProperty(cursor.getString(offset + 14)), // WrongDataSkill
             cursor.isNull(offset + 15) ? null : WrongDataColoctConverter.convertToEntityProperty(cursor.getString(offset + 15)), // WrongDataColoct
-            cursor.isNull(offset + 16) ? null : WrongDataCaseConverter.convertToEntityProperty(cursor.getString(offset + 16)) // WrongDataCase
+            cursor.isNull(offset + 16) ? null : WrongDataCaseConverter.convertToEntityProperty(cursor.getString(offset + 16)), // WrongDataCase
+            cursor.isNull(offset + 17) ? null : lookVideolistConverter.convertToEntityProperty(cursor.getString(offset + 17)) // lookVideolist
         );
         return entity;
     }
@@ -287,6 +302,7 @@ public class UserInfomDbDao extends AbstractDao<UserInfomDb, Long> {
         entity.setWrongDataSkill(cursor.isNull(offset + 14) ? null : WrongDataSkillConverter.convertToEntityProperty(cursor.getString(offset + 14)));
         entity.setWrongDataColoct(cursor.isNull(offset + 15) ? null : WrongDataColoctConverter.convertToEntityProperty(cursor.getString(offset + 15)));
         entity.setWrongDataCase(cursor.isNull(offset + 16) ? null : WrongDataCaseConverter.convertToEntityProperty(cursor.getString(offset + 16)));
+        entity.setLookVideolist(cursor.isNull(offset + 17) ? null : lookVideolistConverter.convertToEntityProperty(cursor.getString(offset + 17)));
      }
     
     @Override

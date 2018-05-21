@@ -96,8 +96,10 @@
     <string name="http_videodownloadpost">/api/video/videodownloadpost</string>
     <!--获取所有在售网课列表-->
     <string name="http_getproduct">/api/video/getproduct</string>
-
-
+    <!--获取视频评价-->
+    <string name="http_getVideo_evalue">/api/video/getvideocomment</string>
+    <!--获取视频的评级评价-->
+    <string name="http_getvideocommentcomment">/api/video/getcommentcomment</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="tv_search_history">历史记录</string>

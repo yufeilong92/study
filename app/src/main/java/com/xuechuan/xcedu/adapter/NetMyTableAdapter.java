@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
+import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
@@ -93,9 +94,7 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
         if (videos != null && !videos.isEmpty()) {
             if (position == 0) {
                 VideosBeanVo videosBeanVo = videos.get(0);
-                if (videosBeanVo.isIstrysee()) {
-                    EventBus.getDefault().postSticky(new NetPlayTrySeeEvent(videosBeanVo));
-                }
+                EventBus.getDefault().postSticky(new NetMyPlayTrySeeEvent(videosBeanVo));
             }
             holder.mRlvNetBookJie.setVisibility(View.VISIBLE);
             if (mSelect.size() <= 0) {
@@ -134,7 +133,7 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
                 SelectVo vo1 = mSelect.get(aftherPosition);
                 ItemSelectVo itemSelect = vo1.getData().get(position);
                 itemSelect.setSelect(true);
-//                EventBus.getDefault().postSticky(new NetMyPlayTrySeeEvent(vo));
+                EventBus.getDefault().postSticky(new NetMyPlayEvent(vo));
                 notifyDataSetChanged();
 
             }

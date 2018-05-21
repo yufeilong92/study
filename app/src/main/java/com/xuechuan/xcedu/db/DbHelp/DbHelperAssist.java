@@ -1,10 +1,12 @@
 package com.xuechuan.xcedu.db.DbHelp;
 
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.db.DownVideoDbDao;
 import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.db.UserInfomDbDao;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.vo.Db.UserLookVo;
@@ -198,6 +200,7 @@ public class DbHelperAssist {
 
 
     }
+
 
     /**
      * 获取用户信息
@@ -657,5 +660,69 @@ public class DbHelperAssist {
         }
     }
 
+    public void saveLookVideo(UserLookVideoVo vo) {
+        if (vo == null) {
+            return;
+        }
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+            saveUserInfom(userInfom);
+            saveLookVideo(vo);
+        }
+        List<UserLookVideoVo> lookVideolist = infomDb.getLookVideolist();
+        if (lookVideolist == null || lookVideolist.isEmpty()) {
+            lookVideolist = new ArrayList<>();
+            lookVideolist.add(vo);
+        } else {
+            boolean isSavebefter = false;
+            int savebefer = -1;
+            for (int i = 0; i < lookVideolist.size(); i++) {
+                UserLookVideoVo userLookVo = lookVideolist.get(i);
+                if (userLookVo.getKid().equals(vo.getKid())) {
+                    isSavebefter = true;
+                    savebefer = i;
+                }
+            }
+            if (isSavebefter) {
+                if (savebefer != -1) {
+                    lookVideolist.remove(savebefer);
+                    lookVideolist.add(vo);
+                }
+            } else {
+                lookVideolist.add(vo);
+            }
 
+
+        }
+        infomDb.setLookVideolist(lookVideolist);
+        dao.update(infomDb);
+
+    }
+
+    /**
+     * 查询用户视频记录
+     * @param kid
+     * @param pid
+     * @param zid
+     * @return
+     */
+    public UserLookVideoVo queryUserLookVideoWithKid(String kid) {
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        if (infomDb == null) {
+            return null;
+        }
+        List<UserLookVideoVo> lookVideolist = infomDb.getLookVideolist();
+        if (lookVideolist == null || lookVideolist.isEmpty()) {
+            return null;
+        }
+        for (UserLookVideoVo vo : lookVideolist) {
+            if (vo.getKid().equals(kid) ) {
+                return vo;
+            }
+        }
+        return null;
+    }
 }

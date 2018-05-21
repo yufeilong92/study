@@ -4,23 +4,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.NetMyBookVualueFragment">
-    <com.andview.refreshview.XRefreshView
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_speca_content"
+        <com.andview.refreshview.XRefreshView
+            android:id="@+id/xrfv_speca_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
-        <TextView
-            android:gravity="center"
-            android:id="@+id/tv_net_empty_content"
-            android:text="暂无评价内容"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.andview.refreshview.XRefreshView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv_speca_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/tv_net_empty_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="暂无评价内容" />
+
+        </com.andview.refreshview.XRefreshView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_48"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <View style="@style/view_line_tab_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_net_book_evalue"
+                    android:layout_marginLeft="@dimen/space_8"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:hint="我来说两句..."
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/text_fu_color"
+                    android:paddingLeft="@dimen/space_8"
+                    android:paddingRight="@dimen/space_8"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/space_8"
+                    android:layout_marginTop="@dimen/space_8"
+                    android:background="@drawable/btn_home_search_bg"
+                    android:gravity="center_vertical" />
+
+                <ImageView
+                    android:id="@+id/iv_net_book_send"
+                    android:background="@mipmap/ic_send"
+                    android:layout_width="@dimen/space_48"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

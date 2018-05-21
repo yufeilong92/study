@@ -1,22 +1,46 @@
 package com.xuechuan.xcedu.fragment;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
+import com.andview.refreshview.callback.IFooterCallBack;
+import com.google.gson.Gson;
+import com.xuechuan.xcedu.Event.VideoIdEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.NetTableAdapter;
+import com.xuechuan.xcedu.adapter.HomeEvaluateAdapter;
+import com.xuechuan.xcedu.adapter.NetMyBookEvaleAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
-import com.xuechuan.xcedu.mvp.model.NetBookInfomModelImpl;
-import com.xuechuan.xcedu.mvp.presenter.NetBookInfomPresenter;
+import com.xuechuan.xcedu.mvp.model.NetVideoEvalueModelImple;
+import com.xuechuan.xcedu.mvp.presenter.NetVideoEvaluePresenter;
+import com.xuechuan.xcedu.mvp.view.NetVideoEvalueView;
+import com.xuechuan.xcedu.net.CurrencyService;
+import com.xuechuan.xcedu.ui.net.NetBookEvalueInfomActivity;
+import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.EvalueInfomVo;
+import com.xuechuan.xcedu.vo.EvalueVo;
+import com.xuechuan.xcedu.vo.SpecasChapterListVo;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +55,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/16
  */
-public class NetMyBookVualueFragment extends BaseFragment implements View.OnClickListener{
+public class NetMyBookVualueFragment extends BaseFragment implements View.OnClickListener, NetVideoEvalueView {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -43,6 +67,28 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     private List mArrary;
     private TextView mTvNetEmptyContent;
     private long lastRefreshTime;
+    private NetVideoEvaluePresenter mPresenter;
+    private String mVideoId;
+    private EditText mEtNetBookEvalue;
+    private ImageView mIvNetBookSend;
+    private NetMyBookEvaleAdapter adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
+    }
 
     public NetMyBookVualueFragment() {
     }
@@ -56,22 +102,20 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void MainVideoEvale(VideoIdEvent event) {
+        mVideoId = event.getVideoId();
+        loadNewData();
     }
 
-    @Override
+/*    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_net_my_book_vualue, container, false);
         initView(view);
         return view;
-    }
+    }*/
+
 
     @Override
     protected int initInflateView() {
@@ -85,10 +129,11 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         clearData();
         bindAdapterData();
         initXrfresh();
-        loadNewData();
+//        loadNewData();
     }
 
     private void initData() {
+        mPresenter = new NetVideoEvaluePresenter(new NetVideoEvalueModelImple(), this);
 
     }
 
@@ -98,15 +143,23 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
             return;
         }
         isRefresh = true;
+        mPresenter.requestVideoEvalue(mContext, mVideoId, 1);
 
     }
 
     private void bindAdapterData() {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-  /*      adapter = new NetTableAdapter(mContext, mArrary);
+        adapter = new NetMyBookEvaleAdapter(mContext, mArrary);
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
-        mRlvSpecaContent.setAdapter(adapter);*/
+        mRlvSpecaContent.setAdapter(adapter);
+        adapter.setClickListener(new NetMyBookEvaleAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(EvalueVo.DatasBean vo, int position) {
+                Intent intent = NetBookEvalueInfomActivity.newInstance(mContext,mVideoId, vo);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initXrfresh() {
@@ -115,7 +168,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         mXrfvSpecaRefresh.setAutoLoadMore(true);
         mXrfvSpecaRefresh.setPullRefreshEnable(false);
         mXrfvSpecaRefresh.setEmptyView(mTvNetEmptyContent);
-//        adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
+        adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
         mXrfvSpecaRefresh.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
             public void onRefresh(boolean isPullDown) {
@@ -129,6 +182,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
             }
         });
 
+
     }
 
     private void LoadMoreData() {
@@ -136,6 +190,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
             return;
         }
         isRefresh = true;
+        mPresenter.requestMoreVideoEvalue(mContext, mVideoId, getNowPage() + 1);
     }
 
     private void initView(View view) {
@@ -143,7 +198,11 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         mRlvSpecaContent = (RecyclerView) view.findViewById(R.id.rlv_speca_content);
         mXrfvSpecaRefresh = (XRefreshView) view.findViewById(R.id.xrfv_speca_refresh);
         mTvNetEmptyContent = (TextView) view.findViewById(R.id.tv_net_empty_content);
+        mIvNetBookSend = (ImageView) view.findViewById(R.id.iv_net_book_send);
+        mIvNetBookSend.setOnClickListener(this);
         mTvNetEmptyContent.setOnClickListener(this);
+        mEtNetBookEvalue = (EditText) view.findViewById(R.id.et_net_book_evalue);
+        mEtNetBookEvalue.setOnClickListener(this);
     }
 
     private void clearData() {
@@ -180,6 +239,106 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_net_book_send://发送
+                String str = getTextStr(mEtNetBookEvalue);
+                submitEvalue(str);
+                break;
+            default:
+
+        }
+    }
+
+    private void submitEvalue(String str) {
+        if (StringUtil.isEmpty(str)) {
+            T.showToast(mContext, getStrWithId(R.string.content_is_empty));
+            return;
+        }
+        mPresenter.submitEvalue(mContext, mVideoId, str, null);
+    }
+
+    @Override
+    public void EvalueOneSuccess(String con) {
+        mXrfvSpecaRefresh.stopRefresh();
+        isRefresh = false;
+        L.e("视频评价" + con);
+        Gson gson = new Gson();
+        EvalueInfomVo vo = gson.fromJson(con, EvalueInfomVo.class);
+        if (vo.getStatus().getCode() == 200) {//成功
+            List list = vo.getDatas();
+            clearData();
+            if (list != null && !list.isEmpty()) {
+                addListData(list);
+            } else {
+                mXrfvSpecaRefresh.setLoadComplete(true);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+
+            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == vo.getTotal().getTotal()) {
+                mXrfvSpecaRefresh.setLoadComplete(true);
+            } else {
+                mXrfvSpecaRefresh.setPullLoadEnable(true);
+                mXrfvSpecaRefresh.setLoadComplete(false);
+            }
+            adapter.notifyDataSetChanged();
+        } else {
+            isRefresh = false;
+            L.e(vo.getStatus().getMessage());
+        }
 
     }
+
+    @Override
+    public void EvalueOneError(String rror) {
+        isRefresh = false;
+    }
+
+    @Override
+    public void EvalueMoreSuccess(String con) {
+        isRefresh = false;
+        L.e("视频评价vodie" + con);
+        L.e(getNowPage() + "集合长度" + mArrary.size());
+        Gson gson = new Gson();
+        EvalueInfomVo vo = gson.fromJson(con, EvalueInfomVo.class);
+        if (vo.getStatus().getCode() == 200) {//成功
+            List list = vo.getDatas();
+//                    clearData();
+            if (list != null && !list.isEmpty()) {
+                addListData(list);
+            } else {
+                mXrfvSpecaRefresh.setLoadComplete(true);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+            //判断是否能整除
+            if (!mArrary.isEmpty() && mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                mXrfvSpecaRefresh.setLoadComplete(false);
+                mXrfvSpecaRefresh.setPullLoadEnable(true);
+            } else {
+                mXrfvSpecaRefresh.setLoadComplete(true);
+            }
+            adapter.notifyDataSetChanged();
+        } else {
+            isRefresh = false;
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
+    }
+
+    @Override
+    public void EvalueMoreError(String rror) {
+        isRefresh = false;
+    }
+
+    @Override
+    public void SubmitEvalueSuccess(String con) {
+      L.d("视频评价"+con);
+    }
+
+    @Override
+    public void SubmitEvalueError(String con) {
+      L.e("视频评价"+con);
+    }
+
+
 }

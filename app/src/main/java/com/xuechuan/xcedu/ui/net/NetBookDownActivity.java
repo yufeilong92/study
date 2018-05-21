@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StatFs;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,10 +16,6 @@ import android.widget.TextView;
 
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
-import com.easefun.polyvsdk.PolyvSDKClient;
-import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
-import com.xuechuan.xcedu.Event.NetDownDoneEvent;
-import com.xuechuan.xcedu.Event.NetDownEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.NetDownGoingAdapter;
 import com.xuechuan.xcedu.adapter.NetDownOverAdapter;
@@ -32,9 +26,6 @@ import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.NetDownSelectVo;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -198,7 +189,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         mOverAdapter.setClickListener(new NetDownOverAdapter.onItemClickListener() {
             @Override
             public void onClickListener(DownVideoDb db, int position) {
-                Intent intent = NetBookDownInfonActivity.newInstance(mContext, db.getKid());
+                Intent intent = NetBookDownOverActivity.newInstance(mContext, db.getKid());
                 startActivity(intent);
             }
         });

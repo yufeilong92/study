@@ -166,6 +166,26 @@ public class DbHelperDownAssist {
 
     }
 
+    public boolean isAdd(DownVideoDb db, DownVideoVo vo) {
+        if (db == null || vo == null) {
+            return false;
+        }
+        DownVideoDb videoDb = queryUserDownInfomWithKid(db.getKid());
+        if (videoDb == null) {
+            return false;
+        }
+        List<DownVideoVo> downlist = videoDb.getDownlist();
+        if (downlist == null || downlist.isEmpty()) {
+            return false;
+        }
+        for (DownVideoVo videoVo : downlist) {
+            if (videoVo.getZid().equals(vo.getZid()) && videoVo.getPid().equals(vo.getPid())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * 删除某条数据
      *

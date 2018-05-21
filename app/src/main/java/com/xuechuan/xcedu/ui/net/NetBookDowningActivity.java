@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.Event.NetDownEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.DownNetBookAdapter;
@@ -24,9 +25,14 @@ import com.xuechuan.xcedu.adapter.DownloadListViewAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
+import com.xuechuan.xcedu.mvp.model.NetDownIngModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.NetDownIngPresenter;
+import com.xuechuan.xcedu.mvp.view.NetDownIngView;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,7 +52,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/20
  */
-public class NetBookDowningActivity extends BaseActivity implements View.OnClickListener {
+public class NetBookDowningActivity extends BaseActivity implements View.OnClickListener, NetDownIngView {
 
     private TextView mTvNetDowningMake;
     private TextView mTvNetDowningDo;
@@ -74,6 +80,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     private List<DownInfomSelectVo> mDataSelectList;
     private DownNetBookAdapter mListAdapter;
     private DbHelperDownAssist mDao;
+    private NetDownIngPresenter mPresenter;
 
     public static Intent newInstance(Context context, String kid) {
         Intent intent = new Intent(context, NetBookDowningActivity.class);
@@ -89,6 +96,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         }
         mDao = DbHelperDownAssist.getInstance();
         initView();
+        mPresenter = new NetDownIngPresenter(new NetDownIngModelImpl(), this);
         initData();
     }
 
@@ -147,8 +155,42 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     mListAdapter.notifyDataSetChanged();
             }
         });
+        mListAdapter.setDownClickListener(new DownNetBookAdapter.onDownClickListener() {
+            @Override
+            public void onDownClickListener(String oid, int position) {
+                mPresenter.submitBookPrgeress(mContext, oid, mKid);
+                DownVideoDb videoDb = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(mKid);
+                if (videoDb != null) {
+                    List<DownVideoVo> downlist = videoDb.getDownlist();
+                    boolean isOver = false;
+                    if (downlist != null && !downlist.isEmpty()) {
+                        for (DownVideoVo vo : downlist) {
+                            if (!vo.getStatus().equals("0")) {
+                                isOver = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isOver) {
+                        mTvNetDowningStop.setText(R.string.stopdown);
+                    } else {
+                        mTvNetDowningStop.setText(R.string.start_down);
+                    }
+                }
 
+            }
+        });
 
+        if (mDataBean != null && mDataBean.getDownlist() != null && !mDataBean.getDownlist().isEmpty()) {
+            List<DownVideoVo> downlist = mDataBean.getDownlist();
+            for (DownVideoVo videoVo : downlist) {
+                if (!videoVo.getStatus().equals("0")) {
+                    mListAdapter.downloadAll();
+                    mTvNetDowningStop.setText(R.string.stopdown);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -259,5 +301,20 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             vo.setShowChb(chb);
             vo.setChbSelect(selelctchb);
         }
+    }
+
+    @Override
+    public void submitSuccess(String con) {
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode() == 200) {
+        } else {
+            L.e(vo.getStatus().getMessage());
+        }
+    }
+
+    @Override
+    public void submitError(String con) {
+        L.e(con);
     }
 }

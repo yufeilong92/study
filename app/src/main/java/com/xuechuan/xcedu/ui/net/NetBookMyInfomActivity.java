@@ -34,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easefun.polyvsdk.PolyvBitRate;
+import com.easefun.polyvsdk.PolyvDownloader;
+import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKUtil;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeItem;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeView;
@@ -57,12 +59,14 @@ import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
+import com.xuechuan.xcedu.Event.VideoIdEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.adapter.NetMyDownTableAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.fragment.NetMyBokTableFragment;
@@ -72,8 +76,10 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerMediaController;
 import com.xuechuan.xcedu.player.player.PolyvPlayerProgressView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
+import com.xuechuan.xcedu.player.util.MyDownloadListener;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
+import com.xuechuan.xcedu.service.SubmitProgressService;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
@@ -82,6 +88,7 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
@@ -177,6 +184,12 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      * 保利视频请求
      */
     private PolyvVlmsHelper helper;
+    private int mVideoid;
+    private ImageView mIvBack;
+    private DbHelperDownAssist mDao;
+    private int mPid;
+    private int mZid;
+    private String mTitleName;
 
     @Override
     protected void onResume() {
@@ -208,18 +221,64 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        int position = videoView.getCurrentPosition();
+        if (position != 0) {
+            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()),vid);
+        }
         videoView.destroy();
         EventBus.getDefault().removeAllStickyEvents();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
         mediaController.disable();
+        saveLookVideo();
+
     }
 
     public static Intent newInstance(Context context, CoursesBeanVo o) {
         Intent intent = new Intent(context, NetBookMyInfomActivity.class);
         intent.putExtra(SERIALIZABLELIST, o);
         return intent;
+    }
+
+    public static Intent newIntent(Context context, PlayMode playMode, String vid) {
+        return newIntent(context, playMode, vid, PolyvBitRate.ziDong.getNum());
+    }
+
+    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate) {
+        return newIntent(context, playMode, vid, bitrate, false);
+    }
+
+    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow) {
+        return newIntent(context, playMode, vid, bitrate, startNow, false);
+    }
+
+    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow,
+                                   boolean isMustFromLocal) {
+        Intent intent = new Intent(context, NetBookMyInfomActivity.class);
+        intent.putExtra("playMode", playMode.getCode());
+        intent.putExtra("value", vid);
+        intent.putExtra("bitrate", bitrate);
+        intent.putExtra("startNow", startNow);
+        intent.putExtra("isMustFromLocal", isMustFromLocal);
+        return intent;
+    }
+
+    public static void intentTo(Context context, PlayMode playMode, String vid) {
+        intentTo(context, playMode, vid, PolyvBitRate.ziDong.getNum());
+    }
+
+    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate) {
+        intentTo(context, playMode, vid, bitrate, false);
+    }
+
+    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow) {
+        intentTo(context, playMode, vid, bitrate, startNow, false);
+    }
+
+    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow,
+                                boolean isMustFromLocal) {
+        context.startActivity(newIntent(context, playMode, vid, bitrate, startNow, isMustFromLocal));
     }
 
 /*    @Override
@@ -318,8 +377,14 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         VideosBeanVo vo = event.getVo();
         L.e(vo.getVid());
         L.e("调用===========" + vo.getVid());
-        play(vo.getVid(), 0, true, false);
-        mRlPlaylayout.setVisibility(View.GONE);
+        vid = vo.getVid();
+        mVideoid = vo.getVideoid();
+        mPid = vo.getChapterid();
+        mZid = vo.getVideoid();
+        mTitleName = vo.getVideoname();
+        play();
+//        play(vo.getVid(), 3, true, false);
+//        mRlPlaylayout.setVisibility(View.GONE);
     }
 
     /**
@@ -329,7 +394,11 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     public void onNetMainTryPlayId(NetMyPlayTrySeeEvent event) {
         VideosBeanVo vo = event.getVo();
         L.e(vo.getVid());
+        mVideoid = vo.getVideoid();
+        mPid = vo.getChapterid();
+        mZid = vo.getVideoid();
         vid = vo.getVid();
+        mTitleName = vo.getVideoname();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -346,6 +415,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     private void initView() {
         mContext = this;
+        mIvBack = findViewById(R.id.iv_net_book_back);
+        mIvBack.setOnClickListener(this);
         mLlNetPlayRoot = (LinearLayout) findViewById(R.id.ll_net_play_my_root);
         mLlNetPlayRoot.setOnClickListener(this);
         mIvNetBookPlay = (ImageView) findViewById(R.id.iv_net_my_book_play);
@@ -618,6 +689,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     }
 
+
     /**
      * 播放视频
      *
@@ -635,8 +707,10 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         if (startNow) {
             //调用setVid方法视频会自动播放
             videoView.setVid(vid, bitrate, isMustFromLocal);
+
         }
     }
+
 
     private void clearGestureInfo() {
         videoView.clearGestureInfo();
@@ -658,45 +732,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         return super.onKeyDown(keyCode, event);
     }
 
-    public static Intent newIntent(Context context, PlayMode playMode, String vid) {
-        return newIntent(context, playMode, vid, PolyvBitRate.ziDong.getNum());
-    }
-
-    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate) {
-        return newIntent(context, playMode, vid, bitrate, false);
-    }
-
-    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow) {
-        return newIntent(context, playMode, vid, bitrate, startNow, false);
-    }
-
-    public static Intent newIntent(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow,
-                                   boolean isMustFromLocal) {
-        Intent intent = new Intent(context, NetBookMyInfomActivity.class);
-        intent.putExtra("playMode", playMode.getCode());
-        intent.putExtra("value", vid);
-        intent.putExtra("bitrate", bitrate);
-        intent.putExtra("startNow", startNow);
-        intent.putExtra("isMustFromLocal", isMustFromLocal);
-        return intent;
-    }
-
-    public static void intentTo(Context context, PlayMode playMode, String vid) {
-        intentTo(context, playMode, vid, PolyvBitRate.ziDong.getNum());
-    }
-
-    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate) {
-        intentTo(context, playMode, vid, bitrate, false);
-    }
-
-    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow) {
-        intentTo(context, playMode, vid, bitrate, startNow, false);
-    }
-
-    public static void intentTo(Context context, PlayMode playMode, String vid, int bitrate, boolean startNow,
-                                boolean isMustFromLocal) {
-        context.startActivity(newIntent(context, playMode, vid, bitrate, startNow, isMustFromLocal));
-    }
 
     @Override
     public void onClick(View v) {
@@ -706,9 +741,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     T.showToast(mContext, "暂无课观看");
                     return;
                 }
-                if (!StringUtil.isEmpty(vid)) {
-                    play();
-                }
+                play();
                 break;
             case R.id.iv_net_icon_my_down://我的下载
                 if (mTableList == null || mTableList.isEmpty()) {
@@ -717,6 +750,14 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 }
                 showPopwindow();
                 break;
+            case R.id.iv_net_book_back:
+                int position = videoView.getCurrentPosition();
+//                String s = PolyvTimeUtils.generateTime(position);
+                if (position != 0) {
+                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()),vid);
+                }
+                this.finish();
+                break;
             default:
 
         }
@@ -724,9 +765,24 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     private void play() {
         mRlPlaylayout.setVisibility(View.GONE);
-        play(vid, 0, true, false);
+        play(vid, 3, true, false);
         mediaController.setIsPlay(true);
         PolyvScreenUtils.IsPlay(true);
+        saveLookVideo();
+        EventBus.getDefault().postSticky(new VideoIdEvent(String.valueOf(mVideoid)));
+    }
+
+    private void saveLookVideo() {
+        DbHelperAssist mUserDao = DbHelperAssist.getInstance();
+        UserLookVideoVo vo = new UserLookVideoVo();
+        vo.setKid(String.valueOf(dataVo.getId()));
+        vo.setPid(String.valueOf(mPid));
+        vo.setZid(String.valueOf(mZid));
+        vo.setTitleName(mTitleName);
+        int position = videoView.getCurrentPosition();
+//                String s = PolyvTimeUtils.generateTime(position);
+        vo.setProgress(String.valueOf(position));
+        mUserDao.saveLookVideo(vo);
     }
 
 
@@ -779,6 +835,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
+        mDao = DbHelperDownAssist.getInstance();
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             private boolean isRuning = true;
             private Thread thread;
@@ -814,9 +871,11 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                             mDownAdapter.notifyDataSetChanged();
                         } else {
                             isRuning = false;
-                            DbHelperDownAssist.getInstance().addDownItem(vo);
+//                            DbHelperDownAssist.getInstance().addDownItem(vo);
+                            startDown(vo);
                             mBtnPopDownRun.setText("正在缓存(" + vo.getDownlist().size() + ")");
                             mDownAdapter.notifyDataSetChanged();
+
                         }
                     }
                 }
@@ -882,7 +941,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         isShow(true, false, true, false, false);
-                        DbHelperDownAssist.getInstance().addDownItem(vo);
+//                        DbHelperDownAssist.getInstance().addDownItem(vo);
+                        startDown(vo);
                     }
                 });
                 //全选
@@ -914,7 +974,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         popDown.getPopupWindow().dismiss();
-                        startActivity(new Intent(NetBookMyInfomActivity.this, NetBookDownActivity.class));
+                        Intent intent = NetBookDowningActivity.newInstance(mContext, String.valueOf(dataVo.getId()));
+                        startActivity(intent);
                     }
                 });
 
@@ -998,6 +1059,18 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         setBackgroundAlpha(0.5f, NetBookMyInfomActivity.this);
     }
 
+    private void startDown(DownVideoDb vo) {
+        for (int i = 0; i < vo.getDownlist().size(); i++) {
+            DownVideoVo vo1 = vo.getDownlist().get(i);
+            if (mDao != null && !mDao.isAdd(vo, vo1)) {
+                mDao.addDownItem(vo);
+                PolyvDownloader polyvDownloader = PolyvDownloaderManager.getPolyvDownloader(vid, Integer.parseInt(vo1.getBitRate()));
+                polyvDownloader.setPolyvDownloadProressListener(new MyDownloadListener(mContext, vo, vo1));
+                polyvDownloader.start(mContext);
+            }
+        }
+    }
+
 
     /**
      * 添加数据
@@ -1045,13 +1118,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     }
 
-    public void submitPlayProgress() {
-        PolyvVideoView view = new PolyvVideoView(mContext);
-        int position = view.getCurrentPosition();
-        Log.e(TAG, "submitPlayProgress: " + position);
-    }
-
-
     private void addData(int mBitrate, VideosBeanVo beanVo, List<DownVideoVo> db) throws JSONException {
         DownVideoVo vo = new DownVideoVo();
         PolyvSDKUtil sdkUtil = new PolyvSDKUtil();
@@ -1076,6 +1142,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         vo.setVid(beanVo.getVid());
         //视频名字
         vo.setTitle(beanVo.getVideoname());
+        //该视频id
+        vo.setVideoOid(String.valueOf(beanVo.getVideoid()));
         vo.setStatus("2");
         db.add(vo);
         Log.e("==视频信息==", mBitrate + "\naddData:总时长 " + duration + "\n"
@@ -1084,5 +1152,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 + beanVo.getVid() + "\n");
 
     }
+
 
 }

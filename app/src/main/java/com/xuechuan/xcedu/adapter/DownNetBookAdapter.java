@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -29,7 +30,9 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.player.Db.PolyvDownloadInfo;
+import com.xuechuan.xcedu.player.PolyvPlayerActivity;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
+import com.xuechuan.xcedu.ui.net.NetBookPlayActivity;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
@@ -62,12 +65,22 @@ public class DownNetBookAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private final DbHelperDownAssist mDao;
 
+    private onDownClickListener downOverListener;
+
+    public interface onDownClickListener {
+        public void onDownClickListener(String  videOid, int position);
+    }
+
+    public void setDownClickListener(onDownClickListener clickListener) {
+        this.downOverListener = clickListener;
+    }
+
 
     public DownNetBookAdapter(Context context, DownVideoDb mDatalists, ListView lv_download, List<DownInfomSelectVo> mDataSelectList) {
         this.mDatalists = mDatalists.getDownlist();
         this.mDownVideo = mDatalists;
         this.mContext = context;
-        this.mSelectList=mDataSelectList;
+        this.mSelectList = mDataSelectList;
         appContext = context.getApplicationContext();
         this.mInflater = LayoutInflater.from(this.mContext);
         this.lv_download = lv_download;
@@ -166,6 +179,8 @@ public class DownNetBookAdapter extends BaseAdapter {
                 } else {
                     if (!tv_status.getText().equals(DOWNLOADING)) {
                         tv_status.setText(WAITED);
+                        mRlSpeed.setVisibility(View.GONE);
+                        mprgp.setVisibility(View.GONE);
                         mRlSpeed.setVisibility(View.VISIBLE);
                         mprgp.setVisibility(View.VISIBLE);
                     }
@@ -222,7 +237,7 @@ public class DownNetBookAdapter extends BaseAdapter {
                         holder.mChbItemDownInfom.setVisibility(View.VISIBLE);
                         if (selectVo.isChbSelect()) {//显示选中
                             holder.mChbItemDownInfom.setChecked(true);
-                        }else {
+                        } else {
                             holder.mChbItemDownInfom.setChecked(false);
                         }
                     } else {
@@ -232,7 +247,7 @@ public class DownNetBookAdapter extends BaseAdapter {
                         holder.mIvItemDownInfomPlay.setVisibility(View.VISIBLE);
                         if (selectVo.isPlaySelect()) {//显示选中
 //                            holder.mChbItemDownInfomPlay.setChecked(true);
-                        }else {
+                        } else {
 //                            holder.mChbItemDownInfomPlay.setChecked(false);
                         }
                     } else {
@@ -266,6 +281,11 @@ public class DownNetBookAdapter extends BaseAdapter {
         if (progerss == 100) {//已经下载完成
             holder.mTvItemDownStatus.setText(DOWNLOADED);
             shoSpeed(holder, false);
+            if (downOverListener != null) {
+
+                downOverListener.onDownClickListener(vo.getVideoOid(), position);
+            }
+
         } else if (downloader.isDownloading()) {//是否开始下载
             holder.mTvItemDownStatus.setText(DOWNLOADING);
             holder.mTvItemDownInfomSpeed.setText(SPEED);
@@ -392,6 +412,9 @@ public class DownNetBookAdapter extends BaseAdapter {
                     viewHolder.get().mTvItemDownStatus.setText(DOWNLOADED);
                     viewHolder.get().mRlItemDownSpeed.setVisibility(View.GONE);
                     viewHolder.get().mProgressItemDownInfom.setVisibility(View.GONE);
+                    if (downOverListener != null) {
+                        downOverListener.onDownClickListener(downloadInfo.getVideoOid(), position);
+                    }
                     // TODO: 2018/5/20  上传服务器
                     Toast.makeText(appContext, "第" + (position + 1) + "个任务下载成功", Toast.LENGTH_SHORT).show();
                 }
@@ -471,7 +494,9 @@ public class DownNetBookAdapter extends BaseAdapter {
             PolyvDownloader downloader = PolyvDownloaderManager.getPolyvDownloader(vid, bitRate);
             String status = getStrWithView(tv_status);
             if (status.equals(DOWNLOADED)) {//已下载跳转播放界面
-
+                Intent intent = NetBookPlayActivity.newIntent(mContext, NetBookPlayActivity.PlayMode.portrait, vid, bitRate, true, true);
+                // 在线视频和下载的视频播放的时候只显示播放器窗口，用该参数来控制
+                mContext.startActivity(intent);
             } else if (status.equals(DOWNLOADING) || status.equals(WAITED)) {//正在和等待下载状态
                 tv_status.setText(PAUSEED);
                 downloader.stop();

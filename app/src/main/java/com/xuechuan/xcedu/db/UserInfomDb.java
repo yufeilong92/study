@@ -2,6 +2,8 @@ package com.xuechuan.xcedu.db;
 
 import com.xuechuan.xcedu.db.Converent.UserConverent;
 import com.xuechuan.xcedu.db.Converent.UserLookConverent;
+import com.xuechuan.xcedu.db.Converent.UserLookVideoConverent;
+import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.vo.Db.UserLookVo;
 
@@ -100,14 +102,21 @@ public class UserInfomDb {
      */
     @Convert(converter = UserLookConverent.class, columnType = String.class)
     private List<UserLookVo> WrongDataCase;
-    @Generated(hash = 471990743)
+
+    /**
+     *用户查看视频记录 保存记录
+     */
+    @Convert(converter = UserLookVideoConverent.class, columnType = String.class)
+    private List<UserLookVideoVo> lookVideolist;
+
+    @Generated(hash = 1943522123)
     public UserInfomDb(Long id, UserInfomVo vo, String moid, boolean SkillBook,
             boolean ColligateBook, boolean CaseBook, String ShowDayOrNight,
             boolean userNextGo, String token, String tokenTime,
             String delectQuestion, List<UserLookVo> skillData,
             List<UserLookVo> coloctData, List<UserLookVo> caseData,
             List<UserLookVo> WrongDataSkill, List<UserLookVo> WrongDataColoct,
-            List<UserLookVo> WrongDataCase) {
+            List<UserLookVo> WrongDataCase, List<UserLookVideoVo> lookVideolist) {
         this.id = id;
         this.vo = vo;
         this.moid = moid;
@@ -125,6 +134,7 @@ public class UserInfomDb {
         this.WrongDataSkill = WrongDataSkill;
         this.WrongDataColoct = WrongDataColoct;
         this.WrongDataCase = WrongDataCase;
+        this.lookVideolist = lookVideolist;
     }
     @Generated(hash = 1986169396)
     public UserInfomDb() {
@@ -230,6 +240,12 @@ public class UserInfomDb {
     }
     public void setWrongDataCase(List<UserLookVo> WrongDataCase) {
         this.WrongDataCase = WrongDataCase;
+    }
+    public List<UserLookVideoVo> getLookVideolist() {
+        return this.lookVideolist;
+    }
+    public void setLookVideolist(List<UserLookVideoVo> lookVideolist) {
+        this.lookVideolist = lookVideolist;
     }
 
  

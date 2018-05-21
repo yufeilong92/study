@@ -27,8 +27,10 @@ public class PolyvScreenUtils {
     private static boolean mIsplay;
 
     public static void initTitleBar(LinearLayout titleBar, RelativeLayout mRlPlaylayout, LinearLayout mLlNetBuyLayou) {
-        mTitleBar = titleBar;
-        mrlplaylayout = mRlPlaylayout;
+        if (titleBar != null)
+            mTitleBar = titleBar;
+        if (mRlPlaylayout != null)
+            mrlplaylayout = mRlPlaylayout;
         if (mLlNetBuyLayou != null)
             mLlNetBuyLayous = mLlNetBuyLayou;
     }
@@ -59,12 +61,14 @@ public class PolyvScreenUtils {
 
     // 设置竖屏
     public static void setPortrait(Activity activity) {
-        mTitleBar.setVisibility(View.VISIBLE);
-        if (mIsplay) {
-            mrlplaylayout.setVisibility(View.GONE);
-        } else {
-            mrlplaylayout.setVisibility(View.VISIBLE);
-        }
+        if (mTitleBar != null)
+            mTitleBar.setVisibility(View.VISIBLE);
+        if (mrlplaylayout != null)
+            if (mIsplay) {
+                mrlplaylayout.setVisibility(View.GONE);
+            } else {
+                mrlplaylayout.setVisibility(View.VISIBLE);
+            }
         if (mLlNetBuyLayous != null)
             mLlNetBuyLayous.setVisibility(View.VISIBLE);
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
@@ -72,12 +76,14 @@ public class PolyvScreenUtils {
 
     // 设置横屏
     public static void setLandscape(Activity activity) {
-        mTitleBar.setVisibility(View.GONE);
-        if (mIsplay) {
-            mrlplaylayout.setVisibility(View.GONE);
-        } else {
-            mrlplaylayout.setVisibility(View.VISIBLE);
-        }
+        if (mTitleBar != null)
+            mTitleBar.setVisibility(View.GONE);
+        if (mrlplaylayout != null)
+            if (mIsplay) {
+                mrlplaylayout.setVisibility(View.GONE);
+            } else {
+                mrlplaylayout.setVisibility(View.VISIBLE);
+            }
         if (mLlNetBuyLayous != null)
             mLlNetBuyLayous.setVisibility(View.GONE);
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -120,12 +126,14 @@ public class PolyvScreenUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            mTitleBar.setVisibility(View.GONE);
-            if (mIsplay) {
-                mrlplaylayout.setVisibility(View.GONE);
-            } else {
-                mrlplaylayout.setVisibility(View.VISIBLE);
-            }
+            if (mTitleBar != null)
+                mTitleBar.setVisibility(View.GONE);
+            if (mrlplaylayout != null)
+                if (mIsplay) {
+                    mrlplaylayout.setVisibility(View.GONE);
+                } else {
+                    mrlplaylayout.setVisibility(View.VISIBLE);
+                }
             if (mLlNetBuyLayous != null)
                 mLlNetBuyLayous.setVisibility(View.GONE);
         } else {
@@ -135,12 +143,14 @@ public class PolyvScreenUtils {
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(uiOptions);
-            mTitleBar.setVisibility(View.GONE);
-            if (mIsplay) {
-                mrlplaylayout.setVisibility(View.GONE);
-            } else {
-                mrlplaylayout.setVisibility(View.VISIBLE);
-            }
+            if (mTitleBar != null)
+                mTitleBar.setVisibility(View.GONE);
+            if (mrlplaylayout != null)
+                if (mIsplay) {
+                    mrlplaylayout.setVisibility(View.GONE);
+                } else {
+                    mrlplaylayout.setVisibility(View.VISIBLE);
+                }
             if (mLlNetBuyLayous != null)
                 mLlNetBuyLayous.setVisibility(View.GONE);
         }
@@ -150,27 +160,31 @@ public class PolyvScreenUtils {
     public static void setDecorVisible(Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            mTitleBar.setVisibility(View.VISIBLE);
+            if (mTitleBar != null)
+                mTitleBar.setVisibility(View.VISIBLE);
             if (mLlNetBuyLayous != null)
                 mLlNetBuyLayous.setVisibility(View.VISIBLE);
-            if (mIsplay) {
-                mrlplaylayout.setVisibility(View.GONE);
-            } else {
-                mrlplaylayout.setVisibility(View.VISIBLE);
-            }
+            if (mrlplaylayout != null)
+                if (mIsplay) {
+                    mrlplaylayout.setVisibility(View.GONE);
+                } else {
+                    mrlplaylayout.setVisibility(View.VISIBLE);
+                }
         } else {
             View decorView = activity.getWindow().getDecorView();
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
             decorView.setSystemUiVisibility(uiOptions);
-            mTitleBar.setVisibility(View.VISIBLE);
+            if (mTitleBar != null)
+                mTitleBar.setVisibility(View.VISIBLE);
             if (mLlNetBuyLayous != null)
                 mLlNetBuyLayous.setVisibility(View.VISIBLE);
-            if (mIsplay) {
-                mrlplaylayout.setVisibility(View.GONE);
-            } else {
-                mrlplaylayout.setVisibility(View.VISIBLE);
-            }
+            if (mrlplaylayout != null)
+                if (mIsplay) {
+                    mrlplaylayout.setVisibility(View.GONE);
+                } else {
+                    mrlplaylayout.setVisibility(View.VISIBLE);
+                }
         }
     }
 

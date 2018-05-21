@@ -129,6 +129,7 @@ public class NetDownUtil {
         vo.setVid(beanVo.getVid());
         //视频名字
         vo.setTitle(beanVo.getVideoname());
+        vo.setVideoOid(String.valueOf(beanVo.getVideoid()));
         vo.setStatus("2");
         db.add(vo);
         Log.e("==视频信息==", bitrate + "\naddData:总时长 " + duration + "\n"

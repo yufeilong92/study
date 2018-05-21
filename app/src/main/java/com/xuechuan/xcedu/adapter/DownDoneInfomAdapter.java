@@ -48,7 +48,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
     private onItemClickListener clickListener;
 
     public interface onItemClickListener {
-        public void onClickListener(Object obj, int position);
+        public void onClickListener( DownVideoVo vo, int position);
     }
 
     public void setClickListener(onItemClickListener clickListener) {
@@ -129,7 +129,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
     @Override
     public void onClick(View v) {
         if (clickListener != null) {
-            clickListener.onClickListener(v.getTag(), v.getId());
+            clickListener.onClickListener((DownVideoVo) v.getTag(), v.getId());
         }
 
     }

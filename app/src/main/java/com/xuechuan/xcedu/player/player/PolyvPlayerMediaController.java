@@ -227,8 +227,10 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
      * 状态栏
      */
     public void initTitltBar(LinearLayout parentView, RelativeLayout mRlPlaylayout, LinearLayout mLlNetBuyLayou) {
-        this.mTitleBarlayout = parentView;
-        this.mRlPlayLayout = mRlPlaylayout;
+        if (parentView != null)
+            this.mTitleBarlayout = parentView;
+        if (mRlPlaylayout != null)
+            this.mRlPlayLayout = mRlPlaylayout;
         if (mLlNetBuyLayou != null)
             this.mLiNetBuyLayout = mLlNetBuyLayou;
     }
@@ -497,12 +499,14 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         PolyvScreenUtils.setLandscape(videoActivity);
         //初始为横屏时，状态栏需要隐藏
         PolyvScreenUtils.hideStatusBar(videoActivity);
-        mTitleBarlayout.setVisibility(GONE);
-        if (mIsplay) {
-            mRlPlayLayout.setVisibility(GONE);
-        } else {
-            mRlPlayLayout.setVisibility(VISIBLE);
-        }
+        if (mTitleBarlayout != null)
+            mTitleBarlayout.setVisibility(GONE);
+        if (mRlPlayLayout != null)
+            if (mIsplay) {
+                mRlPlayLayout.setVisibility(GONE);
+            } else {
+                mRlPlayLayout.setVisibility(VISIBLE);
+            }
         if (mLiNetBuyLayout != null)
             mLiNetBuyLayout.setVisibility(GONE);
         //初始为横屏时，控制栏的宽高需要设置
@@ -522,12 +526,14 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
      */
     public void changeToPortrait() {
         PolyvScreenUtils.setPortrait(videoActivity);
-        mTitleBarlayout.setVisibility(VISIBLE);
-        if (mIsplay) {
-            mRlPlayLayout.setVisibility(GONE);
-        } else {
-            mRlPlayLayout.setVisibility(VISIBLE);
-        }
+        if (mTitleBarlayout != null)
+            mTitleBarlayout.setVisibility(VISIBLE);
+        if (mRlPlayLayout != null)
+            if (mIsplay) {
+                mRlPlayLayout.setVisibility(GONE);
+            } else {
+                mRlPlayLayout.setVisibility(VISIBLE);
+            }
         if (mLiNetBuyLayout != null)
             mLiNetBuyLayout.setVisibility(VISIBLE);
         initPortraitWH();

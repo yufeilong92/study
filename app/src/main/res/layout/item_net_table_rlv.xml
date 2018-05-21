@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="sssss"
-            android:textColor="@color/text_fu_color"
+            android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
 
         <ImageView

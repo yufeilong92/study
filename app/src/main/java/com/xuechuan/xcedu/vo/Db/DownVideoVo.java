@@ -26,6 +26,10 @@ public class DownVideoVo {
      * 保利视频id
      */
     private String vid;
+    /**
+     * 当前视频的id
+     */
+    private String VideoOid;
 
     /**
      * 清晰度 1流畅 2 高清 3超清
@@ -137,4 +141,11 @@ public class DownVideoVo {
         this.status = status;
     }
 
+    public String getVideoOid() {
+        return VideoOid;
+    }
+
+    public void setVideoOid(String videoOid) {
+        VideoOid = videoOid;
+    }
 }

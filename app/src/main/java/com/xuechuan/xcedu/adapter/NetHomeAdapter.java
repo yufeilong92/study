@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 
 import java.util.List;
 
@@ -31,11 +33,13 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
     private Context mContext;
     private List<CoursesBeanVo> mData;
     private final LayoutInflater mInflater;
+    private final DbHelperAssist mUserDao;
 
     public NetHomeAdapter(Context mContext, List<CoursesBeanVo> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
+        mUserDao = DbHelperAssist.getInstance();
     }
 
     private onItemClickListener clickListener;
@@ -62,11 +66,21 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
         if (!StringUtil.isEmpty(vo.getCoverimg())) {
             MyAppliction.getInstance().displayImages(holder.mIvNetMyitemTitleImg, vo.getCoverimg(), false);
         }
-
         holder.mTvNetMyhomeTitle.setText(vo.getName());
         holder.itemView.setTag(vo);
         holder.itemView.setId(position);
-        // TODO: 2018/5/14 上次看到是时间
+        UserLookVideoVo lookVideoVo = mUserDao.queryUserLookVideoWithKid(String.valueOf(vo.getId()));
+        if (lookVideoVo != null) {
+            String titleName = lookVideoVo.getTitleName();
+            int first = titleName.indexOf("第");
+            String substring;
+            if (first==-1){
+                substring = titleName.substring(0, 6);
+            }else {
+                substring = titleName.substring(first, first+6);
+            }
+            holder.mTvNetMyhomePricle.setText("上次看到 "+substring);
+        }
 
     }
 

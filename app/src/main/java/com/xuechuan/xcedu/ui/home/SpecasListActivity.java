@@ -120,7 +120,7 @@ public class SpecasListActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
                 } else {
                     isRefresh = false;
-                    T.showToast(mContext, vo.getStatus().getMessage());
+                    L.e( vo.getStatus().getMessage());
                 }
 
             }
@@ -168,7 +168,7 @@ public class SpecasListActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
                 } else {
                     isRefresh = false;
-                    T.showToast(mContext, vo.getStatus().getMessage());
+                    L.e( vo.getStatus().getMessage());
                 }
 
             }

@@ -24,6 +24,7 @@ import com.xuechuan.xcedu.ui.net.NetAllBookActivity;
 import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
 import com.xuechuan.xcedu.ui.net.NetBookInfomActivity;
 import com.xuechuan.xcedu.ui.net.NetBookMyInfomActivity;
+import com.xuechuan.xcedu.ui.net.NetBookPlayActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
@@ -101,6 +102,12 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
         mPresenter.requestClassSandProducts(mContext);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initView(View view) {
         mContext = getActivity();
         mRlvNetBuyList = (RecyclerView) view.findViewById(R.id.rlv_net_buy_list);
@@ -170,6 +177,8 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
                 startActivity(new Intent(mContext, NetAllBookActivity.class));
                 break;
             case R.id.iv_net_mydown:
+//                Intent intent=new Intent(mContext,NetBookPlayActivity.class);
+//                startActivity(intent);
                 startActivity(new Intent(mContext, NetBookDownActivity.class));
                 break;
             case R.id.iv_net_all:
