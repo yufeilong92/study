@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,10 +17,8 @@ import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
 import com.google.gson.Gson;
-import com.xuechuan.xcedu.Event.NetDownEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.DownNetBookAdapter;
-import com.xuechuan.xcedu.adapter.DownloadListViewAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
@@ -29,14 +26,11 @@ import com.xuechuan.xcedu.mvp.model.NetDownIngModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.NetDownIngPresenter;
 import com.xuechuan.xcedu.mvp.view.NetDownIngView;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
 import com.xuechuan.xcedu.vo.ResultVo;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,6 +58,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     private Button mBtnNetDownDelect;
     private RelativeLayout mRlNetDownDelect;
     private Context mContext;
+    private TextView mTvNetDownEmpty;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +66,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_net_book_downing);
         initView();
     }*/
+
     /**
      * 课目id
      */
@@ -103,6 +99,12 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     private void initData() {
         computeStorage();
         mDataBean = mDao.queryUserDownInfomWithKid(mKid);
+        if (mDataBean == null || mDataBean.getDownlist() == null || mDataBean.getDownlist().isEmpty()) {
+            mTvNetDownEmpty.setVisibility(View.VISIBLE);
+            mTvNetDowningMake.setText(getStringWithId(R.string.edit));
+            return;
+        }
+        mTvNetDownEmpty.setVisibility(View.GONE);
         mDataSelectList = new ArrayList<>();
         for (DownVideoVo vo : mDataBean.getDownlist()) {
             DownInfomSelectVo selectVo = new DownInfomSelectVo();
@@ -176,18 +178,38 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     } else {
                         mTvNetDowningStop.setText(R.string.start_down);
                     }
+                    computeStorage();
                 }
 
             }
         });
 
+        startDownAll(false);
+    }
+
+    /**
+     * 开始下载，并提示
+     *
+     * @param isShowTos 是否提示
+     */
+    private void startDownAll(boolean isShowTos) {
+        boolean isDownAll = false;
         if (mDataBean != null && mDataBean.getDownlist() != null && !mDataBean.getDownlist().isEmpty()) {
             List<DownVideoVo> downlist = mDataBean.getDownlist();
             for (DownVideoVo videoVo : downlist) {
                 if (!videoVo.getStatus().equals("0")) {
-                    mListAdapter.downloadAll();
-                    mTvNetDowningStop.setText(R.string.stopdown);
+                    isDownAll = true;
                     break;
+                }
+            }
+            if (isDownAll) {//有还有没有下载的
+                mListAdapter.downloadAll();
+                mTvNetDowningStop.setText(R.string.stopdown);
+            } else {
+                if (isShowTos) {
+                    mTvNetDowningStop.setText(R.string.start_down);
+                    T.showToast(mContext, getString(R.string.no_down_video));
+
                 }
             }
         }
@@ -212,6 +234,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
+
         mTvNetDowningMake = (TextView) findViewById(R.id.tv_net_downing_make);
         mTvNetDowningMake.setOnClickListener(this);
         mTvNetDowningDo = (TextView) findViewById(R.id.tv_net_downing_do);
@@ -225,6 +248,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         mRlNetDownDelect = (RelativeLayout) findViewById(R.id.rl_net_down_delect);
         mContext = this;
         mBtnNetDownDelect.setOnClickListener(this);
+        mTvNetDownEmpty = (TextView) findViewById(R.id.tv_net_down_empty);
+        mTvNetDownEmpty.setOnClickListener(this);
     }
 
     @Override
@@ -264,8 +289,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             case R.id.tv_net_downing_stop://开始下载
                 String start = getTextStr(mTvNetDowningStop);
                 if (start.equals(getString(R.string.start_down))) {//开始下载
-                    mTvNetDowningStop.setText(R.string.stopdown);
-                    mListAdapter.downloadAll();
+//                    mTvNetDowningStop.setText(R.string.stopdown);
+                    startDownAll(true);
+//                    mListAdapter.downloadAll();
                 } else {//暂停下载
                     mTvNetDowningStop.setText(R.string.start_down);
                     mListAdapter.pauseAll();

@@ -37,7 +37,7 @@
     android:gravity="center"
     android:textSize="@dimen/text_size_14"
     android:textColor="@color/text_title_color"
-    android:text="查询不到该课目"
+    android:text="暂无下载内容"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
     <LinearLayout

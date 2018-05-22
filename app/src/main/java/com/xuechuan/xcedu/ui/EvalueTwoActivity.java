@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -37,9 +36,7 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
-import com.xuechuan.xcedu.vo.EvalueInfomVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
-import com.xuechuan.xcedu.vo.SpecasChapterListVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
@@ -47,11 +44,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 /**
  * All rights Reserved, Designed By
@@ -253,7 +247,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
                 }
                 // TODO: 2018/5/3 提交二级评价
                 submitEvalut(str);
-                mDialog1 = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit));
+                mDialog1 = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
                 Utils.hideInputMethod(mContext, mEtInfomTwoContent);
                 break;
         }

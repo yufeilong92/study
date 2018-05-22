@@ -450,4 +450,13 @@ public class BankService extends BaseHttpServcie {
         requestHttpServciePost(mContext, url, obj, true, callBackView);
     }
 
+    /**
+     * 获取网课产品列表
+     * @param callBackView
+     */
+    public void requestBankProduct( StringCallBackView callBackView) {
+        String url = getUrl(mContext, R.string.http_questionbankproduct);
+        requestHttpServiceGet(mContext, url, null, true, callBackView);
+
+    }
 }

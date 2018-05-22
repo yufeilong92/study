@@ -52,6 +52,7 @@
             <Space style="@style/space_8_width" />
 
             <TextView
+                android:layout_gravity="center"
                 android:id="@+id/tv_item_home_laud_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

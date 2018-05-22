@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.base;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -101,7 +103,8 @@ public class BaseHttpServcie {
             infomVo.setToken(null);
             infomVo.setStaffid(null);
         }
-        RequestBody requestBody = RequestBody.create(parse, params.toString());
+        RequestBody requestBody = RequestBody.create(parse,
+                params.toString());
         sendRequestPostHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce()
                 , signature, requestBody, callBackView);
     }
@@ -210,7 +213,6 @@ public class BaseHttpServcie {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
-
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>post(url)

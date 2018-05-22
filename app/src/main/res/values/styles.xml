@@ -318,10 +318,35 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">5dp</item>
     </style>
-
+    <style name="view_line_tab_line_10">
+        <item name="android:background">@mipmap/ic_title_line_gray</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+    </style>
     <style name="view_line_10_gray">
         <item name="android:background">@color/input_bg</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">10dp</item>
     </style>
+    <style name="m_more">
+        <item name="android:src">@mipmap/ic_more_go</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="m_title">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/text_fu_color</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+    <style name="m_name">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
 </resources>

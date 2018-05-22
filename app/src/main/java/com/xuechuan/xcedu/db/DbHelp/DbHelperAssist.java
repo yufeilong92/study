@@ -704,8 +704,6 @@ public class DbHelperAssist {
     /**
      * 查询用户视频记录
      * @param kid
-     * @param pid
-     * @param zid
      * @return
      */
     public UserLookVideoVo queryUserLookVideoWithKid(String kid) {

@@ -225,7 +225,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private Button mBtnBBuy;
     private LinearLayout mLiBResolveBuy;
     private MyRecyclerView mRlvEualeContent;
-//    private RecyclerView mRlvEualeContent;
+    //    private RecyclerView mRlvEualeContent;
     private SmartScrollView mSloViewShow;
     private LinearLayout mLlBBack;
     private LinearLayout mLlBGo;
@@ -288,7 +288,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     /**
      * 用户是否购买
      */
-    private boolean isBuy = true;
+    private boolean isBuy = false;
     /**
      * 章节标识
      */
@@ -1512,7 +1512,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             default:
             case R.id.btn_b_buy://购买
-
+                startActivity(new Intent(AnswerActivity.this, BankBuyActivity.class));
                 break;
             case R.id.btn_b_sure_key://多选确认
                 isSure = true;
@@ -1718,7 +1718,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         beans.add(bean);
         addListData(beans);
         mEvaluePresenter.submitContent(mContext, String.valueOf(mResultData.getId()), str, null, DataMessageVo.QUESTION);
-        mSubmitDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit));
+        mSubmitDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
         adapter.notifyDataSetChanged();
         Utils.hideInputMethod(mContext, mEtBSubmit);
 

@@ -9,7 +9,7 @@
 
 
     <LinearLayout
-        android:id="@+id/ll_hear"
+        android:id="@+id/ll_m_hear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/red_text"
@@ -20,8 +20,8 @@
         <ImageView
             android:id="@+id/iv_m_hear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_m_hear" />
+            android:layout_height="@dimen/space_60"
+            android:src="@mipmap/common_icon_defaultpicture" />
 
         <Space style="@style/space_16_height" />
 
@@ -49,13 +49,21 @@
                 android:src="@mipmap/ic_m_edit" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_m_phone"
+            android:layout_marginTop="@dimen/space_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="1111"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14" />
         <Space style="@style/space_16_height" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <View
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -87,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我的消息" />
+                    android:text="@string/mymsg" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,7 +116,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我的缓存" />
+                    android:text="@string/mydown" />
             </LinearLayout>
 
             <LinearLayout
@@ -129,7 +137,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我的订单" />
+                    android:text="@string/myorder" />
             </LinearLayout>
 
         </LinearLayout>
@@ -157,7 +165,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="增值服务"
+            android:text="@string/addvuale"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
 
@@ -167,7 +175,7 @@
             android:drawablePadding="@dimen/space_8"
             android:drawableRight="@mipmap/ic_more_go"
             android:gravity="center"
-            android:text="服务陈总之"
+            android:text="@string/value_added_service"
             android:textColor="@color/hint_text"
             android:textSize="@dimen/text_size_12" />
     </LinearLayout>
@@ -175,9 +183,9 @@
     <View style="@style/view_line" />
 
     <LinearLayout
+        android:id="@+id/ll_m_genuine"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-
         android:orientation="horizontal"
         android:paddingLeft="@dimen/space_16"
         android:paddingRight="@dimen/space_16">
@@ -194,7 +202,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="正版验证"
+            android:text="@string/authentic_verification"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
 
@@ -204,7 +212,7 @@
             android:drawablePadding="@dimen/space_8"
             android:drawableRight="@mipmap/ic_more_go"
             android:gravity="center"
-            android:text="服务陈总之"
+            android:text="@string/proving"
             android:textColor="@color/hint_text"
             android:textSize="@dimen/text_size_12" />
     </LinearLayout>
@@ -215,9 +223,9 @@
         android:background="@color/input_bg" />
 
     <LinearLayout
+        android:id="@+id/ll_m_feedback"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-
         android:orientation="horizontal"
         android:paddingLeft="@dimen/space_16"
         android:paddingRight="@dimen/space_16">
@@ -226,26 +234,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_m_feedback" />
-
         <Space style="@style/space_8_width" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="用户反馈"
+            android:text="@string/feedbBack"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
 
     </LinearLayout>
-
     <View style="@style/view_line" />
-
     <LinearLayout
+        android:id="@+id/ll_m_notice"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-
         android:orientation="horizontal"
         android:paddingLeft="@dimen/space_16"
         android:paddingRight="@dimen/space_16">
@@ -262,7 +266,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="系统通知"
+            android:text="@string/notification"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
 
@@ -271,6 +275,7 @@
     <View style="@style/view_line" />
 
     <LinearLayout
+        android:id="@+id/ll_m_setting"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal"
@@ -289,7 +294,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="设置"
+            android:text="@string/setting"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
     </LinearLayout>

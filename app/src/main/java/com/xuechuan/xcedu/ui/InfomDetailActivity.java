@@ -436,7 +436,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private void submit(final String content) {
         CurrencyService currencyService = new CurrencyService(mContext);
         currencyService.setIsShowDialog(true);
-        currencyService.setDialogContext(mContext, "", getString(R.string.submit));
+        currencyService.setDialogContext(mContext, "", getString(R.string.submit_loading));
         currencyService.submitConmment(mTargetid, content, null, DataMessageVo.USERTYOEARTICLE, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {

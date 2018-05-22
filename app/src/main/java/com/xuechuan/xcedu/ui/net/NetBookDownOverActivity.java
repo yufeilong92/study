@@ -97,6 +97,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         mVideoDb = mDao.queryUserDownInfomWithKid(mKid);
         if (mVideoDb == null) {
             mTvInfomEmpty.setVisibility(View.VISIBLE);
+            mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
             return;
         }
         List<DownVideoVo> downlist = mVideoDb.getDownlist();

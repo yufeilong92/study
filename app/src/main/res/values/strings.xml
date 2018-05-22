@@ -84,7 +84,8 @@
     <string name="http_getCnapter">/api/question/getchapter</string>
     <!--错题移除-->
     <string name="http_questionremoveerrsetpost">/api/question/questionremoveerrsetpost</string>
-
+    <!--获取网课产品列表-->
+    <string name="http_questionbankproduct">/api/question/getquestionbankproduct</string>
     <!--//网课-->
     <!--获取网课首页内容-->
     <string name="http_getclassandproducts">/api/video/getclass</string>
@@ -100,6 +101,23 @@
     <string name="http_getVideo_evalue">/api/video/getvideocomment</string>
     <!--获取视频的评级评价-->
     <string name="http_getvideocommentcomment">/api/video/getcommentcomment</string>
+
+    <!--个人中心-->
+    <!--兑换码兑换-->
+    <string name="http_exchangepost">/api/exchangecode/exchangepost</string>
+    <!--sn码正版授权验证-->
+    <string name="http_get_sncode">/api/sncode/get</string>
+    <!--用户建议提交接口-->
+    <string name="http_post_advice">/api/advice/post</string>
+    <!--获取订单信息-->
+    <string name="http_get_order">/api/order/get</string>
+
+    <!--支付接口-->
+    <!--订单下单-->
+    <string name="http_makeorderpost">/api/order/makeorderpost</string>
+    <!--订单支付-->
+    <string name="http_pay">/api/pay/post</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="tv_search_history">历史记录</string>
@@ -117,6 +135,7 @@
     <string name="login_loading">登录中...</string>
     <string name="registerOK">注册成功</string>
     <string name="phone">手机号码</string>
+    <string name="phone_m">手机号</string>
     <string name="user_password">账户密码</string>
     <string name="or">或</string>
     <string name="code">验证码</string>
@@ -139,7 +158,8 @@
     <string name="please_right_phone">请输入正确的手机号码</string>
     <string name="home_select_content">搜索文章、题库</string>
     <string name="more">更多</string>
-    <string name="submit">数据提交中...</string>
+    <string name="submit_loading">数据提交中...</string>
+    <string name="submit">提交</string>
     <string name="content_is_empty">内容不能为空</string>
     <string name="mywrongquestion">我的错题</string>
     <string name="bank_my_collect">我的收藏</string>
@@ -176,5 +196,47 @@
     <string name="edit">编辑</string>
     <string name="start_down">开始下载</string>
     <string name="stopdown">暂停下载</string>
+    <string name="company_about">河南学川教育咨询有限公司&#160;&#160;&#160;&#160;版权所有</string>
+    <string name="service_agreement">《用户服务协议》</string>
+    <string name="about">关于</string>
+    <string name="modify_password">修改密码</string>
+    <string name="version_update">版本更新</string>
+    <string name="bindweixin">绑定微信</string>
+    <string name="nickname">昵称</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="city">城市</string>
+    <string name="your_opinion">您的意见</string>
+    <string name="practice_mode">联系方式</string>
+    <string name="phoneorweixin">手机/微信</string>
+    <string name="submit_feedback">提交反馈</string>
+    <string name="submit_success">提交成功</string>
+    <string name="submit_error">提交失败</string>
+    <string name="setting">设置</string>
+    <string name="notification">系统通知</string>
+    <string name="feedbBack">用户反馈</string>
+    <string name="proving">辅导书正版验证</string>
+    <string name="authentic_verification">正版验证</string>
+    <string name="value_added_service">购辅导书赠送增值服务</string>
+    <string name="addvuale">增值服务</string>
+    <string name="myorder">我的订单</string>
+    <string name="mydown">我的缓存</string>
+    <string name="mymsg">我的消息</string>
+    <string name="code_empty">兑换码不能为空</string>
+    <string name="code_error">兑换失败</string>
+    <string name="code_suceess">兑换成功</string>
+    <string name="code_empty1">请输入验证码</string>
+    <string name="persion">个人资料</string>
+    <string name="shill_text">技术实务题库</string>
+    <string name="collortext">综合能力题库</string>
+    <string name="casetext">案例分析题库</string>
+    <string name="thiry">￥30</string>
+    <string name="y">￥</string>
+    <string name="playtype">支付方式</string>
+    <string name="weixin">微信</string>
+    <string name="zhifubao">支付宝</string>
+    <string name="submit_from">提交订单</string>
+    <string name="pay_type">请选择支付方式</string>
+    <string name="no_down_video">没有任务要下载</string>
 
 </resources>

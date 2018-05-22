@@ -196,7 +196,13 @@
 
         <service
             android:name=".service.SubmitProgressService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".ui.user.AddVauleActivity" />
+        <activity android:name=".ui.user.GenuineActivity" />
+        <activity android:name=".ui.user.NotificationActivity" />
+        <activity android:name=".ui.user.MyMsgActivity" />
+        <activity android:name=".ui.bank.BankBuyActivity"></activity>
     </application>
 
 </manifest>

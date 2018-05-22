@@ -302,6 +302,9 @@ public class DbHelperDownAssist {
      * @return
      */
     public DownVideoDb queryUserDownInfomWithKid(String kid) {
+        if (StringUtil.isEmpty(kid)) {
+            return null;
+        }
         String userId = SaveUUidUtil.getInstance().getUserId();
         return dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId),
                 DownVideoDbDao.Properties.Kid.eq(kid)).unique();
