@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/input_bg"
     android:orientation="vertical"
-    tools:context=".ui.User.SettingActivity">
+    tools:context=".ui.user.SettingActivity">
     <LinearLayout style="@style/TitleBar">
 
         <ImageView

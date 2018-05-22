@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.ui.User;
+package com.xuechuan.xcedu.ui.user;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

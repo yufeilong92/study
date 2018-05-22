@@ -105,13 +105,13 @@
             android:name=".ui.home.AdvisoryListActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.User.PersionActivity"
+            android:name=".ui.user.PersionActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.User.SettingActivity"
+            android:name=".ui.user.SettingActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.User.AboutActivity"
+            android:name=".ui.user.AboutActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.InfomDetailActivity"
@@ -120,7 +120,7 @@
             android:name=".ui.bank.AnswerActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.User.FeedBackActivity"
+            android:name=".ui.user.FeedBackActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.AtricleListActivity"
