@@ -55,7 +55,7 @@
         android:id="@+id/iv_item_home_content"
         android:layout_width="@dimen/space_100dp"
         android:scaleType="fitXY"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/space_70"
         android:src="@mipmap/ic_launcher_round" />
 
 </LinearLayout>

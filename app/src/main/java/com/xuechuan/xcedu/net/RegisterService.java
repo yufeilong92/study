@@ -5,6 +5,7 @@ import android.content.Context;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.Md5;
 import com.xuechuan.xcedu.utils.StringUtil;
 
 import org.json.JSONException;
@@ -70,7 +71,7 @@ public class RegisterService extends BaseHttpServcie {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestHttpServciePost(mContext, url, object,false, callBackView);
+        requestHttpServciePost(mContext, url, object, false, callBackView);
 
     }
 
@@ -82,7 +83,7 @@ public class RegisterService extends BaseHttpServcie {
      * @param openid 微信标识
      * @param unionid 平台标识
      */
-    public void requestRegister(String type,String phone, String code, String paw, String openid, String unionid,
+    public void requestRegister(String type, String phone, String code, String paw, String openid, String unionid,
                                 StringCallBackView callBackView) {
         String url = mContext.getResources().getString(R.string.http_register);
         JSONObject object = new JSONObject();
@@ -90,13 +91,13 @@ public class RegisterService extends BaseHttpServcie {
             object.put("telphone", phone);
             object.put("usetype", type);
             object.put("openid", StringUtil.isEmpty(openid) ? null : openid);
-            object.put("unionid", StringUtil.isEmpty(unionid) ? null : unionid);
+            object.put("unionid", StringUtil.isEmpty(unionid)?null : unionid);
             object.put("securitycode", code);
-            object.put("password", paw);
+            object.put("password", Md5.getMD5String(paw));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestHttpServciePost(mContext, url, object,false, callBackView);
+        requestHttpServciePost(mContext, url, object, false, callBackView);
     }
 
 }

@@ -21,6 +21,7 @@
             android:ellipsize="end"
             android:lineSpacingExtra="@dimen/space_4"
             android:maxLines="2"
+            android:minLines="2"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/space_16" />
 
@@ -66,7 +67,7 @@
     <ImageView
         android:id="@+id/iv_item_home_all"
         android:layout_width="@dimen/space_100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher_round" />
 </LinearLayout>

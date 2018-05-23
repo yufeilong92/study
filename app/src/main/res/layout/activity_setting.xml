@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/input_bg"
     android:orientation="vertical"
-    tools:context=".ui.user.SettingActivity">
+    tools:context=".ui.me.SettingActivity">
 
     <LinearLayout style="@style/TitleBar">
 
@@ -52,11 +52,10 @@
 
             <TextView
                 android:id="@+id/tv_m_setting_weixin"
-                android:textColor="@color/text_fu_color"
-                android:textSize="@dimen/text_size_12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 />
+                android:textColor="@color/text_fu_color"
+                android:textSize="@dimen/text_size_12" />
         </LinearLayout>
 
         <View style="@style/view_line_1_gray" />
@@ -71,6 +70,7 @@
             android:textSize="@dimen/text_size_14" />
 
         <View style="@style/view_line_1_gray" />
+
         <LinearLayout
             android:id="@+id/ll_m_setting_updata"
             android:layout_width="match_parent"
@@ -88,12 +88,12 @@
 
             <TextView
                 android:id="@+id/tv_m_setting_code"
-                android:textSize="@dimen/text_size_12"
-                android:textColor="@color/text_fu_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:textColor="@color/text_fu_color"
+                android:textSize="@dimen/text_size_12" />
         </LinearLayout>
+
         <View style="@style/view_line_1_gray" />
     </LinearLayout>
 
@@ -107,4 +107,20 @@
         android:text="@string/about"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_14" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <Button
+            android:id="@+id/btn_b_s_out"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="退出"
+            android:textColor="@color/red_text"
+            android:textSize="@dimen/text_size_18" />
+    </RelativeLayout>
 </LinearLayout>

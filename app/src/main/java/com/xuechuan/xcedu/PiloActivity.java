@@ -59,7 +59,7 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_pilo);
         initView();
-//        startActivity(new Intent(PiloActivity.this,DownActivity.class));
+//        startActivity(new Intent(PiloActivity.this,MainActivity.class));
         requesPermission();
 
     }
@@ -96,7 +96,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
             this.finish();
         }
     }
-
 
     @Override
     public void TokenSuccess(String con) {

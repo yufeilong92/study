@@ -2,15 +2,21 @@ package com.xuechuan.xcedu.net;
 
 import android.content.Context;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.vo.Sites;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,30 +54,26 @@ public class PayService extends BaseHttpServcie {
         if (login == null) {
             return;
         }
-
         UserBean user = login.getData().getUser();
-        JSONObject object = new JSONObject();
-        try {
-            object.put("staffid", user.getId());
-            object.put("ordersource", ordersource);
-            object.put("usebalance", usebalance);
-            object.put("remark", remark);
-            object.put("products", products);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("staffid",user.getId());
+        jsonObject.addProperty("ordersource",ordersource);
+        jsonObject.addProperty("usebalance",usebalance);
+        jsonObject.addProperty("remark",remark);
+        JsonArray array = new JsonArray();
+        for (int i = 0; i < products.size(); i++) {
+            array.add(products.get(i));
         }
+        jsonObject.add("products",array);
         String url = getUrl(mContext, R.string.http_makeorderpost);
-        requestHttpServciePost(mContext, url, object,
+        requestHttpServciePost(mContext, url, jsonObject,
                 true, view);
-
     }
-
 
     /**
      * 订单支付
      */
-    public void submitPay(String ordernum, String paytype, StringCallBackView view) {
+    public void submitPay(String ordernum, int paytype, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;

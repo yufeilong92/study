@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xuechuan.xcedu">
 
+    <uses-permission android:name="android.permission.WRITE_SETTINGSTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 百度地图 -->
     <!-- 这个权限用于进行网络定位 -->
@@ -21,6 +22,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
@@ -80,9 +82,21 @@
             android:name=".ui.RegisterActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".wxapi.WXEntryActivity"
+            android:name="com.xuechuan.xcedu.wxapi.WXEntryActivity"
             android:exported="true"
-            android:label="@string/app_name" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="wx0c71e64b9e151c84"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            />
         <activity
             android:name=".ui.EvalueDetialActivity"
             android:launchMode="singleTask" />
@@ -105,13 +119,13 @@
             android:name=".ui.home.AdvisoryListActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.user.PersionActivity"
+            android:name=".ui.me.PersionActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.user.SettingActivity"
+            android:name=".ui.me.SettingActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.user.AboutActivity"
+            android:name=".ui.me.AboutActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.InfomDetailActivity"
@@ -120,7 +134,7 @@
             android:name=".ui.bank.AnswerActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.user.FeedBackActivity"
+            android:name=".ui.me.FeedBackActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.AtricleListActivity"
@@ -198,11 +212,13 @@
             android:name=".service.SubmitProgressService"
             android:exported="false" />
 
-        <activity android:name=".ui.user.AddVauleActivity" />
-        <activity android:name=".ui.user.GenuineActivity" />
-        <activity android:name=".ui.user.NotificationActivity" />
-        <activity android:name=".ui.user.MyMsgActivity" />
-        <activity android:name=".ui.bank.BankBuyActivity"></activity>
+        <activity android:name=".ui.me.AddVauleActivity" />
+        <activity android:name=".ui.me.GenuineActivity" />
+        <activity android:name=".ui.me.NotificationActivity" />
+        <activity android:name=".ui.me.MyMsgActivity" />
+        <activity android:name=".ui.bank.BankBuyActivity" />
+        <activity android:name=".ui.bank.BuyPayResultActivity" />
+
     </application>
 
 </manifest>

@@ -63,8 +63,8 @@ public class PayPresenter {
      * @param orderNum
      * @param paytype
      */
-    public void submitPay(Context context, String orderNum, String paytype) {
-        if (StringUtil.isEmpty(orderNum) || StringUtil.isEmpty(paytype)) {
+    public void submitPay(Context context, String orderNum, int paytype) {
+        if (StringUtil.isEmpty(orderNum) ||paytype==-1) {
             return;
         }
         model.submitPay(context, orderNum, paytype, new RequestResulteView() {
@@ -85,6 +85,23 @@ public class PayPresenter {
      * @param context
      */
     public void reuqestBookId(Context context) {
+        model.requestBookId(context, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.BookIDSuccess(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.BookIDError(result);
+            }
+        });
+    }
+    /**
+     * 获取课程id
+     * @param context
+     */
+    public void rreraare(Context context) {
         model.requestBookId(context, new RequestResulteView() {
             @Override
             public void success(String result) {

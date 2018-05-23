@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui.bank;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,16 +12,31 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.lzy.okgo.model.Response;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.PayModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.PayPresenter;
 import com.xuechuan.xcedu.mvp.view.PayView;
+import com.xuechuan.xcedu.net.PayService;
+import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.Constants;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BankValueVo;
+import com.xuechuan.xcedu.vo.BuyFromResultVo;
+import com.xuechuan.xcedu.vo.BuyFromVo;
+import com.xuechuan.xcedu.vo.WechatsignBeanVo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +51,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class BankBuyActivity extends BaseActivity implements  PayView, View.OnClickListener {
+public class BankBuyActivity extends BaseActivity implements PayView, View.OnClickListener {
 
     private Context mContext;
     /**
@@ -58,12 +74,15 @@ public class BankBuyActivity extends BaseActivity implements  PayView, View.OnCl
     private CheckBox mChbBPayWeixin;
     private LinearLayout mLlBWeixin;
     private Button mBtnBSubmitFrom;
-    private double skillPrice=-1;
-    private double colloPrice=-1;
-    private double casePrice=-1;
+    private double skillPrice = -1;
+    private double colloPrice = -1;
+    private double casePrice = -1;
     private int colloid;
     private int skillId;
     private int caseId;
+    private AlertDialog mDialog;
+    private int payType;
+    private IWXAPI api;
 
     public static Intent newInstance(Context context, String countid) {
         Intent intent = new Intent(context, BankBuyActivity.class);
@@ -86,7 +105,9 @@ public class BankBuyActivity extends BaseActivity implements  PayView, View.OnCl
         initView();
         mPresenter = new PayPresenter(new PayModelImpl(), this);
         mPresenter.reuqestBookId(mContext);
+
     }
+
 
     private void initData(List<BankValueVo.DatasBean> bean) {
         bindData(bean);
@@ -210,6 +231,7 @@ public class BankBuyActivity extends BaseActivity implements  PayView, View.OnCl
         mLlBWeixin.setOnClickListener(this);
         mBtnBSubmitFrom = (Button) findViewById(R.id.btn_b_submit_from);
         mBtnBSubmitFrom.setOnClickListener(this);
+
     }
 
     @Override
@@ -218,14 +240,13 @@ public class BankBuyActivity extends BaseActivity implements  PayView, View.OnCl
             case R.id.btn_b_submit_from://提交表单
                 submit();
                 break;
-
         }
 
     }
 
     private void submit() {
         int value = 0;
-        int payType = -1;
+        payType = -1;
 
         List<Integer> list = new ArrayList<>();
         if (mChbBPaySkill.isChecked()) {
@@ -254,12 +275,11 @@ public class BankBuyActivity extends BaseActivity implements  PayView, View.OnCl
             T.showToast(mContext, getString(R.string.pay_type));
             return;
         }
-        mPresenter.submitPayFrom(mContext,String.valueOf(value),list,"app",null);
-
+        mPresenter.submitPayFrom(mContext, String.valueOf(value), list, "app", null);
+        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
   /*      if (payType == 1) {//支付宝
 
         } else if (payType == 2) {//微信
-            wxapi = WXAPIFactory.createWXAPI(mContext, "wx0c71e64b9e151c84");
 
         }*/
 
@@ -268,21 +288,71 @@ public class BankBuyActivity extends BaseActivity implements  PayView, View.OnCl
 
     @Override
     public void SumbitFromSuccess(String con) {
-
+        Gson gson = new Gson();
+        BuyFromVo vo = gson.fromJson(con, BuyFromVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            String orderid = vo.getData().getOrderid();
+            if (payType == 1) {//支付包
+                mPresenter.submitPay(mContext, orderid, DataMessageVo.PAYTYPE_ZFB);
+            } else {//微信
+                mPresenter.submitPay(mContext, orderid, DataMessageVo.PAYTYPE_WEIXIN);
+            }
+        } else {
+            L.e(vo.getStatus().getMessage());
+        }
     }
 
     @Override
     public void SumbitFromError(String con) {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
 
     }
 
     @Override
     public void SumbitPaySuccess(String con) {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+        Gson gson = new Gson();
+        BuyFromResultVo vo = gson.fromJson(con, BuyFromResultVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            WechatsignBeanVo wechatsign = vo.getData().getWechatsign();
+            requestWeiXinPay(wechatsign);
+        } else {
+            L.e(vo.getStatus().getMessage());
+        }
 
     }
 
+    private void requestWeiXinPay(final WechatsignBeanVo wechatsign) {
+        api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
+        api.registerApp(DataMessageVo.APP_ID);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                PayReq request = new PayReq();
+                request.appId = DataMessageVo.APP_ID;
+                request.partnerId = wechatsign.getPartnerid();
+                request.prepayId = wechatsign.getPrepayid();
+                request.packageValue = "Sign=WXPay";
+                request.nonceStr = wechatsign.getNoncestr().toLowerCase();
+                request.timeStamp = wechatsign.getTimespan();
+                request.sign = wechatsign.getSign().toLowerCase();
+                api.sendReq(request);
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
+
     @Override
     public void SumbitPayError(String con) {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
 
     }
 

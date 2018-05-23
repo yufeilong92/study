@@ -150,7 +150,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(intent2);
                 break;
             case R.id.iv_weixinlogin://微信登录
-                loginWeiXin();
+                if (api.isWXAppInstalled()) {
+                    loginWeiXin();
+                }else {
+                    T.showToast(mContext,"请先安装微信");
+                }
                 break;
 
         }
@@ -223,6 +227,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         });
     }
+
     //调用微信
     private void loginWeiXin() {
         final SendAuth.Req req = new SendAuth.Req();
@@ -323,7 +328,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
         L.e(con);
     }
-    public void finishActivity(){
+
+    public void finishActivity() {
         this.finish();
     }
 

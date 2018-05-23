@@ -1,99 +1,99 @@
-package com.xuechuan.xcedu.ui.user;
+package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.mvp.model.AddVauleModelImpl;
-import com.xuechuan.xcedu.mvp.presenter.AddVaulePresenter;
-import com.xuechuan.xcedu.mvp.view.AddVauleView;
+import com.xuechuan.xcedu.mvp.model.ExchangeModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.ExchangePresenter;
+import com.xuechuan.xcedu.mvp.view.ExchangeView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ResultVo;
 
 /**
  * @version V 1.0 xxxxxxxx
- * @Title: AddVauleActivity
+ * @Title: GenuineActivity
  * @Package com.xuechuan.xcedu.ui.user
- * @Description: 增值服务
+ * @Description: 正版验证
  * @author: L-BackPacker
- * @date: 2018/5/22 11:38
+ * @date: 2018/5/22 12:08
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class AddVauleActivity extends BaseActivity implements View.OnClickListener, AddVauleView {
+public class GenuineActivity extends BaseActivity implements View.OnClickListener, ExchangeView {
 
-    private EditText mEtMAddCode;
-    private Button mBtnMAddValue;
+    private EditText mEtMGCode;
+    private Button mBtnMGValue;
     private Context mContext;
-    private AddVaulePresenter mPresenter;
+    private ExchangePresenter mPresenter;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_vaule);
+        setContentView(R.layout.activity_genuine);
         initView();
     }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_add_vaule);
+        setContentView(R.layout.activity_genuine);
         initView();
         initData();
     }
 
     private void initData() {
-        mPresenter = new AddVaulePresenter(new AddVauleModelImpl(), this);
+        mPresenter = new ExchangePresenter(new ExchangeModelImpl(), this);
+
     }
+
     private void initView() {
-        mEtMAddCode = (EditText) findViewById(R.id.et_m_add_code);
-        mBtnMAddValue = (Button) findViewById(R.id.btn_m_add_value);
-        mBtnMAddValue.setOnClickListener(this);
+        mEtMGCode = (EditText) findViewById(R.id.et_m_g_code);
+        mBtnMGValue = (Button) findViewById(R.id.btn_m_g_value);
+
+        mBtnMGValue.setOnClickListener(this);
         mContext = this;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_m_add_value:
+            case R.id.btn_m_g_value:
                 submit();
                 break;
         }
     }
 
     private void submit() {
-        String code = getTextStr(mEtMAddCode);
+        String code = getTextStr(mEtMGCode);
         if (TextUtils.isEmpty(code)) {
-            T.showToast(mContext, R.string.code_empty);
+            T.showToast(mContext, R.string.code_empty1);
             return;
         }
-        mPresenter.requestAddValueWithCode(mContext, code);
+        mPresenter.requestExchangeWithCode(mContext, code);
+
 
     }
 
     @Override
-    public void AddVauleSuccess(String com) {
+    public void ExchangeSuccess(String com) {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(com, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            T.showToast(mContext, getString(R.string.code_suceess));
+            T.showToast(mContext, "此验证是正版码");
         } else {
-            T.showToast(mContext, getString(R.string.code_error));
             L.e(vo.getStatus().getMessage());
         }
-
     }
 
     @Override
-    public void AddVauleError(String com) {
+    public void ExchangeError(String com) {
         L.e(com);
     }
 }

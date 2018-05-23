@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.utils;
 
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
@@ -110,6 +111,33 @@ public class StringSort {
         return md5String;
     }
 
+    /**
+     * 获取升序后的数据
+     *
+     * @param param
+     * @return
+     */
+    public String getOrderMd5Data(JsonObject param) {
+        HttpInfomVo infom = MyAppliction.getInstance().getHttpInfomInstance();
+        String time = infom.getTimeStamp();
+        String random = infom.getNonce();
+        String staffid = infom.getStaffid();
+        String token = infom.getToken();
+        String data;
+        if (param == null) {
+            data = time + random + staffid + token;
+        } else {
+            data = time + random + staffid + token + param.toString();
+        }
+        String sort = sort(data);
+        String md5 = Md5.getMD5String(sort);
+        String md5String = md5.toUpperCase();
+        Log.i("yfl", "升序排序结果: " + sort);
+        Log.i("yfl", "getOrderMd5Data: " + md5);
+        Log.i("yfl", "大写排序: " + md5String);
+
+        return md5String;
+    }
     /**
      * 升序排序
      *

@@ -1,12 +1,10 @@
-package com.xuechuan.xcedu.ui.user;
+package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;

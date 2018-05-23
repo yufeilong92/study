@@ -1,7 +1,8 @@
-package com.xuechuan.xcedu.ui.user;
+package com.xuechuan.xcedu.ui.me;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -21,7 +23,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class PersionActivity extends BaseActivity {
+public class PersionActivity extends BaseActivity implements View.OnClickListener {
 
 
     private TextView mTvMPSubmit;
@@ -30,9 +32,9 @@ public class PersionActivity extends BaseActivity {
     private LinearLayout mLlMPName;
     private TextView mTvMPSex;
     private LinearLayout mLiMPSex;
-    private TextView mEtMPBirthday;
+    private TextView mTvMPBirthday;
     private LinearLayout mLlMPBirthday;
-    private TextView mEtMPCity;
+    private TextView mTvMPCity;
     private LinearLayout mLlMPCity;
     private EditText mEtMPPhone;
     private LinearLayout mLlMPPhone;
@@ -58,13 +60,15 @@ public class PersionActivity extends BaseActivity {
         mLlMPName = (LinearLayout) findViewById(R.id.ll_m_p_name);
         mTvMPSex = (TextView) findViewById(R.id.tv_m_p_sex);
         mLiMPSex = (LinearLayout) findViewById(R.id.li_m_p_sex);
-        mEtMPBirthday = (TextView) findViewById(R.id.et_m_p_birthday);
+        mTvMPBirthday = (TextView) findViewById(R.id.tv_m_p_birthday);
         mLlMPBirthday = (LinearLayout) findViewById(R.id.ll_m_p_birthday);
-        mEtMPCity = (TextView) findViewById(R.id.et_m_p_city);
+        mLlMPBirthday.setOnClickListener(this);
+        mTvMPCity = (TextView) findViewById(R.id.tv_m_p_city);
         mLlMPCity = (LinearLayout) findViewById(R.id.ll_m_p_city);
         mEtMPPhone = (EditText) findViewById(R.id.et_m_p_phone);
         mLlMPPhone = (LinearLayout) findViewById(R.id.ll_m_p_phone);
     }
+
 
     private void submit() {
         String name = getTextStr(mEtMPName);
@@ -76,6 +80,30 @@ public class PersionActivity extends BaseActivity {
         if (TextUtils.isEmpty(phone)) {
             Toast.makeText(this, "phone不能为空", Toast.LENGTH_SHORT).show();
             return;
+        }
+    }
+
+    private void selectTime() {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showSelectTime(this, false);
+        dialogUtil.setSelectTimeListener(new DialogUtil.onTimeClickListener() {
+            @Override
+            public void onTimeListener(String time) {
+                mTvMPBirthday.setText(time);
+            }
+        });
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_m_p_birthday://时间
+                selectTime();
+                break;
+
+            default:
+
         }
     }
 }

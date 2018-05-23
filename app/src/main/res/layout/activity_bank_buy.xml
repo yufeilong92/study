@@ -17,7 +17,7 @@
 
         <TextView
             style="@style/TitleBarText"
-            android:text="" />
+            android:text="@string/surefrom" />
 
         <ImageView style="@style/TitleBarAction" />
 

@@ -44,7 +44,6 @@ import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
  */
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final String UUIONID = "uuionid";
     private CountdownUtil mTimeUtils;
     private Button mBtnSend;
     private EditText mEtRegisterPaw;
@@ -67,7 +66,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * 微信
      */
     private static String OPENID = "openid";
-    private static String UNIONID = "unionid";
+    private static String UNIONID = "uuidid";
     /**
      * 请求类型
      */
@@ -93,7 +92,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @param openid  微信openid
      * @param unionid 平台标识
      */
-    public static Intent newInstance(Context context, String type, String openid, String unionid) {
+    public static Intent newInstance(Context context, String openid, String type, String unionid) {
         Intent intent = new Intent(context, RegisterActivity.class);
         intent.putExtra(OPENID, openid);
         intent.putExtra(HTTPTYPE, type);
@@ -107,7 +106,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_register);
         if (getIntent() != null) {
             mOpenid = getIntent().getStringExtra(OPENID);
-            mUuionid = getIntent().getStringExtra(UUIONID);
+            mUuionid = getIntent().getStringExtra(UNIONID);
             mType = getIntent().getStringExtra(HTTPTYPE);
         }
         initView();
@@ -261,12 +260,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         RegisterService service = RegisterService.getInstance(mContext);
-//        service.setIsShowDialog(true);
-//        service.setDialogContext(null, getString(R.string.login_loading));
+
         final AlertDialog dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-//        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
         // TODO: 2018/5/9 验证码处理
-        service.requestRegister(mType, phone, "1234", paw, mOpenid, mUuionid, new StringCallBackView() {
+        service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
 

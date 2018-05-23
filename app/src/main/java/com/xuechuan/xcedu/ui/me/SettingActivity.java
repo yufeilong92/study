@@ -1,13 +1,17 @@
-package com.xuechuan.xcedu.ui.user;
+package com.xuechuan.xcedu.ui.me;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -27,6 +31,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private TextView mTvMSettingCode;
     private LinearLayout mLlMSettingUpdata;
     private TextView mTvMSettingAbout;
+    private Button mBtnBSOut;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mLlMSettingUpdata.setOnClickListener(this);
         mTvMSettingAbout = (TextView) findViewById(R.id.tv_m_setting_about);
         mTvMSettingAbout.setOnClickListener(this);
+        mBtnBSOut = (Button) findViewById(R.id.btn_b_s_out);
+        mBtnBSOut.setOnClickListener(this);
     }
 
     @Override
@@ -71,13 +78,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                 break;
             case R.id.tv_m_setting_paw://修改密码
-
                 break;
             case R.id.ll_m_setting_bindWei://绑定微信
-
                 break;
-            default:
-
+            case R.id.btn_b_s_out:
+                MyAppliction.getInstance().setUserInfom(null);
+                SaveUUidUtil.getInstance().delectUUid();
+                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+                this.finish();
+                break;
         }
     }
+
 }

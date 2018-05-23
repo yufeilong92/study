@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.ui.user;
+package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;

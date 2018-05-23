@@ -18,11 +18,11 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:textColor">@color/text_title_color</item>
-        <item name="android:colorAccent" tools:ignore="NewApi">@color/black</item>
         <!--状态栏-->
-        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="colorPrimaryDark">@color/gray</item>
         <item name="colorPrimary">@color/white</item>
-        <item name="colorAccent">@color/activity_topbar_bg</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="colorAccent">@color/text_title_color</item>
     </style>
 
 

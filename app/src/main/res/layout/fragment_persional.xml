@@ -18,8 +18,9 @@
         <Space style="@style/space_30_height" />
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/iv_m_hear"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/space_60"
             android:layout_height="@dimen/space_60"
             android:src="@mipmap/common_icon_defaultpicture" />
 

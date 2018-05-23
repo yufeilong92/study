@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.ui.user;
+package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,95 +6,92 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.mvp.model.ExchangeModelImpl;
-import com.xuechuan.xcedu.mvp.presenter.ExchangePresenter;
-import com.xuechuan.xcedu.mvp.view.ExchangeView;
+import com.xuechuan.xcedu.mvp.model.AddVauleModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.AddVaulePresenter;
+import com.xuechuan.xcedu.mvp.view.AddVauleView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ResultVo;
 
 /**
  * @version V 1.0 xxxxxxxx
- * @Title: GenuineActivity
+ * @Title: AddVauleActivity
  * @Package com.xuechuan.xcedu.ui.user
- * @Description: 正版验证
+ * @Description: 增值服务
  * @author: L-BackPacker
- * @date: 2018/5/22 12:08
+ * @date: 2018/5/22 11:38
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class GenuineActivity extends BaseActivity implements View.OnClickListener, ExchangeView {
+public class AddVauleActivity extends BaseActivity implements View.OnClickListener, AddVauleView {
 
-    private EditText mEtMGCode;
-    private Button mBtnMGValue;
+    private EditText mEtMAddCode;
+    private Button mBtnMAddValue;
     private Context mContext;
-    private ExchangePresenter mPresenter;
+    private AddVaulePresenter mPresenter;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_genuine);
+        setContentView(R.layout.activity_add_vaule);
         initView();
     }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_genuine);
+        setContentView(R.layout.activity_add_vaule);
         initView();
         initData();
     }
 
     private void initData() {
-        mPresenter = new ExchangePresenter(new ExchangeModelImpl(), this);
-
+        mPresenter = new AddVaulePresenter(new AddVauleModelImpl(), this);
     }
-
     private void initView() {
-        mEtMGCode = (EditText) findViewById(R.id.et_m_g_code);
-        mBtnMGValue = (Button) findViewById(R.id.btn_m_g_value);
-
-        mBtnMGValue.setOnClickListener(this);
+        mEtMAddCode = (EditText) findViewById(R.id.et_m_add_code);
+        mBtnMAddValue = (Button) findViewById(R.id.btn_m_add_value);
+        mBtnMAddValue.setOnClickListener(this);
         mContext = this;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_m_g_value:
+            case R.id.btn_m_add_value:
                 submit();
                 break;
         }
     }
 
     private void submit() {
-        String code = getTextStr(mEtMGCode);
+        String code = getTextStr(mEtMAddCode);
         if (TextUtils.isEmpty(code)) {
-            T.showToast(mContext, R.string.code_empty1);
+            T.showToast(mContext, R.string.code_empty);
             return;
         }
-        mPresenter.requestExchangeWithCode(mContext, code);
-
+        mPresenter.requestAddValueWithCode(mContext, code);
 
     }
 
     @Override
-    public void ExchangeSuccess(String com) {
+    public void AddVauleSuccess(String com) {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(com, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            T.showToast(mContext, "此验证是正版码");
+            T.showToast(mContext, getString(R.string.code_suceess));
         } else {
+            T.showToast(mContext, getString(R.string.code_error));
             L.e(vo.getStatus().getMessage());
         }
+
     }
 
     @Override
-    public void ExchangeError(String com) {
+    public void AddVauleError(String com) {
         L.e(com);
     }
 }

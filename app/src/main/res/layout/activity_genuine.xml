@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.user.GenuineActivity">
+    tools:context=".ui.me.GenuineActivity">
     <LinearLayout style="@style/TitleBar">
 
         <ImageView

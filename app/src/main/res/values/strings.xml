@@ -7,6 +7,7 @@
     <!--<string name="app_content_heat">http://192.168.1.110:8080</string>-->
     <!--微信接口-->
     <string name="http_url_weixin">/api/auth/login</string>
+    <string name="http_url_text">/api/test/post</string>
     <!--token刷新-->
     <string name="http_token">/api/Service/Refresh</string>
     <!--验证码-->
@@ -238,5 +239,9 @@
     <string name="submit_from">提交订单</string>
     <string name="pay_type">请选择支付方式</string>
     <string name="no_down_video">没有任务要下载</string>
+    <string name="paysuccess">支付成功</string>
+    <string name="pay_error">支付失败</string>
+    <string name="surefrom">确认订单</string>
+    <string name="sure">确定</string>
 
 </resources>

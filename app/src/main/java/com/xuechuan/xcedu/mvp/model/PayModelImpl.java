@@ -57,7 +57,7 @@ public class PayModelImpl implements PayModel {
      */
 
     @Override
-    public void submitPay(Context context, String ordernum, String paytype, final RequestResulteView view) {
+    public void submitPay(Context context, String ordernum, int paytype, final RequestResulteView view) {
         PayService service = new PayService(context);
         service.submitPay(ordernum, paytype, new StringCallBackView() {
             @Override

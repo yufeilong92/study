@@ -1,13 +1,18 @@
 package com.xuechuan.xcedu.utils;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.xuechuan.xcedu.MainActivity;
 import com.xuechuan.xcedu.R;
+
+import java.util.Calendar;
 
 
 /**
@@ -23,6 +28,7 @@ import com.xuechuan.xcedu.R;
 public class DialogUtil {
 
     private static DialogUtil dialogUtil;
+
 
     public DialogUtil() {
     }
@@ -110,7 +116,7 @@ public class DialogUtil {
      * @return
      */
     public void showContinueDialog(Context context, String page) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_continue, null);
         TextView tv = view.findViewById(R.id.tv_number);
         tv.setText(page);
@@ -149,7 +155,7 @@ public class DialogUtil {
      * @return
      */
     public void showSubmitDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_submit, null);
         builder.setView(view)
                 .setCancelable(true)
@@ -187,7 +193,7 @@ public class DialogUtil {
      * @return
      */
     public void showStopDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_time, null);
         builder.setView(view)
                 .setCancelable(false)
@@ -226,11 +232,11 @@ public class DialogUtil {
      * @param context
      * @return
      */
-    public void showTitleDialog(Context context, String title, String btnSure, String cancale,boolean cancelable) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogStyle);
+    public void showTitleDialog(Context context, String title, String btnSure, String cancale, boolean cancelable) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_title, null);
         TextView tv = view.findViewById(R.id.tv_title);
-        tv.setText(title+"?");
+        tv.setText(title + "?");
         Button sure = view.findViewById(R.id.btn_sure);
         sure.setText(btnSure);
         Button cancel = view.findViewById(R.id.btn_cancal);
@@ -261,5 +267,68 @@ public class DialogUtil {
         });
     }
 
+    Calendar cal;
+    private int year, month, day;
+
+    private onTimeClickListener timeListener;
+
+    public interface onTimeClickListener {
+        public void onTimeListener(String time);
+    }
+
+    public void setSelectTimeListener(onTimeClickListener clickListener) {
+        this.timeListener = clickListener;
+    }
+
+    String time;
+
+    public void showSelectTime(Context context, boolean cancelable) {
+        DatePicker mDpShowTimeSelect;
+        Button mBtnCancelTime;
+        Button mBtnSureTime;
+        getDate();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_show_select_time, null);
+        mDpShowTimeSelect = view.findViewById(R.id.dp_show_time_select);
+        mBtnCancelTime = view.findViewById(R.id.btn_cancel_time);
+        mBtnSureTime = view.findViewById(R.id.btn_sure_time);
+        builder.setView(view)
+                .setCancelable(cancelable)
+                .create();
+        final AlertDialog show = builder.show();
+        time = year +"-"+ (month + 1) +"-"+ day + "";
+        DatePicker.OnDateChangedListener listener = new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                time = year +"-"+ (monthOfYear + 1) +"-"+ dayOfMonth + "";
+            }
+        };
+        mDpShowTimeSelect.init(year, month, day, listener);
+        mBtnSureTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show.dismiss();
+                if (timeListener != null) {
+                    timeListener.onTimeListener(time);
+                }
+
+            }
+        });
+        mBtnCancelTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show.dismiss();
+            }
+        });
+
+    }
+
+    //获取当前日期
+    private void getDate() {
+        cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day = cal.get(Calendar.DAY_OF_MONTH);
+    }
 
 }

@@ -27,7 +27,7 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content" />
      <Button
-         android:text="测试请求Token"
+         android:text="==================="
          android:id="@+id/btn_play"
          android:layout_width="match_parent"
          android:layout_height="wrap_content" />

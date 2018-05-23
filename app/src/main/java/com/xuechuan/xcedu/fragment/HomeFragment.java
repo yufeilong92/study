@@ -169,8 +169,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
-//        initBaiduLocation();
-        initData();
+        initBaiduLocation();
+//        initData();
     }
 
     private void initData() {

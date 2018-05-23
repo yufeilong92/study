@@ -35,14 +35,16 @@ public class WeiXinLoginSercvice extends BaseHttpServcie {
     }
 
     public void requestWeiCode( String code, StringCallBackView backView) {
-        String weixin = mContext.getResources().getString(R.string.http_url_weixin);
-        String url =weixin;
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("code", code);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+//        String weixin = mContext.getResources().getString(R.string.http_url_weixin);
+        String url = getUrl(mContext, R.string.http_url_weixin);
         requestHttpServciePost(mContext, url, jsonObject, false,backView);
 
     }

@@ -38,7 +38,7 @@ public interface PayModel {
      * @param paytype
      * @param view
      */
-    public void submitPay(Context context, String ordernum, String paytype, RequestResulteView view);
+    public void submitPay(Context context, String ordernum, int paytype, RequestResulteView view);
 
     /**
      * 获取科目id
