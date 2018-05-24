@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
-import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseFragment;

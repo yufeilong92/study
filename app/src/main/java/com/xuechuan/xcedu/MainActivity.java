@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mBtnLocation.setOnClickListener(this);
         mBtnBaoli = (Button) findViewById(R.id.btn_baoli);
         mBtnBaoli.setOnClickListener(this);
-        mBtnHome = findViewById(R.id.btn_home);
+        mBtnHome =(Button) findViewById(R.id.btn_home);
         mBtnHome.setOnClickListener(this);
         mBtnGetToken = (Button) findViewById(R.id.btn_getToken);
         mBtnGetToken.setOnClickListener(this);

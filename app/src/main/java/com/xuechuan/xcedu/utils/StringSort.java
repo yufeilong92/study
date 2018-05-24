@@ -36,7 +36,8 @@ public class StringSort {
         String token = infom.getToken();
         String data = null;
         if (param != null && !param.isEmpty()) {
-            data = time + random + staffid + token + param;
+//            data = time + random + staffid + token + param;
+            data = time + random + staffid + token;
         }
         String sort = sort(data);
         String md5 = Md5.getMD5String(sort);
@@ -61,18 +62,18 @@ public class StringSort {
         String token = infom.getToken();
         String data = null;
         StringBuffer buffer = new StringBuffer();
-        if (obj.size() > 0) {
-            for (int i = 0; i < obj.size(); i++) {
-                String str = obj.get(i).getParam() + obj.get(i).getValue();
-                buffer.append(str);
-            }
-            L.d("yfl", buffer.toString());
-            if (obj != null && !obj.isEmpty()) {
-                data = time + random + staffid + token + buffer.toString();
-            }
-        } else {
+//        if (obj.size() > 0) {
+//            for (int i = 0; i < obj.size(); i++) {
+//                String str = obj.get(i).getParam() + obj.get(i).getValue();
+//                buffer.append(str);
+//            }
+//            L.d("yfl", buffer.toString());
+//            if (obj != null && !obj.isEmpty()) {
+//                data = time + random + staffid + token + buffer.toString();
+//            }
+//        } else {
             data = time + random + staffid + token;
-        }
+//        }
 
         String sort = sort(data);
         String md5 = Md5.getMD5String(sort);
@@ -96,11 +97,11 @@ public class StringSort {
         String staffid = infom.getStaffid();
         String token = infom.getToken();
         String data;
-        if (param == null) {
+//        if (param == null) {
             data = time + random + staffid + token;
-        } else {
-            data = time + random + staffid + token + param.toString();
-        }
+//        } else {
+//            data = time + random + staffid + token + param.toString();
+//        }
         String sort = sort(data);
         String md5 = Md5.getMD5String(sort);
         String md5String = md5.toUpperCase();
@@ -124,11 +125,11 @@ public class StringSort {
         String staffid = infom.getStaffid();
         String token = infom.getToken();
         String data;
-        if (param == null) {
+//        if (param == null) {
             data = time + random + staffid + token;
-        } else {
-            data = time + random + staffid + token + param.toString();
-        }
+//        } else {
+//            data = time + random + staffid + token + param.toString();
+//        }
         String sort = sort(data);
         String md5 = Md5.getMD5String(sort);
         String md5String = md5.toUpperCase();

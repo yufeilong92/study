@@ -846,7 +846,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         mContext = this;
-        mRlRootLayout = findViewById(R.id.rl_root_layout);
+        mRlRootLayout =(RelativeLayout) findViewById(R.id.rl_root_layout);
         mIvBMore = (ImageView) findViewById(R.id.iv_b_more);
         mIvBMore.setOnClickListener(this);
         mTvRootEmpty = (TextView) findViewById(R.id.tv_root_empty);

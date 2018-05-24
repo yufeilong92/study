@@ -1,15 +1,20 @@
 package com.xuechuan.xcedu.ui.bank;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
@@ -40,6 +45,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -147,6 +153,9 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
         mChbBPayZfb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!mChbBPayZfb.isPressed()) {
+                    return;
+                }
                 if (isChecked) {
                     setPayChb(true, false);
                 } else {
@@ -157,6 +166,9 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
         mChbBPayWeixin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!mChbBPayWeixin.isPressed()) {
+                    return;
+                }
                 if (isChecked) {
                     setPayChb(false, true);
                 } else {
@@ -319,12 +331,24 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
         BuyFromResultVo vo = gson.fromJson(con, BuyFromResultVo.class);
         if (vo.getStatus().getCode() == 200) {
             WechatsignBeanVo wechatsign = vo.getData().getWechatsign();
-            requestWeiXinPay(wechatsign);
+            if (payType == 1) {
+                requestZFBPay(wechatsign);
+            } else {
+                requestWeiXinPay(wechatsign);
+            }
         } else {
+
             L.e(vo.getStatus().getMessage());
         }
 
     }
+
+    private void requestZFBPay(WechatsignBeanVo wechatsign) {
+
+
+    }
+    private static final int SDK_PAY_FLAG = 1;
+    private static final int SDK_AUTH_FLAG = 2;
 
     private void requestWeiXinPay(final WechatsignBeanVo wechatsign) {
         api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);

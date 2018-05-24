@@ -28,7 +28,8 @@
             android:layout_height="@dimen/title_action_height"
             android:gravity="center_vertical"
             android:padding="12dp"
-            android:text="@string/submit"
+            android:textColor="@color/red_text"
+            android:text="@string/save"
             android:textSize="@dimen/text_size_14" />
 
     </LinearLayout>
@@ -43,6 +44,7 @@
         android:paddingRight="@dimen/space_16">
 
         <RelativeLayout
+            android:id="@+id/rl_m_p_phone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_100">
 
@@ -173,8 +175,8 @@
 
             <Space style="@style/space_20_width" />
 
-            <EditText
-                android:id="@+id/et_m_p_phone"
+            <TextView
+                android:id="@+id/tv_m_p_phone"
                 style="@style/m_name"
                 android:text="183175511" />
 

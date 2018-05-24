@@ -40,6 +40,7 @@ import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.Md5;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -254,7 +255,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         final LoginService service = LoginService.getInstance(mContext);
         service.setIsShowDialog(true);
         service.setDialogContext(null, getStringWithId(R.string.login_loading));
-        mPresenter.getLoginContent(mContext, username, password);
+        mPresenter.getLoginContent(mContext, username, Md5.getMD5String(password));
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.login_loading));
     }
 
@@ -277,7 +278,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             startActivity(intent);
             finishActivity();
         } else {//没有绑定手机
-            Intent intent = RegisterActivity.newInstance(mContext, voData.getOpenid(), RegisterActivity.CEX_INT_TYPE_BIND, voData.getUnionid());
+            Intent intent = RegisterActivity.newInstance(mContext,  RegisterActivity.CEX_INT_TYPE_BIND,voData.getOpenid(), voData.getUnionid());
             intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
             startActivity(intent);
         }

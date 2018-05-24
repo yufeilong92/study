@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
-import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
@@ -137,6 +136,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         FragmentTransaction transaction = mSfm.beginTransaction();
         transaction.show(homeFragment).commit();
+
 
     }
 

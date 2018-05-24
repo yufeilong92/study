@@ -183,7 +183,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 初始百度
      */
     private void initBaiduLocation() {
-        mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
+
         mLocationClient = new LocationClient(getActivity());
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -377,6 +377,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 mLocationClient.restart();
                 return;
             }
+            mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
             String province = location.getProvince();    //获取省份
             mTvAddress.setText(province);
             L.d("定位位置", province);

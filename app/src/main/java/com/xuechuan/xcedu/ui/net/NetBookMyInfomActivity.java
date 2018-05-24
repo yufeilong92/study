@@ -432,7 +432,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mNetMagicIndicator.setOnClickListener(this);
         mVpNetBar = (NoScrollViewPager) findViewById(R.id.vp_net_my_bar);
         mVpNetBar.setOnClickListener(this);
-        ll_title_bar = findViewById(R.id.activity_title_container);
+        ll_title_bar =(LinearLayout) findViewById(R.id.activity_title_container);
         viewLayout = (RelativeLayout) findViewById(R.id.view_layout);
         videoView = (PolyvVideoView) findViewById(R.id.polyv_video_view);
         marqueeView = (PolyvMarqueeView) findViewById(R.id.polyv_marquee_view);

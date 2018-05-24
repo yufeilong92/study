@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.andview.refreshview.callback.IFooterCallBack;
 import com.multilevel.treelist.Node;
 import com.multilevel.treelist.TreeListViewAdapter;
-import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 

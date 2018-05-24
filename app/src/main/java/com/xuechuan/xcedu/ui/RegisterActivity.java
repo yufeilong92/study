@@ -92,7 +92,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @param openid  微信openid
      * @param unionid 平台标识
      */
-    public static Intent newInstance(Context context, String openid, String type, String unionid) {
+    public static Intent newInstance(Context context,String type, String openid, String unionid) {
         Intent intent = new Intent(context, RegisterActivity.class);
         intent.putExtra(OPENID, openid);
         intent.putExtra(HTTPTYPE, type);
@@ -220,9 +220,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
+
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         CountdownUtil.getInstance().stop();
     }
 
@@ -242,31 +243,32 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             T.showToast(mContext, getString(R.string.please_input_pass));
             return;
         }
-//        if (paw.length() < 6) {
-//            T.showToast(mContext, getString(R.string.passundersixt));
-//            return;
-//        }
+        if (paw.length() < 6) {
+            T.showToast(mContext, getString(R.string.passundersixt));
+            return;
+        }
         String paws = getTextStr(mEtRegisterPaws);
         if (TextUtils.isEmpty(paws)) {
             T.showToast(mContext, getString(R.string.please_input_pass));
             return;
         }
-//        if (paws.length() < 6) {
-//            T.showToast(mContext, getString(R.string.passundersixt));
-//            return;
-//        }
+        if (paws.length() < 6) {
+            T.showToast(mContext, getString(R.string.passundersixt));
+            return;
+        }
         if (!paw.equals(paws)) {
             T.showToast(mContext, getString(R.string.pas_no_same));
             return;
         }
-        RegisterService service = RegisterService.getInstance(mContext);
+        sumbit(phone, code, paw);
+    }
 
+    private void sumbit(String phone, String code, String paw) {
+        RegisterService service = RegisterService.getInstance(mContext);
         final AlertDialog dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-        // TODO: 2018/5/9 验证码处理
         service.requestRegister(mType, phone, code, paw, mOpenid, mUuionid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
-
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();

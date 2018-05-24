@@ -256,7 +256,6 @@ public class BaseHttpServcie {
         url = hear.concat(url);
         OkGo.<String>post(url)
                 .tag(context)
-                .isMultipart(true)
                 .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
                 .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
                 .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)

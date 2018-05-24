@@ -15,6 +15,9 @@ import android.Manifest;
 public class DataMessageVo {
     //微信
     public static final String APP_ID = "wx0c71e64b9e151c84";
+
+    //支付宝
+    public static final String ZFBAPP_ID = "2018051460129536";
     //接受微信登录广播
     public static final String WEI_LOGIN_ACTION = "com.weixinlogin.com";
     //用户换取access_token的code，仅在ErrCode为0时有效
@@ -85,9 +88,9 @@ public class DataMessageVo {
     public static  String[] Persmission ={
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-//            Manifest.permission.WRITE_SETTINGS
+            Manifest.permission.CAMERA,
+            Manifest.permission.CALL_PHONE
     };
    //微信支付
     public static int PAYTYPE_WEIXIN= 2;

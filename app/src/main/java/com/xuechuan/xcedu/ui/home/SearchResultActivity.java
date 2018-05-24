@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
-import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.HomeReasultViewPagAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
