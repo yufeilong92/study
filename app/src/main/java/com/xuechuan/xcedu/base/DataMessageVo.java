@@ -16,8 +16,6 @@ public class DataMessageVo {
     //微信
     public static final String APP_ID = "wx0c71e64b9e151c84";
 
-    //支付宝
-    public static final String ZFBAPP_ID = "2018051460129536";
     //接受微信登录广播
     public static final String WEI_LOGIN_ACTION = "com.weixinlogin.com";
     //用户换取access_token的code，仅在ErrCode为0时有效

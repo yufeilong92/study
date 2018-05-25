@@ -352,7 +352,9 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
 
     private void requestWeiXinPay(final WechatsignBeanVo wechatsign) {
         api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
-        api.registerApp(DataMessageVo.APP_ID);
+        boolean b = api.registerApp(DataMessageVo.APP_ID);
+        if (b){
+        }
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -361,9 +363,9 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
                 request.partnerId = wechatsign.getPartnerid();
                 request.prepayId = wechatsign.getPrepayid();
                 request.packageValue = "Sign=WXPay";
-                request.nonceStr = wechatsign.getNoncestr().toLowerCase();
+                request.nonceStr = wechatsign.getNoncestr();
                 request.timeStamp = wechatsign.getTimespan();
-                request.sign = wechatsign.getSign().toLowerCase();
+                request.sign = wechatsign.getSign();
                 api.sendReq(request);
             }
         };

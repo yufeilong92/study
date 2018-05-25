@@ -30,12 +30,11 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDir 'libs'
+            jniLibs.srcDir 'jniLibs'
             jni.srcDirs = []
-            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
         }
     }
-//    sourceSets { main { } }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
     greendao {
         schemaVersion 1  //版本
         daoPackage 'com.xuechuan.xcedu.db' // 一般为app包名+生成文件的文件夹名
@@ -46,13 +45,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "com.android.support:appcompat-v7:$appcompatVersion"
     implementation 'com.huxq17.xrefreshview:xrefreshview:3.6.9'
     implementation "com.android.support:recyclerview-v7:$appcompatVersion"
     implementation "com.android.support:support-v4:$appcompatVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation "com.android.support:design:$appcompatVersion"
     implementation "com.android.support:support-annotations:$appcompatVersion"
     //64K 引用限制
@@ -87,7 +86,7 @@ dependencies {
     implementation files('libs/umeng-sharetool-6.9.0.jar')
     implementation files('libs/jcore-android-1.2.0.jar')
     implementation files('libs/jpush-android-3.1.2.jar')
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation project(':MultilevelTreeLibrary')
@@ -100,6 +99,6 @@ dependencies {
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation 'com.github.addappcn:android-pickers:1.0.3'
     implementation 'com.alibaba:fastjson:1.1.56.android'
-    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation files('libs/alipaySdk-20180403.jar')
 }

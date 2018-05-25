@@ -18,6 +18,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeUtil;
 
 import java.util.Date;
@@ -68,6 +69,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 mTvPayReasult.setText(R.string.pay_error);
                 String date = TimeUtil.dateToString(new Date());
                 mTvPayTime.setText(date);
+            }else if (baseResp.errCode==-2){
             }
         }
     }
