@@ -9,24 +9,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andview.refreshview.callback.IFooterCallBack;
+import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.contract.PersionContract;
+import com.xuechuan.xcedu.mvp.model.PersionModel;
+import com.xuechuan.xcedu.mvp.presenter.PersionPresenter;
 import com.xuechuan.xcedu.utils.AddressPickTask;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.PerInfomVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +59,13 @@ import pub.devrel.easypermissions.PermissionRequest;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class PersionActivity extends BaseActivity implements View.OnClickListener {
+public class PersionActivity extends BaseActivity implements View.OnClickListener, PersionContract.View {
 
 
     private TextView mTvMPSubmit;
     private ImageView mIvMPImg;
     private TextView mEtMPName;
     private LinearLayout mLlMPName;
-    private TextView mTvMPSex;
     private LinearLayout mLiMPSex;
     private TextView mTvMPBirthday;
     private LinearLayout mLlMPBirthday;
@@ -65,28 +77,77 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     private int themid = R.style.picture_Sina_style;
     private List<LocalMedia> selectList = new ArrayList<>();
     private Context mContext;
-    /*    @Override
+    private String mProvince;
+    private String mCity;
+    /**
+     * 权限
+     */
+    private int persion = 111;
+    private RadioButton mRdbMPBoy;
+    private RadioButton mRdbMPGirl;
+    private PersionPresenter mPresenter;
+    public static String PERINFOM = "pertype";
+    private PerInfomVo.DataBean mInfomVo;
+    private AlertDialog mDialog;
+
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_persion);
         initView();
     }*/
-    private int persion = 111;
+
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_persion);
+        if (getIntent() != null) {
+            mInfomVo = (PerInfomVo.DataBean) getIntent().getSerializableExtra(PERINFOM);
+        }
         initView();
+        initData();
     }
+
+    private void initData() {
+        mPresenter = new PersionPresenter();
+        mPresenter.BasePersion(new PersionModel(), this);
+        if (mInfomVo != null) {
+            MyAppliction.getInstance().displayImages(mIvMPImg, mInfomVo.getHeadicon(), false);
+            mEtMPName.setText(mInfomVo.getNickname());
+            int gender = mInfomVo.getGender();
+            if (gender == 1) {
+                mRdbMPBoy.setChecked(true);
+            } else if (gender == 2) {
+                mRdbMPGirl.setChecked(true);
+            }
+            String birthday = mInfomVo.getBirthday();
+            mTvMPBirthday.setText(birthday);
+            mProvince = mInfomVo.getProvince();
+            mCity = mInfomVo.getCity();
+            mTvMPCity.setText(mInfomVo.getProvince() + mInfomVo.getCity());
+            mTvMPPhone.setText(Utils.phoneData(mInfomVo.getPhone()));
+
+        }
+
+    }
+
+/*
+    private String phoneData(String phone) {
+        String str = "****";
+        StringBuilder sb = new StringBuilder(phone);
+        sb.replace(3, 7, str);
+        return sb.toString();
+    }
+*/
 
 
     private void initView() {
         mContext = this;
         mTvMPSubmit = (TextView) findViewById(R.id.tv_m_p_submit);
+        mTvMPSubmit.setOnClickListener(this);
         mIvMPImg = (ImageView) findViewById(R.id.iv_m_p_img);
         mEtMPName = (EditText) findViewById(R.id.et_m_p_name);
         mLlMPName = (LinearLayout) findViewById(R.id.ll_m_p_name);
-        mTvMPSex = (TextView) findViewById(R.id.tv_m_p_sex);
         mLiMPSex = (LinearLayout) findViewById(R.id.li_m_p_sex);
         mTvMPBirthday = (TextView) findViewById(R.id.tv_m_p_birthday);
         mLlMPBirthday = (LinearLayout) findViewById(R.id.ll_m_p_birthday);
@@ -98,20 +159,30 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         mLlMPPhone = (LinearLayout) findViewById(R.id.ll_m_p_phone);
         mRlMPPhone = (RelativeLayout) findViewById(R.id.rl_m_p_phone);
         mRlMPPhone.setOnClickListener(this);
+        mRdbMPBoy = (RadioButton) findViewById(R.id.rdb_m_p_boy);
+        mRdbMPBoy.setOnClickListener(this);
+        mRdbMPGirl = (RadioButton) findViewById(R.id.rdb_m_p_girl);
+        mRdbMPGirl.setOnClickListener(this);
     }
 
 
     private void submit() {
+        int gender = -1;
         String name = getTextStr(mEtMPName);
-        if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, "name不能为空", Toast.LENGTH_SHORT).show();
+        if (StringUtil.isEmpty(name)) {
+            T.showToast(mContext, getString(R.string.name_empty));
             return;
         }
-        String phone = getTextStr(mTvMPPhone);
-        if (TextUtils.isEmpty(phone)) {
-            Toast.makeText(this, "phone不能为空", Toast.LENGTH_SHORT).show();
-            return;
+        if (mRdbMPBoy.isChecked()) {
+            gender = 1;
         }
+        if (mRdbMPGirl.isChecked()) {
+            gender = 2;
+        }
+        String brithday = getTextStr(mTvMPBirthday);
+
+        mPresenter.submitPersionInfom(mContext, name, gender, brithday, mProvince, mCity);
+        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
     }
 
     private void selectTime() {
@@ -148,6 +219,9 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             case R.id.ll_m_p_city:
                 showCity();
                 break;
+            case R.id.tv_m_p_submit://提交
+                submit();
+                break;
 
             default:
 
@@ -168,7 +242,11 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             public void onAddressPicked(Province province, City city, County county) {
                 if (county == null) {
                     mTvMPCity.setText(province.getAreaName() + city.getAreaName());
+                    mProvince = province.getAreaName();
+                    mCity = province.getAreaName();
                 } else {
+                    mProvince = province.getAreaName();
+                    mCity = province.getAreaName();
                     mTvMPCity.setText(province.getAreaName() + city.getAreaName() + county.getAreaName());
                 }
             }
@@ -305,4 +383,35 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     }
 
 
+    @Override
+    public void SubmitPersionSuccess(String con) {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            T.showToast(mContext, getString(R.string.sava_success));
+        } else {
+            T.showToast(mContext, getString(R.string.save_errror));
+        }
+    }
+
+    @Override
+    public void SubmitPersionError(String con) {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        T.showToast(mContext, getString(R.string.save_errror));
+    }
+
+    @Override
+    public void SubmitPersionHearScu(String con) {
+
+    }
+
+    @Override
+    public void SubmitPersionHearErr(String con) {
+
+    }
 }

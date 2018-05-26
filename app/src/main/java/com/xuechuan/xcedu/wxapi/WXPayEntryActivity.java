@@ -70,6 +70,10 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 String date = TimeUtil.dateToString(new Date());
                 mTvPayTime.setText(date);
             }else if (baseResp.errCode==-2){
+                mIvPayImg.setImageResource(R.mipmap.common_feedback_fail);
+                mTvPayReasult.setText(R.string.pay_error);
+                String date = TimeUtil.dateToString(new Date());
+                mTvPayTime.setText(date);
             }
         }
     }

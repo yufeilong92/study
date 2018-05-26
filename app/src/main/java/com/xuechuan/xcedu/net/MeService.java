@@ -45,7 +45,7 @@ public class MeService extends BaseHttpServcie {
      *
      * @param code
      */
-    public void requestExchange( String code, StringCallBackView view) {
+    public void requestExchange(String code, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -69,7 +69,7 @@ public class MeService extends BaseHttpServcie {
      *
      * @param code
      */
-    public void requestSncode( String code, StringCallBackView view) {
+    public void requestSncode(String code, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -96,7 +96,7 @@ public class MeService extends BaseHttpServcie {
      *
      * @param content
      */
-    public void submitAdvice( String content, String link, StringCallBackView view) {
+    public void submitAdvice(String content, String link, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -120,7 +120,7 @@ public class MeService extends BaseHttpServcie {
      *
      * @param orderstate
      */
-    public void requestOrder( String orderstate, StringCallBackView view) {
+    public void requestOrder(int page,String orderstate, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -138,9 +138,128 @@ public class MeService extends BaseHttpServcie {
         paramVo1.setValue(orderstate);
         listParamVo.add(paramVo1);
 
+        addPage(listParamVo,page);
+
         String url = getUrl(mContext, R.string.http_get_order);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
+
+    /**
+     * 获取我的通知
+     *
+     */
+    public void requestMembernotification( StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("staffid");
+        paramVo.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo);
+
+        String url = getUrl(mContext, R.string.http_m_membernotification);
+        requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
+
+    /**
+     * 标记订单状态（取消订单，删除订单）
+     * @param ordernunm 订单编号
+     * @param usetype delete删除订单，cancel取消订单
+     * @param view
+     */
+    public void submitMarkorder(String ordernunm, String usetype, StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JSONObject object = new JSONObject();
+        try {
+            object.put("staffid", user.getId());
+            object.put("ordernunm", ordernunm);
+            object.put("usetype", usetype);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getUrl(mContext, R.string.http_m_markorder);
+        requestHttpServciePost(mContext, url, object, true, view);
 
     }
 
+    /**
+     * 用户信息修改接口
+     * @param nickname 匿名
+     * @param gender 1，男2女
+     * @param birthday 生日
+     * @param province 省
+     * @param city 市
+     * @param view
+     */
+    public void submitChangememberinfo(String nickname,
+                                       int gender,String birthday,
+                                       String province,
+                                       String city,
+                                       StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JSONObject object = new JSONObject();
+        try {
+            object.put("staffid", user.getId());
+            object.put("nickname", nickname);
+            object.put("gender", gender);
+            object.put("birthday", birthday);
+            object.put("province", province);
+            object.put("city", city);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getUrl(mContext, R.string.http_m_submitInfom);
+        requestHttpServciePost(mContext, url, object, true, view);
+    }
+    /**
+     *修改用户头像接口
+     * @param view
+     */
+    public void submitchangeheadimg( StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JSONObject object = new JSONObject();
+        try {
+            object.put("staffid", user.getId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getUrl(mContext, R.string.http_m_submitInfom);
+        requestHttpServciePost(mContext, url, object, true, view);
+    }
+    /**
+     * 获取我的通知
+     *
+     */
+    public void requestmemberinfo( StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("staffid");
+        paramVo.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo);
+        String url = getUrl(mContext, R.string.http_m_infom);
+        requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
 }

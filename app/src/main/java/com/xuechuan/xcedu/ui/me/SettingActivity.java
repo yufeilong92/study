@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.ui.me;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.ui.RegisterActivity;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 
 /**
@@ -32,6 +34,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private LinearLayout mLlMSettingUpdata;
     private TextView mTvMSettingAbout;
     private Button mBtnBSOut;
+    private Context mContext;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
+        mContext = this;
         mTvMSettingWeixin = (TextView) findViewById(R.id.tv_m_setting_weixin);
         mLlMSettingBindWei = (LinearLayout) findViewById(R.id.ll_m_setting_bindWei);
         mLlMSettingBindWei.setOnClickListener(this);
@@ -76,10 +80,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.ll_m_setting_updata://更新
 
+
+
                 break;
             case R.id.tv_m_setting_paw://修改密码
+                Intent intent1 = RegisterActivity.newInstance(mContext, RegisterActivity.CEX_INT_TYPE_PAW, null, null);
+                intent1.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.forget_password));
+                startActivity(intent1);
                 break;
             case R.id.ll_m_setting_bindWei://绑定微信
+
                 break;
             case R.id.btn_b_s_out:
                 MyAppliction.getInstance().setUserInfom(null);

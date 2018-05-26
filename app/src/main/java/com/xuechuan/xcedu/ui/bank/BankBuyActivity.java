@@ -1,8 +1,10 @@
 package com.xuechuan.xcedu.ui.bank;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,32 +18,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
-import com.lzy.okgo.model.Response;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.contract.MyTextContract;
+import com.xuechuan.xcedu.mvp.model.MyTextModel;
 import com.xuechuan.xcedu.mvp.model.PayModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.MyTextPresenter;
 import com.xuechuan.xcedu.mvp.presenter.PayPresenter;
+import com.xuechuan.xcedu.mvp.view.PayUtilView;
 import com.xuechuan.xcedu.mvp.view.PayView;
-import com.xuechuan.xcedu.net.PayService;
-import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.utils.Constants;
+import com.xuechuan.xcedu.ui.BuyResultActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.PayUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BankValueVo;
 import com.xuechuan.xcedu.vo.BuyFromResultVo;
 import com.xuechuan.xcedu.vo.BuyFromVo;
+import com.xuechuan.xcedu.vo.PayResult;
 import com.xuechuan.xcedu.vo.WechatsignBeanVo;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.xuechuan.xcedu.vo.BuyZfbResultVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,7 @@ import java.util.Map;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class BankBuyActivity extends BaseActivity implements PayView, View.OnClickListener {
+public class BankBuyActivity extends BaseActivity implements MyTextContract.View, View.OnClickListener, PayUtilView {
 
     private Context mContext;
     /**
@@ -66,7 +68,6 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
     private static String COUNTID = "countid";
     private int value = 0;
     private IWXAPI wxapi;
-    private PayPresenter mPresenter;
     private LinearLayout mLlBBankPay;
     private CheckBox mChbBPaySkill;
     private TextView mTvBSkillPayValue;
@@ -89,6 +90,11 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
     private AlertDialog mDialog;
     private int payType;
     private IWXAPI api;
+    /**
+     * 支付包结果
+     */
+    private static final int SDK_PAY_FLAG = 1;
+    private MyTextPresenter mPresenter;
 
     public static Intent newInstance(Context context, String countid) {
         Intent intent = new Intent(context, BankBuyActivity.class);
@@ -109,7 +115,11 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_bank_buy);
         initView();
-        mPresenter = new PayPresenter(new PayModelImpl(), this);
+        api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
+        api.registerApp(DataMessageVo.APP_ID);
+//        mPresenter = new PayPresenter(new PayModelImpl(), this);
+        mPresenter = new MyTextPresenter();
+        mPresenter.initModelView(new MyTextModel(),this);
         mPresenter.reuqestBookId(mContext);
 
     }
@@ -252,6 +262,7 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
             case R.id.btn_b_submit_from://提交表单
                 submit();
                 break;
+            default:
         }
 
     }
@@ -259,6 +270,7 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
     private void submit() {
         int value = 0;
         payType = -1;
+
 
         List<Integer> list = new ArrayList<>();
         if (mChbBPaySkill.isChecked()) {
@@ -281,22 +293,30 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
             payType = 1;
         }
         if (mChbBPayWeixin.isChecked()) {
+            if (!api.isWXAppInstalled()) {
+                T.showToast(mContext, getString(R.string.weixin_installed));
+                return;
+            }
             payType = 2;
         }
         if (payType == -1) {
             T.showToast(mContext, getString(R.string.pay_type));
             return;
         }
-        mPresenter.submitPayFrom(mContext, String.valueOf(value), list, "app", null);
+
+        PayUtil payUtil = PayUtil.getInstance(mContext, BankBuyActivity.this);
+        payUtil.init(this);
+        if (payType == 1) {
+            payUtil.Submitfrom(PayUtil.ZFB, String.valueOf(value), list, null);
+        } else if (payType == 2) {
+            payUtil.Submitfrom(PayUtil.WEIXIN, String.valueOf(value), list, null);
+        }
+
+//        mPresenter.submitPayFrom(mContext, String.valueOf(value), list, "app", null);
         mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
-  /*      if (payType == 1) {//支付宝
-
-        } else if (payType == 2) {//微信
-
-        }*/
-
 
     }
+/*
 
     @Override
     public void SumbitFromSuccess(String con) {
@@ -306,7 +326,7 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
             String orderid = vo.getData().getOrderid();
             if (payType == 1) {//支付包
                 mPresenter.submitPay(mContext, orderid, DataMessageVo.PAYTYPE_ZFB);
-            } else {//微信
+            } else if (payType == 2) {//微信
                 mPresenter.submitPay(mContext, orderid, DataMessageVo.PAYTYPE_WEIXIN);
             }
         } else {
@@ -328,33 +348,93 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
             mDialog.dismiss();
         }
         Gson gson = new Gson();
-        BuyFromResultVo vo = gson.fromJson(con, BuyFromResultVo.class);
-        if (vo.getStatus().getCode() == 200) {
-            WechatsignBeanVo wechatsign = vo.getData().getWechatsign();
-            if (payType == 1) {
-                requestZFBPay(wechatsign);
-            } else {
+        if (payType == 2) {//微信
+            BuyFromResultVo vo = gson.fromJson(con, BuyFromResultVo.class);
+            if (vo.getStatus().getCode() == 200) {
+                WechatsignBeanVo wechatsign = vo.getData().getWechatsign();
                 requestWeiXinPay(wechatsign);
+            } else {
+                L.e(vo.getStatus().getMessage());
             }
-        } else {
 
-            L.e(vo.getStatus().getMessage());
+        } else if (payType == 1) {//支付包
+            BuyZfbResultVo vo = gson.fromJson(con, BuyZfbResultVo.class);
+            if (vo.getStatus().getCode() == 200) {
+                BuyZfbResultVo.DataBean data = vo.getData();
+                requestZFBPay(data);
+            } else {
+                L.e(vo.getStatus().getMessage());
+            }
         }
 
-    }
-
-    private void requestZFBPay(WechatsignBeanVo wechatsign) {
-
 
     }
-    private static final int SDK_PAY_FLAG = 1;
-    private static final int SDK_AUTH_FLAG = 2;
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+
+                    @SuppressWarnings("unchecked")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    */
+/**
+                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     *//*
+
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        Intent intent = BuyResultActivity.newInstance(mContext, BuyResultActivity.STATUSSUCCESS);
+                        intent.putExtra(BuyResultActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.buyStauts));
+                        startActivity(intent);
+                        Toast.makeText(BankBuyActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        Intent intent = BuyResultActivity.newInstance(mContext, BuyResultActivity.STATUSERROR);
+                        intent.putExtra(BuyResultActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.buyStauts));
+                        startActivity(intent);
+                        Toast.makeText(BankBuyActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    };
+
+    private void requestZFBPay(BuyZfbResultVo.DataBean zfb) {
+        final String orderInfo = zfb.getOrderstring();   // 订单信息
+        Runnable payRunnable = new Runnable() {
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(BankBuyActivity.this);
+                Map<String, String> map = alipay.payV2(orderInfo, true);
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = map;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+
+    public static boolean checkAliPayInstalled(Context context) {
+
+        Uri uri = Uri.parse("alipays://platformapi/startApp");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        ComponentName componentName = intent.resolveActivity(context.getPackageManager());
+        return componentName != null;
+    }
 
     private void requestWeiXinPay(final WechatsignBeanVo wechatsign) {
-        api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
-        boolean b = api.registerApp(DataMessageVo.APP_ID);
-        if (b){
-        }
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -381,6 +461,7 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
         }
 
     }
+*/
 
     @Override
     public void BookIDSuccess(String con) {
@@ -399,5 +480,21 @@ public class BankBuyActivity extends BaseActivity implements PayView, View.OnCli
     @Override
     public void BookIDError(String con) {
         L.e(con);
+    }
+
+    @Override
+    public void PaySuccess(String type) {
+
+    }
+
+    @Override
+    public void PayError(String type) {
+
+    }
+
+    @Override
+    public void Dialog() {
+        if (mDialog != null && mDialog.isShowing())
+            mDialog.dismiss();
     }
 }

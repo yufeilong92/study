@@ -28,8 +28,8 @@
             android:layout_height="@dimen/title_action_height"
             android:gravity="center_vertical"
             android:padding="12dp"
-            android:textColor="@color/red_text"
             android:text="@string/save"
+            android:textColor="@color/red_text"
             android:textSize="@dimen/text_size_14" />
 
     </LinearLayout>
@@ -50,8 +50,8 @@
 
             <ImageView
                 android:id="@+id/iv_m_p_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/space_64"
+                android:layout_height="@dimen/space_64"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/ic_m_hear" />
@@ -101,11 +101,32 @@
 
             <Space style="@style/space_20_width" />
 
-            <TextView
-                android:id="@+id/tv_m_p_sex"
-                style="@style/m_name"
-                android:paddingLeft="@dimen/space_16"
-                android:text="男" />
+            <!--  <TextView
+                  android:id="@+id/tv_m_p_sex"
+                  style="@style/m_name"
+                  android:paddingLeft="@dimen/space_16"
+                  android:text="男" />-->
+            <RadioGroup
+                android:layout_marginLeft="@dimen/space_16"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rdb_m_p_boy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/select_m_sex_boy" />
+
+                <RadioButton
+                    android:id="@+id/rdb_m_p_girl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_8"
+                    android:button="@drawable/select_m_sex_girl" />
+            </RadioGroup>
 
             <ImageView
                 style="@style/m_more"
@@ -169,6 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_60"
             android:orientation="horizontal">
+
             <TextView
                 style="@style/m_title"
                 android:text="@string/phone_m" />

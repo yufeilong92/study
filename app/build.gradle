@@ -44,6 +44,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:support-v4:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -101,4 +102,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.56.android'
     implementation 'com.android.support:multidex:1.0.3'
     implementation files('libs/alipaySdk-20180403.jar')
+
 }

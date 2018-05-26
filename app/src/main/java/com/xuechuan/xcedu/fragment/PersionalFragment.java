@@ -8,16 +8,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseFragment;
+import com.xuechuan.xcedu.mvp.contract.PersionInfomContract;
+import com.xuechuan.xcedu.mvp.model.PersionInfomModel;
+import com.xuechuan.xcedu.mvp.presenter.PersionInfomPresenter;
+import com.xuechuan.xcedu.ui.me.MyOrderActivity;
 import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
 import com.xuechuan.xcedu.ui.me.AddVauleActivity;
 import com.xuechuan.xcedu.ui.me.FeedBackActivity;
 import com.xuechuan.xcedu.ui.me.GenuineActivity;
 import com.xuechuan.xcedu.ui.me.PersionActivity;
 import com.xuechuan.xcedu.ui.me.SettingActivity;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
@@ -31,7 +39,7 @@ import com.xuechuan.xcedu.vo.UserInfomVo;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/11
  */
-public class PersionalFragment extends BaseFragment implements View.OnClickListener {
+public class PersionalFragment extends BaseFragment implements View.OnClickListener, PersionInfomContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -51,6 +59,16 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     private LinearLayout mLlMNotice;
     private LinearLayout mLlMSetting;
     private Context mContext;
+    private PerInfomVo.DataBean mDataInfom;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 
     public PersionalFragment() {
     }
@@ -64,16 +82,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-//    @Override
+    //    @Override
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 //                             Bundle savedInstanceState) {
 //
@@ -95,7 +104,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void initData() {
-        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+        /*UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
         if (userInfom == null) {
             return;
         }
@@ -104,10 +113,14 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         mTvMPhone.setText(user.getPhone());
         if (!StringUtil.isEmpty(user.getHeadicon())) {
             MyAppliction.getInstance().displayImages(mIvMHear, user.getHeadicon(), true);
-        }
+        }*/
+        PersionInfomPresenter mPresenter = new PersionInfomPresenter();
+        mPresenter.basePresenter(new PersionInfomModel(), this);
+        mPresenter.reqeustMInfo(mContext);
     }
 
     private void initView(View view) {
+        mContext = getActivity();
         mIvMHear = (ImageView) view.findViewById(R.id.iv_m_hear);
         mIvMHear.setOnClickListener(this);
         mTvMName = (TextView) view.findViewById(R.id.tv_m_name);
@@ -132,7 +145,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         mLlMNotice.setOnClickListener(this);
         mLlMSetting = (LinearLayout) view.findViewById(R.id.ll_m_setting);
         mLlMSetting.setOnClickListener(this);
-        mContext = getActivity();
+
     }
 
     @Override
@@ -140,6 +153,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.iv_m_edith://编辑
                 Intent intent = new Intent(mContext, PersionActivity.class);
+                intent.putExtra(PersionActivity.PERINFOM, mDataInfom);
                 intent.putExtra(PersionActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.persion));
                 startActivity(intent);
                 break;
@@ -149,7 +163,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
                 startActivity(new Intent(mContext, NetBookDownActivity.class));
                 break;
             case R.id.ll_m_order://我的订单
-
+                startActivity(new Intent(mContext,MyOrderActivity.class));
                 break;
             case R.id.ll_m_addvaluer://增值服务
                 Intent intent1 = new Intent(mContext, AddVauleActivity.class);
@@ -176,5 +190,35 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
             default:
 
         }
+    }
+
+    @Override
+    public void InfomSuccess(String cont) {
+        L.d(cont);
+        Gson gson = new Gson();
+        PerInfomVo vo = gson.fromJson(cont, PerInfomVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            mDataInfom = vo.getData();
+            bindViewData(mDataInfom);
+
+        } else {
+            L.e(vo.getStatus().getMessage());
+        }
+
+    }
+
+    private void bindViewData(PerInfomVo.DataBean data) {
+        mTvMName.setText(data.getNickname());
+        mTvMPhone.setText(Utils.phoneData(data.getPhone()));
+        if (!StringUtil.isEmpty(data.getHeadicon())) {
+            MyAppliction.getInstance().displayImages(mIvMHear, data.getHeadicon(), true);
+        }
+
+
+    }
+
+    @Override
+    public void InfomError(String cont) {
+        L.d(cont);
     }
 }

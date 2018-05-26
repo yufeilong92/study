@@ -6,7 +6,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.MainActivity;
@@ -296,11 +299,11 @@ public class DialogUtil {
                 .setCancelable(cancelable)
                 .create();
         final AlertDialog show = builder.show();
-        time = year +"-"+ (month + 1) +"-"+ day + "";
+        time = year + "-" + (month + 1) + "-" + day + "";
         DatePicker.OnDateChangedListener listener = new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                time = year +"-"+ (monthOfYear + 1) +"-"+ dayOfMonth + "";
+                time = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth + "";
             }
         };
         mDpShowTimeSelect.init(year, month, day, listener);
@@ -329,6 +332,98 @@ public class DialogUtil {
         year = cal.get(Calendar.YEAR);       //获取年月日时分秒
         month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private onItemPayDialogClickListener payClickListener;
+
+    public interface onItemPayDialogClickListener {
+        public void onPayDialogClickListener(int obj, int position);
+    }
+
+    public void setPayDialogClickListener(onItemPayDialogClickListener clickListener) {
+        this.payClickListener = clickListener;
+    }
+
+    int a = -1;
+
+    public void showPayDialog(final Context mContext) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_dialog_pay, null);
+        LinearLayout linzfb = view.findViewById(R.id.ll_net_pay_zfb);
+        LinearLayout liweixin = view.findViewById(R.id.ll_net_weixin);
+        final CheckBox chbweixin = view.findViewById(R.id.chb_net_pay_weixin);
+        final CheckBox chbzfb = view.findViewById(R.id.chb_net_pay_zfb);
+        Button btnsubmit = view.findViewById(R.id.btn_dialog_sure_pay);
+        builder.setView(view)
+                .setCancelable(false)
+                .create();
+        final AlertDialog show = builder.show();
+        liweixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = 1;
+                ShowPayStatus(chbzfb, false, chbweixin, true);
+            }
+        });
+        linzfb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = 2;
+                ShowPayStatus(chbzfb, true, chbweixin, false);
+            }
+        });
+        chbweixin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!chbweixin.isPressed()) return;
+                if (isChecked) {
+                    a = 1;
+                    ShowPayStatus(chbzfb, false, chbweixin, true);
+                } else {
+                    a = -1;
+                    ShowPayStatus(chbzfb, false, chbweixin, false);
+                }
+            }
+        });
+        chbzfb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!chbzfb.isPressed()) return;
+                if (isChecked) {
+                    a = 2;
+                    ShowPayStatus(chbzfb, true, chbweixin, false);
+                } else {
+                    a = -1;
+                    ShowPayStatus(chbzfb, false, chbweixin, false);
+                }
+            }
+        });
+        btnsubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (a == -1) {
+                    T.showToast(mContext, mContext.getResources().getString(R.string.pay_type));
+                    return;
+                }
+                if (show != null && show.isShowing())
+                    show.dismiss();
+
+                if (payClickListener != null) {
+                    if (show != null && show.isShowing())
+                        show.dismiss();
+                    payClickListener.onPayDialogClickListener(a, a);
+                    a = -1;
+                }
+
+            }
+        });
+
+
+    }
+
+    private void ShowPayStatus(CheckBox zc, boolean z, CheckBox wc, boolean w) {
+        zc.setChecked(z);
+        wc.setChecked(w);
     }
 
 }

@@ -230,6 +230,7 @@
         </LinearLayout>
 
         <Button
+            android:layout_marginTop="@dimen/space_16"
             android:id="@+id/btn_b_submit_from"
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_48"

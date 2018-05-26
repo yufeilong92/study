@@ -111,6 +111,7 @@ public class BaseHttpServcie {
                 , signature, requestBody, callBackView);
     }
 
+
     protected void requestHttpServciePost(Context context, final String url, final JsonObject params,
                                           boolean isWithToken, final StringCallBackView callBackView) {
         UserBean user = null;

@@ -81,26 +81,34 @@ public class DataMessageVo {
     //综合
     public static String MARKTYPECOLLORT = "typecoloct";
     //文章标识
-    public static String MARKTYPEORDER= "typeorder";
+    public static String MARKTYPEORDER = "typeorder";
     //需要的权限
-    public static  String[] Persmission ={
+    public static String[] Persmission = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.CAMERA,
             Manifest.permission.CALL_PHONE
     };
-   //微信支付
-    public static int PAYTYPE_WEIXIN= 2;
+    //微信支付
+    public static int PAYTYPE_WEIXIN = 2;
     //支付包
-    public static int PAYTYPE_ZFB= 3;
+    public static int PAYTYPE_ZFB = 3;
     //余额
-    public static int PAYTYPE_YUER= 1;
+    public static int PAYTYPE_YUER = 1;
     //兑换码
-    public static int PAYTYPE_DUHAUN= 5;
+    public static int PAYTYPE_DUHAUN = 5;
     //微信id
-    public static String WEIXINVID="wx0c71e64b9e151c84";
-
-
+    public static String WEIXINVID = "wx0c71e64b9e151c84";
+    //取消订单
+    public static String CANCELORDER = "cancel";
+    //删除订单
+    public static String DELETEORDER = "delete";
+    //全部订单
+    public static String ORDERALL = "0";
+    //未完成
+    public static String ORDERAOB = "-1";
+    //已完成
+    public static String ORDERACOM = "10";
 
 }

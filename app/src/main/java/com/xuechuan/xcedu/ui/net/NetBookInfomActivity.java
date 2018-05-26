@@ -156,13 +156,13 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         return intent;
     }
 
- /*   @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_net_book_infom);
-        initView();
-    }
-*/
+    /*   @Override
+       protected void onCreate(Bundle savedInstanceState) {
+           super.onCreate(savedInstanceState);
+           setContentView(R.layout.activity_net_book_infom);
+           initView();
+       }
+   */
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
@@ -175,7 +175,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         initView();
         initViewData();
         PolyvScreenUtils.generateHeight16_9(this);
-        PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout,mLlNetBuyLayou);
+        PolyvScreenUtils.initTitleBar(ll_title_bar, mRlPlaylayout, mLlNetBuyLayou);
         int playModeCode = getIntent().getIntExtra("playMode", PlayMode.portrait.getCode());
         PlayMode playMode = PlayMode.getPlayMode(playModeCode);
         if (playMode == null)
@@ -206,13 +206,15 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         submitPlayProgress();
 
     }
-    public void submitPlayProgress(){
+
+    public void submitPlayProgress() {
         PolyvVideoView view = new PolyvVideoView(mContext);
         int position = view.getCurrentPosition();
-        String  vid = view.getCurrentVid();
-        Log.e(TAG, "视频播放进度: "+position+"\n"+vid );
+        String vid = view.getCurrentVid();
+        Log.e(TAG, "视频播放进度: " + position + "\n" + vid);
 
     }
+
     private void initData() {
         if (dataVo != null) {
             mTvNetBookTitle.setText(dataVo.getName());
@@ -675,10 +677,14 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_net_contact_service://客服
+
                 break;
             case R.id.btn_net_go_buy://购买
+                Intent intent = NetBuyActivity.newInstance(mContext, dataVo, "");
+                startActivity(intent);
                 break;
             case R.id.iv_net_play:
+
                 break;
             case R.id.iv_net_book_play:
                 mRlPlaylayout.setVisibility(View.GONE);

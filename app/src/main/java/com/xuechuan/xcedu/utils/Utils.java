@@ -1625,4 +1625,16 @@ public class Utils {
         } else
             return String.format("%d B", size);
     }
+
+    /**
+     * 150*****7856
+     * @param phone
+     * @return
+     */
+    public static  String phoneData(String phone) {
+        String str = "****";
+        StringBuilder sb = new StringBuilder(phone);
+        sb.replace(3, 7, str);
+        return sb.toString();
+    }
 }

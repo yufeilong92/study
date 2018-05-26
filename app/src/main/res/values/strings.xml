@@ -112,12 +112,23 @@
     <string name="http_post_advice">/api/advice/post</string>
     <!--获取订单信息-->
     <string name="http_get_order">/api/order/get</string>
+    <!--获取用户信息-->
+    <string name="http_m_infom">/api/user/getmemberinfo</string>
+    <!--头像修改-->
+    <string name="http_m_hear">/api/user/changeheadimg</string>
+    <!--信息修改-->
+    <string name="http_m_submitInfom">/api/user/changememberinfo</string>
+    <!--标记订单状态（取消订单，删除订单）-->
+    <string name="http_m_markorder">/api/order/markorder</string>
+    <!--获取我的通知-->
+    <string name="http_m_membernotification">/membernotification/get</string>
 
     <!--支付接口-->
     <!--订单下单-->
     <string name="http_makeorderpost">/api/order/makeorderpost</string>
     <!--订单支付-->
     <string name="http_pay">/api/pay/post</string>
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -233,6 +244,7 @@
     <string name="casetext">案例分析题库</string>
     <string name="thiry">￥30</string>
     <string name="y">￥</string>
+    <string name="y1">-￥</string>
     <string name="playtype">支付方式</string>
     <string name="weixin">微信</string>
     <string name="zhifubao">支付宝</string>
@@ -244,5 +256,25 @@
     <string name="surefrom">确认订单</string>
     <string name="sure">确定</string>
     <string name="save">保存</string>
+    <string name="buySuccess">购买成功</string>
+    <string name="buyError">购买失败</string>
+    <string name="buyStauts">购买结果</string>
+    <string name="name_empty">名字不能为空</string>
+    <string name="sava_success">保存成功</string>
+    <string name="save_errror">保存失败</string>
+    <string name="order_code">订单编号:</string>
+    <string name="order_code1">订单编号</string>
+    <string name="total">总计</string>
+    <string name="pay_money">付款</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="preferential">优惠</string>
+    <string name="delect_order">删除订单</string>
+    <string name="weixin_installed">请先安装微信客户端</string>
+    <string name="title_activity_my_order_infom">MyOrderInfomActivity</string>
+    <string name="order_detail">订单详情</string>
+    <string name="ware_name">商品名称</string>
+    <string name="order_time">下单时间</string>
+    <string name="order_price">订单金额</string>
+    <string name="paytype">支付方式</string>
 
 </resources>
