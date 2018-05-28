@@ -61,7 +61,7 @@
     <EditText
         android:id="@+id/et_m_feed_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/space_48"
         android:layout_marginLeft="@dimen/space_16"
         android:layout_marginRight="@dimen/space_16"
         android:textColor="@color/black"

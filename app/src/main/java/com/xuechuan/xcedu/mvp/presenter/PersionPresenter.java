@@ -1,9 +1,12 @@
 package com.xuechuan.xcedu.mvp.presenter;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.mvp.contract.PersionContract;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 
 /**
@@ -30,14 +33,21 @@ public class PersionPresenter implements PersionContract.Presenter {
 
     @Override
     public void submitPersionInfom(Context context, String nickname, int gender, String birthday, String province, String city) {
+        final AlertDialog mDialog = DialogUtil.showDialog(context, "", context.getResources().getString(R.string.submit_loading));
+
         model.submitPersionInfom(context, nickname, gender, birthday, province, city, new RequestResulteView() {
             @Override
             public void success(String result) {
+                if (mDialog != null || mDialog.isShowing())
+                    mDialog.dismiss();
                 view.SubmitPersionSuccess(result);
             }
 
             @Override
             public void error(String result) {
+                if (mDialog != null || mDialog.isShowing())
+                    mDialog.dismiss();
+                mDialog.dismiss();
                 view.SubmitPersionError(result);
             }
         });

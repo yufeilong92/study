@@ -124,7 +124,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             mTvMPBirthday.setText(birthday);
             mProvince = mInfomVo.getProvince();
             mCity = mInfomVo.getCity();
-            mTvMPCity.setText(mInfomVo.getProvince() + mInfomVo.getCity());
+            mTvMPCity.setText(mInfomVo.getCity());
             mTvMPPhone.setText(Utils.phoneData(mInfomVo.getPhone()));
 
         }
@@ -180,9 +180,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             gender = 2;
         }
         String brithday = getTextStr(mTvMPBirthday);
-
         mPresenter.submitPersionInfom(mContext, name, gender, brithday, mProvince, mCity);
-        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
     }
 
     private void selectTime() {
@@ -231,7 +229,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     private void showCity() {
         AddressPickTask task = new AddressPickTask(this);
         task.setHideProvince(false);
-        task.setHideCounty(false);
+        task.setHideCounty(true);
         task.setCallback(new AddressPickTask.Callback() {
             @Override
             public void onAddressInitFailed() {
@@ -241,9 +239,9 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onAddressPicked(Province province, City city, County county) {
                 if (county == null) {
-                    mTvMPCity.setText(province.getAreaName() + city.getAreaName());
+                    mTvMPCity.setText(city.getAreaName());
                     mProvince = province.getAreaName();
-                    mCity = province.getAreaName();
+                    mCity = city.getAreaName();
                 } else {
                     mProvince = province.getAreaName();
                     mCity = province.getAreaName();
@@ -263,7 +261,6 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         builder.setView(view);
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
         btnOpenAum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -385,9 +382,6 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void SubmitPersionSuccess(String con) {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -396,12 +390,9 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             T.showToast(mContext, getString(R.string.save_errror));
         }
     }
-
     @Override
     public void SubmitPersionError(String con) {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
+
         T.showToast(mContext, getString(R.string.save_errror));
     }
 
@@ -414,4 +405,5 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     public void SubmitPersionHearErr(String con) {
 
     }
+
 }

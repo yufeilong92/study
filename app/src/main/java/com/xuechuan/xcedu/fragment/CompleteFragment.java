@@ -123,8 +123,8 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
         adapter.setClickListener(new MyOrderAdapter.onItemClickListener() {
             @Override
             public void onClickListener(MyOrderVo.DatasBean obj, int position) {
-                Intent intent = MyOrderInfomActivity.newInstance(mContext, obj);
-                startActivity(intent);
+          /*      Intent intent = MyOrderInfomActivity.newInstance(mContext, obj);
+                startActivity(intent);*/
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemDelClickListener() {

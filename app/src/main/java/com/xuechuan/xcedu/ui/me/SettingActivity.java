@@ -81,12 +81,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             case R.id.ll_m_setting_updata://更新
 
 
-
                 break;
             case R.id.tv_m_setting_paw://修改密码
-                Intent intent1 = RegisterActivity.newInstance(mContext, RegisterActivity.CEX_INT_TYPE_PAW, null, null);
-                intent1.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.forget_password));
-                startActivity(intent1);
+                startActivity(new Intent(SettingActivity.this, PawChangerActivity.class));
                 break;
             case R.id.ll_m_setting_bindWei://绑定微信
 

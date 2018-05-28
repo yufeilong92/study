@@ -60,6 +60,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     private LinearLayout mLlMSetting;
     private Context mContext;
     private PerInfomVo.DataBean mDataInfom;
+    private PersionInfomPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,9 +115,10 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         if (!StringUtil.isEmpty(user.getHeadicon())) {
             MyAppliction.getInstance().displayImages(mIvMHear, user.getHeadicon(), true);
         }*/
-        PersionInfomPresenter mPresenter = new PersionInfomPresenter();
-        mPresenter.basePresenter(new PersionInfomModel(), this);
-        mPresenter.reqeustMInfo(mContext);
+        if (mPresenter == null) {
+            mPresenter = new PersionInfomPresenter();
+            mPresenter.basePresenter(new PersionInfomModel(), this);
+        }
     }
 
     private void initView(View view) {
@@ -158,12 +160,13 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.ll_m_my_msg://我的信息
+
                 break;
             case R.id.ll_m_down://我的下载
                 startActivity(new Intent(mContext, NetBookDownActivity.class));
                 break;
             case R.id.ll_m_order://我的订单
-                startActivity(new Intent(mContext,MyOrderActivity.class));
+                startActivity(new Intent(mContext, MyOrderActivity.class));
                 break;
             case R.id.ll_m_addvaluer://增值服务
                 Intent intent1 = new Intent(mContext, AddVauleActivity.class);
@@ -220,5 +223,11 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void InfomError(String cont) {
         L.d(cont);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.reqeustMInfo(mContext);
     }
 }

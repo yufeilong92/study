@@ -1,2 +1,2 @@
-include ':app','MultilevelTreeLibrary','htmlSpanner'
+include ':app','MultilevelTreeLibrary','htmlSpanner',':update-app'
 

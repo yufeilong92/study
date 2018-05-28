@@ -147,8 +147,8 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
         adapter.setClickListener(new MyOrderAdapter.onItemClickListener() {
             @Override
             public void onClickListener(MyOrderVo.DatasBean obj, int position) {
-                Intent intent = MyOrderInfomActivity.newInstance(mContext, obj);
-                startActivity(intent);
+   /*             Intent intent = MyOrderInfomActivity.newInstance(mContext, obj);
+                startActivity(intent);*/
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemCancelClickListener() {
