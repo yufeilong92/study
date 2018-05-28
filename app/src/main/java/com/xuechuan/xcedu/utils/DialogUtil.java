@@ -355,7 +355,7 @@ public class DialogUtil {
         final CheckBox chbzfb = view.findViewById(R.id.chb_net_pay_zfb);
         Button btnsubmit = view.findViewById(R.id.btn_dialog_sure_pay);
         builder.setView(view)
-                .setCancelable(false)
+                .setCancelable(true)
                 .create();
         final AlertDialog show = builder.show();
         liweixin.setOnClickListener(new View.OnClickListener() {

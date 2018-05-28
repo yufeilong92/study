@@ -1,12 +1,17 @@
 package com.xuechuan.xcedu.service;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.net.NetService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
@@ -33,6 +38,7 @@ public class SubmitProgressService extends IntentService {
     public SubmitProgressService() {
         super("SubmitProgressServcie");
     }
+
 
     /**
      * @param context

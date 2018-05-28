@@ -110,7 +110,7 @@ public class MyOrderAdapter extends BaseRecyclerAdapter<MyOrderAdapter.ViewHodle
         }
 
         holder.mTvMyOrderYPrice.setText(vo.getDiscounts() + "");
-        holder.mTvMyOrderAllPrice.setText((vo.getTotalprice() - vo.getDiscounts()) + "");
+        holder.mTvMyOrderAllPrice.setText(vo.getTotalprice() + "");
         setlistener(holder, position, vo);
         bindViewData(holder, vo);
     }

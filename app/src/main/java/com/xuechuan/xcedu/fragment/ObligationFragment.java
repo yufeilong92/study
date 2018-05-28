@@ -150,12 +150,12 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
     }
 
 
-    private void showDialog(MyOrderVo.DatasBean obj, int position) {
-        double discounts = obj.getDiscounts();
-        double totalprice = obj.getTotalprice();
+    private void showDialog(final MyOrderVo.DatasBean data, int position) {
+        double discounts = data.getDiscounts();
+        double totalprice = data.getTotalprice();
         final double v = totalprice - discounts;
         final ArrayList<Integer> list = new ArrayList<>();
-        final List<OrderDetailVo> details = obj.getDetails();
+        final List<OrderDetailVo> details = data.getDetails();
         for (int i = 0; i < details.size(); i++) {
             list.add(details.get(i).getProductid());
         }
@@ -167,9 +167,9 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 mPayDialog = DialogUtil.showDialog(mContext, "", getStrWithId(R.string.submit_loading));
                 payUtil.showDiaolog(mPayDialog);
                 if (obj == 1) {//微信
-                    payUtil.Submitfrom(PayUtil.WEIXIN, String.valueOf(v), list, null);
+                    payUtil.SubmitfromPay(PayUtil.WEIXIN,data.getOrdernum());
                 } else if (obj == 2) {//支付宝
-                    payUtil.Submitfrom(PayUtil.ZFB, String.valueOf(v), list, null);
+                    payUtil.SubmitfromPay(PayUtil.ZFB, data.getOrdernum());
                 }
             }
         });

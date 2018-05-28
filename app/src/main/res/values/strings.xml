@@ -2,10 +2,10 @@
     <string name="app_name">学川教育</string>
 
     <!--//请求头-->
-    <!--<string name="app_content_heat">http://app1.xuechuanedu.com</string>-->
-    <string name="app_content_heat">http://192.168.1.111:8080</string>
+    <string name="app_content_heat">http://app1.xuechuanedu.cn</string>
+    <!--<string name="app_content_heat">http://192.168.1.111:8080</string>-->
     <!--<string name="app_content_heat">http://192.168.1.110:8080</string>-->
-    微信接口
+    <!--微信接口-->
     <string name="http_url_weixin">/api/auth/login</string>
     <string name="http_url_text">/api/test/post</string>
     <!--token刷新-->
@@ -129,6 +129,7 @@
     <!--订单支付-->
     <string name="http_pay">/api/pay/post</string>
 
+    <string name="http_upApp">/apks/appversion.json</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>

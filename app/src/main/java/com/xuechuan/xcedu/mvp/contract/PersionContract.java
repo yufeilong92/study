@@ -2,7 +2,11 @@ package com.xuechuan.xcedu.mvp.contract;
 
 import android.content.Context;
 
+import com.lzy.okgo.model.Progress;
+import com.xuechuan.xcedu.mvp.view.RequestResulteUpView;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
+
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -20,7 +24,7 @@ public interface PersionContract {
                                        int gender, String birthday, String province
                 , String city, RequestResulteView view);
 
-        public void submitPersionHear(Context context, String path, RequestResulteView view);
+        public void submitPersionHear(Context context, List<String> path, RequestResulteUpView view);
     }
 
     interface View {
@@ -31,6 +35,8 @@ public interface PersionContract {
         public void SubmitPersionHearScu(String con);
 
         public void SubmitPersionHearErr(String con);
+
+        public void SubmitProgressHear(Progress progress);
     }
 
     interface Presenter {
@@ -41,7 +47,7 @@ public interface PersionContract {
                                        int gender, String birthday, String province
                 , String city);
 
-        public void submitPersionHear(Context context, String path);
+        public void submitPersionHear(Context context, List<String> path);
 
     }
 }

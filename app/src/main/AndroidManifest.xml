@@ -239,7 +239,11 @@
         <activity
             android:name=".ui.me.MyOrderInfomActivity"
             android:label="@string/title_activity_my_order_infom" />
-        <activity android:name=".ui.me.PawChangerActivity"></activity>
+        <activity android:name=".ui.me.PawChangerActivity" />
+
+        <service
+            android:name=".service.SubmitHearService"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -52,7 +52,6 @@ public class BaseHttpServcie {
     private String cont;
     private boolean isShow = false;
     private AlertDialog dialog;
-    private AlertDialog mDialog;
 
     public HttpInfomVo getInfomData() {
         HttpInfomVo infomVo = MyAppliction.getInstance().getHttpInfomInstance();
@@ -77,7 +76,7 @@ public class BaseHttpServcie {
         }
     }
 
-    protected void requestHttpServciePost(Context context, final String url, final JSONObject params,
+    protected void requestHttpServciePost(Context context, final String url, JSONObject params,
                                           boolean isWithToken, final StringCallBackView callBackView) {
         UserBean user = null;
         if (isWithToken) {
@@ -90,6 +89,9 @@ public class BaseHttpServcie {
                 return;
             }
             user = vo.getData().getUser();
+        }
+        if (params == null) {
+            params = new JSONObject();
         }
         addParams(context, params);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
@@ -112,7 +114,7 @@ public class BaseHttpServcie {
     }
 
 
-    protected void requestHttpServciePost(Context context, final String url, final JsonObject params,
+    protected void requestHttpServciePost(Context context, final String url, JsonObject params,
                                           boolean isWithToken, final StringCallBackView callBackView) {
         UserBean user = null;
         if (isWithToken) {
@@ -125,6 +127,9 @@ public class BaseHttpServcie {
                 return;
             }
             user = vo.getData().getUser();
+        }
+        if (params == null) {
+            params = new JsonObject();
         }
         addParams(context, params);
         MediaType parse = MediaType.parse(DataMessageVo.HTTPAPPLICAITON);
@@ -145,6 +150,7 @@ public class BaseHttpServcie {
         sendRequestPostHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce()
                 , signature, requestBody, callBackView);
     }
+
     protected void requestHttpServiceGet(Context context, String url, ArrayList<GetParamVo> obj,
                                          boolean isWithToken, final StringCallBackView callBackView) {
         if (obj == null) {
@@ -190,49 +196,6 @@ public class BaseHttpServcie {
         url = url.concat(buffer.toString());
         sendRequestGetHttp(context, url, infomVo.getStaffid(), infomVo.getTimeStamp(), infomVo.getNonce(), signature, callBackView);
 
-    }
-
-    protected void sendOkGoGetTokenHttp(Context context, String url, String saffid, String time,
-                                        String nonce, String signature, final StringCallBackView callBackView) {
-        if (StringUtil.isEmpty(saffid)) {
-            saffid = "0";
-        }
-
-        String hear = context.getResources().getString(R.string.app_content_heat);
-        url = hear.concat(url);
-        OkGo.<String>get(url)
-                .tag(context)
-                .headers(DataMessageVo.STAFFID, StringUtil.isEmpty(saffid) ? null : saffid)
-                .headers(DataMessageVo.TIMESTAMP, StringUtil.isEmpty(time) ? null : time)
-                .headers(DataMessageVo.NONCE, StringUtil.isEmpty(nonce) ? null : nonce)
-                .headers(DataMessageVo.SIGNATURE, StringUtil.isEmpty(signature) ? null : signature)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        if (isShow) {
-                            dialog.dismiss();
-                        }
-                        String s = response.body().toString();
-                        try {
-                            new JsonParser().parse(s);
-                            OkGo.getInstance().cancelTag(mContext);
-                            callBackView.onSuccess(response);
-                        } catch (JsonParseException e) {
-                            L.e("数据异常");
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                        if (isShow) {
-                            dialog.dismiss();
-                        }
-                        callBackView.onError(response);
-                    }
-                });
     }
 
     /**
@@ -369,6 +332,7 @@ public class BaseHttpServcie {
         }
 
     }
+
     /**
      * 添加参数
      *
@@ -376,23 +340,23 @@ public class BaseHttpServcie {
      * @param param
      */
     private void addParams(Context context, JsonObject param) {
-            String newType = Utils.getNewType(context);
-            param.addProperty(DataMessageVo.HTTP_AC, newType);
-            String versionName = Utils.getVersionName(context);
-            param.addProperty(DataMessageVo.HTTP_VERSION_NAME, versionName);
-            int code = Utils.getVersionCode(context);
-            param.addProperty(DataMessageVo.HTTP_VERSION_CODE, String.valueOf(code));
-            param.addProperty(DataMessageVo.HTTP_DEVICE_PLATFORM, "android");
-            String model = Utils.getSystemModel();
-            param.addProperty(DataMessageVo.HTTP_DEVICE_TYPE, model);
-            String brand = Utils.getDeviceBrand();
-            param.addProperty(DataMessageVo.HTTP_DEVICE_BRAND, brand);
-            String systemVersion = Utils.getSystemVersion();
-            param.addProperty(DataMessageVo.HTTP_OS_VERSION, systemVersion);
-            String dp = Utils.getdp(context);
-            param.addProperty(DataMessageVo.HTTP_RESOLUTION, dp);
-            String dpi = Utils.getdpi(context);
-            param.addProperty(DataMessageVo.HTTP_DPI, dpi);
+        String newType = Utils.getNewType(context);
+        param.addProperty(DataMessageVo.HTTP_AC, newType);
+        String versionName = Utils.getVersionName(context);
+        param.addProperty(DataMessageVo.HTTP_VERSION_NAME, versionName);
+        int code = Utils.getVersionCode(context);
+        param.addProperty(DataMessageVo.HTTP_VERSION_CODE, String.valueOf(code));
+        param.addProperty(DataMessageVo.HTTP_DEVICE_PLATFORM, "android");
+        String model = Utils.getSystemModel();
+        param.addProperty(DataMessageVo.HTTP_DEVICE_TYPE, model);
+        String brand = Utils.getDeviceBrand();
+        param.addProperty(DataMessageVo.HTTP_DEVICE_BRAND, brand);
+        String systemVersion = Utils.getSystemVersion();
+        param.addProperty(DataMessageVo.HTTP_OS_VERSION, systemVersion);
+        String dp = Utils.getdp(context);
+        param.addProperty(DataMessageVo.HTTP_RESOLUTION, dp);
+        String dpi = Utils.getdpi(context);
+        param.addProperty(DataMessageVo.HTTP_DPI, dpi);
     }
 
     /**
@@ -489,7 +453,7 @@ public class BaseHttpServcie {
     }
 
 
-    public void  addPage(ArrayList<GetParamVo> list, int page) {
+    public void addPage(ArrayList<GetParamVo> list, int page) {
         GetParamVo paramVo = getParamVo();
         paramVo.setParam("page");
         paramVo.setValue(String.valueOf(page));

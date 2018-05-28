@@ -133,7 +133,8 @@
         android:id="@+id/ll_net_buy_layou"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:gravity="center_vertical"
+        android:layout_height="58dp">
         <View style="@style/view_line_tab_line" />
         <LinearLayout
 

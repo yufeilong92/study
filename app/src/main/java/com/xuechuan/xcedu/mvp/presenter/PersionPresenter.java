@@ -3,11 +3,15 @@ package com.xuechuan.xcedu.mvp.presenter;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 
+import com.lzy.okgo.model.Progress;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.mvp.contract.PersionContract;
+import com.xuechuan.xcedu.mvp.view.RequestResulteUpView;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
+
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -54,8 +58,24 @@ public class PersionPresenter implements PersionContract.Presenter {
     }
 
     @Override
-    public void submitPersionHear(Context context, String path) {
+    public void submitPersionHear(Context context, List<String> path) {
+        model.submitPersionHear(context, path, new RequestResulteUpView() {
+            @Override
+            public void success(String result) {
+                view.SubmitPersionHearScu(result);
+            }
 
+            @Override
+            public void error(String result) {
+                view.SubmitPersionHearErr(result);
+            }
+
+            @Override
+            public void Progress(Progress progress) {
+                view.SubmitProgressHear(progress);
+            }
+        });
     }
+
 
 }

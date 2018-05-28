@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.model.Progress;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -31,8 +33,11 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.contract.PersionContract;
 import com.xuechuan.xcedu.mvp.model.PersionModel;
 import com.xuechuan.xcedu.mvp.presenter.PersionPresenter;
+import com.xuechuan.xcedu.service.SubmitHearService;
+import com.xuechuan.xcedu.service.SubmitProgressService;
 import com.xuechuan.xcedu.utils.AddressPickTask;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
@@ -89,6 +94,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     public static String PERINFOM = "pertype";
     private PerInfomVo.DataBean mInfomVo;
     private AlertDialog mDialog;
+    private ArrayList<String> mPathlist;
 
     /*@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +118,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         mPresenter = new PersionPresenter();
         mPresenter.BasePersion(new PersionModel(), this);
         if (mInfomVo != null) {
-            MyAppliction.getInstance().displayImages(mIvMPImg, mInfomVo.getHeadicon(), false);
+            MyAppliction.getInstance().displayImages(mIvMPImg, mInfomVo.getHeadicon(), true);
             mEtMPName.setText(mInfomVo.getNickname());
             int gender = mInfomVo.getGender();
             if (gender == 1) {
@@ -297,7 +303,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 .synOrAsy(true)//同步true或异步false 压缩 默认同步
                 //.compressSavePath(getPath())//压缩图片保存地址
                 //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
-                .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                .glideOverride(480, 480)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
 //                .isGif(cb_isGif.isChecked())// 是否显示gif图片
@@ -336,7 +342,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 .isCamera(true)// 是否显示拍照按钮
 //               .enableCrop(cb_crop.isChecked())// 是否裁剪
                 .compress(true)// 是否压缩
-                .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                .glideOverride(480, 480)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
 //               .isGif(cb_isGif.isChecked())// 是否显示gif图片
@@ -373,12 +379,17 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     for (LocalMedia media : selectList) {
                         Log.i("图片-----》", media.getPath());
+                        if (media.isCompressed()) {
+                            L.d("图片压缩后的路径====" + media.getCompressPath());
+                            mPathlist = new ArrayList<>();
+                            mPathlist.add(media.getCompressPath());
+                            mPresenter.submitPersionHear(mContext, mPathlist);
+                        }
                     }
                     break;
             }
         }
     }
-
 
     @Override
     public void SubmitPersionSuccess(String con) {
@@ -390,6 +401,8 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             T.showToast(mContext, getString(R.string.save_errror));
         }
     }
+
+
     @Override
     public void SubmitPersionError(String con) {
 
@@ -398,12 +411,24 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void SubmitPersionHearScu(String con) {
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            SubmitHearService.startActionBaz(mContext, 10000, "上传完成");
 
+        } else {
+            SubmitHearService.startActionBaz(mContext, 10000, "上传失败,是否重新上传");
+        }
     }
 
     @Override
     public void SubmitPersionHearErr(String con) {
+        L.d(con);
+    }
 
+    @Override
+    public void SubmitProgressHear(Progress progress) {
+        SubmitHearService.startActionBaz(mContext, (int) (progress.fraction * 10000), "头像上传中...");
     }
 
 }

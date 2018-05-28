@@ -2,11 +2,17 @@ package com.xuechuan.xcedu.mvp.model;
 
 import android.content.Context;
 
+import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.mvp.contract.PersionContract;
+import com.xuechuan.xcedu.mvp.view.RequestResulteUpView;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
 import com.xuechuan.xcedu.net.MeService;
+import com.xuechuan.xcedu.net.UpData;
+import com.xuechuan.xcedu.net.view.StringCallBackUpView;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+
+import java.util.List;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -29,6 +35,7 @@ public class PersionModel implements PersionContract.Model {
             public void onSuccess(Response<String> response) {
                 view.success(response.body().toString());
             }
+
             @Override
             public void onError(Response<String> response) {
                 view.error(response.message());
@@ -37,7 +44,25 @@ public class PersionModel implements PersionContract.Model {
     }
 
     @Override
-    public void submitPersionHear(Context context, String path, RequestResulteView view) {
+    public void submitPersionHear(Context context, List<String> path, final RequestResulteUpView view) {
+        UpData data = new UpData(context);
+        data.submitchangeheadimg(path, new StringCallBackUpView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
 
+            @Override
+            public void onError(Response<String> response) {
+                view.error(response.message());
+            }
+
+            @Override
+            public void onUpProgree(Progress progress) {
+                view.Progress(progress);
+            }
+        });
     }
+
+
 }

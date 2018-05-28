@@ -1,9 +1,15 @@
 package com.xuechuan.xcedu.net;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.google.gson.JsonObject;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
+import com.xuechuan.xcedu.net.view.StringCallBackUpView;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.UserBean;
@@ -120,7 +126,7 @@ public class MeService extends BaseHttpServcie {
      *
      * @param orderstate
      */
-    public void requestOrder(int page,String orderstate, StringCallBackView view) {
+    public void requestOrder(int page, String orderstate, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -138,7 +144,7 @@ public class MeService extends BaseHttpServcie {
         paramVo1.setValue(orderstate);
         listParamVo.add(paramVo1);
 
-        addPage(listParamVo,page);
+        addPage(listParamVo, page);
 
         String url = getUrl(mContext, R.string.http_get_order);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);
@@ -146,9 +152,8 @@ public class MeService extends BaseHttpServcie {
 
     /**
      * 获取我的通知
-     *
      */
-    public void requestMembernotification( StringCallBackView view) {
+    public void requestMembernotification(StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -167,8 +172,9 @@ public class MeService extends BaseHttpServcie {
 
     /**
      * 标记订单状态（取消订单，删除订单）
+     *
      * @param ordernunm 订单编号
-     * @param usetype delete删除订单，cancel取消订单
+     * @param usetype   delete删除订单，cancel取消订单
      * @param view
      */
     public void submitMarkorder(String ordernunm, String usetype, StringCallBackView view) {
@@ -193,15 +199,16 @@ public class MeService extends BaseHttpServcie {
 
     /**
      * 用户信息修改接口
+     *
      * @param nickname 匿名
-     * @param gender 1，男2女
+     * @param gender   1，男2女
      * @param birthday 生日
      * @param province 省
-     * @param city 市
+     * @param city     市
      * @param view
      */
     public void submitChangememberinfo(String nickname,
-                                       int gender,String birthday,
+                                       int gender, String birthday,
                                        String province,
                                        String city,
                                        StringCallBackView view) {
@@ -224,28 +231,27 @@ public class MeService extends BaseHttpServcie {
         String url = getUrl(mContext, R.string.http_m_submitInfom);
         requestHttpServciePost(mContext, url, object, true, view);
     }
+
     /**
-     *修改用户头像接口
+     * 修改用户头像接口
+     *
      * @param view
      */
-    public void submitchangeheadimg( StringCallBackView view) {
+    public void submitchangeheadimg(StringCallBackView view) {
+
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
         }
         UserBean user = login.getData().getUser();
-        JSONObject object = new JSONObject();
-        try {
-            object.put("staffid", user.getId());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JsonObject object = new JsonObject();
+        object.addProperty("staffid", user.getId());
         String url = getUrl(mContext, R.string.http_m_submitInfom);
         requestHttpServciePost(mContext, url, object, true, view);
     }
+
     /**
      * 获取我的通知
-     *
      */
     public void requestmemberinfo( StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
@@ -261,5 +267,25 @@ public class MeService extends BaseHttpServcie {
         listParamVo.add(paramVo);
         String url = getUrl(mContext, R.string.http_m_infom);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
+
+    public void requestAppUpdata(final StringCallBackView view) {
+        String url = getUrl(mContext, R.string.http_upApp);
+        String hear =getUrl(mContext,R.string.app_content_heat);
+        url = hear.concat(url);
+        OkGo.<String>get(url)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Log.e("====", "onSuccess: "+response.body().toString() );
+                        view.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        Log.e("====", "onError: "+response.message() );
+                        view.onSuccess(response);
+                    }
+                });
     }
 }

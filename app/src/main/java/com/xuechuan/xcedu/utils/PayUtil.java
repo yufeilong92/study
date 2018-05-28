@@ -77,12 +77,36 @@ public class PayUtil implements PayView {
         this.mPayUtilsView = view;
     }
 
+    /**
+     * 提交订单
+     * @param type
+     * @param price
+     * @param list
+     * @param remark
+     */
     public void Submitfrom(String type, String price, List<Integer> list, String remark) {
         payType = type;
         payPresenter.submitPayFrom(mContext, price, list, "app", remark);
     }
-    public void showDiaolog(AlertDialog dialog){
-        this.dialog=dialog;
+
+    /**
+     * 提交订单列表提交支付
+     * @param type
+     * @param price
+     * @param list
+     * @param remark
+     */
+    public void SubmitfromPay(String type, String ordernum) {
+        payType = type;
+        if (payType.equals(ZFB)) {//支付包
+            payPresenter.submitPay(mContext, ordernum, DataMessageVo.PAYTYPE_ZFB);
+        } else if (payType.equals(WEIXIN)) {//微信
+            payPresenter.submitPay(mContext, ordernum, DataMessageVo.PAYTYPE_WEIXIN);
+        }
+    }
+
+    public void showDiaolog(AlertDialog dialog) {
+        this.dialog = dialog;
     }
 
     @Override
@@ -107,14 +131,16 @@ public class PayUtil implements PayView {
     @Override
     public void SumbitFromError(String con) {
         L.e(con);
-        mPayUtilsView.Dialog();
+        if (mPayUtilsView != null)
+            mPayUtilsView.Dialog();
         mPayUtilsView.PayError(payType);
     }
 
     @Override
     public void SumbitPaySuccess(String con) {
-        mPayUtilsView.Dialog();
-        if (dialog!=null&&dialog.isShowing()){
+        if (mPayUtilsView != null)
+            mPayUtilsView.Dialog();
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         Gson gson = new Gson();

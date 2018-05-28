@@ -116,8 +116,8 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
-/*        api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
-        api.registerApp(DataMessageVo.APP_ID);*/
+        api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
+        api.registerApp(DataMessageVo.APP_ID);
 //        mPresenter = new PayPresenter(new PayModelImpl(), this);
         payUtil = PayUtil.getInstance(mContext, NetBuyActivity.this);
         double price = mDataVo.getPrice();
@@ -125,6 +125,18 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         mTvNetBookPrice.setText(String.valueOf(price));
         mTvNPayCount.setText(String.valueOf(price));
         MyAppliction.getInstance().displayImages(mIvNetPayImg, mDataVo.getCoverimg(), false);
+        mLlNetPayZfb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChb(true, false);
+            }
+        });
+        mLlNetWeixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChb(false, true);
+            }
+        });
         mChbNetPayWeixin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -191,9 +203,10 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
                     @SuppressWarnings("unchecked")
                     PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     */
-/**
-                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                     *//*
+
+    /**
+     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+     *//*
 
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                     String resultStatus = payResult.getResultStatus();
@@ -219,7 +232,6 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         }
     };
 */
-
     private void submit() {
         ArrayList<Integer> integers = new ArrayList<>();
         integers.add(mDataVo.getId());
@@ -240,10 +252,11 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_from));
 //        mPresenter.submitPayFrom(mContext, String.valueOf(mDataVo.getPrice()),
 //                integers, "app", "");
-        if (statusType==1){
-            payUtil.Submitfrom(PayUtil.ZFB, String.valueOf(mDataVo.getPrice()),integers,null);
-        }else if (statusType==2){
-            payUtil.Submitfrom(PayUtil.WEIXIN, String.valueOf(mDataVo.getPrice()),integers,null);
+        payUtil.showDiaolog(dialog);
+        if (statusType == 1) {
+            payUtil.Submitfrom(PayUtil.ZFB, String.valueOf(mDataVo.getPrice()), integers, null);
+        } else if (statusType == 2) {
+            payUtil.Submitfrom(PayUtil.WEIXIN, String.valueOf(mDataVo.getPrice()), integers, null);
         }
 
     }
@@ -368,6 +381,8 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void Dialog() {
-
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 }

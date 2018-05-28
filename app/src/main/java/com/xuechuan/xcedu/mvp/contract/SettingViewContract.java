@@ -8,26 +8,26 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.mvp.contract
- * @Description: 我的通知
+ * @Description: 请求版本更新
  * @author: L-BackPacker
- * @date: 2018/5/25 16:55
+ * @date: 2018/5/28 18:34
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public interface PerNationContract {
+public interface SettingViewContract {
     interface Model {
-        public void requestNotification(Context context, RequestResulteView view);
+        public void requestAppCode(Context context, RequestResulteView view);
     }
 
     interface View {
-        void NotionSuccess(String con);
+        public void AppCodeSuccess(String cont);
 
-        void NotionError(String con);
+        public void AppCodeError(String msg);
     }
 
     interface Presenter {
         public void initModelView(Model model, View view);
-        public void requestNotification(Context context);
 
+        public void requestAppCode(Context context);
     }
 }
