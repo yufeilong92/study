@@ -79,6 +79,7 @@ public class PayUtil implements PayView {
 
     /**
      * 提交订单
+     *
      * @param type
      * @param price
      * @param list
@@ -91,6 +92,7 @@ public class PayUtil implements PayView {
 
     /**
      * 提交订单列表提交支付
+     *
      * @param type
      */
     public void SubmitfromPay(String type, String ordernum) {
@@ -119,7 +121,8 @@ public class PayUtil implements PayView {
                 payPresenter.submitPay(mContext, orderid, DataMessageVo.PAYTYPE_WEIXIN);
             }
         } else {
-            mPayUtilsView.PayError(payType);
+            if (mPayUtilsView != null)
+                mPayUtilsView.PayError(payType);
             L.e(vo.getStatus().getMessage());
         }
 
@@ -130,7 +133,8 @@ public class PayUtil implements PayView {
         L.e(con);
         if (mPayUtilsView != null)
             mPayUtilsView.Dialog();
-        mPayUtilsView.PayError(payType);
+        if (mPayUtilsView != null)
+            mPayUtilsView.PayError(payType);
     }
 
     @Override
@@ -165,7 +169,8 @@ public class PayUtil implements PayView {
 
     @Override
     public void SumbitPayError(String con) {
-        mPayUtilsView.PayError(payType);
+        if (mPayUtilsView != null)
+            mPayUtilsView.PayError(payType);
     }
 
     @Override
@@ -217,14 +222,16 @@ public class PayUtil implements PayView {
                         Intent intent = BuyResultActivity.newInstance(mContext, BuyResultActivity.STATUSSUCCESS);
                         intent.putExtra(BuyResultActivity.CSTR_EXTRA_TITLE_STR, mContext.getResources().getString(R.string.buyStauts));
                         mContext.startActivity(intent);
-                        mPayUtilsView.PaySuccess(payType);
+                        if (mPayUtilsView != null)
+                            mPayUtilsView.PaySuccess(payType);
                         Toast.makeText(mClass, "支付成功", Toast.LENGTH_SHORT).show();
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Intent intent = BuyResultActivity.newInstance(mContext, BuyResultActivity.STATUSERROR);
                         intent.putExtra(BuyResultActivity.CSTR_EXTRA_TITLE_STR, mContext.getResources().getString(R.string.buyStauts));
                         mContext.startActivity(intent);
-                        mPayUtilsView.PayError(payType);
+                        if (mPayUtilsView != null)
+                            mPayUtilsView.PayError(payType);
                         Toast.makeText(mClass, "支付失败", Toast.LENGTH_SHORT).show();
                     }
                     break;

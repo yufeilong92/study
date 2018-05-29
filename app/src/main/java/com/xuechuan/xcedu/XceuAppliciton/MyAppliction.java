@@ -115,7 +115,6 @@ public class MyAppliction extends MultiDexApplication {
         initPolyCilent();
         initDownFile();
         initOkGo();
-//        initOkHttp();
         initJPush();
         initImagerLoader();
         DBHelper.initDb(this);

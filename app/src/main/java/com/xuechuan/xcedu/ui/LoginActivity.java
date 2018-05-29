@@ -32,6 +32,7 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.UserInfomDb;
+import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.mvp.model.LoginModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.LoginPresenter;
 import com.xuechuan.xcedu.mvp.view.LoginView;
@@ -49,6 +50,8 @@ import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import org.json.JSONObject;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -153,8 +156,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case R.id.iv_weixinlogin://微信登录
                 if (api.isWXAppInstalled()) {
                     loginWeiXin();
-                }else {
-                    T.showToast(mContext,"请先安装微信");
+                } else {
+                    T.showToast(mContext, "请先安装微信");
                 }
                 break;
 
@@ -273,12 +276,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
         if (voData.isIsbinduser()) {//已经绑定数据（手机）
             //保存信息
+
             DbHelperAssist.getInstance().saveUserInfom(vo);
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
+            //注册激光
+            RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+            tag.registJG();
+            tag.setTagAndAlias(String.valueOf(voData.getUser().getId()));
             finishActivity();
         } else {//没有绑定手机
-            Intent intent = RegisterActivity.newInstance(mContext,  RegisterActivity.CEX_INT_TYPE_BIND,voData.getOpenid(), voData.getUnionid());
+            Intent intent = RegisterActivity.newInstance(mContext, RegisterActivity.CEX_INT_TYPE_BIND, voData.getOpenid(), voData.getUnionid());
             intent.putExtra(RegisterActivity.CSTR_EXTRA_TITLE_STR, getStringWithId(R.string.bingphone));
             startActivity(intent);
         }
@@ -316,6 +324,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
             DbHelperAssist.getInstance().saveUserInfom(vo);
             HomeActivity.newInstance(mContext, null, null);
+            //注册激光
+            RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+            tag.registJG();
+            tag.setTagAndAlias(String.valueOf(voData.getUser().getId()));
             finishActivity();
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());

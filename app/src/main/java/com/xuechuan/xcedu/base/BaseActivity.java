@@ -87,7 +87,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        L.e("走了父类产品----------------------");
-        OkGo.getInstance().cancelAll();
+        OkGo.getInstance().cancelTag(this);
     }
 }

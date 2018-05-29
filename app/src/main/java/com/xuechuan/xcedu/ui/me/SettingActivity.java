@@ -25,6 +25,7 @@ import com.vector.update_app.service.DownloadService;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.mvp.contract.SettingViewContract;
 import com.xuechuan.xcedu.mvp.model.SettingViewModel;
 import com.xuechuan.xcedu.mvp.presenter.SettingViewPresenter;
@@ -124,6 +125,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 MyAppliction.getInstance().setUserInfom(null);
                 SaveUUidUtil.getInstance().delectUUid();
                 startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+                //注册激光
+                RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+                tag.cancleTagAndAlias();
                 this.finish();
                 break;
         }
@@ -150,7 +154,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         try {
                             new JsonParser().parse(json);
                             OkGo.getInstance().cancelTag(mContext);
-                            T.showToast(mContext,"服务器正在更新,请稍候点击");
+                            T.showToast(mContext, "服务器正在更新,请稍候点击");
                             return null;
                         } catch (JsonParseException e) {
                             L.e("数据异常");

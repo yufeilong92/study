@@ -84,6 +84,14 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
      */
     private static final int SDK_PAY_FLAG = 1;
     private PayUtil payUtil;
+    private static String PRICE="price";
+    private static String ID="id";
+    private static String NAME="name";
+    private static String URLIMG="urlimg";
+    private double mPrice;
+    private String mName;
+    private int mId;
+    private String mUrlImg;
 
     /**
      * @param context
@@ -95,6 +103,18 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         Intent intent = new Intent(context, NetBuyActivity.class);
         intent.putExtra(PAYINFOM, (Serializable) payinfom);
         intent.putExtra(KID, kid);
+        return intent;
+    }
+    /**
+     * @param context
+     * @return
+     */
+    public static Intent newInstance(Context context, double price, int id,String name,String urlimg) {
+        Intent intent = new Intent(context, NetBuyActivity.class);
+        intent.putExtra(PRICE,price);
+        intent.putExtra(ID,id);
+        intent.putExtra(NAME, name);
+        intent.putExtra(URLIMG, urlimg);
         return intent;
     }
 
@@ -109,7 +129,12 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_net_buy);
         if (getIntent() != null) {
-            mDataVo = (CoursesBeanVo) getIntent().getSerializableExtra(PAYINFOM);
+//            mDataVo = (CoursesBeanVo) getIntent().getSerializableExtra(PAYINFOM);
+            mPrice = getIntent().getDoubleExtra(PRICE,0);
+            mName = getIntent().getStringExtra(NAME);
+            mId = getIntent().getIntExtra(ID,0);
+            mUrlImg = getIntent().getStringExtra(URLIMG);
+
         }
         initView();
         initData();
@@ -120,11 +145,10 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         api.registerApp(DataMessageVo.APP_ID);
 //        mPresenter = new PayPresenter(new PayModelImpl(), this);
         payUtil = PayUtil.getInstance(mContext, NetBuyActivity.this);
-        double price = mDataVo.getPrice();
-        mTvNetBookMame.setText(mDataVo.getName());
-        mTvNetBookPrice.setText(String.valueOf(price));
-        mTvNPayCount.setText(String.valueOf(price));
-        MyAppliction.getInstance().displayImages(mIvNetPayImg, mDataVo.getCoverimg(), false);
+        mTvNetBookMame.setText(mName);
+        mTvNetBookPrice.setText(String.valueOf(mPrice));
+        mTvNPayCount.setText(String.valueOf(mPrice));
+        MyAppliction.getInstance().displayImages(mIvNetPayImg,mUrlImg, false);
         mLlNetPayZfb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,7 +258,7 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
 */
     private void submit() {
         ArrayList<Integer> integers = new ArrayList<>();
-        integers.add(mDataVo.getId());
+        integers.add(mId);
         if (mChbNetPayWeixin.isChecked()) {
             if (!api.isWXAppInstalled()) {
                 T.showToast(mContext, R.string.weixin_installed);
@@ -254,9 +278,9 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
 //                integers, "app", "");
         payUtil.showDiaolog(dialog);
         if (statusType == 1) {
-            payUtil.Submitfrom(PayUtil.ZFB, "", integers, null);
+            payUtil.Submitfrom(PayUtil.ZFB, "", integers, "");
         } else if (statusType == 2) {
-            payUtil.Submitfrom(PayUtil.WEIXIN, "", integers, null);
+            payUtil.Submitfrom(PayUtil.WEIXIN, "", integers, "");
         }
 
     }

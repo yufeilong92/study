@@ -234,7 +234,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             mTvNetBookAllprice.setText("￥" + dataVo.getPrice() + "");
             if (!StringUtil.isEmpty(dataVo.getCoverimg())) {
                 MyAppliction.getInstance().displayImages(mIvNetPlay, dataVo.getCoverimg(), false);
-
             }
 
         }
@@ -252,7 +251,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         fragments.add(booKListFragment);
         return fragments;
     }
-
     /**
      * 播放视频
      */
@@ -679,7 +677,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 
                 break;
             case R.id.btn_net_go_buy://购买
-                Intent intent = NetBuyActivity.newInstance(mContext, dataVo, "");
+                Intent intent = NetBuyActivity.newInstance(mContext, dataVo.getPrice(),dataVo.getId(),
+                        dataVo.getName(),dataVo.getCoverimg());
                 startActivity(intent);
                 break;
             case R.id.iv_net_play:

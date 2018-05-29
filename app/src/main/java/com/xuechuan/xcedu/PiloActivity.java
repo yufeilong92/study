@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.UserInfomDb;
+import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.mvp.model.RefreshTokenModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.RefreshTokenPresenter;
 import com.xuechuan.xcedu.mvp.view.RefreshTokenView;
@@ -28,8 +30,11 @@ import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import cn.jpush.android.api.JPushInterface;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
@@ -204,12 +209,17 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
         user.setTokenexpire(token.getExpiretime());
         DbHelperAssist.getInstance().saveUserInfom(userInfom);
         HomeActivity.newInstance(mContext, "", "");
+        //注册激光
+        RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+        tag.registJG();
+        tag.setTagAndAlias(String.valueOf(data.getToken().getStaffid()));
         this.finish();
     }
 
     private void initView() {
         mContext = this;
         mIvPilo = (ImageView) findViewById(R.id.iv_pilo);
+        JPushInterface.stopPush(getApplicationContext());
     }
 
     @Override
@@ -231,30 +241,30 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
             if (perms.size() != 0) {
                 StringBuilder builder = new StringBuilder();
 //                if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-                    for (String perm : perms) {
-                        if (perm.equals(DataMessageVo.Persmission[0])) {
-                            builder.append("写内存卡、");
-                        }
-                        if (perm.equals(DataMessageVo.Persmission[1])) {
-                            builder.append("读取内存卡、");
-                        }
-                        if (perm.equals(DataMessageVo.Persmission[2])) {
-                            builder.append("定位、");
-                        }
-                        if (perm.equals(DataMessageVo.Persmission[3])) {
-                            builder.append("相机、");
-                        }
-                        if (perm.equals(DataMessageVo.Persmission[4])) {
-                            builder.append("电话、");
-                        }
+                for (String perm : perms) {
+                    if (perm.equals(DataMessageVo.Persmission[0])) {
+                        builder.append("写内存卡、");
                     }
-                    new AppSettingsDialog.Builder(this)
-                            .setPositiveButton(R.string.allow)
-                            .setTitle("权限申请")
-                            .setNegativeButton(R.string.cancel)
-                            .setRationale("请允许使用该app申请" + builder.toString() + "等权限,\n否则，该APP无法正常使用\n")
-                            .build()
-                            .show();
+                    if (perm.equals(DataMessageVo.Persmission[1])) {
+                        builder.append("读取内存卡、");
+                    }
+                    if (perm.equals(DataMessageVo.Persmission[2])) {
+                        builder.append("定位、");
+                    }
+                    if (perm.equals(DataMessageVo.Persmission[3])) {
+                        builder.append("相机、");
+                    }
+                    if (perm.equals(DataMessageVo.Persmission[4])) {
+                        builder.append("电话、");
+                    }
+                }
+                new AppSettingsDialog.Builder(this)
+                        .setPositiveButton(R.string.allow)
+                        .setTitle("权限申请")
+                        .setNegativeButton(R.string.cancel)
+                        .setRationale("请允许使用该app申请" + builder.toString() + "等权限,\n否则，该APP无法正常使用\n")
+                        .build()
+                        .show();
 //                }
             }
         }
@@ -282,4 +292,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
                 .build();
         EasyPermissions.requestPermissions(build);
     }
+
+
 }

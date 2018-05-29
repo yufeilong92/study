@@ -18,6 +18,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
@@ -284,6 +285,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     switch (status) {
                         case 1:
                             T.showToast(mContext, getString(R.string.registerOK));
+                            //注册激光
+                            RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+                            tag.registJG();
+                            tag.setTagAndAlias(String.valueOf(data.getUser().getId()));
+                            //跳转首页
                             MyAppliction.getInstance().setUserInfom(vo);
                             Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                             MyAppliction.getInstance().setUserInfom(vo);
