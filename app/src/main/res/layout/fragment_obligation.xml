@@ -18,7 +18,6 @@
             android:paddingRight="@dimen/space_16"
             android:layout_height="match_parent" />
         <ImageView
-            android:visibility="gone"
             android:layout_gravity="center"
             android:src="@mipmap/common_blankimg_oder"
             android:id="@+id/iv_content_empty"

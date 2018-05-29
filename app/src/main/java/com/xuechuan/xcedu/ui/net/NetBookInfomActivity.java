@@ -282,7 +282,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         mIvNetBookPlay = (ImageView) findViewById(R.id.iv_net_book_play);
         mIvNetBookPlay.setOnClickListener(this);
         mRlPlaylayout = (RelativeLayout) findViewById(R.id.rl_play_layout);
-        mRlPlaylayout.setOnClickListener(this);
         mIvNetPlay = (ImageView) findViewById(R.id.iv_net_play);
         mIvNetPlay.setOnClickListener(this);
         mTvNetBookAllprice = (TextView) findViewById(R.id.tv_net_book_allprice);
@@ -684,7 +683,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.iv_net_play:
-
                 break;
             case R.id.iv_net_book_play:
                 mRlPlaylayout.setVisibility(View.GONE);

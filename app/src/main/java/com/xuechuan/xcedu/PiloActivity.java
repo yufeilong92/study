@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -66,7 +67,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
 //        startActivity(new Intent(PiloActivity.this,MainActivity.class));
         mPermissionsUtilss = EasyPermissionsUtils.getInstance(PiloActivity.this);
         requesPermission();
-
     }
 
     private void requesPermission() {
@@ -189,7 +189,10 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
 
     @Override
     public void TokenError(String con) {
-
+        SaveUUidUtil.getInstance().delectUUid();
+        Intent intent1 = new Intent(mContext, LoginActivity.class);
+        startActivity(intent1);
+        this.finish();
     }
 
     private void updataToken(TokenVo.DataBean data) {

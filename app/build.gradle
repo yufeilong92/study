@@ -102,5 +102,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.56.android'
     implementation 'com.android.support:multidex:1.0.3'
     implementation files('libs/alipaySdk-20180403.jar')
-
+    implementation project(':update-app')
 }

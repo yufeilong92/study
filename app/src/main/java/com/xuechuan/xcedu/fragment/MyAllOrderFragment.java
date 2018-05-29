@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.MyOrderVo;
 import com.xuechuan.xcedu.vo.NetBookTableVo;
 import com.xuechuan.xcedu.vo.OrderDetailVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -78,6 +80,14 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     private PayPresenter mPayPresenter;
     private PayUtil payUtil;
     private AlertDialog mPayDialog;
+    /**
+     * 取消项的位置
+     */
+    private int mCancelpostion = -1;
+    /**
+     * 删除项的位置
+     */
+    private int mDelPostion = -1;
 
     public MyAllOrderFragment() {
     }
@@ -152,14 +162,18 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemCancelClickListener() {
+
+
             @Override
             public void onCancelClickListener(MyOrderVo.DatasBean obj, int position) {
+                mCancelpostion = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.CANCELORDER);
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemDelClickListener() {
             @Override
             public void onDelClickListener(MyOrderVo.DatasBean obj, int position) {
+                mDelPostion = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.DELETEORDER);
             }
         });
@@ -188,7 +202,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 mPayDialog = DialogUtil.showDialog(mContext, "", getStrWithId(R.string.submit_loading));
                 payUtil.showDiaolog(mPayDialog);
                 if (obj == 1) {//微信
-                    payUtil.SubmitfromPay(PayUtil.WEIXIN,data.getOrdernum());
+                    payUtil.SubmitfromPay(PayUtil.WEIXIN, data.getOrdernum());
                 } else if (obj == 2) {//支付宝
                     payUtil.SubmitfromPay(PayUtil.ZFB, data.getOrdernum());
                 }
@@ -345,6 +359,24 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
 
     @Override
     public void submitSuccess(String con) {
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode()==200){
+            if (mDelPostion != -1 && mDelPostion >= 0) {
+                mArrary.remove(mDelPostion);
+                mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
+                adapter.notifyDataSetChanged();
+                mDelPostion = -1;
+            }
+            if (mCancelpostion != -1 && mCancelpostion >= 0) {
+                mArrary.remove(mCancelpostion);
+                mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
+                adapter.notifyDataSetChanged();
+                mCancelpostion = -1;
+            }
+        }else {
+            L.e(vo.getStatus().getMessage());
+        }
 
     }
 

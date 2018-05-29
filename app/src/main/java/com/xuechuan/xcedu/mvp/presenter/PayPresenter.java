@@ -39,7 +39,7 @@ public class PayPresenter {
      * @param remark
      */
     public void submitPayFrom(Context context, String usebalance, List<Integer> products, String ordersource, final String remark) {
-        if (StringUtil.isEmpty(usebalance) || StringUtil.isEmpty(ordersource)) {
+        if ( StringUtil.isEmpty(ordersource)) {
             return;
         }
         model.sumbitPayFrom(context, usebalance, products, ordersource, remark, new RequestResulteView() {

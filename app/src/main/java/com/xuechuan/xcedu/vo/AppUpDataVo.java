@@ -46,7 +46,7 @@ public class AppUpDataVo extends BaseVo {
          */
         private String url;
         /**
-         * 版本更新
+         * 版本号
          */
         private String version;
 

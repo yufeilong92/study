@@ -186,7 +186,7 @@ public class MeService extends BaseHttpServcie {
         JSONObject object = new JSONObject();
         try {
             object.put("staffid", user.getId());
-            object.put("ordernunm", ordernunm);
+            object.put("ordernum", ordernunm);
             object.put("usetype", usetype);
 
         } catch (JSONException e) {

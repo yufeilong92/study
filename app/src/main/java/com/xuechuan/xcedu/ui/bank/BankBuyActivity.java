@@ -307,9 +307,9 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         PayUtil payUtil = PayUtil.getInstance(mContext, BankBuyActivity.this);
         payUtil.init(this);
         if (payType == 1) {
-            payUtil.Submitfrom(PayUtil.ZFB, String.valueOf(value), list, null);
+            payUtil.Submitfrom(PayUtil.ZFB, "", list, null);
         } else if (payType == 2) {
-            payUtil.Submitfrom(PayUtil.WEIXIN, String.valueOf(value), list, null);
+            payUtil.Submitfrom(PayUtil.WEIXIN, "", list, null);
         }
 
 //        mPresenter.submitPayFrom(mContext, String.valueOf(value), list, "app", null);

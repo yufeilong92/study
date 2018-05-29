@@ -254,9 +254,9 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
 //                integers, "app", "");
         payUtil.showDiaolog(dialog);
         if (statusType == 1) {
-            payUtil.Submitfrom(PayUtil.ZFB, String.valueOf(mDataVo.getPrice()), integers, null);
+            payUtil.Submitfrom(PayUtil.ZFB, "", integers, null);
         } else if (statusType == 2) {
-            payUtil.Submitfrom(PayUtil.WEIXIN, String.valueOf(mDataVo.getPrice()), integers, null);
+            payUtil.Submitfrom(PayUtil.WEIXIN, "", integers, null);
         }
 
     }

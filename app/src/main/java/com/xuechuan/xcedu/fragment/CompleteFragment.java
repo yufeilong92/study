@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.xuechuan.xcedu.mvp.presenter.PerOrderPresenter;
 import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.MyOrderVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
     private long lastRefreshTime;
     private boolean isRefresh;
     private PerOrderPresenter mPresenter;
+    private int mDelPositon=-1;
 
     public CompleteFragment() {
     }
@@ -130,6 +133,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
         adapter.setClickListener(new MyOrderAdapter.onItemDelClickListener() {
             @Override
             public void onDelClickListener(MyOrderVo.DatasBean obj, int position) {
+                mDelPositon = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.DELETEORDER);
             }
         });
@@ -227,6 +231,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
                 return;
             }
             if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+                mXfvContentOrderCom.setPullLoadEnable(true);
                 mXfvContentOrderCom.setLoadComplete(true);
             } else {
                 mXfvContentOrderCom.setPullLoadEnable(true);
@@ -282,6 +287,19 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
 
     @Override
     public void submitSuccess(String con) {
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode()==200){
+            if (mDelPositon != -1 && mDelPositon >= 0) {
+                mArrary.remove(mDelPositon);
+                mRlvMyOrderContentCom.setItemAnimator(new DefaultItemAnimator());
+                adapter.notifyDataSetChanged();
+                mDelPositon = -1;
+            }
+        }else {
+            L.e(vo.getStatus().getMessage());
+        }
+
 
     }
 

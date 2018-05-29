@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
     private PerOrderPresenter mPresenter;
     private AlertDialog mPayDialog;
     private PayUtil payUtil;
+    private int mCancelPostion = -1;
 
     public static ObligationFragment newInstance(String param1, String param2) {
         ObligationFragment fragment = new ObligationFragment();
@@ -138,6 +140,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
         adapter.setClickListener(new MyOrderAdapter.onItemCancelClickListener() {
             @Override
             public void onCancelClickListener(MyOrderVo.DatasBean obj, int position) {
+                mCancelPostion = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.CANCELORDER);
             }
         });
@@ -167,7 +170,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 mPayDialog = DialogUtil.showDialog(mContext, "", getStrWithId(R.string.submit_loading));
                 payUtil.showDiaolog(mPayDialog);
                 if (obj == 1) {//微信
-                    payUtil.SubmitfromPay(PayUtil.WEIXIN,data.getOrdernum());
+                    payUtil.SubmitfromPay(PayUtil.WEIXIN, data.getOrdernum());
                 } else if (obj == 2) {//支付宝
                     payUtil.SubmitfromPay(PayUtil.ZFB, data.getOrdernum());
                 }
@@ -268,6 +271,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 return;
             }
             if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+                mXfvContentOrderOb.setPullLoadEnable(true);
                 mXfvContentOrderOb.setLoadComplete(true);
             } else {
                 mXfvContentOrderOb.setPullLoadEnable(true);
@@ -325,6 +329,12 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
         Gson gson = new Gson();
         ResultVo resultVo = gson.fromJson(con, ResultVo.class);
         if (resultVo.getStatus().getCode() == 200) {
+            if (mCancelPostion != -1 && mCancelPostion >= 0) {
+                mRlvMyOrderContentOb.setItemAnimator(new DefaultItemAnimator());
+                mArrary.remove(mCancelPostion);
+                adapter.notifyDataSetChanged();
+                mCancelPostion = -1;
+            }
             T.showToast(mContext, getStrWithId(R.string.submit_success));
         } else {
             T.showToast(mContext, getStrWithId(R.string.submit_error));

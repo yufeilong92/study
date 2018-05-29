@@ -57,8 +57,8 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
     @Override
     public void onResp(BaseResp baseResp) {
         if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            Toast.makeText(WXPayEntryActivity.this,baseResp.errStr
-                    +baseResp.openId+baseResp.errCode,Toast.LENGTH_SHORT).show();
+   /*         Toast.makeText(WXPayEntryActivity.this,baseResp.errStr
+                    +baseResp.openId+baseResp.errCode,Toast.LENGTH_SHORT).show();*/
             if (baseResp.errCode == 0) {//成功
                 mIvPayImg.setImageResource(R.mipmap.common_feedback_suc);
                 mTvPayReasult.setText(R.string.paysuccess);
@@ -74,6 +74,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 mTvPayReasult.setText(R.string.pay_error);
                 String date = TimeUtil.dateToString(new Date());
                 mTvPayTime.setText(date);
+
             }
         }
     }

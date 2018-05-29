@@ -116,7 +116,7 @@ public class MyAppliction extends MultiDexApplication {
         initDownFile();
         initOkGo();
 //        initOkHttp();
-//        initJPush();
+        initJPush();
         initImagerLoader();
         DBHelper.initDb(this);
         SaveUUidUtil.initSharedPreference(this);

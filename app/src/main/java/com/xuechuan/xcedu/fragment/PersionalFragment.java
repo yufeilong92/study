@@ -203,7 +203,6 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         if (vo.getStatus().getCode() == 200) {
             mDataInfom = vo.getData();
             bindViewData(mDataInfom);
-
         } else {
             L.e(vo.getStatus().getMessage());
         }
@@ -216,6 +215,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         if (!StringUtil.isEmpty(data.getHeadicon())) {
             MyAppliction.getInstance().displayImages(mIvMHear, data.getHeadicon(), true);
         }
+
 
 
     }

@@ -287,5 +287,8 @@
     <string name="sure_paw_sure">确认新密码不能为空</string>
     <string name="paw_no_same">新密码输入不相同</string>
     <string name="old_paw">请输入旧密码</string>
+    <string name="latest_version">已经是最新版本</string>
+    <string name="camera">拍照</string>
+    <string name="phoneal">相册</string>
 
 </resources>

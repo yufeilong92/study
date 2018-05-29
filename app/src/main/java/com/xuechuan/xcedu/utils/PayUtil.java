@@ -35,7 +35,7 @@ import java.util.Map;
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
  * @Package com.xuechuan.xcedu.utils
- * @Description: todo
+ * @Description: 付款工具
  * @author: L-BackPacker
  * @date: 2018/5/26 17:31
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
@@ -86,15 +86,12 @@ public class PayUtil implements PayView {
      */
     public void Submitfrom(String type, String price, List<Integer> list, String remark) {
         payType = type;
-        payPresenter.submitPayFrom(mContext, price, list, "app", remark);
+        payPresenter.submitPayFrom(mContext, price, list, "android_app", remark);
     }
 
     /**
      * 提交订单列表提交支付
      * @param type
-     * @param price
-     * @param list
-     * @param remark
      */
     public void SubmitfromPay(String type, String ordernum) {
         payType = type;
