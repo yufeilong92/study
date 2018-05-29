@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.umeng.commonsdk.UMConfigure;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
@@ -116,11 +117,17 @@ public class MyAppliction extends MultiDexApplication {
         initDownFile();
         initOkGo();
         initJPush();
+        initUM();
         initImagerLoader();
         DBHelper.initDb(this);
         SaveUUidUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
 
+    }
+
+    private void initUM() {
+        UMConfigure.init(this,"5a12384aa40fa3551f0001d1"
+                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"");//58edcfeb310c93091c000be2 5965ee00734be40b580001a0
     }
 
     private void initImagerLoader() {
