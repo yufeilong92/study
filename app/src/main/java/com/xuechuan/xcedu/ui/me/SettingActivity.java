@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.ui.me;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,7 +23,10 @@ import com.umeng.debug.log.D;
 import com.vector.update_app.UpdateAppBean;
 import com.vector.update_app.UpdateAppManager;
 import com.vector.update_app.UpdateCallback;
+import com.vector.update_app.listener.ExceptionHandler;
+import com.vector.update_app.listener.IUpdateDialogFragmentListener;
 import com.vector.update_app.service.DownloadService;
+import com.vector.update_app.utils.AppUpdateUtils;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -146,7 +151,21 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 .setHttpManager(new OkGoUpdateHttpUtil())
                 .setUpdateUrl(url)
                 .setPost(false)
+                .setTopPic(R.mipmap.pop_img_update)
                 .setTargetPath(path)
+                .setThemeColor(0xFF0000)
+                .handleException(new ExceptionHandler() {
+                    @Override
+                    public void onException(Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setUpdateDialogFragmentListener(new IUpdateDialogFragmentListener() {
+                    @Override
+                    public void onUpdateNotifyDialogCancel(UpdateAppBean updateApp) {
+
+                    }
+                })
                 .build()
                 .checkNewApp(new UpdateCallback() {
                     @Override
@@ -154,11 +173,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         try {
                             new JsonParser().parse(json);
                             OkGo.getInstance().cancelTag(mContext);
-                            T.showToast(mContext, "服务器正在更新,请稍候点击");
-                            return null;
                         } catch (JsonParseException e) {
                             L.e("数据异常");
+                            T.showToast(mContext, "服务器正在更新,请稍候点击");
                             e.printStackTrace();
+                            return null;
                         }
                         Gson gson = new Gson();
 
@@ -202,7 +221,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     protected void hasNewApp(UpdateAppBean updateApp, UpdateAppManager updateAppManager) {
 //                        super.hasNewApp(updateApp, updateAppManager);
-                        showDiyDialog(updateApp, updateAppManager);
+                        updateAppManager.showDialogFragment();
+//                        showDiyDialog(updateApp, updateAppManager);
                     }
 
                     @Override
@@ -330,4 +350,19 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 .show();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("===", "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        switch (resultCode) {
+            case Activity.RESULT_CANCELED:
+                switch (requestCode){
+                    // 得到通过UpdateDialogFragment默认dialog方式安装，用户取消安装的回调通知，以便用户自己去判断，比如这个更新如果是强制的，但是用户下载之后取消了，在这里发起相应的操作
+                    case AppUpdateUtils.REQ_CODE_INSTALL_APP:
+                       T.showToast(SettingActivity.this,"用户取消了安装包的更新");
+                        break;
+                }
+                break;
+            default:
+        }
+    }
 }

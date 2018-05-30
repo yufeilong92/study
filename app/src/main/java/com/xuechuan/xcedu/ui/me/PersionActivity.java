@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -46,11 +47,14 @@ import com.xuechuan.xcedu.vo.ResultVo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import cn.addapp.pickers.entity.City;
 import cn.addapp.pickers.entity.County;
 import cn.addapp.pickers.entity.Province;
+import cn.addapp.pickers.picker.DatePicker;
 import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
 
@@ -190,15 +194,37 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void selectTime() {
-        DialogUtil dialogUtil = DialogUtil.getInstance();
+   /*     DialogUtil dialogUtil = DialogUtil.getInstance();
         dialogUtil.showSelectTime(this, true);
         dialogUtil.setSelectTimeListener(new DialogUtil.onTimeClickListener() {
             @Override
             public void onTimeListener(String time) {
                 mTvMPBirthday.setText(time);
             }
+        });*/
+        Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int date = c.get(Calendar.DATE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int second = c.get(Calendar.SECOND);
+        DatePicker picker = new DatePicker(this);
+        picker.setCanLoop(true);
+        picker.setWheelModeEnable(true);
+        picker.setTopPadding(15);
+        picker.setRangeStart(1911, 1, 1);
+        picker.setRangeEnd(3000, 1, 1);
+        picker.setSelectedItem(year, month+1, date);
+        picker.setWeightEnable(true);
+        picker.setLineColor(Color.BLACK);
+        picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+            @Override
+            public void onDatePicked(String year, String month, String day) {
+                mTvMPBirthday.setText(year + "-" + month + "-" + day);
+            }
         });
-
+        picker.show();
     }
 
     @Override

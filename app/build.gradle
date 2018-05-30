@@ -104,4 +104,5 @@ dependencies {
     implementation files('libs/alipaySdk-20180403.jar')
     implementation project(':update-app')
 
+
 }

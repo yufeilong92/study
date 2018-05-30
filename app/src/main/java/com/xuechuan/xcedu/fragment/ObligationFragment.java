@@ -256,7 +256,6 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
     public void OrderSuccess(String con) {
         L.d("all============" + con);
         mXfvContentOrderOb.stopRefresh();
-        mXfvContentOrderOb.setPullRefreshEnable(false);
         isRefresh = false;
         Gson gson = new Gson();
         MyOrderVo orderVo = gson.fromJson(con, MyOrderVo.class);

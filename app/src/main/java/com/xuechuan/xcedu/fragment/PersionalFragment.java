@@ -3,7 +3,10 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,19 +18,19 @@ import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.mvp.contract.PersionInfomContract;
 import com.xuechuan.xcedu.mvp.model.PersionInfomModel;
 import com.xuechuan.xcedu.mvp.presenter.PersionInfomPresenter;
-import com.xuechuan.xcedu.ui.me.MyOrderActivity;
-import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
 import com.xuechuan.xcedu.ui.me.AddVauleActivity;
 import com.xuechuan.xcedu.ui.me.FeedBackActivity;
 import com.xuechuan.xcedu.ui.me.GenuineActivity;
+import com.xuechuan.xcedu.ui.me.MyMsgActivity;
+import com.xuechuan.xcedu.ui.me.MyOrderActivity;
 import com.xuechuan.xcedu.ui.me.PersionActivity;
 import com.xuechuan.xcedu.ui.me.SettingActivity;
+import com.xuechuan.xcedu.ui.me.SystemMsgActivity;
+import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.PerInfomVo;
-import com.xuechuan.xcedu.vo.UserBean;
-import com.xuechuan.xcedu.vo.UserInfomVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -61,6 +64,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     private Context mContext;
     private PerInfomVo.DataBean mDataInfom;
     private PersionInfomPresenter mPresenter;
+    private ImageView mIvPersionImg;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,15 +87,14 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         return fragment;
     }
 
-    //    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//
-//        View view = inflater.inflate(R.layout.fragment_persional, container, false);
-//        initView(view);
-//        return view;
-//    }
-
+  /*  @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_persional, container, false);
+        initView(view);
+        return view;
+    }
+*/
 
     @Override
     protected int initInflateView() {
@@ -148,19 +151,24 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         mLlMSetting = (LinearLayout) view.findViewById(R.id.ll_m_setting);
         mLlMSetting.setOnClickListener(this);
 
+        mIvPersionImg = (ImageView) view.findViewById(R.id.iv_persion_img);
+        mIvPersionImg.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_m_edith://编辑
+
+            case R.id.ll_m_hear://编辑
                 Intent intent = new Intent(mContext, PersionActivity.class);
                 intent.putExtra(PersionActivity.PERINFOM, mDataInfom);
                 intent.putExtra(PersionActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.persion));
                 startActivity(intent);
                 break;
             case R.id.ll_m_my_msg://我的信息
-
+                Intent intent6 = new Intent(mContext, MyMsgActivity.class);
+                intent6.putExtra(MyMsgActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.mymsg_notice));
+                startActivity(intent6);
                 break;
             case R.id.ll_m_down://我的下载
                 startActivity(new Intent(mContext, NetBookDownActivity.class));
@@ -184,6 +192,9 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
                 startActivity(intent3);
                 break;
             case R.id.ll_m_notice://系统通告
+                Intent intent5 = new Intent(mContext, SystemMsgActivity.class);
+                intent5.putExtra(SystemMsgActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.system_notice));
+                startActivity(intent5);
                 break;
             case R.id.ll_m_setting://设置
                 Intent intent4 = new Intent(mContext, SettingActivity.class);
@@ -215,7 +226,11 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         if (!StringUtil.isEmpty(data.getHeadicon())) {
             MyAppliction.getInstance().displayImages(mIvMHear, data.getHeadicon(), true);
         }
-
+        if (data.isIshasnews()) {
+            mIvPersionImg.setImageResource(R.mipmap.m_icon_massage_n);
+        } else {
+            mIvPersionImg.setImageResource(R.mipmap.ic_m_massage);
+        }
 
 
     }

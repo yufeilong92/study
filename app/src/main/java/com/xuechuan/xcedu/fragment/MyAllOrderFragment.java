@@ -289,7 +289,6 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     public void OrderSuccess(String con) {
         L.d("all============" + con);
         mXfvContentOrderAll.stopRefresh();
-        mXfvContentOrderAll.setPullRefreshEnable(false);
         isRefresh = false;
         Gson gson = new Gson();
         MyOrderVo orderVo = gson.fromJson(con, MyOrderVo.class);

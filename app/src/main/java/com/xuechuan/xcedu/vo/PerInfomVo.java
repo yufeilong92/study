@@ -52,6 +52,10 @@ public class PerInfomVo extends BaseVo {
          */
         private boolean ischeck;
         /**
+         * 是否有新的消息
+         */
+        private boolean ishasnews;
+        /**
          * 昵称
          */
         private String nickname;
@@ -67,6 +71,14 @@ public class PerInfomVo extends BaseVo {
          *
          */
         private List<ThirdaccountBean> thirdaccount;
+
+        public boolean isIshasnews() {
+            return ishasnews;
+        }
+
+        public void setIshasnews(boolean ishasnews) {
+            this.ishasnews = ishasnews;
+        }
 
         public String getBirthday() {
             return birthday;

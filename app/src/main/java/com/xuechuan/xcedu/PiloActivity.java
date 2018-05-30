@@ -219,7 +219,8 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     private void initView() {
         mContext = this;
         mIvPilo = (ImageView) findViewById(R.id.iv_pilo);
-        JPushInterface.stopPush(getApplicationContext());
+        // TODO: 2018/5/30 激光
+//        JPushInterface.stopPush(getApplicationContext());
     }
 
     @Override

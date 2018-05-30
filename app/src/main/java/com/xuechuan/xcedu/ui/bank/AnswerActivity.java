@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.Event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
@@ -59,9 +60,11 @@ import com.xuechuan.xcedu.mvp.view.TimeShowView;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.ArithUtil;
+import com.xuechuan.xcedu.utils.Defaultcontent;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.MyTimeUitl;
+import com.xuechuan.xcedu.utils.ShareUtils;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -2487,8 +2490,47 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             protected void initEvent() {
-
-
+                qq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,Defaultcontent.title
+                                ,Defaultcontent.text,Defaultcontent.imageurl,R.mipmap.m_setting_about_xcimg
+                                , SHARE_MEDIA.QQ);
+                    }
+                });
+                qqzon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
+                        );
+                    }
+                });
+               weibo.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                               , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
+                               , SHARE_MEDIA.SINA
+                       );
+                   }
+               });
+               weixin.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                               , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                       );
+                   }
+               });
+               circle.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                               , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                       );
+                   }
+               });
             }
 
             @Override

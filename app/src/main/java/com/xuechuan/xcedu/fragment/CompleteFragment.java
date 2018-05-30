@@ -216,7 +216,6 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
     public void OrderSuccess(String con) {
         L.d("com============" + con);
         mXfvContentOrderCom.stopRefresh();
-        mXfvContentOrderCom.setPullRefreshEnable(false);
         isRefresh = false;
         Gson gson = new Gson();
         MyOrderVo orderVo = gson.fromJson(con, MyOrderVo.class);

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+import android.util.Config;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -24,7 +25,10 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.SharedSeletIdListUtil;
@@ -58,6 +62,11 @@ public class MyAppliction extends MultiDexApplication {
     private PolyvSDKClient mPolyclient;
     private UserInfomVo infomVo;
     private static MyAppliction application;
+    private int READTIME = 2000;
+    /**
+     * 是否二十秒超时
+     */
+    private boolean isTime = true;
 
     public static MyAppliction getInstance() {
         if (application == null)
@@ -111,6 +120,7 @@ public class MyAppliction extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
         mContext = getApplicationContext();
         //初始化播放器
         initPolyCilent();
@@ -122,12 +132,16 @@ public class MyAppliction extends MultiDexApplication {
         DBHelper.initDb(this);
         SaveUUidUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
-
     }
 
     private void initUM() {
-        UMConfigure.init(this,"5a12384aa40fa3551f0001d1"
-                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"");//58edcfeb310c93091c000be2 5965ee00734be40b580001a0
+        UMShareAPI.get(this);//初始化sdk
+        UMConfigure.init(mContext, DataMessageVo.YOUMENGKID
+                , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "");//58edcfeb310c93091c000be2 5965ee00734be40b580001a0
+        PlatformConfig.setWeixin(DataMessageVo.APP_ID, DataMessageVo.WEIXINAPP_SECRET);
+        PlatformConfig.setQQZone(DataMessageVo.QQAPP_ID, DataMessageVo.QQAPP_KEY);
+        //新浪微博(第三个参数为回调地址)
+//        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
     }
 
     private void initImagerLoader() {
@@ -219,12 +233,13 @@ public class MyAppliction extends MultiDexApplication {
         loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);        //log打印级别，决定了log显示的详细程度
         loggingInterceptor.setColorLevel(Level.INFO);                               //log颜色级别，决定了log在控制台显示的颜色
         builder.addInterceptor(loggingInterceptor);
+
         //全局的读取超时时间
-        builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.readTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 //全局的写入超时时间
-        builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.writeTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 //全局的连接超时时间
-        builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         OkGo.getInstance().init(this)
                 .setOkHttpClient(builder.build())//设置链接
                 .setCacheMode(CacheMode.NO_CACHE) //设置缓存

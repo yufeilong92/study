@@ -3,12 +3,14 @@ package com.xuechuan.xcedu.net;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.view.StringCallBackUpView;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.vo.GetParamVo;
@@ -253,7 +255,7 @@ public class MeService extends BaseHttpServcie {
     /**
      * 获取我的通知
      */
-    public void requestmemberinfo( StringCallBackView view) {
+    public void requestmemberinfo(StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -271,21 +273,121 @@ public class MeService extends BaseHttpServcie {
 
     public void requestAppUpdata(final StringCallBackView view) {
         String url = getUrl(mContext, R.string.http_upApp);
-        String hear =getUrl(mContext,R.string.app_content_heat);
+        String hear = getUrl(mContext, R.string.app_content_heat);
         url = hear.concat(url);
         OkGo.<String>get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Log.e("====", "onSuccess: "+response.body().toString() );
+                        Log.e("====", "onSuccess: " + response.body().toString());
                         view.onSuccess(response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
-                        Log.e("====", "onError: "+response.message() );
+                        Log.e("====", "onError: " + response.message());
                         view.onSuccess(response);
                     }
                 });
+    }
+
+    /**
+     * 获取我的消息
+     *
+     * @param view
+     */
+    public void requestMyMsg(int page,StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("staffid");
+        paramVo.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo);
+        addPage(listParamVo,page);
+        String url = getUrl(mContext, R.string.http_my_msg);
+        requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
+
+    /**
+     * 个人中心绑定微信
+     */
+    public void submitBindWechat(String code, StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JsonObject object = new JsonObject();
+        object.addProperty("staffid", user.getId());
+        object.addProperty("code", code);
+        String url = getUrl(mContext, R.string.http_bindwechat);
+        requestHttpServciePost(mContext, url, object, true, view);
+
+    }
+
+    /**
+     * 获取系统通知
+     */
+    public void requestSystemMsg(int page,StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("staffid");
+        paramVo.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo);
+        addPage(listParamVo,page);
+        String url = getUrl(mContext, R.string.http_system_msg);
+        requestHttpServiceGet(mContext, url, listParamVo, true, view);
+    }
+
+    //    删除我的消息
+    public void submitDelMyMsg(List<Integer> ids, StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JsonObject object = new JsonObject();
+        object.addProperty("staffid", user.getId());
+        JsonArray array = new JsonArray();
+        for (int i = 0; i < ids.size(); i++) {
+            array.add(ids.get(i));
+        }
+        object.add("ids", array);
+
+        String url = getUrl(mContext, R.string.http_deletenotify);
+        requestHttpServciePost(mContext, url, object, true, view);
+    }
+
+    /**
+     * 删除系统通知
+     * @param ids
+     * @param view
+     */
+    public void submitDelSystemMsg(List<Integer> ids, StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JsonObject object = new JsonObject();
+        object.addProperty("staffid", user.getId());
+        JsonArray array = new JsonArray();
+        for (int i = 0; i < ids.size(); i++) {
+            array.add(ids.get(i));
+        }
+        object.add("ids", array);
+        String url = getUrl(mContext, R.string.http_delsystem);
+        requestHttpServciePost(mContext, url, object, true, view);
     }
 }

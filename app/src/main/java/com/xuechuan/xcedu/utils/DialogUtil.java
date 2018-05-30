@@ -2,6 +2,8 @@ package com.xuechuan.xcedu.utils;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -53,7 +56,10 @@ public class DialogUtil {
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_dialog, null);
         TextView tv_msg = view.findViewById(R.id.tv_msg);
         TextView tv_title = view.findViewById(R.id.tv_dialog_title);
-
+        ImageView iv_dialog = view.findViewById(R.id.iv_dialog_progress);
+        iv_dialog.setImageResource(R.drawable.animation_loading);
+        AnimationDrawable drawable = (AnimationDrawable) iv_dialog.getDrawable();
+        drawable.start();
         if (!StringUtil.isEmpty(titel)) {
             tv_title.setVisibility(View.VISIBLE);
             tv_title.setText(titel);

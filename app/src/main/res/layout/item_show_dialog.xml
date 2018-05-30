@@ -23,6 +23,7 @@
             android:textColor="@color/hint_text"
             android:visibility="gone" />
         <ProgressBar
+            android:visibility="gone"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -33,6 +34,10 @@
             android:indeterminateDuration="1"
             android:indeterminateBehavior="repeat"
             />
+        <ImageView
+            android:id="@+id/iv_dialog_progress"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spance_50" />
         <TextView
             android:layout_marginTop="@dimen/space_6"
             android:textColor="@color/hint_text"
