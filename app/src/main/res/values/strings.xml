@@ -121,13 +121,13 @@
     <!--标记订单状态（取消订单，删除订单）-->
     <string name="http_m_markorder">/api/order/markorder</string>
     <!--获取我的通知-->
-    <string name="http_m_membernotification">/membernotification/get</string>
+    <string name="http_m_membernotification">/api/membernotification/get</string>
     <!--获取我的消息-->
-    <string name="http_my_msg">/membernotification/get</string>
+    <string name="http_my_msg">/api/membernotification/get</string>
     <!--个人中心绑定微信-->
     <string name="http_bindwechat">/api/user/bindwechat</string>
     <!--获取系统通知-->
-    <string name="http_system_msg">/systemnotification/get</string>
+    <string name="http_system_msg">/api/systemnotification/get</string>
     <!--删除我的消息-->
     <string name="http_deletenotify">/api/membernotification/deletenotify</string>
     <!--删除系统通知-->

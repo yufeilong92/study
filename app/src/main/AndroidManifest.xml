@@ -405,7 +405,8 @@
             android:exported="false" />
 
         <activity android:name=".jg.TestActivity" />
-        <activity android:name=".ui.me.SystemMsgActivity"></activity>
+        <activity android:name=".ui.me.SystemMsgActivity" />
+        <activity android:name=".ui.AgreementActivity"></activity>
     </application>
 
 </manifest>

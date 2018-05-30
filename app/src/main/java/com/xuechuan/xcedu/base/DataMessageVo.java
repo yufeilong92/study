@@ -111,13 +111,15 @@ public class DataMessageVo {
     //已完成
     public static String ORDERACOM = "10";
     //友盟key
-    public static String YOUMENGKID="5b067baaf43e483f20000093";
+    public static String YOUMENGKID = "5b067baaf43e483f20000093";
     //qq id
-    public static String QQAPP_ID="1106864981";
+    public static String QQAPP_ID = "1106864981";
     //qq key
-    public static String QQAPP_KEY="rthjDUujg74JKfsq";
+    public static String QQAPP_KEY = "rthjDUujg74JKfsq";
     //APP_SECRET
-    public static String WEIXINAPP_SECRET="19a5f96dc807032fcb7f9d2a289ec0a1";
+    public static String WEIXINAPP_SECRET = "19a5f96dc807032fcb7f9d2a289ec0a1";
+    //协议网址
+    public static String AGREEMENT = "http://www.xuechuanedu.cn/agreement-policy/fuwuxieyi.html";
 
 
 }

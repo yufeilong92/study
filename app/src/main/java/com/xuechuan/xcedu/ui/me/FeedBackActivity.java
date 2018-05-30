@@ -89,6 +89,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
+            finish();
             T.showToast(mContext, getStringWithId(R.string.submit_success));
         } else {
             T.showToast(mContext, getString(R.string.submit_error));
@@ -98,6 +99,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void feedError(String con) {
+        T.showToast(mContext, getString(R.string.submit_error));
         L.e(con);
     }
 }

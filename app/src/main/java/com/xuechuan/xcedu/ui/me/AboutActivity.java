@@ -1,12 +1,16 @@
 package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.ui.AgreementActivity;
 import com.xuechuan.xcedu.utils.Utils;
 
 /**
@@ -55,6 +59,14 @@ public class AboutActivity extends BaseActivity {
         mTvAboutappCode = (TextView) findViewById(R.id.tv_aboutapp_code);
         mTvAbout = (TextView) findViewById(R.id.tv_about);
         mTvAboutappServiceAgreement = (TextView) findViewById(R.id.tv_aboutapp_service_agreement);
+        mTvAboutappServiceAgreement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT);
+                intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR,"服务协议");
+                startActivity(intent);
+            }
+        });
     }
 
 }
