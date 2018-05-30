@@ -82,11 +82,11 @@ public class AtirlceListActivity extends BaseActivity implements ArticleTagView 
         magicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setScrollPivotX(0.25f);
-    /*    if (list.size() > 4) {
-            commonNavigator.setAdjustMode(true);
-        } else {
+        if (list.size() > 4) {
             commonNavigator.setAdjustMode(false);
-        }*/
+        } else {
+            commonNavigator.setAdjustMode(true);
+        }
         MyTagIndicatorAdapter adapter = new MyTagIndicatorAdapter(list, mViewpage);
         magicIndicator.setNavigator(commonNavigator);
         commonNavigator.setAdapter(adapter);
