@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,10 +74,15 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
             MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll, bean.getThumbnailimg(), false);
         }
-
         holder.mChbIsSupper.setChecked(bean.isIssupport());
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("====", "onClick: " );
+            }
+        });
     }
 
     @Override
@@ -86,6 +92,7 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
 
     @Override
     public void onClick(View v) {
+        Log.e("====", "onClick: " );
         if (clickListener != null) {
             clickListener.onClickListener(v.getTag(), v.getId());
         }
@@ -98,7 +105,6 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         public CheckBox mChbIsSupper;
         public TextView mTvItemHomeLaudAll;
         public ImageView mIvItemHomeAll;
-//        public TextView mTvItemHomeAssessAll;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -107,7 +113,6 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
             this.mChbIsSupper = (CheckBox) itemView.findViewById(R.id.chb_isSupper);
             this.mTvItemHomeLaudAll = (TextView) itemView.findViewById(R.id.tv_item_home_laud_all);
             this.mIvItemHomeAll = (ImageView) itemView.findViewById(R.id.iv_item_home_all);
-//            this.mTvItemHomeAssessAll = (TextView) itemView.findViewById(R.id.tv_item_home_assess_all);
 
         }
     }

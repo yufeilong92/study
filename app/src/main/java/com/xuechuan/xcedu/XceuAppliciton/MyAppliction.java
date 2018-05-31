@@ -78,6 +78,7 @@ public class MyAppliction extends MultiDexApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+
     }
 
 
@@ -135,7 +136,7 @@ public class MyAppliction extends MultiDexApplication {
     }
 
     private void initUM() {
-        UMShareAPI.get(this);//初始化sdk
+//        UMShareAPI.get(this);//初始化sdk
         UMConfigure.init(mContext, DataMessageVo.YOUMENGKID
                 , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "");//58edcfeb310c93091c000be2 5965ee00734be40b580001a0
         PlatformConfig.setWeixin(DataMessageVo.APP_ID, DataMessageVo.WEIXINAPP_SECRET);
@@ -163,22 +164,13 @@ public class MyAppliction extends MultiDexApplication {
                 .writeDebugLogs() // 打印debug log
                 .build(); //开始构建
         imageLoader.init(config);
+
     }
 
     private void initJPush() {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
     }
-
-
-    public void displayImagesWithOutHear(ImageView iv, String uri, boolean isRound) {
-        String string = "http://192.168.1.111/8080";
-        StringBuilder builder = new StringBuilder();
-        builder.append(string);
-        builder.append(uri);
-        displayImages(iv, builder.toString(), isRound);
-    }
-
     /**
      * 调用该方法下载图片
      * 配置imageLoader图片选项
@@ -201,9 +193,6 @@ public class MyAppliction extends MultiDexApplication {
                 .bitmapConfig(Bitmap.Config.RGB_565)//图片色彩565
                 .resetViewBeforeLoading(true)
                 .build();
-//        String string ="http://192.168.1.110/8080";
-//        url = string.concat(url);
-
         imageLoader.displayImage(url, iv, options);
     }
 
@@ -218,14 +207,6 @@ public class MyAppliction extends MultiDexApplication {
         mPolyclient.initCrashReport(mContext);
         //使用SDK加密串来配置
     }
-
-    public PolyvSDKClient getPolyColent() {
-        if (mPolyclient == null) {
-            initPolyCilent();
-        }
-        return mPolyclient;
-    }
-
     private void initOkGo() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //log相关
@@ -246,7 +227,6 @@ public class MyAppliction extends MultiDexApplication {
                 .setRetryCount(3); //断网链接
 
     }
-
     /***
      * 播放初始化下载地址
      */
@@ -258,7 +238,6 @@ public class MyAppliction extends MultiDexApplication {
             public void callback() {
                 //是否有可移除的存储介质（例如 SD 卡）或内部（不可移除）存储可供使用。
                 if (!PolyvDevMountInfo.getInstance().isSDCardAvaiable()) {
-                    // TODO 没有可用的存储设备,后续不能使用视频缓存功能
                     Log.e(TAG, "没有可用的存储设备,后续不能使用视频缓存功能");
                     return;
                 }

@@ -246,8 +246,12 @@ public class DialogUtil {
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_title, null);
         TextView tv = view.findViewById(R.id.tv_title);
         tv.setText(title + "?");
+
         Button sure = view.findViewById(R.id.btn_sure);
         sure.setText(btnSure);
+        if (StringUtil.isEmpty(title)) {
+            tv.setVisibility(View.GONE);
+        }
         Button cancel = view.findViewById(R.id.btn_cancal);
         cancel.setText(cancale);
         builder.setView(view)

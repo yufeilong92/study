@@ -66,7 +66,12 @@ public class AgreementActivity extends BaseActivity {
         final AnimationDrawable drawable = (AnimationDrawable) mIvAgreenmentImg.getDrawable();
         WebSettings settings = mWebAgreenement.getSettings();
         settings.setJavaScriptEnabled(true);
+        // 设置可以支持缩放
         settings.setSupportZoom(true);
+        // 设置出现缩放工具
+        settings.setBuiltInZoomControls(true);
+        //自适应屏幕
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         //设置自适应屏幕，两者合用
         settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
         settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小

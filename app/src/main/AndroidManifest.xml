@@ -47,9 +47,9 @@
     <application
         android:name=".XceuAppliciton.MyAppliction"
         android:allowBackup="true"
-        android:icon="@mipmap/m_setting_about_xcimg"
+        android:icon="@mipmap/appicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/m_setting_about_xcimg"
+        android:roundIcon="@mipmap/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
@@ -381,7 +381,6 @@
 
         <activity android:name=".ui.me.AddVauleActivity" />
         <activity android:name=".ui.me.GenuineActivity" />
-        <activity android:name=".ui.me.NotificationActivity" />
         <activity android:name=".ui.me.MyMsgActivity" />
         <activity android:name=".ui.bank.BankBuyActivity">
             <intent-filter>

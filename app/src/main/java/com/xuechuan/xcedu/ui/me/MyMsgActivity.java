@@ -66,7 +66,6 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
     private void initData() {
         mPresenter = new MyMsgPresenter();
         mPresenter.initModelView(new MyMsgModel(),this);
-
     }
 
     private void initView() {
@@ -87,14 +86,10 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
             public void onRefresh(boolean isPullDown) {
                 loadNewData();
             }
-
-
             @Override
             public void onLoadMore(boolean isSilence) {
                 LoadMoreData();
             }
-
-
         });
 
     }

@@ -38,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/space_16"
-        android:layout_marginTop="@dimen/space_16"
         android:maxLines="2"
         android:minLines="2"
         android:text="" />
@@ -47,5 +46,8 @@
         android:id="@+id/iv_system_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_16"
         android:scaleType="fitXY" />
+
+    <View style="@style/view_line_10_gray" />
 </LinearLayout>

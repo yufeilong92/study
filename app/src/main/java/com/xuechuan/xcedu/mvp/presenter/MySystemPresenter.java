@@ -1,9 +1,24 @@
 package com.xuechuan.xcedu.mvp.presenter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.mvp.contract.MySystemContract;
 import com.xuechuan.xcedu.mvp.view.RequestResulteView;
+import com.xuechuan.xcedu.ui.bank.AnswerActivity;
+import com.xuechuan.xcedu.utils.Defaultcontent;
+import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.ShareUtils;
+import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
 import java.util.List;
 
@@ -59,16 +74,22 @@ public class MySystemPresenter implements MySystemContract.Presenter {
 
     @Override
     public void submitDelSystemMsg(Context context, List<Integer> ids) {
+        final AlertDialog alertDialog = DialogUtil.showDialog(context, "", context.getResources().getString(R.string.loading));
         model.submitDelSystemMsg(context, ids, new RequestResulteView() {
             @Override
             public void success(String result) {
+                alertDialog.dismiss();
                 view.DelSuccess(result);
             }
 
             @Override
             public void error(String result) {
+                alertDialog.dismiss();
                 view.DelError(result);
             }
         });
     }
+
+
+
 }
