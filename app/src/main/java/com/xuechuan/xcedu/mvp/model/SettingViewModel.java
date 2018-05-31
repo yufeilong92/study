@@ -34,4 +34,20 @@ public class SettingViewModel implements SettingViewContract.Model {
             }
         });
     }
+
+    @Override
+    public void submitBindWeiXin(Context context, String code, final RequestResulteView view) {
+        MeService service = new MeService(context);
+        service.submitBindWechat(code, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                view.success(response.message());
+            }
+        });
+    }
 }

@@ -69,9 +69,10 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_pilo);
         initView();
-        startActivity(new Intent(PiloActivity.this,MainActivity.class));
-//        mPermissionsUtilss = EasyPermissionsUtils.getInstance(PiloActivity.this);
-//        requesPermission();
+        MyAppliction.getInstance().addActivity(this);
+//        startActivity(new Intent(PiloActivity.this,MainActivity.class));
+        mPermissionsUtilss = EasyPermissionsUtils.getInstance(PiloActivity.this);
+        requesPermission();
     }
 
     private void requesPermission() {
@@ -294,5 +295,9 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
         EasyPermissions.requestPermissions(build);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyAppliction.getInstance().finishActivity(this);
+    }
 }

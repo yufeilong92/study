@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 
@@ -44,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         mBaseTitle = intent.getStringExtra(CSTR_EXTRA_TITLE_STR);
+        MyAppliction.getInstance().addActivity(this);
         initContentView(savedInstanceState);
         if (!StringUtil.isEmpty(mBaseTitle)) {
             setTitle(mBaseTitle);
@@ -88,5 +90,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         OkGo.getInstance().cancelTag(this);
+        MyAppliction.getInstance().finishActivity(this);
     }
+    protected void finishAll(){
+        MyAppliction.getInstance().exit();
+    }
+
 }

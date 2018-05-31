@@ -17,17 +17,22 @@ import com.xuechuan.xcedu.mvp.view.RequestResulteView;
 public interface SettingViewContract {
     interface Model {
         public void requestAppCode(Context context, RequestResulteView view);
+        public void submitBindWeiXin(Context context,String code,RequestResulteView view);
+
     }
 
     interface View {
         public void AppCodeSuccess(String cont);
 
         public void AppCodeError(String msg);
+
+        public void submitBindWeiXin(String com);
+        public void submitBindWeiXinError(String com);
     }
 
     interface Presenter {
         public void initModelView(Model model, View view);
-
+        public void submitBindWeiXin(Context context,String code);
         public void requestAppCode(Context context);
     }
 }

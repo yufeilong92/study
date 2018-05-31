@@ -132,6 +132,8 @@
     <string name="http_deletenotify">/api/membernotification/deletenotify</string>
     <!--删除系统通知-->
     <string name="http_delsystem">/api/systemnotification/deletenotify</string>
+    <!--用户修改密码-->
+    <string name="http_changerpwd">/api/user/userchangepwdpost</string>
     <!--支付接口-->
     <!--订单下单-->
     <string name="http_makeorderpost">/api/order/makeorderpost</string>
@@ -303,5 +305,9 @@
     <string name="mymsg_notice">我的信息</string>
     <string name="is_del">是否删除</string>
     <string name="delect_error">删除失败</string>
+    <string name="bindSuccess">绑定成功</string>
+    <string name="binderror">绑定失败</string>
+    <string name="pas_changer_error">密码修改失败</string>
+    <string name="no_try_see">本课目没有提供试看视频</string>
 
 </resources>

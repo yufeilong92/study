@@ -16,18 +16,18 @@ import java.util.List;
  */
 public class TagListVo extends BaseVo {
 
-    private List<DatasBean> datas;
+    private List<ArticleVo> datas;
 
-    public List<DatasBean> getDatas() {
+    public List<ArticleVo> getDatas() {
         return datas;
     }
 
-    public void setDatas(List<DatasBean> datas) {
+    public void setDatas(List<ArticleVo> datas) {
         this.datas = datas;
     }
 
-    public static class DatasBean {
-        /**
+   /* public static class DatasBean {
+        *//**
          * id : 8
          * issupport : true
          * publishdate : 2018-04-23 17:35:28
@@ -37,8 +37,8 @@ public class TagListVo extends BaseVo {
          * title : 消防规范：KTV火灾惨案18死5伤，违反了哪些消防规范？
          * type : 0
          * viewcount : 0
-         */
-
+         *//*
+        private String gourl;
         private int id;
         private boolean issupport;
         private String publishdate;
@@ -48,6 +48,14 @@ public class TagListVo extends BaseVo {
         private int type;
         private int viewcount;
         private List<TagsBeanVo> tags;
+
+        public String getGourl() {
+            return gourl;
+        }
+
+        public void setGourl(String gourl) {
+            this.gourl = gourl;
+        }
 
         public int getId() {
             return id;
@@ -122,5 +130,5 @@ public class TagListVo extends BaseVo {
         }
 
 
-    }
+    }*/
 }

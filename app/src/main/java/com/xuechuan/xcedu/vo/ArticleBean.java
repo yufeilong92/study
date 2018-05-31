@@ -24,7 +24,7 @@ public class ArticleBean extends HomePageVo {
      */
     private int id;
     /**
-     *
+     * 是否点赞
      */
     private boolean issupport;
     /**
@@ -32,11 +32,11 @@ public class ArticleBean extends HomePageVo {
      */
     private String publishdate;
     /**
-     *
+     *  赞数
      */
     private int supportcount;
     /***
-     *
+     *缩略图
      */
     private String thumbnailimg;
     /***
@@ -47,6 +47,9 @@ public class ArticleBean extends HomePageVo {
      * 类型
      */
     private int type;
+    /**
+     * 浏览量
+     */
     private int viewcount;
 
     public String getGourl() {

@@ -71,6 +71,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MyAppliction.getInstance().finishActivity(this);
         OkGo.getInstance().cancelTag(mContext);
     }
 
@@ -99,6 +100,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
 
     protected void initView() {
+        MyAppliction.getInstance().addActivity(this);
         mContext = this;
         mFlContent = (FrameLayout) findViewById(R.id.fl_content);
         mFlContent.setOnClickListener(this);

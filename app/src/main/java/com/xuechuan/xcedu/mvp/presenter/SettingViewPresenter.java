@@ -26,6 +26,22 @@ public class SettingViewPresenter implements SettingViewContract.Presenter {
     }
 
     @Override
+    public void submitBindWeiXin(Context context, String code) {
+        model.submitBindWeiXin(context, code, new RequestResulteView() {
+            @Override
+            public void success(String result) {
+                view.submitBindWeiXin(result);
+            }
+
+            @Override
+            public void error(String result) {
+                view.submitBindWeiXinError(result);
+            }
+        });
+
+    }
+
+    @Override
     public void requestAppCode(Context context) {
         model.requestAppCode(context, new RequestResulteView() {
             @Override

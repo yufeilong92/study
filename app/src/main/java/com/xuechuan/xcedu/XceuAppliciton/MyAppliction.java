@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.XceuAppliciton;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.multidex.MultiDex;
@@ -39,6 +40,8 @@ import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -63,6 +66,10 @@ public class MyAppliction extends MultiDexApplication {
     private UserInfomVo infomVo;
     private static MyAppliction application;
     private int READTIME = 2000;
+    /**
+     * 打开的activity
+     **/
+    private List<Activity> activities = new ArrayList<Activity>();
     /**
      * 是否二十秒超时
      */
@@ -171,6 +178,7 @@ public class MyAppliction extends MultiDexApplication {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
     }
+
     /**
      * 调用该方法下载图片
      * 配置imageLoader图片选项
@@ -207,6 +215,7 @@ public class MyAppliction extends MultiDexApplication {
         mPolyclient.initCrashReport(mContext);
         //使用SDK加密串来配置
     }
+
     private void initOkGo() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //log相关
@@ -227,6 +236,7 @@ public class MyAppliction extends MultiDexApplication {
                 .setRetryCount(3); //断网链接
 
     }
+
     /***
      * 播放初始化下载地址
      */
@@ -270,5 +280,54 @@ public class MyAppliction extends MultiDexApplication {
         });
         PolyvDownloaderManager.setDownloadQueueCount(1);
     }
+
+    /**
+     * 新建了一个activity
+     *
+     * @param activity
+     */
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+    }
+
+    /**
+     * 结束指定的Activity
+     *
+     * @param activity
+     */
+    public void finishActivity(Activity activity) {
+        if (activity != null) {
+            this.activities.remove(activity);
+            if (activity.isFinishing())
+                activity.finish();
+            activity = null;
+        }
+    }
+
+    /**
+     * 应用退出，结束所有的activity
+     */
+    public void exit() {
+        for (Activity activity : activities) {
+            if (activity != null) {
+                activity.finish();
+            }
+        }
+        System.exit(0);
+    }
+
+    /**
+     * 关闭Activity列表中的所有Activity
+     */
+    public void finishActivity() {
+        for (Activity activity : activities) {
+            if (null != activity) {
+                activity.finish();
+            }
+        }
+        //杀死该应用进程
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
 
 }

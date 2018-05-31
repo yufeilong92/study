@@ -61,6 +61,7 @@ import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
@@ -217,8 +218,14 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 
     private void initData() {
         if (dataVo != null) {
+            List<String> list;
             mTvNetBookTitle.setText(dataVo.getName());
-            List<String> list = ArrayToListUtil.arraytoList(mContext, R.array.net_book_title);
+            if (dataVo.isIsall()) {
+                mIvNetBookPlay.setVisibility(View.GONE);
+                list = new ArrayList<>();
+                list.add("详情");
+            } else
+                list = ArrayToListUtil.arraytoList(mContext, R.array.net_book_title);
             mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
             CommonNavigator commonNavigator = new CommonNavigator(this);
             commonNavigator.setScrollPivotX(0.25f);
@@ -244,13 +251,17 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             mNetMagicIndicator.setVisibility(View.GONE);
         }
         List<Fragment> fragments = new ArrayList<>();
-        NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance("", "");
-//        NetBooKListFragment booKListFragment = NetBooKListFragment.newInstance(String.valueOf(dataVo.getId()));
-        NetTableFragment booKListFragment = NetTableFragment.newInstance(String.valueOf(dataVo.getId()));
+        NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance(dataVo.getDescription(), "");
         fragments.add(bookinfomFragment);
-        fragments.add(booKListFragment);
+        if (dataVo.isIsall()) {
+        } else {
+//        NetBooKListFragment booKListFragment = NetBooKListFragment.newInstance(String.valueOf(dataVo.getId()));
+            NetTableFragment booKListFragment = NetTableFragment.newInstance(String.valueOf(dataVo.getId()));
+            fragments.add(booKListFragment);
+        }
         return fragments;
     }
+
     /**
      * 播放视频
      */
@@ -677,14 +688,16 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 
                 break;
             case R.id.btn_net_go_buy://购买
-                Intent intent = NetBuyActivity.newInstance(mContext, dataVo.getPrice(),dataVo.getId(),
-                        dataVo.getName(),dataVo.getCoverimg());
+                Intent intent = NetBuyActivity.newInstance(mContext, dataVo.getPrice(), dataVo.getId(),
+                        dataVo.getName(), dataVo.getCoverimg());
                 startActivity(intent);
                 break;
             case R.id.iv_net_play:
                 break;
             case R.id.iv_net_book_play:
-                mRlPlaylayout.setVisibility(View.GONE);
+                if (dataVo.isIsall()) {
+                    return;
+                }
                 play();
                 break;
             default:
@@ -697,9 +710,12 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
      */
     private void play() {
         if (!StringUtil.isEmpty(vid)) {
+            mRlPlaylayout.setVisibility(View.GONE);
             play(vid, 0, true, false);
             mediaController.setIsPlay(true);
             PolyvScreenUtils.IsPlay(true);
+        }else {
+            T.showToast(mContext,getString(R.string.no_try_see));
         }
 
     }

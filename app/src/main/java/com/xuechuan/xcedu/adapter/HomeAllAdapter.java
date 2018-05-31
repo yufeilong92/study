@@ -77,12 +77,6 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         holder.mChbIsSupper.setChecked(bean.isIssupport());
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("====", "onClick: " );
-            }
-        });
     }
 
     @Override
@@ -92,7 +86,6 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
 
     @Override
     public void onClick(View v) {
-        Log.e("====", "onClick: " );
         if (clickListener != null) {
             clickListener.onClickListener(v.getTag(), v.getId());
         }

@@ -20,7 +20,7 @@ import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.InfomDetailActivity;
+import com.xuechuan.xcedu.ui.AgreementActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PushXmlUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -66,6 +66,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
     private boolean isRefresh;
     private AdvisoryListAdapter adapter;
     private long lastRefreshtime;
+    private ImageView mIvContentEmpty;
 
 
     /**
@@ -78,14 +79,12 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         return intent;
     }
 
-/*    @Override
+ /*   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advisory_list);
         initView();
-        if (getIntent() != null) {
-            mProvinceCode = getIntent().getStringExtra(PROVICECODE);
-        }
+
     }*/
 
     @Override
@@ -99,12 +98,10 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         }
         initView();
         mTvAddressTitle.setText(title);
-
         clearData();
         bindAdapter();
         initRxfresh();
         mXrvContent.startRefresh();
-//        requestData(mProvinceCode);
     }
 
     private void initRxfresh() {
@@ -112,6 +109,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         mXrvContent.stopLoadMore(true);
         mXrvContent.setAutoLoadMore(true);
         mXrvContent.restoreLastRefreshTime(lastRefreshtime);
+        mXrvContent.setEmptyView(mIvContentEmpty);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(this));
         mXrvContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
@@ -147,7 +145,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
 //                    clearData();
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
-                    }else {
+                    } else {
                         mXrvContent.setLoadComplete(true);
                         adapter.notifyDataSetChanged();
                         return;
@@ -196,7 +194,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
                     }
-                    if (mArray.size()<DataMessageVo.CINT_PANGE_SIZE||mArray.size() == vo.getTotal().getTotal()) {
+                    if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
                         mXrvContent.setLoadComplete(true);
                     } else {
                         mXrvContent.setPullLoadEnable(true);
@@ -225,6 +223,8 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
         mTvAddressTitle.setOnClickListener(this);
         mXrvContent = (XRefreshView) findViewById(R.id.xrv_content);
         mXrvContent.setOnClickListener(this);
+        mIvContentEmpty = (ImageView) findViewById(R.id.iv_content_empty);
+        mIvContentEmpty.setOnClickListener(this);
     }
 
     private void bindAdapter() {
@@ -239,7 +239,9 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
             public void onClickListener(Object obj, int position) {
                 AdvisoryVo vo = (AdvisoryVo) obj;
                 String gourl = vo.getGourl();
-                Intent intent = InfomDetailActivity.startInstance(mContext, gourl, String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+      /*          Intent intent = InfomDetailActivity.startInstance(mContext, gourl,
+                        String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
+                Intent intent = AgreementActivity.newInstance(mContext, gourl);
                 mContext.startActivity(intent);
             }
         });

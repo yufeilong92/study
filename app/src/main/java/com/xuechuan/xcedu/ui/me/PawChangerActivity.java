@@ -1,16 +1,24 @@
 package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.mvp.contract.ChangPawContract;
+import com.xuechuan.xcedu.mvp.model.ChangPawModel;
+import com.xuechuan.xcedu.mvp.presenter.ChangPawPresenter;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.ChangerPawVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -22,13 +30,14 @@ import com.xuechuan.xcedu.utils.T;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/28
  */
-public class PawChangerActivity extends BaseActivity implements View.OnClickListener {
+public class PawChangerActivity extends BaseActivity implements View.OnClickListener, ChangPawContract.View {
 
     private EditText mEtMPOldPaw;
     private EditText mEtMPNewPaw;
     private EditText mEtMPNewPaw1;
     private Button mBtnMPCpSubmit;
     private Context mContext;
+    private ChangPawPresenter mPresenter;
 
 /*
     @Override
@@ -43,6 +52,12 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_paw_changer);
         initView();
+        initData();
+    }
+
+    private void initData() {
+        mPresenter = new ChangPawPresenter();
+        mPresenter.initModelView(new ChangPawModel(), this);
     }
 
     private void initView() {
@@ -51,7 +66,6 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
         mEtMPNewPaw = (EditText) findViewById(R.id.et_m_p_new_paw);
         mEtMPNewPaw1 = (EditText) findViewById(R.id.et_m_p_new_paw1);
         mBtnMPCpSubmit = (Button) findViewById(R.id.btn_m_p_cp_submit);
-
         mBtnMPCpSubmit.setOnClickListener(this);
     }
 
@@ -72,19 +86,41 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
         }
         String newPaw = getTextStr(mEtMPNewPaw);
         if (TextUtils.isEmpty(newPaw)) {
-            T.showToast(mContext,getString( R.string.new_paw_empty));
+            T.showToast(mContext, getString(R.string.new_paw_empty));
             return;
         }
         String newPaw1 = getTextStr(mEtMPNewPaw1);
         if (TextUtils.isEmpty(newPaw1)) {
-            T.showToast(mContext,getString( R.string.sure_paw_sure));
+            T.showToast(mContext, getString(R.string.sure_paw_sure));
             return;
         }
         if (!newPaw.equals(newPaw1)) {
             T.showToast(mContext, getString(R.string.paw_no_same));
             return;
         }
+        mPresenter.submitChangerPaw(mContext, paw, newPaw);
+    }
 
+    @Override
+    public void submitSuccess(String con) {
+        Gson gson = new Gson();
+        ChangerPawVo vo = gson.fromJson(con, ChangerPawVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            if (vo.getData().getStatusX() == 1) {
+                T.showToast(mContext, getString(R.string.pas_changer_error));
+                startActivity(new Intent(mContext, LoginActivity.class));
+            } else {
+                T.showToast(mContext, vo.getData().getInfo());
+            }
+        } else {
+            T.showToast(mContext, getString(R.string.pas_changer_error));
+            Log.e("===", "submitSuccess: " + con);
+        }
+
+    }
+
+    @Override
+    public void submitError(String con) {
 
     }
 }

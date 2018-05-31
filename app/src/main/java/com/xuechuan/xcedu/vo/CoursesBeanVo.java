@@ -38,7 +38,7 @@ public class CoursesBeanVo implements Serializable {
      */
     private boolean isall;
     /**
-     *
+     * 详情地址
      */
     private String description;
     /**

@@ -2,9 +2,11 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -19,6 +21,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.debug.log.D;
 import com.vector.update_app.UpdateAppBean;
 import com.vector.update_app.UpdateAppManager;
@@ -30,6 +35,7 @@ import com.vector.update_app.utils.AppUpdateUtils;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.mvp.contract.SettingViewContract;
 import com.xuechuan.xcedu.mvp.model.SettingViewModel;
@@ -46,6 +52,7 @@ import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.AppUpDataVo;
+import com.xuechuan.xcedu.vo.BindWeiXinVo;
 
 import java.io.File;
 
@@ -71,25 +78,62 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private Context mContext;
     private SettingViewPresenter mPresenter;
     private boolean isShowDownloadProgress;
-/*    @Override
+    private IWXAPI api;
+    private BroadcastReceiver receiver;
+    /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         initView();
     }*/
 
+    public static String WEIXINNAME = "weixinname";
+    private String mName;
+
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_setting);
+        if (getIntent() != null) {
+            mName = getIntent().getStringExtra(WEIXINNAME);
+        }
         initView();
         initData();
+        regToWx();
+        initWeiXinResult();
+    }
+
+    private void initWeiXinResult() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DataMessageVo.WEI_LOGIN_ACTION);
+        //                    requestLogin(extra, code);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent != null) {
+                    String extra = intent.getStringExtra(DataMessageVo.WEISTATE);
+                    String code = intent.getStringExtra(DataMessageVo.WEICODE);
+                    mPresenter.submitBindWeiXin(mContext, code);
+                }
+            }
+        };
+        registerReceiver(receiver, filter);
+
     }
 
     private void initData() {
         int versionCode = Utils.getVersionCode(mContext);
         mTvMSettingCode.setText(versionCode + "");
+        mTvMSettingWeixin.setText(mName);
         mPresenter = new SettingViewPresenter();
         mPresenter.initModelView(new SettingViewModel(), this);
+
+
+    }
+
+    //注册微信
+    private void regToWx() {
+        api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID, true);
+        api.registerApp(DataMessageVo.APP_ID);
     }
 
     private void initView() {
@@ -124,7 +168,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 startActivity(new Intent(SettingActivity.this, PawChangerActivity.class));
                 break;
             case R.id.ll_m_setting_bindWei://绑定微信
-
+                if (api.isWXAppInstalled()) {
+                    loginWeiXin();
+                } else {
+                    T.showToast(mContext, "请先安装微信");
+                }
                 break;
             case R.id.btn_b_s_out:
                 MyAppliction.getInstance().setUserInfom(null);
@@ -136,6 +184,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 this.finish();
                 break;
         }
+    }
+
+    //调用微信
+    private void loginWeiXin() {
+        final SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "wechat_sdk_demo_test";
+        api.sendReq(req);
     }
 
     /**
@@ -260,6 +316,31 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         L.e(msg);
     }
 
+    @Override
+    public void submitBindWeiXin(String com) {
+        Gson gson = new Gson();
+        BindWeiXinVo vo = gson.fromJson(com, BindWeiXinVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            if (vo.getData().getStatusX() == 1) {
+                String nickname = vo.getData().getUser().getNickname();
+                mTvMSettingWeixin.setText(nickname);
+                T.showToast(mContext, getString(R.string.bindSuccess));
+            }else {
+                T.showToast(mContext, vo.getData().getMessage());
+            }
+        } else {
+            String message = vo.getStatus().getMessage();
+            L.e(message);
+            T.showToast(mContext, getString(R.string.binderror));
+        }
+
+    }
+
+    @Override
+    public void submitBindWeiXinError(String com) {
+        T.showToast(mContext, getString(R.string.binderror));
+    }
+
     /**
      * 自定义对话框
      *
@@ -355,10 +436,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         Log.d("===", "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         switch (resultCode) {
             case Activity.RESULT_CANCELED:
-                switch (requestCode){
+                switch (requestCode) {
                     // 得到通过UpdateDialogFragment默认dialog方式安装，用户取消安装的回调通知，以便用户自己去判断，比如这个更新如果是强制的，但是用户下载之后取消了，在这里发起相应的操作
                     case AppUpdateUtils.REQ_CODE_INSTALL_APP:
-                       T.showToast(SettingActivity.this,"用户取消了安装包的更新");
+                        T.showToast(SettingActivity.this, "用户取消了安装包的更新");
                         break;
                 }
                 break;

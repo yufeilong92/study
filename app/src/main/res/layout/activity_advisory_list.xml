@@ -36,14 +36,23 @@
 
     </LinearLayout>
 
+    <View style="@style/view_line_tab_line" />
+
     <com.andview.refreshview.XRefreshView
-        android:layout_width="match_parent"
         android:id="@+id/xrv_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rlv_advisory_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/iv_content_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@mipmap/common_blankimg_ser" />
     </com.andview.refreshview.XRefreshView>
 </LinearLayout>

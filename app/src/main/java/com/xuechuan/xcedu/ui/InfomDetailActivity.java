@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -79,18 +80,20 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private String mSupperNumber;
     private Context mContext;
     private InfomDetailAdapter adapter;
-    private XRefreshView mXfvContentDetail;
     private EditText mEtInfomContent;
     private Button mBtnInfomSend;
     private AlertDialog mDialog;
     private RelativeLayout mRlInfomLayout;
+    private LinearLayout mLlInfomSend;
+    private long lastRefreshTime;
+    private static String ISSHOWEDITE = "misshowedite";
+    private boolean mIsShow;
 
-    public static void newInstance(Context context, String url) {
+    /*   public static void newInstance(Context context, String url) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
         intent.putExtra(URLPARAM, url);
         context.startActivity(intent);
-    }
-
+    }*/
     public static Intent startInstance(Context context, String url, String id, String usertype) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
         intent.putExtra(URLPARAM, url);
@@ -117,13 +120,14 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         return intent;
     }
 
-/*    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_infom_detail);
-        initView();
-    }*/
-
+    /*
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_infom_detail);
+            initView();
+        }
+    */
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_infom_detail);
@@ -134,9 +138,25 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             mSupperNumber = getIntent().getStringExtra(SUPPER);
 
         }
-        clearData();
         initView();
+        clearData();
+        bindAdapter();
+        initxfvView();
+        initData();
         reqesstEvaleData();
+    }
+
+    private void initData() {
+         mEtInfomContent.setOnFocusChangeListener(new OnFocusChangeListener() {
+             @Override
+             public void onFocusChange(View v, boolean hasFocus) {
+                 if(hasFocus){
+
+                 }else {
+                     Utils.hideInputMethod(mContext,mEtInfomContent);
+                 }
+             }
+         });
     }
 
 
@@ -153,6 +173,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     mDialog.dismiss();
                 }
                 mRlInfomLayout.setVisibility(View.VISIBLE);
+                mLlInfomSend.setVisibility(View.VISIBLE);
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();
@@ -185,22 +206,26 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void initView() {
         mContext = this;
-        mXfvContentDetail = (XRefreshView) findViewById(R.id.xfv_content_detail);
-        mXfvContentDetail.setOnClickListener(this);
         mEtInfomContent = (EditText) findViewById(R.id.et_infom_content);
         mEtInfomContent.setOnClickListener(this);
         mBtnInfomSend = (Button) findViewById(R.id.btn_infom_send);
         mBtnInfomSend.setOnClickListener(this);
         mRlvInfomdetailContent = (RecyclerView) findViewById(R.id.rlv_infomdetail_content);
         mXfvContent = (XRefreshView) findViewById(R.id.xfv_content_detail);
+        mRlInfomLayout = (RelativeLayout) findViewById(R.id.rl_infom_layout);
+        mRlInfomLayout.setOnClickListener(this);
+        mLlInfomSend = (LinearLayout) findViewById(R.id.ll_infom_send);
+        mLlInfomSend.setOnClickListener(this);
+    }
+
+    private void initxfvView() {
+        mXfvContent.restoreLastRefreshTime(lastRefreshTime);
         mXfvContent.setPullLoadEnable(true);
         mXfvContent.setAutoLoadMore(true);
         mXfvContent.setPullRefreshEnable(false);
         mXfvContent.setMoveForHorizontal(true);
-        bindAdapter();
-        mRlInfomLayout = (RelativeLayout) findViewById(R.id.rl_infom_layout);
-        mRlInfomLayout.setOnClickListener(this);
     }
+
 
     /**
      * 资讯
@@ -275,6 +300,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 T.showToast(mContext, response.message());
             }
         });
+
     }
 
     /**
@@ -287,17 +313,9 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         LinearLayout mliSupper = view.findViewById(R.id.li_supperNumber);
         TextView tvNumber = view.findViewById(R.id.tv_iofom_detail_suppernumber);
         TextView tvHearNumber = view.findViewById(R.id.tv_h_evalue);
-        if (!StringUtil.isEmpty(mSupperNumber)) {
-            tvHearNumber.setVisibility(View.VISIBLE);
-            tvHearNumber.setText("评论(" + mSupperNumber + ")");
-        } else {
-            tvHearNumber.setVisibility(View.GONE);
-        }
-        if (StringUtil.isEmpty(mSupperNumber)) {
-            mliSupper.setVisibility(View.GONE);
-        } else {
-            mliSupper.setVisibility(View.VISIBLE);
-        }
+        tvHearNumber.setVisibility(View.VISIBLE);
+        tvHearNumber.setText("评论()");
+        mliSupper.setVisibility(View.VISIBLE);
         chb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -320,14 +338,14 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private void initWebView(View view) {
         WebView webview = view.findViewById(R.id.web_infom_detail);
         final LinearLayout li = view.findViewById(R.id.ll_webview_after);
-
+        li.setVisibility(View.VISIBLE);
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
         //设置自适应屏幕，两者合用
         settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
         settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
-        settings.setDisplayZoomControls(false); //隐藏原生的缩放控件
+        settings.setDisplayZoomControls(true); //隐藏原生的缩放控件
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
         webview.loadUrl(mUrl);
@@ -463,11 +481,11 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
             }
-
             @Override
             public void onError(Response<String> response) {
 
             }
         });
     }
+
 }

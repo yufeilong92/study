@@ -110,6 +110,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
+        MyAppliction.getInstance().addActivity(this);
         setContentView(R.layout.activity_persion);
         if (getIntent() != null) {
             mInfomVo = (PerInfomVo.DataBean) getIntent().getSerializableExtra(PERINFOM);

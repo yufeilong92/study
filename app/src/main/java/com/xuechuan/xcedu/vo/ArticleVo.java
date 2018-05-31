@@ -2,6 +2,8 @@ package com.xuechuan.xcedu.vo;
 
 import com.xuechuan.xcedu.utils.TimeUtil;
 
+import java.util.List;
+
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu
@@ -22,6 +24,14 @@ public class ArticleVo {
     private String title;
     private int type;
     private int viewcount;
+    private List<TagsBeanVo> tags;
+    public List<TagsBeanVo> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagsBeanVo> tags) {
+        this.tags = tags;
+    }
 
     public String getGourl() {
         return gourl;

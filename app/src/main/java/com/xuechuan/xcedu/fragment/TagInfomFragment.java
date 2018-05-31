@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -132,8 +133,10 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
         adapter.setClickListener(new TagListAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                TagListVo.DatasBean vo = (TagListVo.DatasBean) obj;
-
+                ArticleVo vo = (ArticleVo) obj;
+                Log.e("====", "onClickListener: " );
+                Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, String.valueOf(vo.getSupportcount()));
+                mContext.startActivity(intent);
             }
 
         });
@@ -218,7 +221,7 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
         TagListVo vo = gson.fromJson(message, TagListVo.class);
         BaseVo.StatusBean status = vo.getStatus();
         if (status.getCode() == 200) {
-            List<TagListVo.DatasBean> datas = vo.getDatas();
+            List<ArticleVo> datas = vo.getDatas();
             clearData();
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
@@ -249,7 +252,7 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
         TagListVo vo = gson.fromJson(message, TagListVo.class);
         BaseVo.StatusBean status = vo.getStatus();
         if (status.getCode() == 200) {
-            List<TagListVo.DatasBean> datas = vo.getDatas();
+            List<ArticleVo> datas = vo.getDatas();
 //           clearData();
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);

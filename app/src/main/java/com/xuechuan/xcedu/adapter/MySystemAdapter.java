@@ -148,7 +148,6 @@ public class MySystemAdapter extends BaseRecyclerAdapter<MySystemAdapter.ViewHol
                             showDel.getPopupWindow().dismiss();
                             clickLangListener.onClickLangListener(vo, position);
                         }
-
                     }
                 });
                 btnDel.setOnClickListener(new View.OnClickListener() {

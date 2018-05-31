@@ -154,6 +154,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(intent2);
                 break;
             case R.id.iv_weixinlogin://微信登录
+
                 if (api.isWXAppInstalled()) {
                     loginWeiXin();
                 } else {
@@ -346,4 +347,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         this.finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAll();
+    }
 }

@@ -14,6 +14,7 @@ import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.ArticleBean;
+import com.xuechuan.xcedu.vo.ArticleVo;
 import com.xuechuan.xcedu.vo.TagListVo;
 
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolder> implements View.OnClickListener {
     private Context mContext;
-    private List<TagListVo.DatasBean> mData;
+    private List<ArticleVo> mData;
     private final LayoutInflater mInflater;
 
     private onItemClickListener clickListener;
@@ -43,7 +44,7 @@ public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolde
         this.clickListener = clickListener;
     }
 
-    public TagListAdapter(Context mContext, List<TagListVo.DatasBean> mData) {
+    public TagListAdapter(Context mContext, List<ArticleVo> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
@@ -64,7 +65,7 @@ public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        TagListVo.DatasBean bean = mData.get(position);
+        ArticleVo bean = mData.get(position);
         holder.mTvItemHomeTitleAll.setText(bean.getTitle());
         holder.mTvItemHomeLookAll.setText(bean.getViewcount() + "");
         holder.mTvItemHomeLaudAll.setText(bean.getSupportcount() + "");
@@ -101,7 +102,6 @@ public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolde
         public CheckBox mChbIsSupper;
         public TextView mTvItemHomeLaudAll;
         public ImageView mIvItemHomeAll;
-//        public TextView mTvItemHomeAssessAll;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -110,7 +110,6 @@ public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolde
             this.mChbIsSupper = (CheckBox) itemView.findViewById(R.id.chb_isSupper);
             this.mTvItemHomeLaudAll = (TextView) itemView.findViewById(R.id.tv_item_home_laud_all);
             this.mIvItemHomeAll = (ImageView) itemView.findViewById(R.id.iv_item_home_all);
-//            this.mTvItemHomeAssessAll = (TextView) itemView.findViewById(R.id.tv_item_home_assess_all);
 
         }
     }

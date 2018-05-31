@@ -56,7 +56,6 @@ public class AgreementActivity extends BaseActivity {
         if (getIntent() != null) {
             mUrl = getIntent().getStringExtra(URLDATA);
         }
-
         initView();
         initData();
     }

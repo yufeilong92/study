@@ -26,6 +26,7 @@ import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.ui.AgreementActivity;
 import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.ui.home.AddressShowActivity;
 import com.xuechuan.xcedu.ui.home.AdvisoryListActivity;
@@ -135,15 +136,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-/*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, null);
-        initView(view);
-        return view;
-    }
-*/
-
+    /*
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_home, null);
+            initView(view);
+            return view;
+        }
+    */
     public HomeFragment() {
     }
 
@@ -175,8 +175,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initData() {
         code = PushXmlUtil.getInstance().getLocationCode(mContext, "河南省");
-        if (!StringUtil.isEmpty(code))
+        if (!StringUtil.isEmpty(code)) {
+            mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
             requestData(code);
+        }
     }
 
     /**
@@ -233,11 +235,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
 
                 } else {//失败
-//                    T.showToast(mContext, status.getMessage());
                     if (mDialog == null)
                         mDialog.dismiss();
                     L.e(status.getMessage());
-//                    requestData(code);
                 }
             }
 
@@ -307,8 +307,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClickListener(Object obj, int position) {
                 AdvisoryBean vo = (AdvisoryBean) obj;
-//                T.showToast(mContext, position + "");
-                Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);
+              /*  Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
+                        String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
+                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl());
                 mContext.startActivity(intent);
             }
         });
@@ -362,8 +363,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mBanHome.setOnBannerClickListener(new OnBannerClickListener() {
             @Override
             public void OnBannerClick(int position) {
-                String url = list.get(position - 1);
-                InfomDetailActivity.newInstance(mContext, url);
+//                String url = list.get(position - 1);
+//                InfomDetailActivity.newInstance(mContext, url);
 
             }
         });
@@ -376,7 +377,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 mLocationClient.restart();
                 return;
             }
-            mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
             String province = location.getProvince();    //获取省份
             mTvAddress.setText(province);
             L.d("定位位置", province);
@@ -421,8 +421,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
                 startActivity(intent1);
                 break;
-            case R.id.tv_article_more://全部更多
-//                UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            case R.id.tv_article_more://文章更多
                 Intent instance = AtirlceListActivity.newInstance(mContext, "");
                 instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.home_infom_all));
                 startActivity(instance);

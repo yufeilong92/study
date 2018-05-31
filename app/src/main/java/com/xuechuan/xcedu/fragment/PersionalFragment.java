@@ -32,6 +32,8 @@ import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.PerInfomVo;
 
+import java.util.List;
+
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: PersionalFragment
@@ -167,7 +169,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
                 break;
             case R.id.ll_m_my_msg://我的信息
                 Intent intent6 = new Intent(mContext, MyMsgActivity.class);
-                intent6.putExtra(MyMsgActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.mymsg_notice));
+                intent6.putExtra(MyMsgActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.mymsg_notice));
                 startActivity(intent6);
                 break;
             case R.id.ll_m_down://我的下载
@@ -193,11 +195,17 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
                 break;
             case R.id.ll_m_notice://系统通告
                 Intent intent5 = new Intent(mContext, SystemMsgActivity.class);
-                intent5.putExtra(SystemMsgActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.system_notice));
+                intent5.putExtra(SystemMsgActivity.CSTR_EXTRA_TITLE_STR, getString(R.string.system_notice));
                 startActivity(intent5);
                 break;
             case R.id.ll_m_setting://设置
                 Intent intent4 = new Intent(mContext, SettingActivity.class);
+                if (mDataInfom != null) {
+                    List<PerInfomVo.DataBean.ThirdaccountBean> thirdaccount = mDataInfom.getThirdaccount();
+                    if (thirdaccount != null && !thirdaccount.isEmpty()) {
+                        intent4.putExtra(SettingActivity.WEIXINNAME, mDataInfom.getThirdaccount().get(0).getNickname());
+                    }
+                }
                 intent4.putExtra(SettingActivity.CSTR_EXTRA_TITLE_STR, getStrWithId(R.string.setting));
                 startActivity(intent4);
                 break;

@@ -1,15 +1,21 @@
 package com.xuechuan.xcedu.fragment;
 
-import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseFragment;
+import com.xuechuan.xcedu.utils.StringUtil;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -27,6 +33,8 @@ public class NetBookinfomFragment extends BaseFragment {
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+    private WebView mWebAgreenement;
+    private ImageView mIvAgreenmentImg;
 
     public NetBookinfomFragment() {
     }
@@ -49,12 +57,13 @@ public class NetBookinfomFragment extends BaseFragment {
         }
     }
 
-    @Override
+  /*  @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_net_bookinfom, container, false);
+        initView(view);
         return view;
-    }
+    }*/
 
     @Override
     protected int initInflateView() {
@@ -63,7 +72,70 @@ public class NetBookinfomFragment extends BaseFragment {
 
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
-
+        initView(view);
+        if (StringUtil.isEmpty(mParam1)) {
+            return;
+        }
+        initData();
     }
 
+    private void initData() {
+        mIvAgreenmentImg.setImageResource(R.drawable.animation_loading);
+        final AnimationDrawable drawable = (AnimationDrawable) mIvAgreenmentImg.getDrawable();
+        WebSettings settings = mWebAgreenement.getSettings();
+        settings.setJavaScriptEnabled(true);
+        // 设置可以支持缩放
+        settings.setSupportZoom(true);
+        // 设置出现缩放工具
+        settings.setBuiltInZoomControls(true);
+        //自适应屏幕
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        //设置自适应屏幕，两者合用
+        settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        settings.setDisplayZoomControls(false); //隐藏原生的缩放控件
+        settings.setLoadsImagesAutomatically(true); //支持自动加载图片
+        settings.setDefaultTextEncodingName("utf-8");//设置编码格式
+        mWebAgreenement.loadUrl(mParam1);
+        mWebAgreenement.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url == null) return false;
+
+                try {
+                    if (url.startsWith("http:") || url.startsWith("https:")) {
+                        view.loadUrl(url);
+                        return true;
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        getActivity().startActivity(intent);
+                        return true;
+                    }
+                } catch (Exception e) { //防止crash (如果手机上没有安装处理某个scheme开头的url的APP, 会导致crash)
+                    return false;
+                }
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                mWebAgreenement.setVisibility(View.GONE);
+                mIvAgreenmentImg.setVisibility(View.VISIBLE);
+                drawable.start();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                mWebAgreenement.setVisibility(View.VISIBLE);
+                mIvAgreenmentImg.setVisibility(View.GONE);
+                drawable.stop();
+            }
+        });
+    }
+
+    private void initView(View view) {
+        mWebAgreenement = (WebView) view.findViewById(R.id.web_agreenement);
+        mIvAgreenmentImg = (ImageView) view.findViewById(R.id.iv_agreenment_img);
+    }
 }

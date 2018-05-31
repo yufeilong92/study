@@ -4,10 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.NetBookinfomFragment">
+    <WebView
+        android:layout_marginLeft="@dimen/space_16"
+        android:layout_marginRight="@dimen/space_16"
+        android:id="@+id/web_agreenement"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<ImageView
-    android:src="@mipmap/f_t"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    </WebView>
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/iv_agreenment_img"
+        android:scaleType="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
 
 </FrameLayout>

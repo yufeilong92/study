@@ -296,7 +296,7 @@ public class MeService extends BaseHttpServcie {
      *
      * @param view
      */
-    public void requestMyMsg(int page,StringCallBackView view) {
+    public void requestMyMsg(int page, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -308,7 +308,7 @@ public class MeService extends BaseHttpServcie {
         paramVo.setParam("staffid");
         paramVo.setValue(String.valueOf(user.getId()));
         listParamVo.add(paramVo);
-        addPage(listParamVo,page);
+        addPage(listParamVo, page);
         String url = getUrl(mContext, R.string.http_my_msg);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);
     }
@@ -333,7 +333,7 @@ public class MeService extends BaseHttpServcie {
     /**
      * 获取系统通知
      */
-    public void requestSystemMsg(int page,StringCallBackView view) {
+    public void requestSystemMsg(int page, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -345,7 +345,7 @@ public class MeService extends BaseHttpServcie {
         paramVo.setParam("staffid");
         paramVo.setValue(String.valueOf(user.getId()));
         listParamVo.add(paramVo);
-        addPage(listParamVo,page);
+        addPage(listParamVo, page);
         String url = getUrl(mContext, R.string.http_system_msg);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);
     }
@@ -371,6 +371,7 @@ public class MeService extends BaseHttpServcie {
 
     /**
      * 删除系统通知
+     *
      * @param ids
      * @param view
      */
@@ -390,4 +391,26 @@ public class MeService extends BaseHttpServcie {
         String url = getUrl(mContext, R.string.http_delsystem);
         requestHttpServciePost(mContext, url, object, true, view);
     }
+
+
+    /**
+     * 用户修改密码
+     * @param view
+     */
+    //    删除我的消息
+    public void submitMyPsw(String oldpas, String newpas, StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        UserBean user = login.getData().getUser();
+        JsonObject object = new JsonObject();
+        object.addProperty("staffid", user.getId());
+        object.addProperty("oldpwd", oldpas);
+        object.addProperty("newpwd", newpas);
+        String url = getUrl(mContext, R.string.http_changerpwd);
+        requestHttpServciePost(mContext, url, object, true, view);
+    }
+
+
 }

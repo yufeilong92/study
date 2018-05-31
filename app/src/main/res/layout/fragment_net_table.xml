@@ -19,7 +19,7 @@
         <TextView
             android:gravity="center"
             android:id="@+id/tv_net_empty_content"
-            android:text="暂无评价内容"
+            android:text="暂无课程表"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.andview.refreshview.XRefreshView>
