@@ -88,7 +88,7 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
         L.e(stamp);
         holder.mTvEvalueTime.setText(stamp);
         if (!StringUtil.isEmpty(bean.getHeadicon())) {
-            MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
+            MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear,bean.getHeadicon(), true);
         }
         holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
         holder.itemView.setTag(bean);

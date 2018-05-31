@@ -198,6 +198,8 @@ public class DbHelperAssist {
 
         }
 
+    }
+    private void  cope(UserBean Uvo,UserBean SaVo){
 
     }
 

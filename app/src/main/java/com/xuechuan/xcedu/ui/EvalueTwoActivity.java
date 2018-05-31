@@ -254,9 +254,9 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void submitEvalut(String str) {
-        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
-        UserBean user = userInfom.getData().getUser();
-        EvalueVo.DatasBean bean = new EvalueVo.DatasBean();
+//        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+//        UserBean user = userInfom.getData().getUser();
+     /*   EvalueVo.DatasBean bean = new EvalueVo.DatasBean();
         bean.setCommentcount(0);
         bean.setCommentid(Integer.parseInt(mCommonid));
         bean.setContent(str);
@@ -267,7 +267,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         List<EvalueVo.DatasBean> beans = new ArrayList<>();
         beans.add(bean);
         addListData(beans);
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
         mEtInfomTwoContent.setText("");
         mPresenter.submitContent(mContext, mQuestion, str, mCommonid, DataMessageVo.QUESTION);
     }
@@ -278,7 +278,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         if (mDialog1 != null) {
             mDialog1.dismiss();
         }
-        Toast.makeText(EvalueTwoActivity.this, "评论提交成功", Toast.LENGTH_SHORT).show();
+        T.showToast(mContext, getString(R.string.evelua_sucee));
     }
 
     @Override

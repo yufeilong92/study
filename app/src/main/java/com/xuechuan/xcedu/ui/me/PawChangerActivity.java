@@ -17,6 +17,7 @@ import com.xuechuan.xcedu.mvp.contract.ChangPawContract;
 import com.xuechuan.xcedu.mvp.model.ChangPawModel;
 import com.xuechuan.xcedu.mvp.presenter.ChangPawPresenter;
 import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.utils.Md5;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChangerPawVo;
 
@@ -98,7 +99,7 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
             T.showToast(mContext, getString(R.string.paw_no_same));
             return;
         }
-        mPresenter.submitChangerPaw(mContext, paw, newPaw);
+        mPresenter.submitChangerPaw(mContext, Md5.getMD5String(paw) ,Md5.getMD5String(newPaw));
     }
 
     @Override

@@ -87,20 +87,6 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mLlInfomSend;
     private long lastRefreshTime;
     private static String ISSHOWEDITE = "misshowedite";
-    private boolean mIsShow;
-
-    /*   public static void newInstance(Context context, String url) {
-        Intent intent = new Intent(context, InfomDetailActivity.class);
-        intent.putExtra(URLPARAM, url);
-        context.startActivity(intent);
-    }*/
-    public static Intent startInstance(Context context, String url, String id, String usertype) {
-        Intent intent = new Intent(context, InfomDetailActivity.class);
-        intent.putExtra(URLPARAM, url);
-        intent.putExtra(MOID, id);
-        intent.putExtra(MTYPE, usertype);
-        return intent;
-    }
 
     /***
      *
@@ -147,16 +133,16 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initData() {
-         mEtInfomContent.setOnFocusChangeListener(new OnFocusChangeListener() {
-             @Override
-             public void onFocusChange(View v, boolean hasFocus) {
-                 if(hasFocus){
+        mEtInfomContent.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
 
-                 }else {
-                     Utils.hideInputMethod(mContext,mEtInfomContent);
-                 }
-             }
-         });
+                } else {
+                    Utils.hideInputMethod(mContext, mEtInfomContent);
+                }
+            }
+        });
     }
 
 
@@ -308,22 +294,28 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
      *
      * @param view
      */
+    int integer;
     private void bindHearData(View view) {
         CheckBox chb_select = view.findViewById(R.id.chb_iofom_detial_supper);
         LinearLayout mliSupper = view.findViewById(R.id.li_supperNumber);
-        TextView tvNumber = view.findViewById(R.id.tv_iofom_detail_suppernumber);
+        final TextView tvNumber = view.findViewById(R.id.tv_iofom_detail_suppernumber);
         TextView tvHearNumber = view.findViewById(R.id.tv_h_evalue);
         tvHearNumber.setVisibility(View.VISIBLE);
         tvHearNumber.setText("评论()");
         mliSupper.setVisibility(View.VISIBLE);
+        integer = Integer.parseInt(mSupperNumber);
         chb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 L.e(isChecked + "是否点赞");
                 if (isChecked) {
                     requestSupper("true");
+                    integer+=1;
+                    tvNumber.setText(integer + "");
                 } else {
+                    integer-=1;
                     requestSupper("false");
+                    tvNumber.setText(integer + "");
                 }
             }
         });
@@ -463,24 +455,26 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 Gson gson = new Gson();
                 BaseVo vo = gson.fromJson(message, BaseVo.class);
                 if (vo.getStatus().getCode() == 200) {
-                    T.showToast(mContext, "提交成功");
-                    UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
-                    EvalueVo.DatasBean evalue = new EvalueVo.DatasBean();
-                    evalue.setContent(content);
-                    String s = TimeUtil.dateToString(new Date());
-                    evalue.setCreatetime(s);
-                    UserBean user = userInfom.getData().getUser();
-                    evalue.setNickname(user.getNickname());
-                    evalue.setHeadicon(user.getHeadicon());
-                    evalue.setMemberid(user.getId());
-                    List<EvalueVo.DatasBean> beans = new ArrayList<>();
-                    beans.add(evalue);
-                    addListData(beans);
-                    adapter.notifyDataSetChanged();
+                    T.showToast(mContext, getString(R.string.evelua_sucee));
+
+//                    UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
+//                    EvalueVo.DatasBean evalue = new EvalueVo.DatasBean();
+//                    evalue.setContent(content);
+//                    String s = TimeUtil.dateToString(new Date());
+//                    evalue.setCreatetime(s);
+//                    UserBean user = userInfom.getData().getUser();
+//                    evalue.setNickname(user.getNickname());
+//                    evalue.setHeadicon(user.getHeadicon());
+//                    evalue.setMemberid(user.getId());
+//                    List<EvalueVo.DatasBean> beans = new ArrayList<>();
+//                    beans.add(evalue);
+//                    addListData(beans);
+//                    adapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
             }
+
             @Override
             public void onError(Response<String> response) {
 

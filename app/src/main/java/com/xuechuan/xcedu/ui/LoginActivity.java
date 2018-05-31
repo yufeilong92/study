@@ -304,8 +304,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             mDialog.dismiss();
         }
         L.d("登录成功", message);
-        String code = JSONObject.quote(message);
-        L.w(code);
         Gson gson = new Gson();
         UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
         if (vo.getStatus().getCode() == 200) {
