@@ -295,6 +295,7 @@ public class BaseHttpServcie {
                             dialog.dismiss();
                         }
                         L.e("数据异常");
+                        T.showToast(mContext,R.string.net_error);
                         L.e(response.message());
                         callBackView.onError(response);
                     }

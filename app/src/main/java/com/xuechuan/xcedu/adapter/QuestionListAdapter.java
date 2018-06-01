@@ -32,20 +32,20 @@ import java.util.List;
 public class QuestionListAdapter extends BaseRecyclerAdapter<QuestionListAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private  List<ResultQuesitonVo.DatasBean> mData;
+    private List<ResultQuesitonVo.DatasBean> mData;
     private final LayoutInflater mInflater;
 
     private onItemClickListener clickListener;
 
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
-        }
-
-        public void setClickListener(onItemClickListener clickListener) {
-            this.clickListener = clickListener;
     }
 
-    public QuestionListAdapter(Context mContext,  List<ResultQuesitonVo.DatasBean> mData) {
+    public void setClickListener(onItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public QuestionListAdapter(Context mContext, List<ResultQuesitonVo.DatasBean> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
@@ -67,8 +67,10 @@ public class QuestionListAdapter extends BaseRecyclerAdapter<QuestionListAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
         ResultQuesitonVo.DatasBean datasBean = mData.get(position);
-        
+
         holder.mTvItemInfomlistTitel.setText(new HtmlSpanner().fromHtml(datasBean.getQuestion()));
+        holder.itemView.setTag(datasBean);
+        holder.itemView.setId(position);
 
     }
 
@@ -79,9 +81,9 @@ public class QuestionListAdapter extends BaseRecyclerAdapter<QuestionListAdapter
 
     @Override
     public void onClick(View v) {
-         if (clickListener!=null){
-             clickListener.onClickListener(v.getTag(),v.getId());
-         }
+        if (clickListener != null) {
+            clickListener.onClickListener(v.getTag(), v.getId());
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,7 +92,6 @@ public class QuestionListAdapter extends BaseRecyclerAdapter<QuestionListAdapter
         public ViewHolder(View itemView) {
             super(itemView);
             this.mTvItemInfomlistTitel = (TextView) itemView.findViewById(R.id.tv_result_title);
-
 
 
         }

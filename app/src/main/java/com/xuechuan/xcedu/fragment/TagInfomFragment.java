@@ -136,6 +136,7 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
                 ArticleVo vo = (ArticleVo) obj;
                 Log.e("====", "onClickListener: " );
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, String.valueOf(vo.getSupportcount()));
+//                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }
 

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <provinces>
     <province>
+        <name>全国</name>
+        <code>000000</code>
+    </province>
+    <province>
         <name>北京</name>
         <code>110000</code>
     </province>

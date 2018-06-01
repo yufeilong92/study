@@ -21,7 +21,7 @@ import com.xuechuan.xcedu.ui.RegisterActivity;
  * @Copyright: 2018
  */
 public class CountdownUtil {
-    int recLen = 0;
+    int recLen = 60;
     private Context mContext;
     Handler handler = new Handler();
     private static CountdownUtil util;
@@ -30,17 +30,17 @@ public class CountdownUtil {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            recLen++;
-            if (recLen > 59) {
+            recLen--;
+            if (recLen ==0) {
                 button.setText("重新发送");
                 button.setEnabled(true);
                 button.setTextColor(mContext.getResources().getColor(R.color.red_text));
-                recLen = 0;
+                recLen = 60;
                 return;
             }
             button.setTextColor(mContext.getResources().getColor(R.color.gray_text));
             button.setText("重发" + "(" + recLen + ")");
-            handler.postDelayed(this, 2000);
+            handler.postDelayed(this, 1000);
         }
     };
 

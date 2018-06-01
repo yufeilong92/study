@@ -3,13 +3,12 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
@@ -29,7 +28,6 @@ import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ArticleListVo;
 import com.xuechuan.xcedu.vo.ArticleVo;
-import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
     private String mSearchkey;
     private String mType;
     private RecyclerView mRlvReasultContent;
-    private TextView mTvEmpty;
+    private ImageView mTvEmpty;
     private XRefreshView mXrfResultContent;
 
     private List mArray;
@@ -122,6 +120,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA, vo.getSupportcount());
+//                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }
         });
@@ -175,7 +174,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
     private void initView(View view) {
         mContext = getActivity();
         mRlvReasultContent = (RecyclerView) view.findViewById(R.id.rlv_reasult_content);
-        mTvEmpty = (TextView) view.findViewById(R.id.tv_empty);
+        mTvEmpty = (ImageView) view.findViewById(R.id.tv_empty);
         mXrfResultContent = (XRefreshView) view.findViewById(R.id.xrf_result_content);
     }
 

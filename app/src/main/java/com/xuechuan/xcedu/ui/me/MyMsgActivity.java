@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.xuechuan.xcedu.mvp.contract.MyMsgContract;
 import com.xuechuan.xcedu.mvp.model.MyMsgModel;
 import com.xuechuan.xcedu.mvp.presenter.MyMsgPresenter;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.vo.MyMsgVo;
 import com.xuechuan.xcedu.vo.MyOrderVo;
 
 import java.util.ArrayList;
@@ -115,6 +117,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new MyMsgAdapter(mContext, mArrary);
         mRlvMyMsg.setLayoutManager(gridLayoutManager);
+        mRlvMyMsg.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
         mRlvMyMsg.setAdapter(adapter);
     }
 
@@ -156,30 +159,30 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         isRefresh = false;
         Gson gson = new Gson();
         Log.e("=====", "MyMsgSuccess: "+con );
-//        MyOrderVo orderVo = gson.fromJson(con, MyOrderVo.class);
-//        if (orderVo.getStatus().getCode() == 200) {
-//            List<MyOrderVo.DatasBean> datas = orderVo.getDatas();
-//            clearData();
-//            if (datas != null && !datas.isEmpty()) {
-//                addListData(datas);
-//            } else {
-//                mXfvContentMsg.setPullRefreshEnable(true);
-//                mXfvContentMsg.setLoadComplete(true);
-//                adapter.notifyDataSetChanged();
-//                return;
-//            }
-//            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
-//                mXfvContentMsg.setPullRefreshEnable(true);
-//                mXfvContentMsg.setLoadComplete(true);
-//            } else {
-//                mXfvContentMsg.setPullLoadEnable(true);
-//                mXfvContentMsg.setLoadComplete(false);
-//            }
-//            adapter.notifyDataSetChanged();
-//        } else {
-//            isRefresh = false;
-//            L.e(orderVo.getStatus().getMessage());
-//        }
+        MyMsgVo orderVo = gson.fromJson(con, MyMsgVo.class);
+        if (orderVo.getStatus().getCode() == 200) {
+            List<MyMsgVo.DatasBean> datas = orderVo.getDatas();
+            clearData();
+            if (datas != null && !datas.isEmpty()) {
+                addListData(datas);
+            } else {
+                mXfvContentMsg.setPullRefreshEnable(true);
+                mXfvContentMsg.setLoadComplete(true);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+                mXfvContentMsg.setPullRefreshEnable(true);
+                mXfvContentMsg.setLoadComplete(true);
+            } else {
+                mXfvContentMsg.setPullLoadEnable(true);
+                mXfvContentMsg.setLoadComplete(false);
+            }
+            adapter.notifyDataSetChanged();
+        } else {
+            isRefresh = false;
+            L.e(orderVo.getStatus().getMessage());
+        }
     }
 
     @Override
@@ -192,9 +195,9 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
     public void MyMsgMoreSuccess(String con) {
         isRefresh = false;
         Gson gson = new Gson();
-        MyOrderVo orderVo = gson.fromJson(con, MyOrderVo.class);
+        MyMsgVo orderVo = gson.fromJson(con, MyMsgVo.class);
         if (orderVo.getStatus().getCode() == 200) {
-            List<MyOrderVo.DatasBean> datas = orderVo.getDatas();
+            List<MyMsgVo.DatasBean> datas = orderVo.getDatas();
 //                    clearData();
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);

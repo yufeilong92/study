@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
@@ -55,7 +56,7 @@ public class SpecasListActivity extends BaseActivity {
      * 防止冲突
      */
     private boolean isRefresh = false;
-    private TextView mTvNetEmptyContent;
+    private ImageView mTvNetEmptyContent;
 
     public static Intent newInstance(Context context, String parame, String parame1) {
         Intent intent = new Intent(context, SpecasListActivity.class);
@@ -227,11 +228,7 @@ public class SpecasListActivity extends BaseActivity {
         mRlvSpecaContent = (RecyclerView) findViewById(R.id.rlv_speca_content);
         mXrfvSpecaRefresh = (XRefreshView) findViewById(R.id.xrfv_speca_refresh);
 
-        mTvNetEmptyContent = (TextView) findViewById(R.id.tv_net_empty_content);
-    }
-
-    private void initRefresh(SpecsOrderAdapter adapter) {
-
+        mTvNetEmptyContent = (ImageView) findViewById(R.id.tv_net_empty_content);
     }
 
     private void clearData() {

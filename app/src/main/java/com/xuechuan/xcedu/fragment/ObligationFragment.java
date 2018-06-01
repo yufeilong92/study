@@ -347,7 +347,9 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
 
     @Override
     public void PaySuccess(String type) {
-
+        if (mXfvContentOrderOb != null) {
+            mXfvContentOrderOb.startRefresh();
+        }
     }
 
     @Override

@@ -27,30 +27,39 @@ import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
+import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.InfomDetailAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.BaseVo;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.contract.InfomDetailContract;
+import com.xuechuan.xcedu.mvp.model.InfomDetailModel;
+import com.xuechuan.xcedu.mvp.presenter.InfomDetailPresenter;
 import com.xuechuan.xcedu.net.CurrencyService;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.ArticleBean;
 import com.xuechuan.xcedu.vo.EvalueVo;
+import com.xuechuan.xcedu.vo.InfomDetailVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class InfomDetailActivity extends BaseActivity implements View.OnClickListener {
+public class InfomDetailActivity extends BaseActivity implements View.OnClickListener, InfomDetailContract.View {
     /**
      * 资讯id
      */
@@ -87,6 +96,11 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mLlInfomSend;
     private long lastRefreshTime;
     private static String ISSHOWEDITE = "misshowedite";
+    private CheckBox chb_select;
+    private LinearLayout mliSupper;
+    private TextView tvNumber;
+    private TextView tvHearNumber;
+    private InfomDetailPresenter mPresenter;
 
     /***
      *
@@ -103,6 +117,14 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         intent.putExtra(MOID, id);
         intent.putExtra(MTYPE, usertype);
         intent.putExtra(SUPPER, supper);
+        return intent;
+    }
+
+    public static Intent startInstance(Context context, String id, String url, String usertype) {
+        Intent intent = new Intent(context, InfomDetailActivity.class);
+        intent.putExtra(URLPARAM, url);
+        intent.putExtra(MOID, id);
+        intent.putExtra(MTYPE, usertype);
         return intent;
     }
 
@@ -143,6 +165,9 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
+        mPresenter = new InfomDetailPresenter();
+        mPresenter.initModelView(new InfomDetailModel(), this);
+
     }
 
 
@@ -155,11 +180,9 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         bankService.requestArticleCommentList(mTargetid, 1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
-                if (mDialog != null) {
-                    mDialog.dismiss();
-                }
                 mRlInfomLayout.setVisibility(View.VISIBLE);
                 mLlInfomSend.setVisibility(View.VISIBLE);
+
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();
@@ -223,7 +246,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         final View view = inflater.inflate(R.layout.item_infom_webview, null);
         adapter.setHeaderView(view, mRlvInfomdetailContent);
         initWebView(view);
-        bindHearData(view);
+        bindHearData();
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRlvInfomdetailContent.setLayoutManager(layoutManager);
@@ -238,11 +261,23 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         adapter.setClickListener(new InfomDetailAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
-                EvalueVo.DatasBean vo = (EvalueVo.DatasBean) obj;
-                Intent intent = EvalueDetialActivity.newInstance(mContext, String.valueOf(vo.getTargetid()),
-                        String.valueOf(vo.getCommentid()));
-                intent.putExtra(EvalueDetialActivity.CSTR_EXTRA_TITLE_STR, "评论详情");
+                EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
+                EventBus.getDefault().postSticky(new EvalueTwoEvent(bean));
+                Intent intent = EvalueTwoActivity.newInstance(mContext,
+                        String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()),DataMessageVo.ARTICLE);
                 startActivity(intent);
+            }
+        });
+        adapter.setChbClickListener(new InfomDetailAdapter.onItemChbClickListener() {
+            @Override
+            public void onChbClickListener(Object obj, boolean isChecak, int position) {
+                EvalueVo.DatasBean bean= (EvalueVo.DatasBean) obj;
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                if (isChecak){
+                    util.submitSupport(String.valueOf(bean.getTargetid()),"true",DataMessageVo.USERTYPEAC);
+                }else {
+                    util.submitSupport(String.valueOf(bean.getTargetid()),"false",DataMessageVo.USERTYPEAC);
+                }
             }
         });
 
@@ -295,25 +330,23 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
      * @param view
      */
     int integer;
-    private void bindHearData(View view) {
-        CheckBox chb_select = view.findViewById(R.id.chb_iofom_detial_supper);
-        LinearLayout mliSupper = view.findViewById(R.id.li_supperNumber);
-        final TextView tvNumber = view.findViewById(R.id.tv_iofom_detail_suppernumber);
-        TextView tvHearNumber = view.findViewById(R.id.tv_h_evalue);
+
+    private void bindHearData() {
         tvHearNumber.setVisibility(View.VISIBLE);
-        tvHearNumber.setText("评论()");
+        tvHearNumber.setText("评论("+mArray.size()+")");
         mliSupper.setVisibility(View.VISIBLE);
         integer = Integer.parseInt(mSupperNumber);
         chb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 L.e(isChecked + "是否点赞");
+                if (!chb_select.isPressed()) return;
                 if (isChecked) {
                     requestSupper("true");
-                    integer+=1;
+                    integer += 1;
                     tvNumber.setText(integer + "");
                 } else {
-                    integer-=1;
+                    integer -= 1;
                     requestSupper("false");
                     tvNumber.setText(integer + "");
                 }
@@ -328,6 +361,10 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
      * @param view
      */
     private void initWebView(View view) {
+        chb_select = view.findViewById(R.id.chb_iofom_detial_supper);
+        mliSupper = view.findViewById(R.id.li_supperNumber);
+        tvNumber = view.findViewById(R.id.tv_iofom_detail_suppernumber);
+        tvHearNumber = view.findViewById(R.id.tv_h_evalue);
         WebView webview = view.findViewById(R.id.web_infom_detail);
         final LinearLayout li = view.findViewById(R.id.ll_webview_after);
         li.setVisibility(View.VISIBLE);
@@ -370,6 +407,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 li.setVisibility(View.VISIBLE);
+                mPresenter.requestGetDetail(mContext, mTargetid);
             }
         });
     }
@@ -456,25 +494,11 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 BaseVo vo = gson.fromJson(message, BaseVo.class);
                 if (vo.getStatus().getCode() == 200) {
                     T.showToast(mContext, getString(R.string.evelua_sucee));
-
-//                    UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
-//                    EvalueVo.DatasBean evalue = new EvalueVo.DatasBean();
-//                    evalue.setContent(content);
-//                    String s = TimeUtil.dateToString(new Date());
-//                    evalue.setCreatetime(s);
-//                    UserBean user = userInfom.getData().getUser();
-//                    evalue.setNickname(user.getNickname());
-//                    evalue.setHeadicon(user.getHeadicon());
-//                    evalue.setMemberid(user.getId());
-//                    List<EvalueVo.DatasBean> beans = new ArrayList<>();
-//                    beans.add(evalue);
-//                    addListData(beans);
-//                    adapter.notifyDataSetChanged();
+                    mEtInfomContent.setText(null);
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
             }
-
             @Override
             public void onError(Response<String> response) {
 
@@ -482,4 +506,49 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    @Override
+    public void GetDetailSuccess(String con) {
+        Gson gson = new Gson();
+        InfomDetailVo vo = gson.fromJson(con, InfomDetailVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            ArticleBean data = vo.getData();
+            bindData(data);
+        } else {
+            L.e(vo.getStatus().getMessage());
+        }
+    }
+
+    private void bindData(ArticleBean data) {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+        integer = data.getSupportcount();
+        chb_select.setChecked(data.isIssupport());
+        bindHearData();
+    }
+
+    @Override
+    public void GetDetailError(String con) {
+
+    }
+
+    @Override
+    public void EvalueMoreDetail(String con) {
+
+    }
+
+    @Override
+    public void EvalueMoreDetailErr(String con) {
+
+    }
+
+    @Override
+    public void EvalueDetail(String con) {
+
+    }
+
+    @Override
+    public void EvalueDetailErr(String con) {
+
+    }
 }

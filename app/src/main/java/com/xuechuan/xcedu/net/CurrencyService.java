@@ -2,9 +2,11 @@ package com.xuechuan.xcedu.net;
 
 import android.content.Context;
 
+import com.umeng.debug.log.E;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseHttpServcie;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.GetParamVo;
@@ -75,10 +77,10 @@ public class CurrencyService extends BaseHttpServcie {
 
     /**
      * 点赞接口
-     * @param targetid 赞主体编号
-     * @param issupport 赞或取消赞 true 赞 false 取消赞
-     * @param usetype  类型ac文章评论 a文章qc问题评论 vc视频评论
-
+     *
+     * @param targetid     赞主体编号
+     * @param issupport    赞或取消赞 true 赞 false 取消赞
+     * @param usetype      类型ac文章评论 a文章qc问题评论 vc视频评论
      * @param callBackView
      */
     public void subimtSpport(String targetid, String issupport, String usetype, StringCallBackView callBackView) {
@@ -89,20 +91,64 @@ public class CurrencyService extends BaseHttpServcie {
         UserBean user = login.getData().getUser();
         JSONObject obj = getJsonObj();
         try {
-            obj.put("staffid",user.getId());
-            obj.put("targetid",targetid);
-            obj.put("issupport",issupport);
-            obj.put("usetype",usetype);
+            obj.put("staffid", user.getId());
+            obj.put("targetid", targetid);
+            obj.put("issupport", issupport);
+            obj.put("usetype", usetype);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String url = getUrl(mContext, R.string.http_laud);
-        requestHttpServciePost(mContext,url,obj,true,callBackView);
+        requestHttpServciePost(mContext, url, obj, true, callBackView);
     }
 
 
+    /**
+     * 获取评论的评论
+     *
+     * @param commnetid
+     * @param type
+     * @param view
+     */
+    public void requestEvalueData(int page, String commnetid, String type, StringCallBackView view) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        if (page <= 0) {
+            page = 1;
+        }
+        UserBean user = login.getData().getUser();
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        GetParamVo paramVo3 = getParamVo();
+        paramVo3.setParam("page");
+        paramVo3.setValue(String.valueOf(page));
+        GetParamVo paramVo4 = getParamVo();
+        paramVo4.setParam("pagesize");
+        paramVo4.setValue("10");
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("commentid");
+        GetParamVo paramVo2 = getParamVo();
+        paramVo2.setParam("staffid");
+        paramVo2.setValue(String.valueOf(user.getId()));
+        paramVo1.setValue(commnetid);
+        listParamVo.add(paramVo3);
+        listParamVo.add(paramVo4);
+        listParamVo.add(paramVo2);
+        listParamVo.add(paramVo1);
+        String url="";
+        if (type.equals(DataMessageVo.ARTICLE)) {
+            url= getUrl(mContext,R.string.http_homecommentcomment);
+        }else if (type.equals(DataMessageVo.QUESTION)){
+            url = getUrl(mContext, R.string.http_commentcomment);
+        }else if (type.equals(DataMessageVo.VIDEO)){
+            url = getUrl(mContext, R.string.http_getvideocommentcomment);
+        }
+        requestHttpServiceGet(mContext, url, listParamVo, true, view);
 
+
+    }
 
 
 }

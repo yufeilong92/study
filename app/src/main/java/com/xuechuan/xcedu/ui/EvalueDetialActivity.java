@@ -3,15 +3,20 @@ package com.xuechuan.xcedu.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.HomeEvaluateAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
@@ -19,9 +24,13 @@ import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.TimeSampUtil;
+import com.xuechuan.xcedu.utils.TimeUtil;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.SpecasChapterListVo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +53,8 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
      * commentid
      */
     private static String COMMENTID = "commentid ";
+
+    private static String EVALUEDATA = "evaluedata";
     private RecyclerView mRlvEvalueDetail;
     private XRefreshView mXfvEvauleContent;
     private boolean isRefresh;
@@ -53,20 +64,38 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
 
     private String mArticleid;
     private String mCommentid;
+    private EvalueVo.DatasBean mDataVo;
+    private ImageView mIvEvaluateHear;
+    private TextView mTvEvalueUserName;
+    private TextView mTvEvalueContent;
+    private TextView mTvEvalueTime;
+    private TextView mTvEvalueEvalue;
+    private CheckBox mChbEvaluaIssupper;
+    private TextView mTvEvalueSuppernumber;
+    private ImageView mTvXfrContentEmpty;
 
     /**
-     *
      * @param context
      * @param articleid
      * @param commentid
      * @return
      */
-    public static Intent newInstance(Context context, String articleid, String commentid) {
+    public static Intent newInstance(Context context, EvalueVo.DatasBean vo, String articleid, String commentid) {
         Intent intent = new Intent(context, EvalueDetialActivity.class);
         intent.putExtra(ARTICLEID, articleid);
+        intent.putExtra(EVALUEDATA, (Serializable) vo);
         intent.putExtra(COMMENTID, commentid);
         return intent;
     }
+
+/*
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_evalue_detial);
+        initView();
+    }
+*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -74,6 +103,7 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         if (getIntent() != null) {
             mArticleid = getIntent().getStringExtra(ARTICLEID);
             mCommentid = getIntent().getStringExtra(ARTICLEID);
+            mDataVo = (EvalueVo.DatasBean) getIntent().getSerializableExtra(EVALUEDATA);
         }
         initView();
         clearData();
@@ -84,6 +114,10 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
+        MyAppliction.getInstance().displayImages(mIvEvaluateHear,mDataVo.getHeadicon(),true);
+        mTvEvalueContent.setText(mDataVo.getContent());
+        mTvEvalueTime.setText(TimeSampUtil.getStringTimeStamp(mDataVo.getCreatetime()));
+        mTvEvalueUserName.setText(mDataVo.getNickname());
 
     }
 
@@ -117,12 +151,12 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void loadMoreData() {
-        if (isRefresh){
+        if (isRefresh) {
             return;
         }
-        isRefresh=true;
+        isRefresh = true;
         HomeService service = new HomeService(mContext);
-        service.requestCommentCommentList(getNowPage()+1,mArticleid, mCommentid, new StringCallBackView() {
+        service.requestCommentCommentList(getNowPage() + 1, mArticleid, mCommentid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 isRefresh = false;
@@ -159,7 +193,7 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onError(Response<String> response) {
                 isRefresh = false;
-                T.showToast(mContext,response.message());
+                T.showToast(mContext, response.message());
             }
         });
 
@@ -171,7 +205,7 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         }
         isRefresh = true;
         HomeService service = new HomeService(mContext);
-        service.requestCommentCommentList(1,mArticleid, mCommentid, new StringCallBackView() {
+        service.requestCommentCommentList(1, mArticleid, mCommentid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 isRefresh = false;
@@ -206,7 +240,7 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onError(Response<String> response) {
                 isRefresh = false;
-                T.showToast(mContext,response.message());
+                T.showToast(mContext, response.message());
             }
         });
 
@@ -221,7 +255,24 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         mContext = this;
         mRlvEvalueDetail = (RecyclerView) findViewById(R.id.rlv_evalue_detail);
         mXfvEvauleContent = (XRefreshView) findViewById(R.id.xfv_evaule_content);
+        mIvEvaluateHear = (ImageView) findViewById(R.id.iv_evaluate_hear);
+        mIvEvaluateHear.setOnClickListener(this);
+        mTvEvalueUserName = (TextView) findViewById(R.id.tv_evalue_user_name);
+        mTvEvalueUserName.setOnClickListener(this);
+        mTvEvalueContent = (TextView) findViewById(R.id.tv_evalue_content);
+        mTvEvalueContent.setOnClickListener(this);
+        mTvEvalueTime = (TextView) findViewById(R.id.tv_evalue_time);
+        mTvEvalueTime.setOnClickListener(this);
+        mTvEvalueEvalue = (TextView) findViewById(R.id.tv_evalue_evalue);
+        mTvEvalueEvalue.setOnClickListener(this);
+        mChbEvaluaIssupper = (CheckBox) findViewById(R.id.chb_evalua_issupper);
+        mChbEvaluaIssupper.setOnClickListener(this);
+        mTvEvalueSuppernumber = (TextView) findViewById(R.id.tv_evalue_suppernumber);
+        mTvEvalueSuppernumber.setOnClickListener(this);
+        mTvXfrContentEmpty = (ImageView) findViewById(R.id.tv_xfr_content_empty);
+        mTvXfrContentEmpty.setOnClickListener(this);
     }
+
     /**
      * 当前数据有几页
      *
@@ -235,6 +286,7 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
         else
             return mArray.size() / DataMessageVo.CINT_PANGE_SIZE + 1;
     }
+
     private void clearData() {
         if (mArray == null) {
             mArray = new ArrayList();

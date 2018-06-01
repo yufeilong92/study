@@ -3,7 +3,6 @@ package com.xuechuan.xcedu.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +66,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     private PerInfomVo.DataBean mDataInfom;
     private PersionInfomPresenter mPresenter;
     private ImageView mIvPersionImg;
+    private ImageView mIvMPSystem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,14 +89,13 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         return fragment;
     }
 
-  /*  @Override
+ /*   @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_persional, container, false);
         initView(view);
         return view;
-    }
-*/
+    }*/
 
     @Override
     protected int initInflateView() {
@@ -155,6 +154,8 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
 
         mIvPersionImg = (ImageView) view.findViewById(R.id.iv_persion_img);
         mIvPersionImg.setOnClickListener(this);
+        mIvMPSystem = (ImageView) view.findViewById(R.id.iv_m_p_system);
+        mIvMPSystem.setOnClickListener(this);
     }
 
     @Override
@@ -234,12 +235,16 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         if (!StringUtil.isEmpty(data.getHeadicon())) {
             MyAppliction.getInstance().displayImages(mIvMHear, data.getHeadicon(), true);
         }
-        if (data.isIshasnews()) {
+        if (data.isIshavemembernotify()) {
             mIvPersionImg.setImageResource(R.mipmap.m_icon_massage_n);
         } else {
             mIvPersionImg.setImageResource(R.mipmap.ic_m_massage);
         }
 
+        // TODO: 2018/6/1 系统通知
+        if (data.isIshavesystemnotify()) {
+
+        }
 
     }
 

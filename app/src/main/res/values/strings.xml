@@ -71,6 +71,8 @@
     <string name="http_datail">/api/question/getdetail</string>
     <!--题目评论-->
     <string name="http_questioncmment">/api/question/getquestioncomment</string>
+    <!--根据文章编号获取文章详情-->
+    <string name="http_getdetail">/api/article/getdetail</string>
 
     <!--获取题目评论二级评论-->
     <string name="http_commentcomment">/api/question/getcommentcomment</string>
@@ -310,5 +312,8 @@
     <string name="pas_changer_error">密码修改失败</string>
     <string name="no_try_see">本课目没有提供试看视频</string>
     <string name="evelua_sucee">提交成功，等待审核，</string>
+    <string name="changesuccess">修改成功</string>
+    <string name="sure_out">确定退出</string>
+    <string name="look">查看</string>
 
 </resources>

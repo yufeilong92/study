@@ -67,7 +67,7 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         ArticleBean bean = mData.get(position);
         holder.mTvItemHomeTitleAll.setText(bean.getTitle());
         holder.mTvItemHomeLookAll.setText(bean.getViewcount() + "");
-        holder.mTvItemHomeLaudAll.setText(bean.getSupportcount() + "");
+        holder.mChbIsSupper.setText(bean.getSupportcount() + "");
         if (StringUtil.isEmpty( bean.getThumbnailimg())) {
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
@@ -75,6 +75,7 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
             MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll, bean.getThumbnailimg(), false);
         }
         holder.mChbIsSupper.setChecked(bean.isIssupport());
+
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
     }

@@ -360,7 +360,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     public void submitSuccess(String con) {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
-        if (vo.getStatus().getCode()==200){
+        if (vo.getStatus().getCode() == 200) {
             if (mDelPostion != -1 && mDelPostion >= 0) {
                 mArrary.remove(mDelPostion);
                 mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
@@ -373,7 +373,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 adapter.notifyDataSetChanged();
                 mCancelpostion = -1;
             }
-        }else {
+        } else {
             L.e(vo.getStatus().getMessage());
         }
 
@@ -387,7 +387,9 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
 
     @Override
     public void PaySuccess(String type) {
-
+        if (mXfvContentOrderAll != null) {
+            mXfvContentOrderAll.startRefresh();
+        }
     }
 
     @Override

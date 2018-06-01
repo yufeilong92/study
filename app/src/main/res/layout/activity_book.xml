@@ -22,6 +22,8 @@
         <ImageView style="@style/TitleBarAction" />
 
     </LinearLayout>
+    <View
+      style="@style/view_line_tab_line"/>
 <android.support.v7.widget.RecyclerView
     android:id="@+id/rlv_book_content"
     android:layout_width="match_parent"

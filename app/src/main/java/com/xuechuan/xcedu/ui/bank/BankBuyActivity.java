@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
@@ -37,6 +38,7 @@ import com.xuechuan.xcedu.ui.BuyResultActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PayUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BankValueVo;
 import com.xuechuan.xcedu.vo.BuyFromResultVo;
@@ -95,10 +97,19 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
      */
     private static final int SDK_PAY_FLAG = 1;
     private MyTextPresenter mPresenter;
+    private String mCountid;
+    //题干
+    public static String TEXT = "text";
+    //个人
+    public static String PERSION = "persion";
+    //类型
+    public static String TYPE = "type";
+    private String mType;
 
-    public static Intent newInstance(Context context, String countid) {
+    public static Intent newInstance(Context context, String countid, String type) {
         Intent intent = new Intent(context, BankBuyActivity.class);
         intent.putExtra(COUNTID, countid);
+        intent.putExtra(TYPE, type);
         return intent;
     }
 
@@ -114,12 +125,16 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_bank_buy);
+        if (getIntent() != null) {
+            mCountid = getIntent().getStringExtra(COUNTID);
+            mType = getIntent().getStringExtra(TYPE);
+        }
         initView();
         api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID);
         api.registerApp(DataMessageVo.APP_ID);
 //        mPresenter = new PayPresenter(new PayModelImpl(), this);
         mPresenter = new MyTextPresenter();
-        mPresenter.initModelView(new MyTextModel(),this);
+        mPresenter.initModelView(new MyTextModel(), this);
         mPresenter.reuqestBookId(mContext);
 
     }
@@ -127,6 +142,17 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
 
     private void initData(List<BankValueVo.DatasBean> bean) {
         bindData(bean);
+        if (!StringUtil.isEmpty(mCountid)) {
+            if (mCountid.equals("1")) {
+                mChbBPaySkill.setChecked(true);
+            } else if (mCountid.equals("2")) {
+                mChbBPayCollo.setChecked(true);
+            } else if (mCountid.equals("3")) {
+                mChbBPayCase.setChecked(true);
+            }
+        }
+
+        mChbBPayWeixin.setChecked(true);
         mChbBPaySkill.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -379,9 +405,10 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
                     @SuppressWarnings("unchecked")
                     PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     */
-/**
-                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                     *//*
+
+    /**
+     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+     *//*
 
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                     String resultStatus = payResult.getResultStatus();
@@ -461,7 +488,6 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
 
     }
 */
-
     @Override
     public void BookIDSuccess(String con) {
         Gson gson = new Gson();
@@ -483,7 +509,12 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
 
     @Override
     public void PaySuccess(String type) {
+        if (mType.equals(TEXT)) {//题干
+            HomeActivity.startInstance(mContext, HomeActivity.BOOK);
+            finish();
+        } else if (mType.equals(PERSION)) {
 
+        }
     }
 
     @Override

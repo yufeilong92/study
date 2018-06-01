@@ -97,6 +97,7 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     private void initData() {
         colPresenter = new ColoctPresenter(new ColoctModelImpl(), this);
         colPresenter.getErrOrCollNumber(mContext, mTypeOid);
+        colPresenter.requestBuyInfom(mContext,mTypeOid);
 
     }
 
@@ -145,19 +146,19 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.iv_b_co_text://模拟考试
-                if (ifBuyBook()) {
                     Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPECOLLORT);
                     intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
                     startActivity(intent3);
-                } else {
-                    buyBook();
-                }
+
                 break;
             case R.id.tv_b_co_free://自由 组卷
+                T.showToast(mContext,"该科暂不提供");
                 break;
             case R.id.tv_b_co_shunxu://顺序练习
+                T.showToast(mContext,"该科暂不提供");
                 break;
             case R.id.tv_b_co_zhuanxiang://专项练习
+                T.showToast(mContext,"该科暂不提供");
                 break;
 
 
@@ -212,7 +213,15 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void BuyError(String con) {
+        Gson gson = new Gson();
+        BuyVo vo = gson.fromJson(con, BuyVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            BuyVo.DataBean data = vo.getData();
+            DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
 
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
     }
 
     @Override

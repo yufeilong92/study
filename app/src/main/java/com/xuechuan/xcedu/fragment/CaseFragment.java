@@ -105,6 +105,7 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
     private void initData() {
         mCasePresenter = new CasePresenter(new CaseModelImpl(), this);
         mCasePresenter.getErrOrCollNumber(mContext, mTypeOid);
+        mCasePresenter.requestBuyInfom(mContext,mTypeOid);
     }
 
 
@@ -141,12 +142,12 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
                 }
                 break;
             case R.id.ll_b_case_collect://我的收藏
-                if (mData!=null){
-                Intent intent2 =
-                        MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
-                                MyErrorOrCollectTextActivity.FAVTYPE, String.valueOf(mData.getFavorite()));
-                intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
-                startActivity(intent2);
+                if (mData != null) {
+                    Intent intent2 =
+                            MyErrorOrCollectTextActivity.newInstance(mContext, mTypeOid,
+                                    MyErrorOrCollectTextActivity.FAVTYPE, String.valueOf(mData.getFavorite()));
+                    intent2.putExtra(MyErrorOrCollectTextActivity.CSTR_EXTRA_TITLE_STR, "我的收藏");
+                    startActivity(intent2);
                 }
                 break;
             case R.id.iv_b_case_order://章节
@@ -155,54 +156,31 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
                 startActivity(intent);
                 break;
             case R.id.iv_b_case_text://考试
-                if (ifBuyBook()){
                 Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPECASE);
                 intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
                 startActivity(intent3);
-                }else {
-                    buyBook();
-                }
                 break;
             case R.id.tv_b_case_free://自由
-                if (ifBuyBook()){
-                    Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
-                    intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
-                    startActivity(intent6);
-                }else {
-                    buyBook();
-                }
+                Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
+                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
+                startActivity(intent6);
                 break;
             case R.id.tv_b_case_zhuanxiang://专项
-                if (ifBuyBook()){
                 Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
                 intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
                 startActivity(intent4);
-                }else {
-                    buyBook();
-                }
                 break;
             case R.id.tv_b_case_shunxu://顺序
-                if (ifBuyBook()){
-
                 Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
                 intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
                 startActivity(intent5);
-                }else {
-                    buyBook();
-                }
                 break;
             default:
                 break;
         }
     }
 
-    public boolean ifBuyBook() {
-        UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
-        return db.getCaseBook();
-    }
-    public void buyBook(){
 
-    }
 
     @Override
     public void ErrorOrCollortNumberSuccess(String con) {
@@ -234,14 +212,22 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
             DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
-        }else {
+        } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
     @Override
     public void BuyError(String con) {
+        Gson gson = new Gson();
+        BuyVo vo = gson.fromJson(con, BuyVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            BuyVo.DataBean data = vo.getData();
+            DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
 
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
     }
 
     @Override

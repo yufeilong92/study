@@ -175,6 +175,39 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_register_agreem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/spance_36"
+                android:layout_marginRight="@dimen/spance_36"
+                >
+
+                <CheckBox
+                    android:id="@+id/chb_register_agreen"
+                    android:layout_width="@dimen/space_20"
+                    android:layout_height="@dimen/space_20"
+                    android:button="@drawable/select_free_chb_bg" />
+
+                <TextView
+                    android:textColor="@color/text_fu_color"
+                    android:layout_marginLeft="@dimen/space_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我已阅读并同意" />
+
+                <TextView
+                    android:id="@+id/tv_regiths_agreem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="《用户注册协议》"
+                    android:textColor="@color/red_text" />
+
+            </LinearLayout>
+
             <Space style="@style/space_20_height" />
 
             <Button

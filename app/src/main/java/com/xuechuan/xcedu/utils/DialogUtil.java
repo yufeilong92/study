@@ -125,7 +125,7 @@ public class DialogUtil {
      * @return
      */
     public void showContinueDialog(Context context, String page) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_continue, null);
         TextView tv = view.findViewById(R.id.tv_number);
         tv.setText(page);
@@ -164,7 +164,7 @@ public class DialogUtil {
      * @return
      */
     public void showSubmitDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_submit, null);
         builder.setView(view)
                 .setCancelable(true)
@@ -202,7 +202,7 @@ public class DialogUtil {
      * @return
      */
     public void showStopDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_time, null);
         builder.setView(view)
                 .setCancelable(false)
@@ -242,7 +242,7 @@ public class DialogUtil {
      * @return
      */
     public void showTitleDialog(Context context, String title, String btnSure, String cancale, boolean cancelable) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_title, null);
         TextView tv = view.findViewById(R.id.tv_title);
         tv.setText(title + "?");

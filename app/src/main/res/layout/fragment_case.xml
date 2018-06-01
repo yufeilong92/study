@@ -47,7 +47,7 @@
                     android:id="@+id/tv_case_wroing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20道" />
+                    android:text="" />
             </LinearLayout>
 
         </LinearLayout>
@@ -85,7 +85,7 @@
                     android:id="@+id/tv_case_coolect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20道" />
+                    android:text="" />
             </LinearLayout>
 
         </LinearLayout>

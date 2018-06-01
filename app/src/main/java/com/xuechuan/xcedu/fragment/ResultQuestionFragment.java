@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
@@ -26,13 +28,13 @@ import com.xuechuan.xcedu.mvp.model.SearchModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.SearchPresenter;
 import com.xuechuan.xcedu.mvp.view.SearchView;
 import com.xuechuan.xcedu.ui.InfomDetailActivity;
+import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ArticleListVo;
 import com.xuechuan.xcedu.vo.ArticleVo;
 import com.xuechuan.xcedu.vo.ResultQuesitonVo;
-import com.xuechuan.xcedu.weight.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +56,7 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
     private String mSearchkey;
     private String mType;
     private RecyclerView mRlvReasultContent;
-    private TextView mTvEmpty;
+    private ImageView mTvEmpty;
     private XRefreshView mXrfResultContent;
 
     private List mArray;
@@ -94,8 +96,6 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
         View view = inflater.inflate(R.layout.fragment_result, container, false);
         initView(view);
         initData();
-
-
         return view;
     }*/
 
@@ -118,7 +118,19 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new QuestionListAdapter(mContext, mArray);
         mRlvReasultContent.setLayoutManager(gridLayoutManager);
+        mRlvReasultContent.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvReasultContent.setAdapter(adapter);
+        adapter.setClickListener(new QuestionListAdapter.onItemClickListener() {
+            @Override
+            public void onClickListener(Object obj, int position) {
+
+                ResultQuesitonVo.DatasBean datasBean = (ResultQuesitonVo.DatasBean) obj;
+                Intent intent = AnswerActivity.searchInstance(mContext, String.valueOf(datasBean.getCourseid()),
+                        String.valueOf(datasBean.getId()), "search");
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -169,7 +181,7 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
     private void initView(View view) {
         mContext = getActivity();
         mRlvReasultContent = (RecyclerView) view.findViewById(R.id.rlv_reasult_content);
-        mTvEmpty = (TextView) view.findViewById(R.id.tv_empty);
+        mTvEmpty = (ImageView) view.findViewById(R.id.tv_empty);
         mXrfResultContent = (XRefreshView) view.findViewById(R.id.xrf_result_content);
     }
 

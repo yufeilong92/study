@@ -9,14 +9,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
+        android:paddingLeft="@dimen/space_16"
+        android:paddingRight="@dimen/space_16"
         android:id="@+id/rlv_reasult_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <TextView
+    <ImageView
         android:textColor="@color/text_fu_color"
-        android:gravity="center"
+        android:scaleType="center"
         android:id="@+id/tv_empty"
-        android:text="搜索内容为空"
+        android:src="@mipmap/common_blankimg_ser"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </com.andview.refreshview.XRefreshView>

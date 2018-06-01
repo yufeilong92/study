@@ -45,10 +45,12 @@ import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.ui.RegisterActivity;
 import com.xuechuan.xcedu.utils.CProgressDialogUtils;
 import com.xuechuan.xcedu.utils.CompareVersionUtil;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.HProgressDialogUtils;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.OkGoUpdateHttpUtil;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.AppUpDataVo;
@@ -168,6 +170,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 startActivity(new Intent(SettingActivity.this, PawChangerActivity.class));
                 break;
             case R.id.ll_m_setting_bindWei://绑定微信
+                if (!StringUtil.isEmpty(mName)) {
+                    return;
+                }
                 if (api.isWXAppInstalled()) {
                     loginWeiXin();
                 } else {
@@ -175,15 +180,32 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
             case R.id.btn_b_s_out:
-                MyAppliction.getInstance().setUserInfom(null);
-                SaveUUidUtil.getInstance().delectUUid();
-                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
-                //注册激光
-                RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
-                tag.cancleTagAndAlias();
-                this.finish();
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showTitleDialog(mContext, getString(R.string.sure_out),
+                        getStringWithId(R.string.sure), getStringWithId(R.string.cancel), true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        out();
+                    }
+
+                    @Override
+                    public void onCancelClickListener() {
+
+                    }
+                });
                 break;
         }
+    }
+
+    private void out() {
+        MyAppliction.getInstance().setUserInfom(null);
+        SaveUUidUtil.getInstance().delectUUid();
+        startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+        //注册激光
+        RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+        tag.cancleTagAndAlias();
+        this.finish();
     }
 
     //调用微信
@@ -325,7 +347,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 String nickname = vo.getData().getUser().getNickname();
                 mTvMSettingWeixin.setText(nickname);
                 T.showToast(mContext, getString(R.string.bindSuccess));
-            }else {
+            } else {
                 T.showToast(mContext, vo.getData().getMessage());
             }
         } else {

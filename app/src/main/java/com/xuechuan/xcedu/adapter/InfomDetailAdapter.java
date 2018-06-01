@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,8 +40,8 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
 
     @Override
     public void onClick(View v) {
-        if (clickListener!=null){
-            clickListener.onClickListener(v.getTag(),v.getId());
+        if (clickListener != null) {
+            clickListener.onClickListener(v.getTag(), v.getId());
         }
     }
 
@@ -58,6 +59,16 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
         mInflater = LayoutInflater.from(mContext);
     }
 
+    private onItemChbClickListener clickChbListener;
+
+    public interface onItemChbClickListener {
+        public void onChbClickListener(Object obj, boolean isChecak, int position);
+    }
+
+    public void setChbClickListener(onItemChbClickListener clickListener) {
+        this.clickChbListener = clickListener;
+    }
+
 
     @Override
     public ViewHoler getViewHolder(View view) {
@@ -73,13 +84,13 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
     }
 
     @Override
-    public void onBindViewHolder(ViewHoler holder, int position, boolean isItem) {
-        EvalueVo.DatasBean bean = mData.get(position);
+    public void onBindViewHolder(final ViewHoler holder, final int position, boolean isItem) {
+        final EvalueVo.DatasBean bean = mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
-            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
+            holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         } else {
-            holder.mTvEvalueSuppernumber.setText("赞");
+            holder.mChbEvaluaIssupper.setText("赞");
         }
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
@@ -88,8 +99,19 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
         L.e(stamp);
         holder.mTvEvalueTime.setText(stamp);
         if (!StringUtil.isEmpty(bean.getHeadicon())) {
-            MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear,bean.getHeadicon(), true);
+            MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
+
+        holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!holder.mChbEvaluaIssupper.isPressed()) return;
+                if (clickChbListener != null) {
+                    clickChbListener.onChbClickListener(bean, isChecked, position);
+                }
+            }
+        });
+
         holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);

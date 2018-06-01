@@ -32,17 +32,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_48"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
             <View style="@style/view_line_tab_line" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-
                 <EditText
                     android:id="@+id/et_net_book_evalue"
                     android:layout_marginLeft="@dimen/space_8"
@@ -50,6 +48,8 @@
                     android:layout_width="0dp"
                     android:hint="我来说两句..."
                     android:textSize="@dimen/text_size_12"
+                    android:minLines="2"
+                    android:maxLines="4"
                     android:textColor="@color/text_fu_color"
                     android:paddingLeft="@dimen/space_8"
                     android:paddingRight="@dimen/space_8"
@@ -61,9 +61,9 @@
 
                 <ImageView
                     android:id="@+id/iv_net_book_send"
-                    android:background="@mipmap/ic_send"
+                    android:background="@mipmap/common_com_send"
                     android:layout_width="@dimen/space_48"
-                    android:layout_height="match_parent" />
+                    android:layout_height="@dimen/space_48" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

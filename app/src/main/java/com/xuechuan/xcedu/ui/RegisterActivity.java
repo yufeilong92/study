@@ -3,13 +3,14 @@ package com.xuechuan.xcedu.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
@@ -22,16 +23,13 @@ import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.net.RegisterService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.CountdownUtil;
-import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.DialogUtil;
-import com.xuechuan.xcedu.utils.SharedUserUtils;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.SmsVo;
-import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
-import com.xuechuan.xcedu.vo.UserbuyOrInfomVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -55,6 +53,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private Button mBtnRegisterLogin;
     private CheckBox mChbShowPasw;
     private CheckBox mChbShowPassw;
+    private CheckBox mChbRegisterAgreen;
+    private TextView mTvRegithsAgreem;
+    private LinearLayout mLlRegisterAgreem;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @param openid  微信openid
      * @param unionid 平台标识
      */
-    public static Intent newInstance(Context context,String type, String openid, String unionid) {
+    public static Intent newInstance(Context context, String type, String openid, String unionid) {
         Intent intent = new Intent(context, RegisterActivity.class);
         intent.putExtra(OPENID, openid);
         intent.putExtra(HTTPTYPE, type);
@@ -122,6 +123,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             } else if (mType.equals(CEX_INT_TYPE_BIND)) {//绑定手机
                 mBtnRegisterLogin.setText(R.string.bingphone);
             } else if (mType.equals(CEX_INT_TYPE_REG)) {//注册
+                mLlRegisterAgreem.setVisibility(View.VISIBLE);
                 mBtnRegisterLogin.setText(R.string.regist);
             }
         }
@@ -145,6 +147,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mChbShowPasw.setOnClickListener(this);
         mChbShowPassw = (CheckBox) findViewById(R.id.chb_show_passw);
         mChbShowPassw.setOnClickListener(this);
+        mChbRegisterAgreen = (CheckBox) findViewById(R.id.chb_register_agreen);
+        mChbRegisterAgreen.setOnClickListener(this);
+        mTvRegithsAgreem = (TextView) findViewById(R.id.tv_regiths_agreem);
+        mTvRegithsAgreem.setOnClickListener(this);
+        mLlRegisterAgreem = (LinearLayout) findViewById(R.id.ll_register_agreem);
+        mLlRegisterAgreem.setOnClickListener(this);
     }
 
 
@@ -260,6 +268,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (!paw.equals(paws)) {
             T.showToast(mContext, getString(R.string.pas_no_same));
             return;
+        }
+        if (mType.equals(CEX_INT_TYPE_REG)) {
+            if (!mChbRegisterAgreen.isChecked()) {
+                T.showToast(mContext, "请确认同意注册协议");
+                return;
+            }
         }
         sumbit(phone, code, paw);
     }

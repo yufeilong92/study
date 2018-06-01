@@ -43,11 +43,11 @@ public class UserInfomDb {
      */
     private boolean SkillBook;
     /**
-     * 综合能力
+     * 综合能力 true 为购买，false为不购买
      */
     private boolean ColligateBook;
     /**
-     * 案例分析
+     * 案例分析 true 为购买，false为不购买
      */
     private boolean CaseBook;
     /**

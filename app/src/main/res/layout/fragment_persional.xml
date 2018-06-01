@@ -257,6 +257,7 @@
         android:paddingRight="@dimen/space_16">
 
         <ImageView
+            android:id="@+id/iv_m_p_system"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_m_notice" />

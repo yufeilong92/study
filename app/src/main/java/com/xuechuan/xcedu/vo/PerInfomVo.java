@@ -68,6 +68,31 @@ public class PerInfomVo extends BaseVo {
          */
         private String province;
         /**
+         * 否有未读消息
+         */
+        private boolean ishavemembernotify;
+        /**
+         * 是否有未读通知
+         */
+        private boolean ishavesystemnotify;
+
+        public boolean isIshavemembernotify() {
+            return ishavemembernotify;
+        }
+
+        public void setIshavemembernotify(boolean ishavemembernotify) {
+            this.ishavemembernotify = ishavemembernotify;
+        }
+
+        public boolean isIshavesystemnotify() {
+            return ishavesystemnotify;
+        }
+
+        public void setIshavesystemnotify(boolean ishavesystemnotify) {
+            this.ishavesystemnotify = ishavesystemnotify;
+        }
+
+        /**
          *
          */
         private List<ThirdaccountBean> thirdaccount;

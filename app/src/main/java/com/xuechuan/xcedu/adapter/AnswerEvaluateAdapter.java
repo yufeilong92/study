@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,9 +14,11 @@ import android.widget.TextView;
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.EvalueVo;
@@ -85,7 +88,7 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        EvalueVo.DatasBean bean = mData.get(position);
+      final   EvalueVo.DatasBean bean = mData.get(position);
         if (!StringUtil.isEmpty(mSelectType)) {
             if (mSelectType.equals(AnswerActivity.mSelectViewBgYJ)) {//夜间
                 holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
@@ -113,9 +116,9 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
 
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
-            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
+            holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         } else {
-            holder.mTvEvalueSuppernumber.setText("赞");
+            holder.mChbEvaluaIssupper.setText("赞");
         }
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
@@ -127,8 +130,21 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
         holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
+        holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                if (isChecked) {
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEQC);
+                } else {
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEQC);
+                }
+
+            }
+        });
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
+
 
     }
 

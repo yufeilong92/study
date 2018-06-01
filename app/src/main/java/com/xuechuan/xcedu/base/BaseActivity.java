@@ -96,4 +96,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         MyAppliction.getInstance().exit();
     }
 
+
 }

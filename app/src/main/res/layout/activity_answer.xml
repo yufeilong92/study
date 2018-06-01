@@ -163,7 +163,7 @@
                         android:layout_marginTop="@dimen/text_size_16"
                         android:paddingLeft="@dimen/text_size_16"
                         android:paddingRight="@dimen/text_size_16"
-                        android:text="56454654654654654654654654654654446464464644646464646464644646464"
+                        android:text=""
                         android:textColor="@color/text_title_color" />
                 </LinearLayout>
 

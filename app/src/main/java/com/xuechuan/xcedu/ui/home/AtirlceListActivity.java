@@ -46,17 +46,13 @@ public class AtirlceListActivity extends BaseActivity implements ArticleTagView 
     private ArticleTagPresenter mPresenter;
     private static String ATIRLCETAG = "atirlcetag";
     private Context mContext;
-    private AlertDialog mDialog;
     private MagicIndicator magicIndicator;
     private List<Fragment> fragmentList;
-
     public static Intent newInstance(Context context, String atirlcetag) {
         Intent intent = new Intent(context, AtirlceListActivity.class);
         intent.putExtra(ATIRLCETAG, atirlcetag);
         return intent;
     }
-
-
   /*  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,13 +65,11 @@ public class AtirlceListActivity extends BaseActivity implements ArticleTagView 
         setContentView(R.layout.activity_atirlce_list);
         initView();
         initData();
-//        initIndicator();
     }
 
     private void initData() {
         mPresenter = new ArticleTagPresenter(new ArticleTagModelImpl(), this);
         mPresenter.reqeustTagList(this);
-        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
     }
 
     private void initIndicator(List<ArtilceTagVo.DatasBean> list) {
@@ -121,9 +115,6 @@ public class AtirlceListActivity extends BaseActivity implements ArticleTagView 
 
     @Override
     public void ArticleTagSuccess(String con) {
-        if (mDialog != null) {
-            mDialog.dismiss();
-        }
         Gson gson = new Gson();
         ArtilceTagVo vo = gson.fromJson(con, ArtilceTagVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -138,9 +129,7 @@ public class AtirlceListActivity extends BaseActivity implements ArticleTagView 
 
     @Override
     public void ArticleTagError(String con) {
-        if (mDialog != null) {
-            mDialog.dismiss();
-        }
+
         L.d("tagArticleTagError" + con);
     }
 

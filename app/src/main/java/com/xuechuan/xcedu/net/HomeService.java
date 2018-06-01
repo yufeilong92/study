@@ -349,6 +349,29 @@ public class HomeService extends BaseHttpServcie {
 
 
     /**
+     * 获取搜索内容
+     */
+    public void requestGetDetail(String articleid, StringCallBackView callBackView) {
+        UserInfomVo login = isLogin(mContext);
+        if (login == null) {
+            return;
+        }
+        ArrayList<GetParamVo> listParamVo = getListParamVo();
+        UserBean user = login.getData().getUser();
+        GetParamVo paramVo1 = getParamVo();
+        paramVo1.setParam("staffid");
+        paramVo1.setValue(String.valueOf(user.getId()));
+        listParamVo.add(paramVo1);
+        GetParamVo paramVo = getParamVo();
+        paramVo.setParam("articleid");
+        paramVo.setValue(articleid);
+        listParamVo.add(paramVo);
+        String url = getUrl(mContext, R.string.http_getdetail);
+        requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
+    }
+
+
+    /**
      * 获取评论的评论
      *
      * @param articleid    科目
@@ -370,9 +393,9 @@ public class HomeService extends BaseHttpServcie {
         GetParamVo paramVo4 = getParamVo();
         paramVo4.setParam("pagesize");
         paramVo4.setValue("10");
-        GetParamVo paramVo = getParamVo();
-        paramVo.setParam("articleid");
-        paramVo.setValue(articleid);
+//        GetParamVo paramVo = getParamVo();
+//        paramVo.setParam("articleid");
+//        paramVo.setValue(articleid);
         GetParamVo paramVo1 = getParamVo();
         paramVo1.setParam("commentid");
         GetParamVo paramVo2 = getParamVo();
@@ -383,7 +406,7 @@ public class HomeService extends BaseHttpServcie {
         listParamVo.add(paramVo4);
         listParamVo.add(paramVo2);
         listParamVo.add(paramVo1);
-        listParamVo.add(paramVo);
+//        listParamVo.add(paramVo);
         String url = getUrl(mContext, R.string.http_homecommentcomment);
         requestHttpServiceGet(mContext, url, listParamVo, true, callBackView);
     }

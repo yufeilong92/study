@@ -19,6 +19,7 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
+import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.SystemVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
@@ -87,7 +88,7 @@ public class MySystemAdapter extends BaseRecyclerAdapter<MySystemAdapter.ViewHol
         holder.mIvSystemTitle.setText(vo.getTitle());
         if (!StringUtil.isEmpty(vo.getThumbnail()))
             MyAppliction.getInstance().displayImages(holder.mIvSystemImg, vo.getThumbnail(), false);
-        holder.mTvSystemTime.setText(TimeSampUtil.getStringTimeStamp(vo.getCreatetime()));
+        holder.mTvSystemTime.setText(TimeUtil.getYMDT(vo.getCreatetime()));
         holder.mTvSystemContent.setText(vo.getSummary());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

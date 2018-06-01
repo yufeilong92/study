@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -26,12 +27,16 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.EvalueTwoAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.mvp.contract.EvalueInterfaceContract;
+import com.xuechuan.xcedu.mvp.model.EvalueInterfaceModel;
 import com.xuechuan.xcedu.mvp.model.EvalueModelImpl;
+import com.xuechuan.xcedu.mvp.presenter.EvalueInterfacePresenter;
 import com.xuechuan.xcedu.mvp.presenter.EvaluePresenter;
 import com.xuechuan.xcedu.mvp.view.EvalueView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
@@ -60,8 +65,11 @@ import java.util.List;
  * @Copyright: 2018/5/3   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class EvalueTwoActivity extends BaseActivity implements View.OnClickListener, EvalueView {
-
+public class EvalueTwoActivity extends BaseActivity implements View.OnClickListener, EvalueView, EvalueInterfaceContract.View {
+    /**
+     * 评价类型类型
+     */
+    private static final String TESTYPE = "type";
     private RecyclerView mRlvInfomtwoContent;
     private XRefreshView mXfvContentTwoDetail;
     private EditText mEtInfomTwoContent;
@@ -87,20 +95,24 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
      */
     public static long lastRefreshTime;
 
+
     private String mQuestion;
     private String mCommonid;
 
     private List mArray;
     private EvalueTwoAdapter adapter;
     boolean isRefresh;
-    private TextView mTvEvalueEmpty;
+    private ImageView mTvEvalueEmpty;
     private EvalueVo.DatasBean mData;
     private AlertDialog mDialog1;
+    private String mType;
+    private EvalueInterfacePresenter mInfomPresenter;
 
-    public static Intent newInstance(Context context, String question, String commonid) {
+    public static Intent newInstance(Context context, String question, String commonid, String type) {
         Intent intent = new Intent(context, EvalueTwoActivity.class);
         intent.putExtra(QUESTTION, question);
         intent.putExtra(COMMONID, commonid);
+        intent.putExtra(TESTYPE, type);
         return intent;
     }
 
@@ -120,6 +132,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         if (getIntent() != null) {
             mQuestion = getIntent().getStringExtra(QUESTTION);
             mCommonid = getIntent().getStringExtra(COMMONID);
+            mType = getIntent().getStringExtra(TESTYPE);
+
         }
         initView();
 
@@ -139,21 +153,21 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    private void initHearView(View view, EvalueVo.DatasBean bean) {
+    private void initHearView(View view, final EvalueVo.DatasBean bean) {
         ImageView mIvEvaluateHear = (ImageView) view.findViewById(R.id.iv_evaluate_hear);
         TextView mTvEvalueUserName = (TextView) view.findViewById(R.id.tv_evalue_user_name);
         TextView mTvEvalueContent = (TextView) view.findViewById(R.id.tv_evalue_content);
         TextView mTvEvalueTime = (TextView) view.findViewById(R.id.tv_evalue_time);
         TextView mTvEvalueEvalue = (TextView) view.findViewById(R.id.tv_evalue_evalue);
-        CheckBox mChbEvaluaIssupper = (CheckBox) view.findViewById(R.id.chb_evalua_issupper);
+        final CheckBox mChbEvaluaIssupper = (CheckBox) view.findViewById(R.id.chb_evalua_issupper);
         TextView mTvEvalueSuppernumber = (TextView) view.findViewById(R.id.tv_evalue_suppernumber);
         View line = (View) view.findViewById(R.id.v_line_hear);
         line.setVisibility(View.VISIBLE);
         mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
-            mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
+            mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         } else {
-            mTvEvalueSuppernumber.setText("赞");
+            mChbEvaluaIssupper.setText("赞");
         }
         mChbEvaluaIssupper.setChecked(bean.isIssupport());
         mTvEvalueContent.setText(bean.getContent());
@@ -164,6 +178,18 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         if (!StringUtil.isEmpty(bean.getHeadicon())) {
             MyAppliction.getInstance().displayImages(mIvEvaluateHear, bean.getHeadicon(), true);
         }
+        mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!mChbEvaluaIssupper.isPressed()) return;
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                if (isChecked) {
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEA);
+                } else {
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEA);
+                }
+            }
+        });
         mTvEvalueEvalue.setText(bean.getCommentcount() + "");
     }
 
@@ -197,7 +223,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
             return;
         }
         isRefresh = true;
-        mPresenter.requestEvalueTwoMoreContent(mContext, getNowPage() + 1, mQuestion, mCommonid);
+        mInfomPresenter.requestEvalueTwoMore(mContext,getNowPage() + 1,mCommonid,mType);
+//        mPresenter.requestEvalueTwoMoreContent(mContext, getNowPage() + 1, mQuestion, mCommonid);
     }
 
     private void requestData() {
@@ -206,7 +233,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
             return;
         }
         isRefresh = true;
-        mPresenter.requestEvalueTwoContent(mContext, 1, mQuestion, mCommonid);
+        mInfomPresenter.requestEvalueTwo(mContext,1,mCommonid,mType);
+//        mPresenter.requestEvalueTwoContent(mContext, 1, mQuestion, mCommonid);
     }
 
     private void initAdapter() {
@@ -220,7 +248,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void initData() {
         mPresenter = new EvaluePresenter(new EvalueModelImpl(), this);
-
+        mInfomPresenter = new EvalueInterfacePresenter();
+        mInfomPresenter.initModelView(new EvalueInterfaceModel(), this);
     }
 
     private void initView() {
@@ -232,7 +261,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         mRlInfomTwoLayout = (RelativeLayout) findViewById(R.id.rl_infom_two_layout);
 
         mBtnInfomTwoSend.setOnClickListener(this);
-        mTvEvalueEmpty = (TextView) findViewById(R.id.tv_evalue_empty);
+        mTvEvalueEmpty = (ImageView) findViewById(R.id.tv_evalue_empty);
         mTvEvalueEmpty.setOnClickListener(this);
     }
 
@@ -254,20 +283,6 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void submitEvalut(String str) {
-//        UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
-//        UserBean user = userInfom.getData().getUser();
-     /*   EvalueVo.DatasBean bean = new EvalueVo.DatasBean();
-        bean.setCommentcount(0);
-        bean.setCommentid(Integer.parseInt(mCommonid));
-        bean.setContent(str);
-        bean.setHeadicon(user.getHeadicon());
-        bean.setNickname(user.getNickname());
-        bean.setTargetid(Integer.parseInt(mQuestion));
-        bean.setSupportcount(0);
-        List<EvalueVo.DatasBean> beans = new ArrayList<>();
-        beans.add(bean);
-        addListData(beans);
-        adapter.notifyDataSetChanged();*/
         mEtInfomTwoContent.setText("");
         mPresenter.submitContent(mContext, mQuestion, str, mCommonid, DataMessageVo.QUESTION);
     }
@@ -417,5 +432,25 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void EvalueTwoSuc(String com) {
+
+    }
+
+    @Override
+    public void EvalueTwoErro(String com) {
+
+    }
+
+    @Override
+    public void EvalueTwoSucMore(String com) {
+
+    }
+
+    @Override
+    public void EvalueTwoErroMore(String com) {
+
     }
 }

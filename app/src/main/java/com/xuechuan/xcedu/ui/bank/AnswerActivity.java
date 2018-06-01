@@ -128,6 +128,19 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 问题父id
      */
     private static String QUESTIONID = "courseid";
+
+    /**
+     * 搜索章节id
+     */
+    private static String SEARCHZID = "SearchZid";
+    /**
+     * 搜索题id
+     */
+    private static String SEARCHTID = "SearchTid";
+    /**
+     * 搜索类型
+     */
+    private static String SEARCHTYPE = "SearchTYPE";
     /**
      * 当前题干信息
      */
@@ -373,6 +386,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private ImageView mIvTimePlay;
     private LinearLayout mVBLineBar;
     private ImageView mIvBarDelect;
+    private String mSearchZid;
+    private String mSearchTid;
+    private String mSearchType;
+
 
     @Override
     protected void onDestroy() {
@@ -398,6 +415,22 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         Intent intent = new Intent(context, AnswerActivity.class);
         intent.putExtra(QUESTIONID, questionId);
         intent.putExtra(TYPEMARK, type);
+        return intent;
+    }
+
+    /**
+     * 搜索界面
+     *
+     * @param context
+     * @param courseid
+     * @param id
+     * @return
+     */
+    public static Intent searchInstance(Context context, String courseid, String id, String type) {
+        Intent intent = new Intent(context, AnswerActivity.class);
+        intent.putExtra(SEARCHZID, courseid);
+        intent.putExtra(SEARCHTYPE, type);
+        intent.putExtra(SEARCHTID, id);
         return intent;
     }
 
@@ -490,6 +523,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mTagType = getIntent().getStringExtra(TAGYTTPE);
             //考试类型
             mStyleCase = getIntent().getStringExtra(STYLECASE);
+            //搜索章id
+            mSearchZid = getIntent().getStringExtra(SEARCHZID);
+            //搜索题id
+            mSearchTid = getIntent().getStringExtra(SEARCHTID);
+            //搜索类型
+            mSearchType = getIntent().getStringExtra(SEARCHTYPE);
         }
         initView();
         clearAll();
@@ -538,6 +577,23 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         errOrCol();
         shunxu();
         zhuanXiang();
+        searchtype();
+    }
+
+    private void searchtype() {
+        if (!StringUtil.isEmpty(mSearchType) && !StringUtil.isEmpty(mSearchTid) && !StringUtil.isEmpty(mSearchZid)) {
+            isExamHine = true;
+            List<QuestionAllVo.DatasBean> list = new ArrayList<>();
+            QuestionAllVo.DatasBean datasBean = new QuestionAllVo.DatasBean();
+            datasBean.setId(Integer.parseInt(mSearchTid));
+            datasBean.setCourseid(Integer.parseInt(mSearchZid));
+            list.add(datasBean);
+            mTextDetial = list;
+            setShowLayout();
+            mTvBCount.setText(String.valueOf(list.size()));
+            bindTextNumberData();
+        }
+
     }
 
     /**
@@ -790,7 +846,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             public void onClickListener(Object obj, int position) {
                 EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
                 EventBus.getDefault().postSticky(new EvalueTwoEvent(bean));
-                Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()));
+                Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()),DataMessageVo.QUESTION);
                 startActivity(intent);
             }
         });
@@ -804,6 +860,17 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mTvBNew.setText(String.valueOf(mMark + 1));
             if (mMark < mTextDetial.size()) {
                 QuestionAllVo.DatasBean bean = mTextDetial.get(mMark);
+                int i = bean.getCourseid();
+                UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
+                if (db != null) {
+                    if (i == 1) {//技术
+                        isBuy = db.getSkillBook();
+                    } else if (i == 2) {//综合
+                        isBuy = db.getColligateBook();
+                    } else if (i == 3) {//案例
+                        isBuy = db.getCaseBook();
+                    }
+                }
                 //请求评价
                 mEvaluePresenter.requestEvalueOneContent(mContext, 1, String.valueOf(bean.getId()));
                 //请求题干详情
@@ -849,7 +916,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         mContext = this;
-        mRlRootLayout =(RelativeLayout) findViewById(R.id.rl_root_layout);
+        mRlRootLayout = (RelativeLayout) findViewById(R.id.rl_root_layout);
         mIvBMore = (ImageView) findViewById(R.id.iv_b_more);
         mIvBMore.setOnClickListener(this);
         mTvRootEmpty = (TextView) findViewById(R.id.tv_root_empty);
@@ -984,6 +1051,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param vo
      */
     private void bindViewData(TextDetailVo vo) {
+        DbHelperAssist helperAssist = DbHelperAssist.getInstance();
+
         setShowLayout();
         //设置布局颜色
         setLayoutBg();
@@ -1145,6 +1214,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mRightItem = mResultData.getChoiceanswer();
         Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
 //        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
+
         mTvLookAnswerWen.setText(fromHtml);
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
@@ -1513,9 +1583,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     setSelectMoreItemBG(4, isClickE);
                 }
                 break;
-            default:
             case R.id.btn_b_buy://购买
-                startActivity(new Intent(AnswerActivity.this, BankBuyActivity.class));
+                QuestionAllVo.DatasBean datasBean = mTextDetial.get(mMark);
+//                Intent intent = new Intent(AnswerActivity.this, BankBuyActivity.class);
+                Intent intent = BankBuyActivity.newInstance(mContext, String.valueOf(datasBean.getCourseid()),BankBuyActivity.TEXT);
+                startActivity(intent);
                 break;
             case R.id.btn_b_sure_key://多选确认
                 isSure = true;
@@ -2493,8 +2565,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 qq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,Defaultcontent.title
-                                ,Defaultcontent.text,Defaultcontent.imageurl,R.mipmap.m_setting_about_xcimg
+                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
                                 , SHARE_MEDIA.QQ);
                     }
                 });
@@ -2506,31 +2578,31 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         );
                     }
                 });
-               weibo.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                               , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
-                               , SHARE_MEDIA.SINA
-                       );
-                   }
-               });
-               weixin.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                               , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
-                       );
-                   }
-               });
-               circle.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                               , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
-                       );
-                   }
-               });
+                weibo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
+                                , SHARE_MEDIA.SINA
+                        );
+                    }
+                });
+                weixin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                        );
+                    }
+                });
+                circle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
+                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                        );
+                    }
+                });
             }
 
             @Override
@@ -3380,6 +3452,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             for (int i = 0; i < size; i++) {
                 QuestionAllVo.DatasBean datasBean = new QuestionAllVo.DatasBean();
                 datasBean.setId(mUserData.get(i));
+                datasBean.setCourseid(Integer.parseInt(mCouresidUser));
                 list.add(datasBean);
             }
             //保存用户错问题

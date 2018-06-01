@@ -32,7 +32,7 @@
                 android:drawableRight="@mipmap/ic_home_location"
                 android:gravity="center_vertical"
                 android:padding="@dimen/space_8"
-                android:text="河南省"
+                android:text=""
                 android:textColor="@color/text_title_color"
                 android:textSize="@dimen/text_size_16" />
 

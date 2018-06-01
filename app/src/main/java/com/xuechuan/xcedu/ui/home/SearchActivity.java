@@ -7,8 +7,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +35,7 @@ import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveHistoryUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.HotKeyVo;
 import com.xuechuan.xcedu.weight.FlowLayout;
 
@@ -132,6 +135,17 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mInstance = SaveHistoryUtil.getInstance(mContext);
         mPresenter = new SearchPresenter(new SearchModelImpl(), this);
         mPresenter.requestHostList(mContext, "10");
+        mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                    search();
+                    Utils.hideInputMethod(mContext,mEtSearch);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -218,15 +232,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_search:
-                String trim = mEtSearch.getText().toString().trim();
-                if (StringUtil.isEmpty(trim)) {
-                    T.showToast(mContext, "内容不能为空");
-                    return;
-                }
-                mFlSearchHistory.removeAllViews();
-                mInstance.saveHistory(trim);
-                bindHistoryData();
-                starResult(trim);
+                search();
                 break;
             case R.id.iv_search_clear:
                 mInstance.delete(mContext);
@@ -237,10 +243,23 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private void search() {
+        String trim = mEtSearch.getText().toString().trim();
+        if (StringUtil.isEmpty(trim)) {
+            T.showToast(mContext, "内容不能为空");
+            return;
+        }
+        mEtSearch.setText(null);
+        mFlSearchHistory.removeAllViews();
+        mInstance.saveHistory(trim);
+        bindHistoryData();
+        starResult(trim);
+    }
+
     private void starResult(String trim) {
         Intent intent = SearchResultActivity.newInsanter(mContext, trim);
         startActivity(intent);
-
+        finish();
     }
 
 

@@ -12,12 +12,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.mvp.contract.ChangPawContract;
 import com.xuechuan.xcedu.mvp.model.ChangPawModel;
 import com.xuechuan.xcedu.mvp.presenter.ChangPawPresenter;
 import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.Md5;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChangerPawVo;
 
@@ -99,7 +101,7 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
             T.showToast(mContext, getString(R.string.paw_no_same));
             return;
         }
-        mPresenter.submitChangerPaw(mContext, Md5.getMD5String(paw) ,Md5.getMD5String(newPaw));
+        mPresenter.submitChangerPaw(mContext, Md5.getMD5String(paw), Md5.getMD5String(newPaw));
     }
 
     @Override
@@ -108,8 +110,10 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
         ChangerPawVo vo = gson.fromJson(con, ChangerPawVo.class);
         if (vo.getStatus().getCode() == 200) {
             if (vo.getData().getStatusX() == 1) {
-                T.showToast(mContext, getString(R.string.pas_changer_error));
-                startActivity(new Intent(mContext, LoginActivity.class));
+                T.showToast(mContext, getString(R.string.changesuccess));
+                MyAppliction.getInstance().setUserInfom(null);
+                SaveUUidUtil.getInstance().delectUUid();
+                startActivity(new Intent(PawChangerActivity.this, LoginActivity.class));
             } else {
                 T.showToast(mContext, vo.getData().getInfo());
             }
@@ -122,6 +126,6 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void submitError(String con) {
-
+        T.showToast(mContext, getString(R.string.net_error));
     }
 }

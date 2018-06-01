@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.TimeUtil;
+import com.xuechuan.xcedu.vo.MyMsgVo;
 
 import java.util.List;
 
@@ -49,6 +53,21 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
+        MyMsgVo.DatasBean datas = (MyMsgVo.DatasBean) mData.get(position);
+        int notifytype = datas.getNotifytype();
+        if (notifytype == 1) {
+            holder.mTvMPType.setText("回复了你");
+            holder.mTvMPLook.setVisibility(View.VISIBLE);
+        } else if (notifytype == 2) {
+            holder.mTvMPType.setText("赞了你");
+            holder.mTvMPLook.setVisibility(View.GONE);
+        }
+        if (!StringUtil.isEmpty(datas.getMemberheadicon()))
+            MyAppliction.getInstance().displayImages(holder.mIvMyMsgImg, datas.getMemberheadicon(), true);
+        holder.mTvMyMsgName.setText(datas.getMembername());
+        holder.mTvMyMsgContent.setText(datas.getContent());
+        holder.mTvMyMsgTime.setText(TimeUtil.getYMDT(datas.getCreatetime()));
+
 
     }
 
@@ -57,18 +76,23 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
         return mData == null ? 0 : mData.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView mIvMyMsgImg;
-        public TextView mTvMyMsgTitle;
+        public TextView mTvMyMsgName;
+        public TextView mTvMPType;
         public TextView mTvMyMsgTime;
-        public TextView mTvMyMsgFrom;
+        public TextView mTvMyMsgContent;
+        public TextView mTvMPLook;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.mIvMyMsgImg = (ImageView) itemView.findViewById(R.id.iv_my_msg_img);
-            this.mTvMyMsgTitle = (TextView) itemView.findViewById(R.id.tv_my_msg_title);
+            this.mTvMyMsgName = (TextView) itemView.findViewById(R.id.tv_my_msg_name);
+            this.mTvMPType = (TextView) itemView.findViewById(R.id.tv_m_p_type);
             this.mTvMyMsgTime = (TextView) itemView.findViewById(R.id.tv_my_msg_time);
-            this.mTvMyMsgFrom = (TextView) itemView.findViewById(R.id.tv_my_msg_from);
+            this.mTvMyMsgContent = (TextView) itemView.findViewById(R.id.tv_my_msg_content);
+            this.mTvMPLook = (TextView) itemView.findViewById(R.id.tv_m_p_look);
         }
     }
 

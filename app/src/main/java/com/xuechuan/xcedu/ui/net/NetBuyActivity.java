@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -84,10 +85,10 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
      */
     private static final int SDK_PAY_FLAG = 1;
     private PayUtil payUtil;
-    private static String PRICE="price";
-    private static String ID="id";
-    private static String NAME="name";
-    private static String URLIMG="urlimg";
+    private static String PRICE = "price";
+    private static String ID = "id";
+    private static String NAME = "name";
+    private static String URLIMG = "urlimg";
     private double mPrice;
     private String mName;
     private int mId;
@@ -105,14 +106,15 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         intent.putExtra(KID, kid);
         return intent;
     }
+
     /**
      * @param context
      * @return
      */
-    public static Intent newInstance(Context context, double price, int id,String name,String urlimg) {
+    public static Intent newInstance(Context context, double price, int id, String name, String urlimg) {
         Intent intent = new Intent(context, NetBuyActivity.class);
-        intent.putExtra(PRICE,price);
-        intent.putExtra(ID,id);
+        intent.putExtra(PRICE, price);
+        intent.putExtra(ID, id);
         intent.putExtra(NAME, name);
         intent.putExtra(URLIMG, urlimg);
         return intent;
@@ -130,9 +132,9 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_net_buy);
         if (getIntent() != null) {
 //            mDataVo = (CoursesBeanVo) getIntent().getSerializableExtra(PAYINFOM);
-            mPrice = getIntent().getDoubleExtra(PRICE,0);
+            mPrice = getIntent().getDoubleExtra(PRICE, 0);
             mName = getIntent().getStringExtra(NAME);
-            mId = getIntent().getIntExtra(ID,0);
+            mId = getIntent().getIntExtra(ID, 0);
             mUrlImg = getIntent().getStringExtra(URLIMG);
 
         }
@@ -148,7 +150,7 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         mTvNetBookMame.setText(mName);
         mTvNetBookPrice.setText(String.valueOf(mPrice));
         mTvNPayCount.setText(String.valueOf(mPrice));
-        MyAppliction.getInstance().displayImages(mIvNetPayImg,mUrlImg, false);
+        MyAppliction.getInstance().displayImages(mIvNetPayImg, mUrlImg, false);
         mLlNetPayZfb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,7 +200,6 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
         mLlNetWeixin = (LinearLayout) findViewById(R.id.ll_net_weixin);
         mBtnNetSubmitFrom = (Button) findViewById(R.id.btn_net_submit_from);
         mLlBBankPay = (LinearLayout) findViewById(R.id.ll_b_bank_pay);
-
         mBtnNetSubmitFrom.setOnClickListener(this);
     }
 
@@ -395,7 +396,8 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void PaySuccess(String type) {
-
+        HomeActivity.startInstance(mContext, HomeActivity.VIDEO);
+        finish();
     }
 
     @Override

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/space_100"
     android:orientation="horizontal"
-    android:padding="@dimen/space_16">
+    android:paddingBottom="@dimen/space_16"
+    android:paddingTop="@dimen/space_16">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginRight="@dimen/space_16"
@@ -24,7 +25,7 @@
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/space_16" />
 
-        <Space style="@style/space_16_height" />
+        <Space style="@style/space_8_height" />
 
         <LinearLayout
             android:layout_width="match_parent"

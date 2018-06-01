@@ -31,6 +31,7 @@ import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.TokenVo;
@@ -66,7 +67,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private int mFragmentLayout = R.id.fl_content;
     private static String Params = "Params";
     private static String Params1 = "Params";
+    private static String TYPE = "type";
+    public static String BOOK = "1";
+    public static String VIDEO = "2";
     private AlertDialog mDialog;
+    private String mType;
 
     @Override
     protected void onDestroy() {
@@ -82,6 +87,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         context.startActivity(intent);
     }
 
+    public static void startInstance(Context context, String type) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra(TYPE, type);
+        context.startActivity(intent);
+    }
+
+
     //        @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -92,9 +104,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
+        if (getIntent() != null) {
+            mType = getIntent().getStringExtra(TYPE);
+        }
         initView();
         initData();
+        if (!StringUtil.isEmpty(mType)) {
+            if(mType.equals(BOOK)){
+                Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 1);
+            }else if (mType.equals(VIDEO)){
+                Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 2);
+            }
 
+        }
+    }
+
+    private void setShowType() {
 
     }
 

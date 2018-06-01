@@ -6,14 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.EvalueVo;
@@ -68,11 +71,11 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        EvalueVo.DatasBean bean = mData.get(position);
+        final EvalueVo.DatasBean bean = mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
-            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount()+"");
-        }else {
+            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
+        } else {
             holder.mTvEvalueSuppernumber.setText("赞");
         }
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
@@ -84,15 +87,28 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
         if (!StringUtil.isEmpty(bean.getHeadicon())) {
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
-        holder.mTvEvalueEvalue.setText(bean.getCommentcount()+"");
+        holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
+        holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                if (isChecked) {
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEAC);
+                } else {
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEAC);
+                }
+
+            }
+        });
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
+
 
     }
 
     @Override
     public int getAdapterItemCount() {
-        return mData==null?0:mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
     @Override

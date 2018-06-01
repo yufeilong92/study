@@ -75,7 +75,6 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,52 +159,32 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 startActivity(intent);
                 break;
             case R.id.iv_b_test://考试
-                if (ifBuyBook()){
                 Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPESKILL);
                 intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
                 startActivity(intent3);
-                }else {
-                    buyBook();
-                }
+
                 break;
             case R.id.tv_b_free://自由
-                if (ifBuyBook()){
                 Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
                 intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
                 startActivity(intent6);
-                }else {
-                    buyBook();
-                }
+
                 break;
             case R.id.tv_b_special://专项
-               if (ifBuyBook()){
                 Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
                 intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
                 startActivity(intent4);
-               }else {
-                   buyBook();
-               }
+
                 break;
             case R.id.tv_b_turn://顺序
-                if (ifBuyBook()){
                 Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
                 intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
                 startActivity(intent5);
-                }else {
-                    buyBook();
-                }
+
                 break;
             default:
 
         }
-    }
-
-    public boolean ifBuyBook() {
-        UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
-        return db.getSkillBook();
-    }
-    public void buyBook(){
-
     }
 
     @Override

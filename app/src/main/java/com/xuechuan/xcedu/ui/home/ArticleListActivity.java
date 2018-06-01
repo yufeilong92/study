@@ -213,6 +213,7 @@ public class ArticleListActivity extends BaseActivity {
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(), String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,vo.getSupportcount());
+//                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }
         });

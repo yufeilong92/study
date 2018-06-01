@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/space_100dp"
     android:orientation="horizontal"
-    android:padding="@dimen/space_16">
+    android:paddingTop="@dimen/space_16"
+    android:paddingBottom="@dimen/space_16"
+    >
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-       android:layout_marginRight="@dimen/space_16"
        >
 
         <TextView
-            android:text="22222222222"
+            android:text="标题"
             android:id="@+id/tv_item_home_title_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,6 +27,7 @@
             android:textSize="@dimen/space_16" />
 
         <LinearLayout
+            android:layout_marginTop="@dimen/space_8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
@@ -43,14 +45,18 @@
             <Space style="@style/space_16_width" />
 
             <CheckBox
+                android:paddingLeft="@dimen/space_8"
                 android:layout_gravity="center"
                 android:id="@+id/chb_isSupper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/select_issupper_home" />
-            <Space style="@style/space_8_width" />
+            <Space
+                android:visibility="gone"
+                style="@style/space_8_width" />
 
             <TextView
+                android:visibility="gone"
                 android:layout_gravity="center"
                 android:id="@+id/tv_item_home_laud_all"
                 android:layout_width="wrap_content"
@@ -63,6 +69,7 @@
     </LinearLayout>
 
     <ImageView
+       android:layout_marginLeft="@dimen/space_8"
         android:id="@+id/iv_item_home_all"
         android:layout_width="@dimen/space_100dp"
         android:layout_height="@dimen/space_70"
