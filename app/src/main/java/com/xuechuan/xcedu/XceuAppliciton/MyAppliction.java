@@ -90,6 +90,15 @@ public class MyAppliction extends MultiDexApplication {
 
     }
 
+    private boolean isPlay;
+
+    public boolean getPlay() {
+        return isPlay;
+    }
+
+    public void setIsPlay(boolean isPlay) {
+        this.isPlay = isPlay;
+    }
 
     /**
      * 保存用户信息
@@ -330,7 +339,8 @@ public class MyAppliction extends MultiDexApplication {
         //杀死该应用进程
         android.os.Process.killProcess(android.os.Process.myPid());
     }
-    public void startLogin(Context context){
+
+    public void startLogin(Context context) {
         MyAppliction.getInstance().setUserInfom(null);
         SaveUUidUtil.getInstance().delectUUid();
         context.startActivity(new Intent(context, LoginActivity.class));

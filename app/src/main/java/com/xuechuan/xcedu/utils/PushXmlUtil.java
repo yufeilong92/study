@@ -96,6 +96,9 @@ public class PushXmlUtil {
     }
 
     public String getLocationProvice(Context context, String code) {
+        if (StringUtil.isEmpty(code)) {
+            return null;
+        }
         ArrayList<ProvincesVo> vos = pushXml(context);
         for (ProvincesVo vo : vos
                 ) {

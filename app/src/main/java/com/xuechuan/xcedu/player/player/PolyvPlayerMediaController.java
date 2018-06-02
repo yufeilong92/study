@@ -29,6 +29,7 @@ import com.easefun.polyvsdk.video.PolyvBaseMediaController;
 import com.easefun.polyvsdk.video.PolyvVideoView;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.player.util.PolyvKeyBoardUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.player.util.PolyvSensorHelper;
@@ -502,7 +503,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         if (mTitleBarlayout != null)
             mTitleBarlayout.setVisibility(GONE);
         if (mRlPlayLayout != null)
-            if (mIsplay) {
+            if (MyAppliction.getInstance().getPlay()) {
                 mRlPlayLayout.setVisibility(GONE);
             } else {
                 mRlPlayLayout.setVisibility(VISIBLE);
@@ -529,7 +530,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         if (mTitleBarlayout != null)
             mTitleBarlayout.setVisibility(VISIBLE);
         if (mRlPlayLayout != null)
-            if (mIsplay) {
+            if (MyAppliction.getInstance().getPlay()) {
                 mRlPlayLayout.setVisibility(GONE);
             } else {
                 mRlPlayLayout.setVisibility(VISIBLE);

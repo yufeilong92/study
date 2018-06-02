@@ -254,7 +254,7 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
         HomePageVo homePageVo = gson.fromJson(com, HomePageVo.class);
         BaseVo.StatusBean status = homePageVo.getStatus();
         if (status.getCode() == 200) {//成功
-            adapter.setData(homePageVo);
+            adapter.setData(homePageVo, code);
             adapter.notifyDataSetChanged();
         }
     }

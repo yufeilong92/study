@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.andview.refreshview.callback.IFooterCallBack;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 
 /**
  * 与屏幕相关的工具类
@@ -64,7 +64,7 @@ public class PolyvScreenUtils {
         if (mTitleBar != null)
             mTitleBar.setVisibility(View.VISIBLE);
         if (mrlplaylayout != null)
-            if (mIsplay) {
+            if (MyAppliction.getInstance().getPlay()) {
                 mrlplaylayout.setVisibility(View.GONE);
             } else {
                 mrlplaylayout.setVisibility(View.VISIBLE);
@@ -79,7 +79,7 @@ public class PolyvScreenUtils {
         if (mTitleBar != null)
             mTitleBar.setVisibility(View.GONE);
         if (mrlplaylayout != null)
-            if (mIsplay) {
+            if (MyAppliction.getInstance().getPlay()) {
                 mrlplaylayout.setVisibility(View.GONE);
             } else {
                 mrlplaylayout.setVisibility(View.VISIBLE);
@@ -129,7 +129,7 @@ public class PolyvScreenUtils {
             if (mTitleBar != null)
                 mTitleBar.setVisibility(View.GONE);
             if (mrlplaylayout != null)
-                if (mIsplay) {
+                if (MyAppliction.getInstance().getPlay()) {
                     mrlplaylayout.setVisibility(View.GONE);
                 } else {
                     mrlplaylayout.setVisibility(View.VISIBLE);
@@ -146,7 +146,7 @@ public class PolyvScreenUtils {
             if (mTitleBar != null)
                 mTitleBar.setVisibility(View.GONE);
             if (mrlplaylayout != null)
-                if (mIsplay) {
+                if (MyAppliction.getInstance().getPlay()) {
                     mrlplaylayout.setVisibility(View.GONE);
                 } else {
                     mrlplaylayout.setVisibility(View.VISIBLE);
@@ -165,7 +165,7 @@ public class PolyvScreenUtils {
             if (mLlNetBuyLayous != null)
                 mLlNetBuyLayous.setVisibility(View.VISIBLE);
             if (mrlplaylayout != null)
-                if (mIsplay) {
+                if (MyAppliction.getInstance().getPlay()) {
                     mrlplaylayout.setVisibility(View.GONE);
                 } else {
                     mrlplaylayout.setVisibility(View.VISIBLE);
@@ -180,7 +180,7 @@ public class PolyvScreenUtils {
             if (mLlNetBuyLayous != null)
                 mLlNetBuyLayous.setVisibility(View.VISIBLE);
             if (mrlplaylayout != null)
-                if (mIsplay) {
+                if (MyAppliction.getInstance().getPlay()) {
                     mrlplaylayout.setVisibility(View.GONE);
                 } else {
                     mrlplaylayout.setVisibility(View.VISIBLE);

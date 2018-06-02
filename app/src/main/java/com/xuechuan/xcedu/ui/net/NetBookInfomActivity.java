@@ -712,8 +712,10 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         if (!StringUtil.isEmpty(vid)) {
             mRlPlaylayout.setVisibility(View.GONE);
             play(vid, 0, true, false);
-            mediaController.setIsPlay(true);
-            PolyvScreenUtils.IsPlay(true);
+//            mediaController.setIsPlay(true);
+            MyAppliction.getInstance().setIsPlay(true);
+//            PolyvScreenUtils.IsPlay(true);
+
         }else {
             T.showToast(mContext,getString(R.string.no_try_see));
         }

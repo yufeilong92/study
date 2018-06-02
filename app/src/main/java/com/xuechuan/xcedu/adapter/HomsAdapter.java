@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class HomsAdapter extends RecyclerView.Adapter {
 
-    private final String code;
+    private  String code;
     private Context mContext;
     private HomePageVo mData;
     private final LayoutInflater mInflater;
@@ -60,8 +60,9 @@ public class HomsAdapter extends RecyclerView.Adapter {
         mInflater = LayoutInflater.from(mContext);
     }
 
-    public void setData(HomePageVo vo) {
+    public void setData(HomePageVo vo, String codes) {
         mData = vo;
+        code = codes;
         notifyDataSetChanged();
     }
 
@@ -135,7 +136,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Intent instance = AtirlceListActivity.newInstance(mContext, "");
-                instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, R.string.home_infom_all);
+                instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, mContext.getResources().getString(R.string.home_infom_all));
                 mContext.startActivity(instance);
             }
         });
@@ -178,7 +179,8 @@ public class HomsAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Intent intent3 = BookActivity.newInstance(mContext, null, null);
-                intent3.putExtra(BookActivity.CSTR_EXTRA_TITLE_STR, R.string.home_teacherMateri);
+                intent3.putExtra(BookActivity.CSTR_EXTRA_TITLE_STR,
+                        mContext.getResources().getString(R.string.home_teacherMateri));
                 mContext.startActivity(intent3);
             }
         });
@@ -187,7 +189,8 @@ public class HomsAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Intent intent2 = SpecasListActivity.newInstance(mContext, null, null);
-                intent2.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, R.string.home_specs);
+                intent2.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR,
+                        mContext.getResources().getString(R.string.home_specs));
                 mContext.startActivity(intent2);
             }
         });
