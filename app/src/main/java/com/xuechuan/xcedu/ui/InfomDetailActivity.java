@@ -273,10 +273,16 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             public void onChbClickListener(Object obj, boolean isChecak, int position) {
                 EvalueVo.DatasBean bean= (EvalueVo.DatasBean) obj;
                 SuppertUtil util = SuppertUtil.getInstance(mContext);
-                if (isChecak){
+                EvalueVo.DatasBean vo = (EvalueVo.DatasBean) mArray.get(position);
+                vo.setIssupport(isChecak);
+                if (isChecak) {
+                    vo.setSupportcount(vo.getSupportcount() + 1);
                     util.submitSupport(String.valueOf(bean.getTargetid()),"true",DataMessageVo.USERTYPEAC);
-                }else {
+                    adapter.notifyDataSetChanged();
+                } else {
+                    vo.setSupportcount(vo.getSupportcount() - 1);
                     util.submitSupport(String.valueOf(bean.getTargetid()),"false",DataMessageVo.USERTYPEAC);
+                    adapter.notifyDataSetChanged();
                 }
             }
         });

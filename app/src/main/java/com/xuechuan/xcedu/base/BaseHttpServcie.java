@@ -1,6 +1,7 @@
 package com.xuechuan.xcedu.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
 import com.google.gson.Gson;
@@ -13,8 +14,10 @@ import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -85,7 +88,9 @@ public class BaseHttpServcie {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                MyAppliction.getInstance().startLogin(context);
                 T.showToast(context, context.getString(R.string.please_login));
+
                 return;
             }
             user = vo.getData().getUser();
@@ -123,6 +128,7 @@ public class BaseHttpServcie {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                MyAppliction.getInstance().startLogin(context);
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }
@@ -163,6 +169,7 @@ public class BaseHttpServcie {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                MyAppliction.getInstance().startLogin(context);
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }
@@ -295,7 +302,7 @@ public class BaseHttpServcie {
                             dialog.dismiss();
                         }
                         L.e("数据异常");
-                        T.showToast(mContext,R.string.net_error);
+                        T.showToast(mContext, R.string.net_error);
                         L.e(response.message());
                         callBackView.onError(response);
                     }
@@ -444,6 +451,7 @@ public class BaseHttpServcie {
         UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
         if (userInfom == null) {
             T.showToast(context, context.getResources().getString(R.string.please_login));
+            MyAppliction.getInstance().startLogin(context);
             return null;
         }
         return userInfom;

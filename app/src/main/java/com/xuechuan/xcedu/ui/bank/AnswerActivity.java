@@ -67,6 +67,7 @@ import com.xuechuan.xcedu.utils.MyTimeUitl;
 import com.xuechuan.xcedu.utils.ShareUtils;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
@@ -846,8 +847,26 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             public void onClickListener(Object obj, int position) {
                 EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
                 EventBus.getDefault().postSticky(new EvalueTwoEvent(bean));
-                Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()),DataMessageVo.QUESTION);
+                Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(bean.getTargetid()),
+                        String.valueOf(bean.getId()), DataMessageVo.QUESTION);
                 startActivity(intent);
+            }
+        });
+        adapter.setClickChbListener(new AnswerEvaluateAdapter.onItemChbClickListener() {
+            @Override
+            public void onClickChbListener(Object obj, boolean isCheck, int position) {
+                EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
+                EvalueVo.DatasBean vo = (EvalueVo.DatasBean) mArray.get(position);
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                vo.setIssupport(isCheck);
+                if (isCheck) {
+                    vo.setSupportcount(vo.getSupportcount() + 1);
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEQC);
+                } else {
+                    vo.setSupportcount(vo.getSupportcount() - 1);
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEQC);
+                }
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -1586,7 +1605,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             case R.id.btn_b_buy://购买
                 QuestionAllVo.DatasBean datasBean = mTextDetial.get(mMark);
 //                Intent intent = new Intent(AnswerActivity.this, BankBuyActivity.class);
-                Intent intent = BankBuyActivity.newInstance(mContext, String.valueOf(datasBean.getCourseid()),BankBuyActivity.TEXT);
+                Intent intent = BankBuyActivity.newInstance(mContext, String.valueOf(datasBean.getCourseid()), BankBuyActivity.TEXT);
                 startActivity(intent);
                 break;
             case R.id.btn_b_sure_key://多选确认

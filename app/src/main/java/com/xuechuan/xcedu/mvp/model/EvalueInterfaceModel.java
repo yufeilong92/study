@@ -35,4 +35,20 @@ public class EvalueInterfaceModel implements EvalueInterfaceContract.Model {
             }
         });
     }
+    @Override
+    public void SubmitContent(Context context, String targetid, String comment, String commentid, String usetype, final RequestResulteView view) {
+        CurrencyService service = new CurrencyService(context);
+        service.submitConmment(targetid, comment, commentid, usetype, new StringCallBackView() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                view.success(response.body().toString());
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                view.error(response.message());
+            }
+        });
+
+    }
 }

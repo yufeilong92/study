@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.EvalueTwoActivity">
 
     <LinearLayout style="@style/TitleBar">
@@ -43,46 +43,54 @@
         </com.andview.refreshview.XRefreshView>
 
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_ed_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="@dimen/space_8">
-
-            <EditText
-                android:id="@+id/et_infom_two_content"
-                android:layout_width="0dp"
+            android:orientation="vertical">
+            <View style="@style/view_line_tab_line" />
+            <LinearLayout
+                android:padding="@dimen/space_8"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/space_8"
-                android:layout_weight="1"
-                android:background="@drawable/btn_home_search_bg"
-                android:gravity="center_vertical"
-                android:hint="我来说两句..."
-                android:maxLines="4"
-                android:minLines="2"
-                android:paddingBottom="@dimen/space_4"
-                android:paddingLeft="@dimen/space_16"
-                android:paddingRight="@dimen/space_16"
-                android:paddingTop="@dimen/space_4"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_14" />
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/et_infom_two_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/space_8"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_home_search_bg"
+                    android:gravity="center_vertical"
+                    android:hint="我来说两句..."
+                    android:maxLines="4"
+                    android:minLines="2"
+                    android:paddingBottom="@dimen/space_4"
+                    android:paddingLeft="@dimen/space_16"
+                    android:paddingRight="@dimen/space_16"
+                    android:paddingTop="@dimen/space_4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_14" />
 
-            <Button
-                android:id="@+id/btn_infom_two_send"
-                android:layout_width="@dimen/space_22"
-                android:layout_height="@dimen/space_22"
-                android:layout_gravity="center_vertical"
-                android:background="@mipmap/ic_send" />
+                <Button
+                    android:id="@+id/btn_infom_two_send"
+                    android:layout_width="@dimen/space_48"
+                    android:layout_height="@dimen/space_48"
+                    android:layout_gravity="center_vertical"
+                    android:background="@mipmap/common_com_send" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/tv_evalue_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@mipmap/common_blankimg_comment"
+                android:visibility="gone" />
         </LinearLayout>
-        <ImageView
-            android:visibility="gone"
-            android:scaleType="center"
-            android:src="@mipmap/common_blankimg_comment"
-            android:id="@+id/tv_evalue_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </LinearLayout>

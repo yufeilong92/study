@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,14 +13,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
-import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.EvalueTwoAdapter;
@@ -29,10 +27,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.contract.EvalueInterfaceContract;
 import com.xuechuan.xcedu.mvp.model.EvalueInterfaceModel;
-import com.xuechuan.xcedu.mvp.model.EvalueModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.EvalueInterfacePresenter;
-import com.xuechuan.xcedu.mvp.presenter.EvaluePresenter;
-import com.xuechuan.xcedu.mvp.view.EvalueView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -41,13 +36,9 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
+import com.xuechuan.xcedu.vo.EvalueInfomDataVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
-import com.xuechuan.xcedu.vo.UserBean;
-import com.xuechuan.xcedu.vo.UserInfomVo;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.xuechuan.xcedu.vo.TargetcommentBeanVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +56,7 @@ import java.util.List;
  * @Copyright: 2018/5/3   Inc. All rights reserved.
  * 注意：本内容仅限于XXXXXX有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class EvalueTwoActivity extends BaseActivity implements View.OnClickListener, EvalueView, EvalueInterfaceContract.View {
+public class EvalueTwoActivity extends BaseActivity implements View.OnClickListener, EvalueInterfaceContract.View {
     /**
      * 评价类型类型
      */
@@ -75,13 +66,12 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     private EditText mEtInfomTwoContent;
     private Button mBtnInfomTwoSend;
     private RelativeLayout mRlInfomTwoLayout;
-    private EvaluePresenter mPresenter;
     private Context mContext;
     private AlertDialog mDialog;
     /**
      * 问题id
      */
-    public static String QUESTTION = "questtion";
+    public static String TARGETID = "questtion";
     /**
      * 评价id
      */
@@ -96,7 +86,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     public static long lastRefreshTime;
 
 
-    private String mQuestion;
+    private String mTargetid;
     private String mCommonid;
 
     private List mArray;
@@ -107,53 +97,46 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     private AlertDialog mDialog1;
     private String mType;
     private EvalueInterfacePresenter mInfomPresenter;
+    private LinearLayout mLlEdLayout;
 
-    public static Intent newInstance(Context context, String question, String commonid, String type) {
+    public static Intent newInstance(Context context, String targetid, String commonid, String type) {
         Intent intent = new Intent(context, EvalueTwoActivity.class);
-        intent.putExtra(QUESTTION, question);
+        intent.putExtra(TARGETID, targetid);
         intent.putExtra(COMMONID, commonid);
         intent.putExtra(TESTYPE, type);
         return intent;
     }
 
-/*
-    @Override
+/*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evalue_two);
         initView();
         initData();
-    }
-*/
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_evalue_two);
         if (getIntent() != null) {
-            mQuestion = getIntent().getStringExtra(QUESTTION);
+            mTargetid = getIntent().getStringExtra(TARGETID);
             mCommonid = getIntent().getStringExtra(COMMONID);
             mType = getIntent().getStringExtra(TESTYPE);
 
         }
         initView();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void setHeardata(EvalueTwoEvent heardata) {
         clearData();
         initData();
         initAdapter();
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_two_evaluate_hear, null);
-        initHearView(view, heardata.getBean());
-        adapter.setHeaderView(view, mRlvInfomtwoContent);
         initXflrView();
         mXfvContentTwoDetail.startRefresh();
-
     }
 
-    private void initHearView(View view, final EvalueVo.DatasBean bean) {
+
+    private void initHearView(View view, final TargetcommentBeanVo bean) {
+        mCommonid = String.valueOf(bean.getId());
+
+        mLlEdLayout.setVisibility(View.VISIBLE);
         ImageView mIvEvaluateHear = (ImageView) view.findViewById(R.id.iv_evaluate_hear);
         TextView mTvEvalueUserName = (TextView) view.findViewById(R.id.tv_evalue_user_name);
         TextView mTvEvalueContent = (TextView) view.findViewById(R.id.tv_evalue_content);
@@ -223,18 +206,15 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
             return;
         }
         isRefresh = true;
-        mInfomPresenter.requestEvalueTwoMore(mContext,getNowPage() + 1,mCommonid,mType);
-//        mPresenter.requestEvalueTwoMoreContent(mContext, getNowPage() + 1, mQuestion, mCommonid);
+        mInfomPresenter.requestEvalueTwoMore(mContext, getNowPage() + 1, mCommonid, mType);
     }
 
     private void requestData() {
-
         if (isRefresh) {
             return;
         }
         isRefresh = true;
-        mInfomPresenter.requestEvalueTwo(mContext,1,mCommonid,mType);
-//        mPresenter.requestEvalueTwoContent(mContext, 1, mQuestion, mCommonid);
+        mInfomPresenter.requestEvalueTwo(mContext, 1, mCommonid, mType);
     }
 
     private void initAdapter() {
@@ -242,12 +222,10 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvInfomtwoContent.setLayoutManager(gridLayoutManager);
-        mRlvInfomtwoContent.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvInfomtwoContent.setAdapter(adapter);
     }
 
     private void initData() {
-        mPresenter = new EvaluePresenter(new EvalueModelImpl(), this);
         mInfomPresenter = new EvalueInterfacePresenter();
         mInfomPresenter.initModelView(new EvalueInterfaceModel(), this);
     }
@@ -263,6 +241,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         mBtnInfomTwoSend.setOnClickListener(this);
         mTvEvalueEmpty = (ImageView) findViewById(R.id.tv_evalue_empty);
         mTvEvalueEmpty.setOnClickListener(this);
+        mLlEdLayout = (LinearLayout) findViewById(R.id.ll_ed_layout);
+        mLlEdLayout.setOnClickListener(this);
     }
 
     @Override
@@ -274,7 +254,6 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
                     T.showToast(mContext, getStringWithId(R.string.content_is_empty));
                     return;
                 }
-                // TODO: 2018/5/3 提交二级评价
                 submitEvalut(str);
                 mDialog1 = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
                 Utils.hideInputMethod(mContext, mEtInfomTwoContent);
@@ -284,9 +263,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void submitEvalut(String str) {
         mEtInfomTwoContent.setText("");
-        mPresenter.submitContent(mContext, mQuestion, str, mCommonid, DataMessageVo.QUESTION);
+        mInfomPresenter.SubmitContent(mContext, mTargetid, str, mCommonid, mType);
     }
-
 
     @Override
     public void submitEvalueSuccess(String con) {
@@ -301,99 +279,6 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         if (mDialog1 != null) {
             mDialog1.dismiss();
         }
-    }
-
-    @Override
-    public void GetTwoEvalueSuccess(String con) {
-        mXfvContentTwoDetail.stopRefresh();
-        isRefresh = false;
-        L.e(con);
-        Gson gson = new Gson();
-        EvalueVo vo = gson.fromJson(con, EvalueVo.class);
-        if (vo.getStatus().getCode() == 200) {
-            List list = vo.getDatas();
-            clearData();
-            if (list != null && !list.isEmpty()) {
-                addListData(list);
-            } else {
-                mXfvContentTwoDetail.setLoadComplete(true);
-                adapter.notifyDataSetChanged();
-                return;
-            }
-
-            if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
-                mXfvContentTwoDetail.setLoadComplete(true);
-            } else {
-                mXfvContentTwoDetail.setPullLoadEnable(true);
-                mXfvContentTwoDetail.setLoadComplete(false);
-            }
-            adapter.notifyDataSetChanged();
-        } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
-        }
-    }
-
-    @Override
-    public void GetTwoEvalueError(String con) {
-        isRefresh = false;
-        mXfvContentTwoDetail.stopRefresh();
-        L.e(con);
-    }
-
-    @Override
-    public void GetTwoMoreEvalueSuccess(String con) {
-        isRefresh = false;
-        Gson gson = new Gson();
-        EvalueVo vo = gson.fromJson(con, EvalueVo.class);
-        if (vo.getStatus().getCode() == 200) {//成功
-            List list = vo.getDatas();
-//                    clearData();
-            if (list != null && !list.isEmpty()) {
-                addListData(list);
-            } else {
-                mXfvContentTwoDetail.setLoadComplete(true);
-                adapter.notifyDataSetChanged();
-                return;
-            }
-            //判断是否能整除
-            if (!mArray.isEmpty() && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
-                mXfvContentTwoDetail.setLoadComplete(false);
-                mXfvContentTwoDetail.setPullLoadEnable(true);
-            } else {
-                mXfvContentTwoDetail.setLoadComplete(true);
-            }
-            adapter.notifyDataSetChanged();
-        } else {
-            isRefresh = false;
-            T.showToast(mContext, vo.getStatus().getMessage());
-        }
-    }
-
-    @Override
-    public void GetTwoMoreEvalueError(String con) {
-        isRefresh = false;
-        mXfvContentTwoDetail.stopRefresh();
-        L.e(con);
-    }
-
-    @Override
-    public void GetOneEvalueSuccess(String con) {
-
-    }
-
-    @Override
-    public void GetOneEvalueError(String con) {
-
-    }
-
-    @Override
-    public void GetOneMoreEvalueSuccess(String con) {
-
-    }
-
-    @Override
-    public void GetOneMoreEvalueError(String con) {
-
     }
 
     /**
@@ -428,29 +313,81 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         mArray.addAll(list);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 
     @Override
-    public void EvalueTwoSuc(String com) {
+    public void EvalueTwoSuc(String con) {
+        mXfvContentTwoDetail.stopRefresh();
+        isRefresh = false;
+        L.e(con);
+        Gson gson = new Gson();
+        EvalueInfomDataVo vo = gson.fromJson(con, EvalueInfomDataVo.class);
+        EvalueInfomDataVo.DataBean data = vo.getData();
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_two_evaluate_hear, null);
+        initHearView(view, data.getTargetcomment());
+        adapter.setHeaderView(view, mRlvInfomtwoContent);
+        if (vo.getStatus().getCode() == 200) {
+            List list = data.getCommentcomments();
+            clearData();
+            if (list != null && !list.isEmpty()) {
+                addListData(list);
+            } else {
+                mXfvContentTwoDetail.setLoadComplete(true);
+                adapter.notifyDataSetChanged();
+                return;
+            }
 
+            if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
+                mXfvContentTwoDetail.setLoadComplete(true);
+            } else {
+                mXfvContentTwoDetail.setPullLoadEnable(true);
+                mXfvContentTwoDetail.setLoadComplete(false);
+            }
+            adapter.notifyDataSetChanged();
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
     }
 
     @Override
     public void EvalueTwoErro(String com) {
-
+        isRefresh = false;
+        mXfvContentTwoDetail.stopRefresh();
+        L.e(com);
     }
 
     @Override
     public void EvalueTwoSucMore(String com) {
-
+        isRefresh = false;
+        Gson gson = new Gson();
+        EvalueInfomDataVo vo = gson.fromJson(com, EvalueInfomDataVo.class);
+        if (vo.getStatus().getCode() == 200) {//成功
+            List list = vo.getData().getCommentcomments();
+//                    clearData();
+            if (list != null && !list.isEmpty()) {
+                addListData(list);
+            } else {
+                mXfvContentTwoDetail.setLoadComplete(true);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+            //判断是否能整除
+            if (!mArray.isEmpty() && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                mXfvContentTwoDetail.setLoadComplete(false);
+                mXfvContentTwoDetail.setPullLoadEnable(true);
+            } else {
+                mXfvContentTwoDetail.setLoadComplete(true);
+            }
+            adapter.notifyDataSetChanged();
+        } else {
+            isRefresh = false;
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
     }
 
     @Override
     public void EvalueTwoErroMore(String com) {
-
+        isRefresh = false;
+        mXfvContentTwoDetail.stopRefresh();
+        L.e(com);
     }
 }

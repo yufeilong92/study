@@ -1,19 +1,26 @@
 package com.xuechuan.xcedu.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.MyMsgVo;
+import com.xuechuan.xcedu.vo.SystemVo;
+import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
 import java.util.List;
 
@@ -32,11 +39,25 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
     private Context mContext;
     private List mData;
     private final LayoutInflater mInflater;
+    private CommonPopupWindow layoutGravity;
+    private CommonPopupWindow.LayoutGravity layoutGravity1;
+    private CommonPopupWindow showDel;
+    private Button btnDel;
 
     public MyMsgAdapter(Context mContext, List mData) {
         this.mContext = mContext;
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
+    }
+
+    private onItemLangClickListener clickLangListener;
+
+    public interface onItemLangClickListener {
+        public void onClickLangListener(MyMsgVo.DatasBean datas, int position);
+    }
+
+    public void setLangClickListener(onItemLangClickListener clickListener) {
+        this.clickLangListener = clickListener;
     }
 
     @Override
@@ -52,23 +73,46 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        MyMsgVo.DatasBean datas = (MyMsgVo.DatasBean) mData.get(position);
+    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
+        final MyMsgVo.DatasBean datas = (MyMsgVo.DatasBean) mData.get(position);
         int notifytype = datas.getNotifytype();
         if (notifytype == 1) {
             holder.mTvMPType.setText("回复了你");
             holder.mTvMPLook.setVisibility(View.VISIBLE);
+            holder.mTvMyMsgContent.setText(datas.getContent());
         } else if (notifytype == 2) {
             holder.mTvMPType.setText("赞了你");
             holder.mTvMPLook.setVisibility(View.GONE);
+            holder.mTvMyMsgContent.setText(datas.getTargetcontent());
         }
         if (!StringUtil.isEmpty(datas.getMemberheadicon()))
             MyAppliction.getInstance().displayImages(holder.mIvMyMsgImg, datas.getMemberheadicon(), true);
+
         holder.mTvMyMsgName.setText(datas.getMembername());
-        holder.mTvMyMsgContent.setText(datas.getContent());
         holder.mTvMyMsgTime.setText(TimeUtil.getYMDT(datas.getCreatetime()));
-
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = "";
+                if (datas.getSourcetype() == 1 || datas.getSourcetype() == 2) {
+                    type = DataMessageVo.ARTICLE;
+                } else if (datas.getSourcetype() == 3 || datas.getSourcetype() == 4) {
+                    type = DataMessageVo.QUESTION;
+                } else if (datas.getSourcetype() == 5 || datas.getSourcetype() == 6) {
+                    type = DataMessageVo.VIDEO;
+                }
+                Intent intent = EvalueTwoActivity.newInstance(mContext, "", String.valueOf(datas.getTargetid()), type);
+                mContext.startActivity(intent);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showShareLayout(holder.itemView, datas, position);
+                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
+                return false;
+            }
+        });
     }
 
     @Override
@@ -94,6 +138,59 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
             this.mTvMyMsgContent = (TextView) itemView.findViewById(R.id.tv_my_msg_content);
             this.mTvMPLook = (TextView) itemView.findViewById(R.id.tv_m_p_look);
         }
+
+
+    }
+
+    /**
+     * 分享布局
+     */
+    private void showShareLayout(final View view, final MyMsgVo.DatasBean vo, final int position) {
+        layoutGravity1 = new CommonPopupWindow.LayoutGravity(CommonPopupWindow.LayoutGravity.TO_ABOVE | CommonPopupWindow.LayoutGravity.CENTER_HORI);
+        showDel = new CommonPopupWindow(mContext, R.layout.del, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+
+            private Button btnCancel;
+
+            @Override
+            protected void initView() {
+                View view = getContentView();
+                btnDel = view.findViewById(R.id.btn_pop_del);
+                btnCancel = view.findViewById(R.id.btn_pop_cancel);
+            }
+
+            @Override
+            protected void initEvent() {
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDel.getPopupWindow().dismiss();
+                    }
+                });
+                btnDel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (clickLangListener != null) {
+                            showDel.getPopupWindow().dismiss();
+                            clickLangListener.onClickLangListener(vo, position);
+                        }
+
+                    }
+                });
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        view.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                    }
+                });
+            }
+        };
+        showDel.showBashOfAnchor(view, layoutGravity1, 0, 0);
     }
 
 

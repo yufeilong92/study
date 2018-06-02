@@ -1,12 +1,15 @@
 package com.xuechuan.xcedu.net;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.gson.JsonObject;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackUpView;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
@@ -47,6 +50,7 @@ public class UpData extends UpDataService {
 
         UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
         if (userInfom == null) {
+            MyAppliction.getInstance().startLogin(mContext);
             T.showToast(mContext, mContext.getResources().getString(R.string.please_login));
             return;
         }

@@ -1,28 +1,16 @@
 package com.xuechuan.xcedu.ui.me;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.MyMsgAdapter;
 import com.xuechuan.xcedu.adapter.MySystemAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
@@ -30,16 +18,10 @@ import com.xuechuan.xcedu.mvp.contract.MySystemContract;
 import com.xuechuan.xcedu.mvp.model.MySystemModel;
 import com.xuechuan.xcedu.mvp.presenter.MySystemPresenter;
 import com.xuechuan.xcedu.ui.AgreementActivity;
-import com.xuechuan.xcedu.ui.bank.AnswerActivity;
-import com.xuechuan.xcedu.utils.Defaultcontent;
-import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.ShareUtils;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.MyOrderVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 import com.xuechuan.xcedu.vo.SystemVo;
-import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +54,10 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
         setContentView(R.layout.activity_system_msg);
         initView();
     }*/
-
-    private int mPosition = -1;
+    /**
+     * 删除
+     */
+    private int mDelPosition = -1;
 
 
     @Override
@@ -169,8 +153,9 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
     private void submitDelSystem(final SystemVo.DatasBean obj, final int position) {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(obj.getId());
-        mPosition = position;
+        mDelPosition = position;
         mPresenter.submitDelSystemMsg(mContext, list);
+
     }
 
     private void clearData() {
@@ -281,7 +266,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            mArrary.remove(mPosition);
+            mArrary.remove(mDelPosition);
             adapter.notifyDataSetChanged();
             T.showToast(mContext, getStringWithId(R.string.delect_Success));
         } else {

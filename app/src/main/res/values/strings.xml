@@ -172,7 +172,7 @@
     <string name="reset_password">重置密码</string>
     <string name="loading">加载中...</string>
     <string name="passundersixt">密码不能低于6位</string>
-    <string name="please_login">用户没有登录，请登录</string>
+    <string name="please_login">用户登录过期，请登录</string>
     <string name="please_register">用户还未注册,请注册</string>
     <string name="sms_ok">验证码发送成功</string>
     <string name="sms_ok_repeat">一分钟内同一个手机号不能重新发送</string>

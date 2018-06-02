@@ -19,6 +19,7 @@ import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
+import com.xuechuan.xcedu.vo.CommentcommentsVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
 
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewHolder> implements View.OnClickListener {
     private Context mContext;
-    private List<EvalueVo.DatasBean> mData;
+    private List mData;
     private final LayoutInflater mInflater;
 
     private onItemClickListener clickListener;
@@ -71,7 +72,7 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        final EvalueVo.DatasBean bean = mData.get(position);
+        final CommentcommentsVo bean = (CommentcommentsVo) mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
             holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");

@@ -1,6 +1,7 @@
 package com.xuechuan.xcedu.net;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -16,7 +17,9 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.net.view.StringCallBackUpView;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -55,6 +58,7 @@ public class UpDataService {
         if (isWithToken) {
             UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
             if (vo == null) {
+                MyAppliction.getInstance().startLogin(context);
                 T.showToast(context, context.getString(R.string.please_login));
                 return;
             }

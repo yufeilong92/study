@@ -74,9 +74,12 @@
                     android:background="@drawable/select_issupper_home"
                     android:button="@null" />
 
-                <Space style="@style/space_8_width" />
+                <Space
+                    android:visibility="gone"
+                    style="@style/space_8_width" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_evalue_suppernumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

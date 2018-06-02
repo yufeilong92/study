@@ -145,16 +145,17 @@ public class MySystemAdapter extends BaseRecyclerAdapter<MySystemAdapter.ViewHol
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (clickLangListener != null) {
-                            showDel.getPopupWindow().dismiss();
-                            clickLangListener.onClickLangListener(vo, position);
-                        }
+                        showDel.getPopupWindow().dismiss();
                     }
                 });
                 btnDel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showDel.getPopupWindow().dismiss();
+                        if (clickLangListener != null) {
+                            showDel.getPopupWindow().dismiss();
+                            clickLangListener.onClickLangListener(vo, position);
+                        }
+
                     }
                 });
             }

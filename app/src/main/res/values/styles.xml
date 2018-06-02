@@ -325,7 +325,7 @@
     </style>
 
     <style name="view_line_tab_line">
-        <item name="android:background">@mipmap/ic_title_line</item>
+        <item name="android:background">@mipmap/ic_title_line_gray</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">5dp</item>
     </style>

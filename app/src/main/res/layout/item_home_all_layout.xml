@@ -47,6 +47,7 @@
             <CheckBox
                 android:paddingLeft="@dimen/space_8"
                 android:layout_gravity="center"
+                android:clickable="false"
                 android:id="@+id/chb_isSupper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

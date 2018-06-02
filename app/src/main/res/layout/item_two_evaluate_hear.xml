@@ -25,6 +25,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/tv_evalue_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,7 +40,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
                 android:maxLines="2"
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
@@ -51,6 +51,8 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12"
                     android:id="@+id/tv_evalue_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,6 +60,8 @@
                     android:text="1分钟" />
 
                 <TextView
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/text_fu_color"
                     android:visibility="gone"
                     android:id="@+id/tv_evalue_evalue"
                     android:layout_width="wrap_content"
@@ -69,6 +73,8 @@
                 <Space style="@style/space_16_width" />
 
                 <CheckBox
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/text_fu_color"
                     android:paddingLeft="@dimen/space_8"
                     android:text="222"
                     android:id="@+id/chb_evalua_issupper"

@@ -22,6 +22,7 @@ public class SuppertUtil implements SupportContract.View {
     private Context mContext;
     private static SuppertUtil service;
     private final SupportPresenter presenter;
+    private String IsSupport;
 
     public SuppertUtil(Context mContext) {
         this.mContext = mContext;
@@ -36,17 +37,23 @@ public class SuppertUtil implements SupportContract.View {
         return service;
     }
 
-    public void submitSupport( String targetid, String isSupport, String usetype) {
+    public void submitSupport(String targetid, String isSupport, String usetype) {
+        this.IsSupport = isSupport;
         presenter.submitSupport(mContext, targetid, isSupport, usetype);
     }
+
     @Override
     public void SupportSuc(String con) {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
-        if (vo.getStatus().getCode()==200){
-             T.showToast(mContext,"点赞成功");
-        }else {
-            T.showToast(mContext,vo.getStatus().getMessage());
+        if (vo.getStatus().getCode() == 200) {
+            if (!StringUtil.isEmpty(IsSupport) && IsSupport.equals("true")) {
+//                T.showToast(mContext, "点赞成功");
+            } else if (!StringUtil.isEmpty(IsSupport) && IsSupport.equals("false")) {
+//                T.showToast(mContext, "取消成功");
+            }
+        } else {
+            L.e(vo.getStatus().getMessage());
         }
     }
 

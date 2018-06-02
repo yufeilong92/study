@@ -62,6 +62,16 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
         mInflater = LayoutInflater.from(mContext);
     }
 
+    private onItemChbClickListener clickChbListener;
+
+    public interface onItemChbClickListener {
+        public void onClickChbListener(Object obj, boolean isCheck,int position);
+        }
+
+        public void setClickChbListener(onItemChbClickListener clickListener) {
+            this.clickChbListener = clickListener;
+    }
+
     /**
      * 设置背景
      *
@@ -87,7 +97,7 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
+    public void onBindViewHolder(ViewHolder holder, final int position, boolean isItem) {
       final   EvalueVo.DatasBean bean = mData.get(position);
         if (!StringUtil.isEmpty(mSelectType)) {
             if (mSelectType.equals(AnswerActivity.mSelectViewBgYJ)) {//夜间
@@ -130,16 +140,13 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
         holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
+
         holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SuppertUtil util = SuppertUtil.getInstance(mContext);
-                if (isChecked) {
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEQC);
-                } else {
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEQC);
+                if (clickChbListener!=null){
+                    clickChbListener.onClickChbListener(bean,isChecked,position);
                 }
-
             }
         });
         holder.itemView.setTag(bean);

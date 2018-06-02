@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
+import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.MyMsgAdapter;
 import com.xuechuan.xcedu.adapter.MyOrderAdapter;
@@ -20,8 +21,10 @@ import com.xuechuan.xcedu.mvp.contract.MyMsgContract;
 import com.xuechuan.xcedu.mvp.model.MyMsgModel;
 import com.xuechuan.xcedu.mvp.presenter.MyMsgPresenter;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.MyMsgVo;
 import com.xuechuan.xcedu.vo.MyOrderVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +56,10 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         setContentView(R.layout.activity_my_msg);
         initView();
     }*/
-
+    /**
+     * 删除数据
+     */
+    private int mDelPostion=-1;
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_my_msg);
@@ -67,7 +73,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
 
     private void initData() {
         mPresenter = new MyMsgPresenter();
-        mPresenter.initModelView(new MyMsgModel(),this);
+        mPresenter.initModelView(new MyMsgModel(), this);
     }
 
     private void initView() {
@@ -76,6 +82,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         mIvContentEmpty = (ImageView) findViewById(R.id.iv_content_empty);
         mXfvContentMsg = (XRefreshView) findViewById(R.id.xfv_content_msg);
     }
+
     private void initXrfresh() {
         mXfvContentMsg.restoreLastRefreshTime(lastRefreshTime);
         mXfvContentMsg.setPullLoadEnable(true);
@@ -88,6 +95,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
             public void onRefresh(boolean isPullDown) {
                 loadNewData();
             }
+
             @Override
             public void onLoadMore(boolean isSilence) {
                 LoadMoreData();
@@ -101,7 +109,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
             return;
         }
         isRefresh = true;
-        mPresenter.requestMyMsg(mContext,getNowPage()+1);
+        mPresenter.requestMyMsg(mContext, getNowPage() + 1);
     }
 
     private void loadNewData() {
@@ -109,7 +117,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
             return;
         }
         isRefresh = true;
-        mPresenter.requestMyMsg(mContext,1);
+        mPresenter.requestMyMsg(mContext, 1);
     }
 
     private void bindAdapterData() {
@@ -117,8 +125,17 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new MyMsgAdapter(mContext, mArrary);
         mRlvMyMsg.setLayoutManager(gridLayoutManager);
-        mRlvMyMsg.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
+        mRlvMyMsg.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvMyMsg.setAdapter(adapter);
+        adapter.setLangClickListener(new MyMsgAdapter.onItemLangClickListener() {
+            @Override
+            public void onClickLangListener(MyMsgVo.DatasBean datas, int position) {
+                List<Integer> list = new ArrayList<>();
+                list.add(datas.getId());
+                mDelPostion = position;
+                mPresenter.submitDelMyMsg(mContext, list);
+            }
+        });
     }
 
     private void clearData() {
@@ -158,7 +175,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         mXfvContentMsg.stopRefresh();
         isRefresh = false;
         Gson gson = new Gson();
-        Log.e("=====", "MyMsgSuccess: "+con );
+        Log.e("=====", "MyMsgSuccess: " + con);
         MyMsgVo orderVo = gson.fromJson(con, MyMsgVo.class);
         if (orderVo.getStatus().getCode() == 200) {
             List<MyMsgVo.DatasBean> datas = orderVo.getDatas();
@@ -222,17 +239,26 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
 
     @Override
     public void MyMsgMoreError(String con) {
-
         isRefresh = false;
     }
 
     @Override
     public void DelMyMsg(String con) {
-
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            mArrary.remove(mDelPostion);
+            adapter.notifyDataSetChanged();
+            T.showToast(mContext, getStringWithId(R.string.delect_Success));
+        } else {
+            T.showToast(mContext, getStringWithId(R.string.delect_error));
+            String message = vo.getStatus().getMessage();
+            L.e(message);
+        }
     }
 
     @Override
     public void DelMyError(String con) {
-
+        T.showToast(mContext, getStringWithId(R.string.delect_error));
     }
 }

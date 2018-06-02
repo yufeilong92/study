@@ -6,14 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.EvalueInfomVo;
@@ -40,7 +43,7 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
 
 
     public interface onItemClickListener {
-        public void onClickListener( EvalueVo.DatasBean obj, int position);
+        public void onClickListener(EvalueVo.DatasBean obj, int position);
     }
 
     public void setClickListener(onItemClickListener clickListener) {
@@ -52,6 +55,18 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
         this.mData = mData;
         mInflater = LayoutInflater.from(mContext);
     }
+
+
+    private onItemChbClickListener clickChbListener;
+
+    public interface onItemChbClickListener {
+        public void onClickChbListener(EvalueVo.DatasBean bean, boolean isChick, int position);
+    }
+
+    public void setChbClickListener(onItemChbClickListener clickListener) {
+        this.clickChbListener = clickListener;
+    }
+
 
     @Override
     public NetMyBookEvaleAdapter.ViewHolder getViewHolder(View view) {
@@ -68,13 +83,13 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
-        EvalueVo.DatasBean bean = mData.get(position);
+    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
+        final EvalueVo.DatasBean bean = mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
-            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount()+"");
-        }else {
-            holder.mTvEvalueSuppernumber.setText("赞");
+            holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
+        } else {
+            holder.mChbEvaluaIssupper.setText("赞");
         }
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
@@ -85,7 +100,16 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
         if (!StringUtil.isEmpty(bean.getHeadicon())) {
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
-        holder.mTvEvalueEvalue.setText(bean.getCommentcount()+"");
+        holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (clickChbListener != null) {
+                    clickChbListener.onClickChbListener(bean, isChecked, position);
+                }
+
+            }
+        });
+        holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);
 
@@ -93,7 +117,7 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
 
     @Override
     public int getAdapterItemCount() {
-        return mData==null?0:mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
     @Override

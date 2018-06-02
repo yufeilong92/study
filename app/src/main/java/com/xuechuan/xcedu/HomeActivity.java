@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -21,6 +22,7 @@ import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomeFragment;
+import com.xuechuan.xcedu.fragment.HomesFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
 import com.xuechuan.xcedu.mvp.model.RefreshTokenModelImpl;
@@ -110,9 +112,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         initView();
         initData();
         if (!StringUtil.isEmpty(mType)) {
-            if(mType.equals(BOOK)){
+            if (mType.equals(BOOK)) {
                 Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 1);
-            }else if (mType.equals(VIDEO)){
+            } else if (mType.equals(VIDEO)) {
                 Utils.showSelectFragment(mSfm, mFragmentLists, mFragmentLayout, 2);
             }
 
@@ -120,9 +122,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void setShowType() {
-
     }
-
 
     protected void initView() {
         MyAppliction.getInstance().addActivity(this);
@@ -147,7 +147,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private void addFragmentData() {
         mFragmentLists = new ArrayList<>();
-        HomeFragment homeFragment = new HomeFragment();
+//        HomeFragment homeFragment = new HomeFragment();
+        HomesFragment homeFragment = new HomesFragment();
         BankFragment bankFragment = new BankFragment();
         NetFragment netFragment = new NetFragment();
         PersionalFragment persionalFragment = new PersionalFragment();
@@ -163,8 +164,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         FragmentTransaction transaction = mSfm.beginTransaction();
         transaction.show(homeFragment).commit();
-
-
     }
 
 

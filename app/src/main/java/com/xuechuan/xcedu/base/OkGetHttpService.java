@@ -1,11 +1,14 @@
 package com.xuechuan.xcedu.base;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
@@ -50,6 +53,7 @@ public class OkGetHttpService extends BaseHttpServcie {
     public void sendRequestGetWithToken(Context context, final String url, final ArrayList<GetParamVo> obj, final StringCallBackView callBackView) {
         UserInfomVo userInfomVo = MyAppliction.getInstance().getUserInfom();
         if (userInfomVo == null) {
+            MyAppliction.getInstance().startLogin(context);
             T.showToast(context, context.getString(R.string.please_login));
             return;
         }

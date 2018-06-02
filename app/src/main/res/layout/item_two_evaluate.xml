@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/ll_item_root"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -25,6 +25,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/tv_evalue_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,7 +40,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
                 android:maxLines="2"
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
@@ -55,16 +55,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1分钟" />
+                    android:text="1分钟"
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/tv_evalue_evalue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/ic_comment"
                     android:drawablePadding="@dimen/space_8"
-                    android:text="评论" />
+                    android:text="评论"
+                    android:visibility="gone" />
 
                 <Space style="@style/space_16_width" />
 
@@ -73,7 +75,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/select_issupper_home"
-                    android:button="@null" />
+                    android:button="@null"
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12" />
 
                 <Space style="@style/space_8_width" />
 
@@ -85,11 +89,11 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <View
-        android:id="@+id/v_line_hear"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space_10"
-        android:background="@color/input_bg" />
+        style="@style/view_line_1"
+        android:layout_marginLeft="@dimen/space_16"
+        android:layout_marginRight="@dimen/space_16" />
+
 
 </LinearLayout>

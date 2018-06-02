@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.XceuAppliciton;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -31,6 +32,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.SharedSeletIdListUtil;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
@@ -327,6 +329,11 @@ public class MyAppliction extends MultiDexApplication {
         }
         //杀死该应用进程
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+    public void startLogin(Context context){
+        MyAppliction.getInstance().setUserInfom(null);
+        SaveUUidUtil.getInstance().delectUUid();
+        context.startActivity(new Intent(context, LoginActivity.class));
     }
 
 

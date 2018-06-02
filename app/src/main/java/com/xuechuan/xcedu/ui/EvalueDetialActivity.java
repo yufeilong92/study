@@ -38,7 +38,7 @@ import java.util.List;
  * @version V 1.0 xxxxxxxx
  * @Title: InfomActivity
  * @Package com.xuechuan.xcedu.ui
- * @Description: 评价页详情
+ * @Description: 评价页详情(暂无)
  * @author: L-BackPacker
  * @date: 2018/4/19 16:35
  * @verdescript 版本号 修改时间  修改人 修改的概要说明

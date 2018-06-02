@@ -1,42 +1,38 @@
 package com.xuechuan.xcedu.fragment;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
-import com.andview.refreshview.callback.IFooterCallBack;
 import com.google.gson.Gson;
+import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.Event.VideoIdEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.HomeEvaluateAdapter;
 import com.xuechuan.xcedu.adapter.NetMyBookEvaleAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.model.NetVideoEvalueModelImple;
 import com.xuechuan.xcedu.mvp.presenter.NetVideoEvaluePresenter;
 import com.xuechuan.xcedu.mvp.view.NetVideoEvalueView;
-import com.xuechuan.xcedu.net.CurrencyService;
-import com.xuechuan.xcedu.ui.net.NetBookEvalueInfomActivity;
+import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.EvalueInfomVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
-import com.xuechuan.xcedu.vo.SpecasChapterListVo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,9 +65,10 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     private long lastRefreshTime;
     private NetVideoEvaluePresenter mPresenter;
     private String mVideoId;
-    private EditText mEtNetBookEvalue;
+    private TextView mEtNetBookEvalue;
     private ImageView mIvNetBookSend;
     private NetMyBookEvaleAdapter adapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,8 +153,26 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         adapter.setClickListener(new NetMyBookEvaleAdapter.onItemClickListener() {
             @Override
             public void onClickListener(EvalueVo.DatasBean vo, int position) {
-                Intent intent = NetBookEvalueInfomActivity.newInstance(mContext,mVideoId, vo);
+                Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(vo.getTargetid()),
+                        String.valueOf(vo.getId()), DataMessageVo.VIDEO);
                 startActivity(intent);
+            }
+        });
+        adapter.setChbClickListener(new NetMyBookEvaleAdapter.onItemChbClickListener() {
+            @Override
+            public void onClickChbListener(EvalueVo.DatasBean bean, boolean isChick, int position) {
+                EvalueVo.DatasBean vo = (EvalueVo.DatasBean) mArrary.get(position);
+                SuppertUtil suppertUtil = SuppertUtil.getInstance(mContext);
+                vo.setIssupport(isChick);
+                if (isChick) {
+                    vo.setSupportcount(vo.getSupportcount() + 1);
+                    suppertUtil.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEVC);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    vo.setSupportcount(vo.getSupportcount() - 1);
+                    suppertUtil.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEVC);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -201,7 +216,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         mIvNetBookSend = (ImageView) view.findViewById(R.id.iv_net_book_send);
         mIvNetBookSend.setOnClickListener(this);
         mTvNetEmptyContent.setOnClickListener(this);
-        mEtNetBookEvalue = (EditText) view.findViewById(R.id.et_net_book_evalue);
+        mEtNetBookEvalue = (TextView) view.findViewById(R.id.et_net_book_evalue);
         mEtNetBookEvalue.setOnClickListener(this);
     }
 
@@ -240,13 +255,44 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_net_book_send://发送
-                String str = getTextStr(mEtNetBookEvalue);
-                submitEvalue(str);
+            case R.id.et_net_book_evalue://发送
+                showInputDialog();
                 break;
             default:
 
         }
+    }
+
+    private EditText mEtDialogContent;
+    private Button mBtnInputCancle;
+    private Button mBtnInputSure;
+
+    /**
+     * 显示输入框内容
+     */
+    private void showInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_inpout, null);
+        mEtDialogContent = view.findViewById(R.id.et_dialog_content);
+        mBtnInputCancle = view.findViewById(R.id.btn_input_cancle);
+        mBtnInputSure = view.findViewById(R.id.btn_input_sure);
+        builder.setView(view);
+        builder.setCancelable(true);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        mBtnInputSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitEvalue(getTextStr(mEtDialogContent));
+                dialog.dismiss();
+            }
+        });
+        mBtnInputCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void submitEvalue(String str) {
@@ -332,12 +378,12 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void SubmitEvalueSuccess(String con) {
-      L.d("视频评价"+con);
+        L.d("视频评价" + con);
     }
 
     @Override
     public void SubmitEvalueError(String con) {
-      L.e("视频评价"+con);
+        L.e("视频评价" + con);
     }
 
 

@@ -56,7 +56,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/space_8"
                 android:layout_weight="1"
                 android:background="@drawable/btn_home_search_bg"
                 android:gravity="center_vertical"
@@ -71,8 +70,8 @@
 
             <Button
                 android:id="@+id/btn_infom_send"
-                android:layout_width="@dimen/space_22"
-                android:layout_height="@dimen/space_22"
+                android:layout_width="@dimen/space_48"
+                android:layout_height="@dimen/space_48"
                 android:layout_gravity="center_vertical"
                 android:background="@mipmap/common_com_send"
                 />
