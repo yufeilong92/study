@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 
+import com.xuechuan.xcedu.PiloActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.DataMessageVo;
 
@@ -115,5 +116,14 @@ public class EasyPermissionsUtils {
 
         }
         return build;
+    }
+
+    public void showDailog(Activity cla, String per) {
+        PermissionRequest build = new PermissionRequest.Builder(cla, 0, per)
+                .setRationale("请允许使用该app申请的权限，否则，该APP无法正常使用")
+                .setNegativeButtonText(R.string.cancel)
+                .setPositiveButtonText(R.string.allow)
+                .build();
+        EasyPermissions.requestPermissions(build);
     }
 }

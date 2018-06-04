@@ -151,19 +151,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="tttttttt"
+                android:text=""
                 android:textColor="@color/red_text"
                 android:textSize="@dimen/text_size_20" />
 
             <TextView
                 android:id="@+id/tv_net_contact_service"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:drawableLeft="@mipmap/c_n_p_icon_service"
                 android:drawablePadding="@dimen/space_8"
                 android:gravity="center_vertical"
-
-                android:text="练习客服"
+                android:text="联系客服"
                 android:textColor="@color/text_fu_color"
                 android:textSize="@dimen/text_size_12" />
 

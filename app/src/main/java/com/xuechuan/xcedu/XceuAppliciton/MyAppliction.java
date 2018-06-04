@@ -39,6 +39,7 @@ import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.SharedTextListUtil;
 import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
+import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.io.File;
@@ -76,6 +77,7 @@ public class MyAppliction extends MultiDexApplication {
      * 是否二十秒超时
      */
     private boolean isTime = true;
+    private PerInfomVo mPerInfom;
 
     public static MyAppliction getInstance() {
         if (application == null)
@@ -107,6 +109,14 @@ public class MyAppliction extends MultiDexApplication {
      */
     public void setUserInfom(UserInfomVo infomVo) {
         this.infomVo = infomVo;
+    }
+
+    public void setUserData(PerInfomVo vo) {
+        this.mPerInfom = vo;
+    }
+
+    public PerInfomVo getUserData() {
+        return mPerInfom;
     }
 
     /**
@@ -338,6 +348,15 @@ public class MyAppliction extends MultiDexApplication {
         }
         //杀死该应用进程
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    public void finishOtherActivity(Activity activity) {
+        for (Activity activity1 : activities) {
+            if (activity == activity1) {
+            } else {
+                activity1.finish();
+            }
+        }
     }
 
     public void startLogin(Context context) {

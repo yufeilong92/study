@@ -104,9 +104,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             HomeActivity.newInstance(mContext, null, null);
             finishActivity();
         }
-
     }
-
     //注册微信
     private void regToWx() {
         api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID, true);

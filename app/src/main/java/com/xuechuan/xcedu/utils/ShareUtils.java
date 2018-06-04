@@ -11,6 +11,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.io.File;
+
 /**
  * Author     wildma
  * DATE       2017/07/16
@@ -85,5 +87,59 @@ public class ShareUtils {
                 .withText(description + " " + WebUrl)
                 .withMedia(new UMImage(activity,imageID))
                 .share();*/
+    }
+
+    public static void shareImg(final Activity activity, String title, String imp, SHARE_MEDIA platform) {
+        File file = new File(imp);
+        UMImage umImage = new UMImage(activity, file);
+        new ShareAction(activity)
+                .setPlatform(platform)
+                .withText(title)
+                .withMedia(umImage)
+                .setCallback(new UMShareListener() {
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+
+                    }
+
+                    @Override
+                    public void onResult(final SHARE_MEDIA share_media) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (share_media.name().equals("WEIXIN_FAVORITE")) {
+                                    Toast.makeText(activity, share_media + " 收藏成功", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(activity, share_media + " 分享成功", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(final SHARE_MEDIA share_media, final Throwable throwable) {
+                        if (throwable != null) {
+                            Log.d("throw", "throw:" + throwable.getMessage());
+                        }
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, share_media + " 分享失败", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancel(final SHARE_MEDIA share_media) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, share_media + " 分享取消", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .share();
     }
 }

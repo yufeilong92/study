@@ -67,6 +67,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     private PersionInfomPresenter mPresenter;
     private ImageView mIvPersionImg;
     private ImageView mIvMPSystem;
+    private ImageView mIvMPTiShi;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,14 +89,16 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         fragment.setArguments(args);
         return fragment;
     }
+/*
 
- /*   @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_persional, container, false);
         initView(view);
         return view;
-    }*/
+    }
+*/
 
     @Override
     protected int initInflateView() {
@@ -156,6 +159,8 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         mIvPersionImg.setOnClickListener(this);
         mIvMPSystem = (ImageView) view.findViewById(R.id.iv_m_p_system);
         mIvMPSystem.setOnClickListener(this);
+        mIvMPTiShi = (ImageView) view.findViewById(R.id.iv_m_p_ti_shi);
+        mIvMPTiShi.setOnClickListener(this);
     }
 
     @Override
@@ -241,9 +246,10 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
             mIvPersionImg.setImageResource(R.mipmap.ic_m_massage);
         }
 
-        // TODO: 2018/6/1 系统通知
         if (data.isIshavesystemnotify()) {
-
+            mIvMPTiShi.setImageResource(R.mipmap.common_rp);
+        } else {
+            mIvMPTiShi.setVisibility(View.GONE);
         }
 
     }

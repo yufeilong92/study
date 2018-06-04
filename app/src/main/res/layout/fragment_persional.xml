@@ -245,6 +245,11 @@
             android:text="@string/feedbBack"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_more_go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
     <View style="@style/view_line" />
@@ -272,6 +277,17 @@
             android:text="@string/notification"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
+        <ImageView
+            android:id="@+id/iv_m_p_ti_shi"
+            android:layout_marginRight="@dimen/space_16"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_more_go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -300,6 +316,11 @@
             android:text="@string/setting"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_14" />
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_more_go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

@@ -315,5 +315,6 @@
     <string name="changesuccess">修改成功</string>
     <string name="sure_out">确定退出</string>
     <string name="look">查看</string>
+    <string name="iscancelorder">是否取消订单</string>
 
 </resources>

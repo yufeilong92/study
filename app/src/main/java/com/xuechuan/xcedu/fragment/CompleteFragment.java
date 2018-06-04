@@ -22,6 +22,7 @@ import com.xuechuan.xcedu.mvp.contract.PerOrderContract;
 import com.xuechuan.xcedu.mvp.model.PerOrderModel;
 import com.xuechuan.xcedu.mvp.presenter.PerOrderPresenter;
 import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.MyOrderVo;
 import com.xuechuan.xcedu.vo.ResultVo;
@@ -133,10 +134,27 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
         adapter.setClickListener(new MyOrderAdapter.onItemDelClickListener() {
             @Override
             public void onDelClickListener(MyOrderVo.DatasBean obj, int position) {
+                showData(obj, position);
+            }
+        });
+    }
+
+    private void showData(final MyOrderVo.DatasBean obj, final int position) {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext,"确定删除订单",getStrWithId(R.string.sure)
+        ,getStrWithId(R.string.cancel),true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
                 mDelPositon = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.DELETEORDER);
             }
+            @Override
+            public void onCancelClickListener() {
+
+            }
         });
+
     }
 
     private void clearData() {

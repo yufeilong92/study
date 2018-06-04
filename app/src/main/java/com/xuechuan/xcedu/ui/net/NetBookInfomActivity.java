@@ -1,14 +1,17 @@
 package com.xuechuan.xcedu.ui.net;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,11 +48,13 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
 import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
+import com.xuechuan.xcedu.PiloActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.fragment.NetBookinfomFragment;
 import com.xuechuan.xcedu.fragment.NetTableFragment;
 import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
@@ -59,6 +64,7 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
+import com.xuechuan.xcedu.utils.EasyPermissionsUtils;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -77,8 +83,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -325,7 +335,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
                 .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
                 .setDuration(10000) //时长
-                .setText("POLYV Android SDK") //文本
+                .setText(MyAppliction.getInstance().getUserInfom().getData().getUser().getPhone()) //文本
                 .setSize(16) //字体大小
                 .setColor(Color.YELLOW) //字体颜色
                 .setTextAlpha(70) //字体透明度
@@ -627,6 +637,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             EventBus.getDefault().unregister(this);
         }
         mediaController.disable();
+        MyAppliction.getInstance().setIsPlay(false);
     }
 
     @Override
@@ -685,7 +696,14 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_net_contact_service://客服
-
+                Intent intent12 = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "400-963-8119"));
+                EasyPermissionsUtils permissionsUtils = EasyPermissionsUtils.getInstance(NetBookInfomActivity.this);
+                boolean b = permissionsUtils.havsCALL_PHONEPermission();
+                if (b) {
+                    startActivity(intent12);
+                } else {
+                    permissionsUtils.showDailog(NetBookInfomActivity.this, Manifest.permission.CALL_PHONE );
+                }
                 break;
             case R.id.btn_net_go_buy://购买
                 Intent intent = NetBuyActivity.newInstance(mContext, dataVo.getPrice(), dataVo.getId(),
@@ -716,8 +734,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             MyAppliction.getInstance().setIsPlay(true);
 //            PolyvScreenUtils.IsPlay(true);
 
-        }else {
-            T.showToast(mContext,getString(R.string.no_try_see));
+        } else {
+            T.showToast(mContext, getString(R.string.no_try_see));
         }
 
     }

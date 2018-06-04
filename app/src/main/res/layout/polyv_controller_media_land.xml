@@ -26,6 +26,7 @@
             android:src="@drawable/polyv_btn_settings" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/iv_share"
             style="@style/iv_click_controller_land_top"
             android:layout_marginRight="@dimen/common_margin_lr"

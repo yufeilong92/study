@@ -72,14 +72,17 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
         UserLookVideoVo lookVideoVo = mUserDao.queryUserLookVideoWithKid(String.valueOf(vo.getId()));
         if (lookVideoVo != null) {
             String titleName = lookVideoVo.getTitleName();
+            if (StringUtil.isEmpty(titleName)) {
+                return;
+            }
             int first = titleName.indexOf("第");
             String substring;
-            if (first==-1){
+            if (first == -1) {
                 substring = titleName.substring(0, 6);
-            }else {
-                substring = titleName.substring(first, first+6);
+            } else {
+                substring = titleName.substring(first, first + 6);
             }
-            holder.mTvNetMyhomePricle.setText("上次看到 "+substring);
+            holder.mTvNetMyhomePricle.setText("上次看到 " + substring);
         }
 
     }

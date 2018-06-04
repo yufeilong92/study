@@ -64,6 +64,7 @@ import com.xuechuan.xcedu.utils.Defaultcontent;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.MyTimeUitl;
+import com.xuechuan.xcedu.utils.ScreenShot;
 import com.xuechuan.xcedu.utils.ShareUtils;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -2584,42 +2585,57 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 qq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
-                                , SHARE_MEDIA.QQ);
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+//                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, mResultData.getQuestion()
+//                                , "",pic, R.mipmap.m_setting_about_xcimg
+//                                , SHARE_MEDIA.QQ);
+                        ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
+                                pic, SHARE_MEDIA.QQ);
                     }
                 });
                 qqzon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
-                        );
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                      /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,mResultData.getQuestion()
+                                , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
+                        );*/
+                        ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
+                                pic, SHARE_MEDIA.QQ);
                     }
                 });
                 weibo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                      /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,  mResultData.getQuestion()
+                                , "",pic, R.mipmap.m_setting_about_xcimg
                                 , SHARE_MEDIA.SINA
-                        );
+                        );*/
+                        ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
+                                pic, SHARE_MEDIA.QQ);
                     }
                 });
                 weixin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
-                        );
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                      /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,  mResultData.getQuestion()
+                                , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                        );*/
+                        ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
+                                pic, SHARE_MEDIA.QQ);
                     }
                 });
                 circle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, Defaultcontent.title
-                                , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
-                        );
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                    /*    ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, mResultData.getQuestion()
+                                , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                        );*/
+                        ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
+                                pic, SHARE_MEDIA.QQ);
                     }
                 });
             }

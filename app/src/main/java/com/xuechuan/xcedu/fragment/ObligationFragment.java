@@ -140,8 +140,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
         adapter.setClickListener(new MyOrderAdapter.onItemCancelClickListener() {
             @Override
             public void onCancelClickListener(MyOrderVo.DatasBean obj, int position) {
-                mCancelPostion = position;
-                mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.CANCELORDER);
+                showData(obj, position);
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemPayClickListener() {
@@ -150,6 +149,23 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 showDialog(obj, position);
             }
         });
+    }
+
+    private void showData(final MyOrderVo.DatasBean obj, final int position) {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, getString(R.string.iscancelorder), getStrWithId(R.string.sure)
+                , getStrWithId(R.string.cancel), true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                mCancelPostion = position;
+                mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.CANCELORDER);
+            }
+            @Override
+            public void onCancelClickListener() {
+            }
+        });
+
     }
 
 

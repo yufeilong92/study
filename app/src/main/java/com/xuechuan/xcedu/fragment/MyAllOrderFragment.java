@@ -166,15 +166,16 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
 
             @Override
             public void onCancelClickListener(MyOrderVo.DatasBean obj, int position) {
-                mCancelpostion = position;
-                mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.CANCELORDER);
+
+                showData(obj, position, false);
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemDelClickListener() {
             @Override
             public void onDelClickListener(MyOrderVo.DatasBean obj, int position) {
-                mDelPostion = position;
-                mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.DELETEORDER);
+                showData(obj, position, true);
+//                mDelPostion = position;
+//                mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.DELETEORDER);
             }
         });
         adapter.setClickListener(new MyOrderAdapter.onItemPayClickListener() {
@@ -183,6 +184,34 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 showDialog(obj, position);
             }
         });
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param obj
+     * @param position
+     */
+    private void showData(final MyOrderVo.DatasBean obj, final int position, final boolean isDel) {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, getString(R.string.iscancelorder), getStrWithId(R.string.sure)
+                , getStrWithId(R.string.cancel), true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                if (isDel) {
+                    mDelPostion = position;
+                } else {
+                    mCancelpostion = position;
+                }
+                mPresenter.submitDelOrd(mContext, obj.getOrdernum(), isDel ? DataMessageVo.DELETEORDER : DataMessageVo.CANCELORDER);
+            }
+
+            @Override
+            public void onCancelClickListener() {
+            }
+        });
+
     }
 
     private void showDialog(final MyOrderVo.DatasBean data, int position) {

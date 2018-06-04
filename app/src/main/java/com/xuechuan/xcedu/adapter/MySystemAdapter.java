@@ -17,6 +17,7 @@ import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.ui.bank.AnswerActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
@@ -101,8 +102,22 @@ public class MySystemAdapter extends BaseRecyclerAdapter<MySystemAdapter.ViewHol
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showShareLayout(holder.itemView, vo, position);
-                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showTitleDialog(mContext,"是否删除","确定","取消",true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        clickLangListener.onClickLangListener(vo, position);
+                    }
+
+                    @Override
+                    public void onCancelClickListener() {
+
+                    }
+                });
+
+//                showShareLayout(holder.itemView, vo, position);
+//                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
                 return false;
             }
         });

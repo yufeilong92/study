@@ -33,6 +33,7 @@ import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.EvalueInfomVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -256,6 +257,10 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_net_book_evalue://发送
+                if (StringUtil.isEmpty(mVideoId)) {
+                    T.showToast(mContext, "请选择播放视频，再来评价");
+                    return;
+                }
                 showInputDialog();
                 break;
             default:
@@ -378,6 +383,14 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void SubmitEvalueSuccess(String con) {
+        Gson gson = new Gson();
+        ResultVo vo = gson.fromJson(con, ResultVo.class);
+        if (vo.getStatus().getCode() == 200) {
+            T.showToast(mContext, getString(R.string.evelua_sucee));
+            mEtDialogContent.setText(null);
+        } else {
+            T.showToast(mContext, vo.getStatus().getMessage());
+        }
         L.d("视频评价" + con);
     }
 

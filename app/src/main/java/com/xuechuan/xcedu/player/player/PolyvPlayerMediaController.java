@@ -503,7 +503,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         if (mTitleBarlayout != null)
             mTitleBarlayout.setVisibility(GONE);
         if (mRlPlayLayout != null)
-            if (MyAppliction.getInstance().getPlay()) {
+            if (MyAppliction.getInstance().getPlay()||mIsplay) {
                 mRlPlayLayout.setVisibility(GONE);
             } else {
                 mRlPlayLayout.setVisibility(VISIBLE);
@@ -530,7 +530,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         if (mTitleBarlayout != null)
             mTitleBarlayout.setVisibility(VISIBLE);
         if (mRlPlayLayout != null)
-            if (MyAppliction.getInstance().getPlay()) {
+            if (MyAppliction.getInstance().getPlay()||mIsplay) {
                 mRlPlayLayout.setVisibility(GONE);
             } else {
                 mRlPlayLayout.setVisibility(VISIBLE);

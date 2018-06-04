@@ -223,7 +223,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         super.onDestroy();
         int position = videoView.getCurrentPosition();
         if (position != 0) {
-            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()),vid);
+            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()), vid);
         }
         videoView.destroy();
         EventBus.getDefault().removeAllStickyEvents();
@@ -232,6 +232,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         }
         mediaController.disable();
         saveLookVideo();
+        MyAppliction.getInstance().setIsPlay(false);
 
     }
 
@@ -432,7 +433,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mNetMagicIndicator.setOnClickListener(this);
         mVpNetBar = (NoScrollViewPager) findViewById(R.id.vp_net_my_bar);
         mVpNetBar.setOnClickListener(this);
-        ll_title_bar =(LinearLayout) findViewById(R.id.activity_title_container);
+        ll_title_bar = (LinearLayout) findViewById(R.id.activity_title_container);
         viewLayout = (RelativeLayout) findViewById(R.id.view_layout);
         videoView = (PolyvVideoView) findViewById(R.id.polyv_video_view);
         marqueeView = (PolyvMarqueeView) findViewById(R.id.polyv_marquee_view);
@@ -450,7 +451,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
                 .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
                 .setDuration(10000) //时长
-                .setText("POLYV Android SDK") //文本
+                .setText(MyAppliction.getInstance().getUserInfom().getData().getUser().getPhone()) //文本
                 .setSize(16) //字体大小
                 .setColor(Color.YELLOW) //字体颜色
                 .setTextAlpha(70) //字体透明度
@@ -754,7 +755,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 int position = videoView.getCurrentPosition();
 //                String s = PolyvTimeUtils.generateTime(position);
                 if (position != 0) {
-                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()),vid);
+                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()), vid);
                 }
                 this.finish();
                 break;
@@ -764,12 +765,15 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     }
 
     private void play() {
-        mRlPlaylayout.setVisibility(View.GONE);
-        play(vid, 3, true, false);
-        mediaController.setIsPlay(true);
-        PolyvScreenUtils.IsPlay(true);
-        saveLookVideo();
-        EventBus.getDefault().postSticky(new VideoIdEvent(String.valueOf(mVideoid)));
+        if (!StringUtil.isEmpty(vid)) {
+            mRlPlaylayout.setVisibility(View.GONE);
+            play(vid, 3, true, false);
+            mediaController.setIsPlay(true);
+            MyAppliction.getInstance().setIsPlay(true);
+            PolyvScreenUtils.IsPlay(true);
+            saveLookVideo();
+            EventBus.getDefault().postSticky(new VideoIdEvent(String.valueOf(mVideoid)));
+        }
     }
 
     private void saveLookVideo() {
