@@ -1,14 +1,10 @@
 package com.xuechuan.xcedu;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
@@ -23,18 +19,16 @@ import com.xuechuan.xcedu.mvp.view.RefreshTokenView;
 import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.EasyPermissionsUtils;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.SaveIsDoneUtil;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
-import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.TokenVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import cn.jpush.android.api.JPushInterface;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
@@ -70,9 +64,9 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
         setContentView(R.layout.activity_pilo);
         initView();
         MyAppliction.getInstance().addActivity(this);
-//        startActivity(new Intent(PiloActivity.this,MainActivity.class));
-        mPermissionsUtilss = EasyPermissionsUtils.getInstance(PiloActivity.this);
-        requesPermission();
+        startActivity(new Intent(PiloActivity.this, GuideActivity.class));
+//        mPermissionsUtilss = EasyPermissionsUtils.getInstance(PiloActivity.this);
+//        requesPermission();
     }
 
     private void requesPermission() {
@@ -152,8 +146,14 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
             RefreshTokenPresenter presenter = new RefreshTokenPresenter(new RefreshTokenModelImpl(), this);
             presenter.refreshToken(mContext, userInfomDb.getToken());
         } else {
-            Intent intent1 = new Intent(mContext, LoginActivity.class);
-            startActivity(intent1);
+            String id = SaveIsDoneUtil.getInstance().getUserId();
+            if (!StringUtil.isEmpty(id)) {
+                Intent intent1 = new Intent(mContext, LoginActivity.class);
+                startActivity(intent1);
+            } else {
+                Intent intent1 = new Intent(mContext, GuideActivity.class);
+                startActivity(intent1);
+            }
             this.finish();
         }
     }

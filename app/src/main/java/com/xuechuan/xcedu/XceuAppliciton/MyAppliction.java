@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
-import android.util.Config;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -28,16 +27,13 @@ import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.utils.SaveIsDoneUtil;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
-import com.xuechuan.xcedu.utils.SharedSeletIdListUtil;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
-import com.xuechuan.xcedu.utils.SharedTextListUtil;
-import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
@@ -160,6 +156,7 @@ public class MyAppliction extends MultiDexApplication {
         initImagerLoader();
         DBHelper.initDb(this);
         SaveUUidUtil.initSharedPreference(this);
+        SaveIsDoneUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
     }
 

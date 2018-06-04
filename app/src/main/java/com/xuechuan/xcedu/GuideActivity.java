@@ -1,45 +1,79 @@
 package com.xuechuan.xcedu;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 
-import java.util.List;
+import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
+import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.fragment.GuideFragment;
+
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
+
+import java.util.ArrayList;
 
 /**
- * @Title:  GuideActivity
+ * @version V 1.0 xxxxxxxx
+ * @Title: GuideActivity
  * @Package com.xuechuan.xcedu
  * @Description: 引导页
  * @author: L-BackPacker
- * @date:   2018/6/4 18:41
- * @version V 1.0 xxxxxxxx
- * @verdescript  版本号 修改时间  修改人 修改的概要说明
+ * @date: 2018/6/4 18:41
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/6/4
  */
-public class GuideActivity extends AppCompatActivity {
-    private ViewPager vp;
-    private GuideViewPagerAdapter adapter;
-    private List<View> views;
-    private Button startBtn;
+public class GuideActivity extends BaseActivity {
 
-    // 引导页图片资源
-    private static final int[] pics = { R.mipmap.bpage1,
-            R.mipmap.bpage2, R.mipmap.bpage3 };
-
-    // 底部小点图片
-    private ImageView[] dots;
-
-    // 记录当前选中位置
-    private int currentIndex;
-
+    private ViewPager mViewpager;
+    private MagicIndicator mMagicindicator;
+    //引导页个数
+    private int index = 3;
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
+        initView();
+    }*/
+
+    @Override
+    protected void initContentView(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_guide);
+        initView();
+        initData();
+        initMagicIndicatore();
+    }
+
+    private void initMagicIndicatore() {
+        CircleNavigator circleNavigator = new CircleNavigator(this);
+        circleNavigator.setCircleCount(3);
+        circleNavigator.setCircleColor(Color.RED);
+        circleNavigator.setCircleClickListener(new CircleNavigator.OnCircleClickListener() {
+            @Override
+            public void onClick(int index) {
+                mViewpager.setCurrentItem(index);
+            }
+        });
+        mMagicindicator.setNavigator(circleNavigator);
+        ViewPagerHelper.bind(mMagicindicator, mViewpager);
+    }
+
+    private void initData() {
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        for (int i = 0; i < index; i++) {
+            fragments.add(GuideFragment.newInstance(i + "", ""));
+        }
+
+        MyTagPagerAdapter adapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
+        mViewpager.setAdapter(adapter);
     }
 
 
+    private void initView() {
+        mViewpager = (ViewPager) findViewById(R.id.viewpager);
+        mMagicindicator = (MagicIndicator) findViewById(R.id.magicindicator);
+    }
 }
