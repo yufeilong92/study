@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,9 +20,7 @@ import com.xuechuan.xcedu.mvp.presenter.NetHomePresenter;
 import com.xuechuan.xcedu.mvp.view.NetHomeView;
 import com.xuechuan.xcedu.ui.net.NetAllBookActivity;
 import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
-import com.xuechuan.xcedu.ui.net.NetBookInfomActivity;
 import com.xuechuan.xcedu.ui.net.NetBookMyInfomActivity;
-import com.xuechuan.xcedu.ui.net.NetBookPlayActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
@@ -153,6 +148,7 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
             @Override
             public void onClickListener(CoursesBeanVo vo, int position) {
                 Intent intent = NetBookMyInfomActivity.newInstance(mContext, vo);
+                intent.putExtra(NetBookMyInfomActivity.SERIALIZABLELIST, vo.getName());
                 startActivity(intent);
             }
         });

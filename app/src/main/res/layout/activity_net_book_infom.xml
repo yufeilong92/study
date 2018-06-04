@@ -106,6 +106,7 @@
         </RelativeLayout>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_net_book_title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_48"
@@ -116,7 +117,9 @@
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_18" />
 
-        <View style="@style/view_line_10_gray" />
+        <View
+            android:visibility="gone"
+            style="@style/view_line_10_gray" />
 
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/net_magic_indicator"
