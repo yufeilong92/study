@@ -322,6 +322,7 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".PiloActivity"
+            android:theme="@style/AppTheme_Splict"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

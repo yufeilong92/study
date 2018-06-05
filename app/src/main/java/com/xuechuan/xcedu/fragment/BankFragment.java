@@ -1,15 +1,13 @@
 package com.xuechuan.xcedu.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
@@ -17,6 +15,8 @@ import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.BankFragmentAdapter;
+import com.xuechuan.xcedu.adapter.MyOrderIndicatorAdapter;
+import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
@@ -24,6 +24,10 @@ import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BookHomeVo;
+
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +57,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
     private CheckBox mChbBCase;
     private ImageView mIvBLineBg2;
     private ViewPager mVpgContent;
+    private MagicIndicator mMagicindicatorBank;
 
 
     public BankFragment() {
@@ -81,16 +86,66 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+/*
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = View.inflate(getActivity(), R.layout.fragment_bank, null);
+        initView(view);
+        return view;
+    }
+*/
+
+    @Override
+    protected int initInflateView() {
+        return R.layout.fragment_bank;
+    }
+
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         requestChapters();
         initView(view);
-        initViewData();
+//        initViewData();
+        initIndicator();
+    }
+
+    private void initIndicator() {
+        final ArrayList<String> mTabs = ArrayToListUtil.arraytoList(mContext, R.array.bank_tab);
+        mMagicindicatorBank.setBackgroundColor(Color.parseColor("#ffffff"));
+        CommonNavigator commonNavigator = new CommonNavigator(mContext);
+        commonNavigator.setScrollPivotX(0.25f);
+        if (mTabs.size() > 4) {
+            commonNavigator.setAdjustMode(false);
+        } else {
+            commonNavigator.setAdjustMode(true);
+        }
+        List<Fragment> fragments = creartFragment(mTabs);
+        MyOrderIndicatorAdapter adapter = new MyOrderIndicatorAdapter(mTabs, mVpgContent);
+        mMagicindicatorBank.setNavigator(commonNavigator);
+        commonNavigator.setAdapter(adapter);
+        MyTagPagerAdapter tagPagerAdapter = new MyTagPagerAdapter(getFragmentManager(), fragments);
+        mVpgContent.setAdapter(tagPagerAdapter);
+        mVpgContent.setOffscreenPageLimit(3);
+        ViewPagerHelper.bind(mMagicindicatorBank, mVpgContent);
+    }
+
+    private List<Fragment> creartFragment(List<String> list) {
+        if (list.size() < 2) {
+            mMagicindicatorBank.setVisibility(View.GONE);
+        }
+        ArrayList<Fragment> mlist = new ArrayList<>();
+        SkillFragment skillFragment = SkillFragment.newInstance("1");
+        ColligateFragment colligateFragment = ColligateFragment.newInstance("2");
+        CaseFragment caseFragment = CaseFragment.newInstance("3");
+
+        mlist.add(skillFragment);
+        mlist.add(colligateFragment);
+        mlist.add(caseFragment);
+        return mlist;
     }
 
     private void initViewData() {
         mlist = new ArrayList<>();
-        SkillFragment skillFragment   = SkillFragment.newInstance("1");
+        SkillFragment skillFragment = SkillFragment.newInstance("1");
         ColligateFragment colligateFragment = ColligateFragment.newInstance("2");
         CaseFragment caseFragment = CaseFragment.newInstance("3");
         mlist.add(skillFragment);
@@ -104,6 +159,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -158,15 +214,11 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    @Override
-    protected int initInflateView() {
-        return R.layout.fragment_bank;
-    }
 
     private void initView(View view) {
         mContext = getActivity();
-
-        mChbBSkill = (CheckBox) view.findViewById(R.id.chb_b_skill);
+        mMagicindicatorBank = (MagicIndicator) view.findViewById(R.id.magicindicator_bank);
+/*        mChbBSkill = (CheckBox) view.findViewById(R.id.chb_b_skill);
         mChbBSkill.setOnClickListener(this);
         mIvBLineBg = (ImageView) view.findViewById(R.id.iv_b_line_bg);
         mIvBLineBg.setOnClickListener(this);
@@ -177,14 +229,14 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
         mChbBCase = (CheckBox) view.findViewById(R.id.chb_b_case);
         mChbBCase.setOnClickListener(this);
         mIvBLineBg2 = (ImageView) view.findViewById(R.id.iv_b_line_bg2);
-        mIvBLineBg2.setOnClickListener(this);
+        mIvBLineBg2.setOnClickListener(this);*/
         mVpgContent = (ViewPager) view.findViewById(R.id.vpg_content);
         mVpgContent.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+    /*    switch (v.getId()) {
             case R.id.chb_b_skill:
                 mVpgContent.setCurrentItem(0, true);
                 break;
@@ -196,7 +248,7 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
                 break;
             default:
 
-        }
+        }*/
     }
 
     private void selectTabBg(boolean skill, boolean co, boolean cased) {
@@ -226,4 +278,5 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
         mIvBLineBg2.setImageDrawable(netDrawable);
 
     }
+
 }

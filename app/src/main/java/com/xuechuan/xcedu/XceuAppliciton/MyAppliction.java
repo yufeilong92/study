@@ -274,7 +274,7 @@ public class MyAppliction extends MultiDexApplication {
                 if (!TextUtils.isEmpty(externalSDCardPath)) {
                     StringBuilder dirPath = new StringBuilder();
                     dirPath.append(externalSDCardPath).append(File.separator).append("Android").append(File.separator).append("data")
-                            .append(File.separator).append(getPackageName()).append(File.separator).append("polyvdownload");
+                            .append(File.separator).append(getPackageName()).append(File.separator).append("xuechuan");
                     File saveDir = new File(dirPath.toString());
                     if (!saveDir.exists()) {
                         getExternalFilesDir(null); // 生成包名目录

@@ -19,7 +19,8 @@ import java.io.StreamCorruptedException;
  */
 public class SaveIsDoneUtil {
     // 用户名key
-    public final static String KEY_NAME = "useruuid";
+    public final static String KEY_NAME = SaveIsDoneUtil.class.getName()
+            ;
     private static SaveIsDoneUtil sharedUserUtils;
     private final SharedPreferences msp;
     private String s_User =null;

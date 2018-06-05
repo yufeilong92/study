@@ -20,9 +20,13 @@ import com.xuechuan.xcedu.mvp.presenter.ColoctPresenter;
 import com.xuechuan.xcedu.mvp.presenter.ErrOrColPresenter;
 import com.xuechuan.xcedu.mvp.view.ColoctView;
 import com.xuechuan.xcedu.mvp.view.ErrOrColNumView;
+import com.xuechuan.xcedu.ui.bank.AnswerActivity;
 import com.xuechuan.xcedu.ui.bank.AtricleListActivity;
+import com.xuechuan.xcedu.ui.bank.FreeQuestionActivity;
 import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
+import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
+import com.xuechuan.xcedu.ui.home.SpecasListActivity;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
@@ -152,13 +156,22 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
 
                 break;
             case R.id.tv_b_co_free://自由 组卷
-                T.showToast(mContext,"该科暂不提供");
+                Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
+                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
+                startActivity(intent6);
+//                T.showToast(mContext,"该科暂不提供");
                 break;
             case R.id.tv_b_co_shunxu://顺序练习
-                T.showToast(mContext,"该科暂不提供");
+                Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
+                intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
+                startActivity(intent5);
+//                T.showToast(mContext,"该科暂不提供");
                 break;
             case R.id.tv_b_co_zhuanxiang://专项练习
-                T.showToast(mContext,"该科暂不提供");
+                Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
+                intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
+                startActivity(intent4);
+//                T.showToast(mContext,"该科暂不提供");
                 break;
 
 

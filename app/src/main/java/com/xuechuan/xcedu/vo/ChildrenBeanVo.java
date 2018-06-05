@@ -33,7 +33,21 @@ public class ChildrenBeanVo extends BookHomePageVo {
      * 标题
      */
     private String title;
+    /**
+     * 子题数据
+     */
+    private int qnum;
+
     private List<ChildrenBeanVo> children;
+
+    public int getQnum() {
+        return qnum;
+    }
+
+    public void setQnum(int qnum) {
+        this.qnum = qnum;
+    }
+
     public String getGourl() {
         return gourl;
     }

@@ -40,7 +40,19 @@ public class SkillTextVo extends BaseVo {
         private boolean isend;
         private int parentid;
         private String title;
+        /**
+         * 子题数据
+         */
+        private int qnum;
         private List<ChildrenBeanVo> children;
+
+        public int getQnum() {
+            return qnum;
+        }
+
+        public void setQnum(int qnum) {
+            this.qnum = qnum;
+        }
 
         public int getId() {
             return id;
@@ -84,12 +96,12 @@ public class SkillTextVo extends BaseVo {
 /*
         public static class ChildrenBean {
             *//**
-             * children : []
-             * id : 109
-             * isend : true
-             * parentid : 1
-             * title : 第一篇第一章 燃烧基础知识
-             *//*
+         * children : []
+         * id : 109
+         * isend : true
+         * parentid : 1
+         * title : 第一篇第一章 燃烧基础知识
+         *//*
 
             private int id;
             private boolean isend;

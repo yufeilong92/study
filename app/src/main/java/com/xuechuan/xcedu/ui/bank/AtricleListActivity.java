@@ -50,9 +50,9 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     private String mOid;
     private ArrayList<Node> mNodeLists;
     private AlertDialog mAlertDialog;
+    private AtriclePresenter atriclePresenter;
 
     /**
-     *
      * @param context
      * @param courseid 科目id
      * @return
@@ -70,34 +70,40 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
             mOid = getIntent().getStringExtra(COURSEID);
         }
         initView();
-        initData();
+//        initData();
 
     }
 
     private void initData() {
-        AtriclePresenter atriclePresenter = new AtriclePresenter(new AtricleContentModelImpl(), this);
+        atriclePresenter = new AtriclePresenter(new AtricleContentModelImpl(), this);
         atriclePresenter.getAtricleContent(mContext, mOid);
         mNodeLists = new ArrayList<>();
         mAlertDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
     }
 
-    private void setAdapter() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    private void setAdapter(List<SkillTextVo.DatasBean> datas) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvTreeContent.setLayoutManager(gridLayoutManager);
         mRlvTreeContent.addItemDecoration(new DividerItemDecoration(this, GridLayoutManager.VERTICAL));
         AtricleTreeAdapter adapter = new AtricleTreeAdapter(mRlvTreeContent, this, mNodeLists,
-                0, R.mipmap.ic_spread_gray, R.mipmap.ic_more_go);
+                0, R.mipmap.ic_spread_gray, R.mipmap.ic_more_go, mOid, datas);
 
         mRlvTreeContent.setAdapter(adapter);
+
         adapter.setOnTreeNodeClickListener(new OnTreeNodeClickListener() {
             @Override
             public void onClick(Node node, int position) {
                 if (!node.isRoot()) {
                     int id = (int) node.getId();
                     Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id),
-                            mOid );
-
+                            mOid);
                     startActivity(intent);
                 }
             }
@@ -121,7 +127,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
             List<SkillTextVo.DatasBean> datas = vo.getDatas();
             clearData();
             addListData(datas);
-            setAdapter();
+            setAdapter(datas);
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());
         }

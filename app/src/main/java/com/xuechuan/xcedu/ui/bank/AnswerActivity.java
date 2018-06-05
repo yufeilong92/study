@@ -391,6 +391,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private String mSearchZid;
     private String mSearchTid;
     private String mSearchType;
+    private TextView mTvNam;
+    private ImageView mIvJianPan;
 
 
     @Override
@@ -495,12 +497,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         return intent;
     }
 
-    /*  @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_answer);
-        initView();
-    }*/
+//      @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_answer);
+//        initView();
+//    }
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -936,6 +938,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         mContext = this;
+        mIvJianPan = (ImageView) findViewById(R.id.iv_ban_jianpan);
+        mIvJianPan.setOnClickListener(this);
+        mTvNam = (TextView) findViewById(R.id.tv_nandu);
         mRlRootLayout = (RelativeLayout) findViewById(R.id.rl_root_layout);
         mIvBMore = (ImageView) findViewById(R.id.iv_b_more);
         mIvBMore.setOnClickListener(this);
@@ -1211,10 +1216,36 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         Spanned html = Html.fromHtml(mResultData.getQuestion());
 //        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
         mTvBMatter.setText(html);
-        mTvBAContent.setText(mResultData.getA());
-        mTvBBContent.setText(mResultData.getB());
-        mTvBCContent.setText(mResultData.getC());
-        mTvBDContent.setText(mResultData.getD());
+        if (!StringUtil.isEmpty(mResultData.getA())) {
+            mTvBAContent.setText(mResultData.getA());
+        } else {
+            mTvBAContent.setText("");
+        }
+        if (!StringUtil.isEmpty(mResultData.getB())) {
+            mTvBBContent.setText(mResultData.getB());
+        } else {
+            mTvBBContent.setText("");
+        }
+        if (!StringUtil.isEmpty(mResultData.getC())) {
+            mTvBBContent.setText(mResultData.getB());
+        } else {
+            mTvBBContent.setText("");
+        }
+        if (!StringUtil.isEmpty(mResultData.getC())) {
+            mTvBCContent.setText(mResultData.getC());
+        } else {
+            mTvBCContent.setText("");
+        }
+        if (!StringUtil.isEmpty(mResultData.getD())) {
+            mTvBDContent.setText(mResultData.getD());
+        } else {
+            mTvBDContent.setText("");
+        }
+
+//        mTvBAContent.setText(mResultData.getA());
+//        mTvBBContent.setText(mResultData.getB());
+//        mTvBCContent.setText(mResultData.getC());
+//        mTvBDContent.setText(mResultData.getD());
         if (StringUtil.isEmpty(mResultData.getE())) {//是否有e选项
             mIvBE.setVisibility(View.GONE);
             mTvBEContent.setVisibility(View.GONE);
@@ -1234,7 +1265,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mRightItem = mResultData.getChoiceanswer();
         Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
 //        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
-
         mTvLookAnswerWen.setText(fromHtml);
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
@@ -1667,6 +1697,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     public void onCancelClickListener() {
                     }
                 });
+                break;
+            case R.id.iv_ban_jianpan:
+                mLiXia.setVisibility(View.VISIBLE);
+                mLlBSubmitEvalue.setVisibility(View.GONE);
                 break;
         }
     }
@@ -2701,11 +2735,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private void setSelectOnlyItemBG(boolean a, boolean b, boolean c, boolean d,
                                      boolean e) {
-        setImgBg(mIvBA, a, R.mipmap.ic_b_single_a_s, R.mipmap.ic_b_single_a_n);
-        setImgBg(mIvBB, b, R.mipmap.ic_b_single_b_s, R.mipmap.ic_b_single_b_n);
-        setImgBg(mIvBC, c, R.mipmap.ic_b_single_c_s, R.mipmap.ic_b_single_c_n);
-        setImgBg(mIvBD, d, R.mipmap.ic_b_single_d_s, R.mipmap.ic_b_single_d_n);
-        setImgBg(mIvBE, e, R.mipmap.ic_b_e_s, R.mipmap.ic_b_e_n);
+        setImgBg(mIvBA, a, R.mipmap.qbank_answer_icon_single_a_s, R.mipmap.ic_b_single_a_n);
+        setImgBg(mIvBB, b, R.mipmap.qbank_answer_icon_single_b_s, R.mipmap.ic_b_single_b_n);
+        setImgBg(mIvBC, c, R.mipmap.qbank_answer_icon_single_c_s, R.mipmap.ic_b_single_c_n);
+        setImgBg(mIvBD, d, R.mipmap.qbank_answer_icon_single_d_s, R.mipmap.ic_b_single_d_n);
+        setImgBg(mIvBE, e, R.mipmap.qbank_answer_icon_single_e_s, R.mipmap.ic_b_e_n);
     }
 
     private void clearMoreBG() {
@@ -2723,15 +2757,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private void setSelectMoreItemBG(int id, boolean isSelect) {
         if (id == 0) {
-            setImgBg(mIvBA, isSelect, R.mipmap.ic_b_a_s, R.mipmap.ic_b_a_n);
+            setImgBg(mIvBA, isSelect, R.mipmap.qbank_answe_icon_multiple_a_s, R.mipmap.ic_b_a_n);
         } else if (id == 1) {
-            setImgBg(mIvBB, isSelect, R.mipmap.ic_b_b_s, R.mipmap.ic_b_b_n);
+            setImgBg(mIvBB, isSelect, R.mipmap.qbank_answe_icon_multiple_b_s, R.mipmap.ic_b_b_n);
         } else if (id == 2) {
-            setImgBg(mIvBC, isSelect, R.mipmap.ic_b_c_s, R.mipmap.ic_b_c_n);
+            setImgBg(mIvBC, isSelect, R.mipmap.qbank_answe_icon_multiple_c_s, R.mipmap.ic_b_c_n);
         } else if (id == 3) {
-            setImgBg(mIvBD, isSelect, R.mipmap.ic_b_d_s, R.mipmap.ic_b_d_n);
+            setImgBg(mIvBD, isSelect, R.mipmap.qbank_answe_icon_multiple_d_s, R.mipmap.ic_b_d_n);
         } else if (id == 4) {
-            setImgBg(mIvBE, isSelect, R.mipmap.ic_b_e_s, R.mipmap.ic_b_e_n);
+            setImgBg(mIvBE, isSelect, R.mipmap.qbank_answe_icon_multiple_e_s, R.mipmap.ic_b_e_n);
         }
 
     }
@@ -3345,6 +3379,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         setTvColor(mTvBRosoleContent, R.color.night_text_color);
         setTvColor(mTvLookAnswerCan, R.color.night_text_color);
         setTvColor(mTvBAnswer, R.color.night_text_color);
+        setTvColor(mTvNam, R.color.night_text_color);
         setTvColor(mTvAnswerNumberevlue, R.color.night_text_color);
         mLlBSubmitEvalue.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
         mLiXia.setBackgroundColor(getLayoutColor(R.color.night_title_bar));
@@ -3414,6 +3449,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         setTvColor(mTvBDContent, R.color.black);
         setTvColor(mTvBEContent, R.color.black);
         setTvColor(mTvAnswerJiexi, R.color.black);
+        setTvColor(mTvNam, R.color.black);
         setTvColor(mTvAnswerAnswer, R.color.black);
         setTvColor(mTvBRosoleContent, R.color.black);
         setTvColor(mTvBAnswer, R.color.black);
@@ -3668,13 +3704,16 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTypeMark.equals("1")) {
             userLookVo.setChapterId(mOid);
             userLookVo.setNextId(String.valueOf(mMark));
+            userLookVo.setCount(String.valueOf(mTextDetial.size()));
             lookVos.add(userLookVo);
             assist.upDataSkillRecord(lookVos);
+
             return;
         }
         if (mTypeMark.equals("2")) {
             userLookVo.setChapterId(mOid);
             userLookVo.setNextId(String.valueOf(mMark));
+            userLookVo.setCount(String.valueOf(mTextDetial.size()));
             lookVos.add(userLookVo);
             assist.upDataColoctRecord(lookVos);
             return;
@@ -3682,6 +3721,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTypeMark.equals("3")) {
             userLookVo.setChapterId(mOid);
             userLookVo.setNextId(String.valueOf(mMark));
+            userLookVo.setCount(String.valueOf(mTextDetial.size()));
             lookVos.add(userLookVo);
             assist.upDataCaseRecord(lookVos);
             return;

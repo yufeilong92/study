@@ -66,11 +66,9 @@ public class GuideActivity extends BaseActivity {
         for (int i = 0; i < index; i++) {
             fragments.add(GuideFragment.newInstance(i + "", ""));
         }
-
         MyTagPagerAdapter adapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
         mViewpager.setAdapter(adapter);
     }
-
 
     private void initView() {
         mViewpager = (ViewPager) findViewById(R.id.viewpager);

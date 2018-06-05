@@ -37,13 +37,15 @@ public class DBHelper {
         /**context 上下文
          * test-db 数据库名称
          */
-        mHelper = new MyOpenHelper(context, "userinfom.db", null);
+        DatabaseContext databaseContext = new DatabaseContext(context);
+        mHelper = new MyOpenHelper(databaseContext, "userinfom.db", null);
         db = mHelper.getWritableDatabase();
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
     }
 
     public static DaoSession getDaoSession() {
+
         return mDaoSession;
     }
 

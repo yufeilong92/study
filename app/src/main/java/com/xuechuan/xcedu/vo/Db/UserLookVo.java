@@ -19,6 +19,10 @@ public class UserLookVo {
      * 第几题
      */
     private String nextId;
+    /**
+     * 总数
+     */
+    private String Count;
 
     public String getChapterId() {
         return chapterId;
@@ -34,5 +38,13 @@ public class UserLookVo {
 
     public void setNextId(String nextId) {
         this.nextId = nextId;
+    }
+
+    public String getCount() {
+        return Count;
+    }
+
+    public void setCount(String count) {
+        Count = count;
     }
 }

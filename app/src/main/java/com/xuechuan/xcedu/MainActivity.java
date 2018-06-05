@@ -2,7 +2,6 @@ package com.xuechuan.xcedu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,6 +14,7 @@ import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.Defaultcontent;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.ShareUtils;
+import com.xuechuan.xcedu.vo.HomePageVo;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -32,15 +32,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button mButton3;
     private Button mButton4;
     private Button mButton5;
+    private Button mButton6;
+    private Button mButton7;
 
-/*
-    @Override
+
+/*    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-    }
-*/
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
@@ -78,6 +79,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mButton4.setOnClickListener(this);
         mButton5 = (Button) findViewById(R.id.button5);
         mButton5.setOnClickListener(this);
+        mButton6 = (Button) findViewById(R.id.button6);
+        mButton6.setOnClickListener(this);
+        mButton7 = (Button) findViewById(R.id.button7);
+        mButton7.setOnClickListener(this);
     }
 
     protected void initData() {
@@ -114,9 +119,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent3);
                 break;
             case R.id.button:
-                ShareUtils.shareWeb(mContext, Defaultcontent.url,Defaultcontent.title
-                ,Defaultcontent.text,Defaultcontent.imageurl,R.mipmap.m_setting_about_xcimg
-                        ,SHARE_MEDIA.QQ);
+                ShareUtils.shareWeb(mContext, Defaultcontent.url, Defaultcontent.title
+                        , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
+                        , SHARE_MEDIA.QQ);
                 break;
             case R.id.button2:
                 ShareUtils.shareWeb(this, Defaultcontent.url, Defaultcontent.title
@@ -138,6 +143,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         , Defaultcontent.text, Defaultcontent.imageurl, R.mipmap.m_setting_about_xcimg
                         , SHARE_MEDIA.SINA
                 );
+                break;
+
+
+            case R.id.button6:
+                break;
+            case R.id.button7:
                 break;
         }
     }
@@ -194,6 +205,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return jsonObject.toString();
 
     }
+
 
 
     public class text {

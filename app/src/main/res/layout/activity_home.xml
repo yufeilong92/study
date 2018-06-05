@@ -4,59 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".HomeActivity">
 
-    <FrameLayout
-        android:id="@+id/fl_content"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpage_contetn"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1" />
 
-    <View
-        style="@style/title_line_style"/>
-    <RadioGroup
-        android:id="@+id/rg_btns"
+    <View style="@style/title_line_style" />
+
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/magicindicator_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/space_8"
-        android:paddingTop="@dimen/space_8">
-
-        <RadioButton
-            android:checked="true"
-            android:id="@+id/rdb_home_home"
-            style="@style/radiobutton_style"
-            android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/select_home_bg"
-            android:textColor="@drawable/select_home_textcolor"
-            android:text="首页" />
-
-        <RadioButton
-            android:textColor="@drawable/select_home_textcolor"
-            android:id="@+id/rdb_home_bank"
-            style="@style/radiobutton_style"
-            android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/select_bank_tab_bg"
-            android:text="题库" />
-
-        <RadioButton
-            android:textColor="@drawable/select_home_textcolor"
-            android:id="@+id/rdb_home_net"
-            style="@style/radiobutton_style"
-            android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/select_net_tab_bg"
-            android:text="网课" />
-
-        <RadioButton
-            android:textColor="@drawable/select_home_textcolor"
-            android:id="@+id/rdb_home_personal"
-            style="@style/radiobutton_style"
-            android:drawablePadding="@dimen/space_6"
-            android:drawableTop="@drawable/select_m_tab_bg"
-            android:text="我的" />
-
-    </RadioGroup>
-
+        android:layout_height="@dimen/space_56" />
 </LinearLayout>

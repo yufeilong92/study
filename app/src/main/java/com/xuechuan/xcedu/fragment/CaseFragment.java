@@ -105,7 +105,7 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
     private void initData() {
         mCasePresenter = new CasePresenter(new CaseModelImpl(), this);
         mCasePresenter.getErrOrCollNumber(mContext, mTypeOid);
-        mCasePresenter.requestBuyInfom(mContext,mTypeOid);
+        mCasePresenter.requestBuyInfom(mContext, mTypeOid);
     }
 
 
@@ -161,26 +161,31 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
                 startActivity(intent3);
                 break;
             case R.id.tv_b_case_free://自由
-                Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
-                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
-                startActivity(intent6);
+                showToast();
+//                Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
+//                intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
+//                startActivity(intent6);
                 break;
             case R.id.tv_b_case_zhuanxiang://专项
-                Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
-                intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
-                startActivity(intent4);
+                showToast();
+//                Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
+//                intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
+//                startActivity(intent4);
                 break;
             case R.id.tv_b_case_shunxu://顺序
-                Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
-                intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
-                startActivity(intent5);
+                showToast();
+//                Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);
+//                intent5.putExtra(AnswerActivity.CSTR_EXTRA_TITLE_STR, "顺序练习");
+//                startActivity(intent5);
                 break;
             default:
                 break;
         }
     }
 
-
+    private void showToast() {
+        T.showToast(mContext, "该科暂不提供");
+    }
 
     @Override
     public void ErrorOrCollortNumberSuccess(String con) {

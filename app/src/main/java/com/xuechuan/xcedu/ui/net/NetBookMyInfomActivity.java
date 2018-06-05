@@ -102,6 +102,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -238,7 +239,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     public static Intent newInstance(Context context, CoursesBeanVo o) {
         Intent intent = new Intent(context, NetBookMyInfomActivity.class);
-        intent.putExtra(SERIALIZABLELIST, o);
+        intent.putExtra(SERIALIZABLELIST, (Serializable) o);
         return intent;
     }
 

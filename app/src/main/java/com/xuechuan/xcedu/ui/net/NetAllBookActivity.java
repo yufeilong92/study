@@ -95,7 +95,7 @@ public class NetAllBookActivity extends BaseActivity implements NetAllView {
             @Override
             public void onClickListener(CoursesBeanVo obj, int position) {
                 Intent intent = NetBookInfomActivity.newInstance(mContext, obj);
-                intent.putExtra(NetBookInfomActivity.SERIALIZABLELIST, obj.getName());
+                intent.putExtra(NetBookInfomActivity.CSTR_EXTRA_TITLE_STR, obj.getName());
                 startActivity(intent);
             }
         });
