@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.xuechuan.xcedu.mvp.contract.PerOrderContract;
 import com.xuechuan.xcedu.mvp.model.PerOrderModel;
 import com.xuechuan.xcedu.mvp.presenter.PerOrderPresenter;
 import com.xuechuan.xcedu.mvp.view.PayUtilView;
+import com.xuechuan.xcedu.ui.me.DelectSuceessActivity;
 import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
@@ -109,6 +111,12 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
         mXfvContentOrderOb.startRefresh();
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mXfvContentOrderOb != null)
+            mXfvContentOrderOb.startRefresh();
+    }
 
     private void initData() {
         mPresenter = new PerOrderPresenter();
@@ -161,6 +169,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 mCancelPostion = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.CANCELORDER);
             }
+
             @Override
             public void onCancelClickListener() {
             }
@@ -349,8 +358,9 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 mArrary.remove(mCancelPostion);
                 adapter.notifyDataSetChanged();
                 mCancelPostion = -1;
+                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
             }
-            T.showToast(mContext, getStrWithId(R.string.submit_success));
+//            T.showToast(mContext, getStrWithId(R.string.submit_success));
         } else {
             T.showToast(mContext, getStrWithId(R.string.submit_error));
         }

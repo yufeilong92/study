@@ -31,6 +31,7 @@ import com.xuechuan.xcedu.mvp.presenter.PayPresenter;
 import com.xuechuan.xcedu.mvp.presenter.PerOrderPresenter;
 import com.xuechuan.xcedu.mvp.view.PayUtilView;
 import com.xuechuan.xcedu.mvp.view.PayView;
+import com.xuechuan.xcedu.ui.me.DelectSuceessActivity;
 import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
@@ -130,9 +131,8 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
         clearData();
         bindAdapterData();
         initXrfresh();
-        mXfvContentOrderAll.startRefresh();
+//        mXfvContentOrderAll.startRefresh();
     }
-
     private void initData() {
         mPresenter = new PerOrderPresenter();
         mPresenter.BasePresenter(new PerOrderModel(), this);
@@ -140,6 +140,11 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
         payUtil.init(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mXfvContentOrderAll.startRefresh();
+    }
 
     private void initView(View view) {
         mContext = getActivity();
@@ -395,12 +400,14 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 mDelPostion = -1;
+                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
             }
             if (mCancelpostion != -1 && mCancelpostion >= 0) {
                 mArrary.remove(mCancelpostion);
                 mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 mCancelpostion = -1;
+                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.CANCELSUCCESS);
             }
         } else {
             L.e(vo.getStatus().getMessage());

@@ -63,6 +63,7 @@ public class MyOrderActivity extends BaseActivity {
         initIndoter();
     }
 
+
     private void initIndoter() {
         ArrayList<String> titleList = ArrayToListUtil.arraytoList(mContext, R.array.my_order_title);
         mMagicindicator.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -75,7 +76,7 @@ public class MyOrderActivity extends BaseActivity {
         List<Fragment> fragments = creartFragment();
         MyTagPagerAdapter tagPagerAdapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPagerContent.setAdapter(tagPagerAdapter);
-        mViewPagerContent.setOffscreenPageLimit(4);
+        mViewPagerContent.setOffscreenPageLimit(3);
         ViewPagerHelper.bind(mMagicindicator, mViewPagerContent);
     }
 

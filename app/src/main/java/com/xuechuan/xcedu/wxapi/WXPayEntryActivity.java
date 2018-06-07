@@ -15,6 +15,7 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
@@ -32,6 +33,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
     private LinearLayout mLlPayContent;
 
     public void onHomeClick(View view){
+        HomeActivity.startInstance(this,HomeActivity.BOOK);
         finish();
     }
     @Override
@@ -64,6 +66,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 mTvPayReasult.setText(R.string.paysuccess);
                 String date = TimeUtil.dateToString(new Date());
                 mTvPayTime.setText(date);
+
             } else if (baseResp.errCode == -1) {
                 mIvPayImg.setImageResource(R.mipmap.common_feedback_fail);
                 mTvPayReasult.setText(R.string.pay_error);

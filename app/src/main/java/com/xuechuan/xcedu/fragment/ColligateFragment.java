@@ -100,8 +100,8 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
 
     private void initData() {
         colPresenter = new ColoctPresenter(new ColoctModelImpl(), this);
-        colPresenter.getErrOrCollNumber(mContext, mTypeOid);
-        colPresenter.requestBuyInfom(mContext,mTypeOid);
+//        colPresenter.getErrOrCollNumber(mContext, mTypeOid);
+//        colPresenter.requestBuyInfom(mContext,mTypeOid);
 
     }
 
@@ -241,5 +241,6 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     public void onResume() {
         super.onResume();
         colPresenter.requestBuyInfom(mContext, mTypeOid);
+        colPresenter.requestBuyInfom(mContext,mTypeOid);
     }
 }

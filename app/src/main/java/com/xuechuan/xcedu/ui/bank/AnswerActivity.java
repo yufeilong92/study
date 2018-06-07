@@ -1652,7 +1652,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     NextGo();
                 }
-
+                mBtnBSureKey.setVisibility(View.GONE);
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
@@ -1770,6 +1770,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 bindViewData(mTextDetialNew);
             }
         } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+            mBtnBSureKey.setVisibility(View.VISIBLE);
             String cont = null;
             List<String> list = getAnswerKeyList(mResultData.getChoiceanswer());
             ArrayList<String> mResult = new ArrayList<>();

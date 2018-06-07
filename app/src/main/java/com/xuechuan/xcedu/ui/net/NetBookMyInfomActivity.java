@@ -199,6 +199,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private AlertDialog mShowDialog;
     private NetBookTableVo.DataBean mBookInfom;
     private ClassBeanVideoVo bookInfmo;
+    private List<ChaptersBeanVo> mBookList;
 
     @Override
     protected void onResume() {
@@ -343,31 +344,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mShowDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         mPresenter.requestBookInfoms(mContext, mClassId);
     }
-
- /*   private void initData() {
-        if (dataVo != null) {
-            helper = new PolyvVlmsHelper();
-            mTvNetBookTitle.setText(dataVo.getName());
-            List<String> list = ArrayToListUtil.arraytoList(mContext, R.array.net_mybook_title);
-            mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
-            CommonNavigator commonNavigator = new CommonNavigator(this);
-            commonNavigator.setScrollPivotX(0.25f);
-            commonNavigator.setAdjustMode(true);
-            MyNetBookIndicatorAdapter adapter = new MyNetBookIndicatorAdapter(list, mVpNetBar);
-            mNetMagicIndicator.setNavigator(commonNavigator);
-            commonNavigator.setAdapter(adapter);
-            List<Fragment> fragments = creartFragment(list);
-            MyTagPagerAdapter tagPagerAdapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
-            mVpNetBar.setAdapter(tagPagerAdapter);
-            mVpNetBar.setOffscreenPageLimit(4);
-            ViewPagerHelper.bind(mNetMagicIndicator, mVpNetBar);
-            if (!StringUtil.isEmpty(dataVo.getCoverimg())) {
-                MyAppliction.getInstance().displayImages(mIvNetPlay, dataVo.getCoverimg(), false);
-            }
-
-        }
-    }*/
-
     /**
      * 播放视频
      */
@@ -398,18 +374,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mZid = vo.getVideoid();
         vid = vo.getVid();
         mTitleName = vo.getVideoname();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void getBookTableList(BookTableEvent event) {
-        List list = event.getArrary();
-        if (list != null && list.size() > 0) {
-            mTableList = list;
-            if (mDownAdapter != null) {
-                mDownAdapter.notifyDataSetChanged();
-            }
-        }
-
     }
 
     private void initView() {
@@ -743,7 +707,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 play();
                 break;
             case R.id.iv_net_icon_my_down://我的下载
-                if (mTableList == null || mTableList.isEmpty()) {
+                if (mBookList == null || mBookList.isEmpty()) {
                     T.showToast(mContext, "暂无课下载");
                     return;
                 }
@@ -797,8 +761,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         if (tableVo.getStatus().getCode() == 200) {
             NetBookTableVo.DataBean bean = tableVo.getData();
             bookInfmo = bean.getClassX();
-            List<ChaptersBeanVo> bookList = bean.getChapters();
-            bindViewData(bookInfmo, bookList, bookInfmo.isIsall());
+            mBookList = bean.getChapters();
+            bindViewData(bookInfmo, mBookList, bookInfmo.isIsall());
 
         } else {
 
@@ -953,7 +917,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 mChbNetPopDownGao = view.findViewById(R.id.chb_net_pop_down_gao);
                 mChbNetPopDownChao = view.findViewById(R.id.chb_net_pop_down_chao);
                 mTvNetPopEmpty = view.findViewById(R.id.tv_net_pop_empty);
-                if (mTableList == null || mTableList.isEmpty()) {
+                if (mBookList == null || mBookList.isEmpty()) {
                     mTvNetPopEmpty.setVisibility(View.VISIBLE);
                     mRlvTableList.setVisibility(View.GONE);
                 }
@@ -1007,7 +971,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-                        GetNetBookService(mTableList, bitrer);
+                        GetNetBookService(mBookList, bitrer);
                     }
                 });
                 //取消按钮
@@ -1043,7 +1007,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 GridLayoutManager manager = new GridLayoutManager(mContext, 1);
                 manager.setOrientation(GridLayoutManager.VERTICAL);
                 mRlvTableList.setLayoutManager(manager);
-                mDownAdapter = new NetMyDownTableAdapter(mContext, mTableList, bookInfmo.getId());
+                mDownAdapter = new NetMyDownTableAdapter(mContext, mBookList, bookInfmo.getId());
                 mRlvTableList.setAdapter(mDownAdapter);
                 mDownAdapter.setClickListener(new NetMyDownTableAdapter.onItemClickListener() {
                     @Override
@@ -1072,7 +1036,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
              * @param bitrate 编码
              */
             private void GetNetBookService(final List list, final int bitrate) {
-                if (mTableList == null || mTableList.isEmpty()) {
+                if (mBookList == null || mBookList.isEmpty()) {
                     return;
                 }
                 thread = new Thread(new Runnable() {

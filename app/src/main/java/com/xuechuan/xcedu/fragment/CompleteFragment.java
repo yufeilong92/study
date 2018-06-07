@@ -21,6 +21,7 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.contract.PerOrderContract;
 import com.xuechuan.xcedu.mvp.model.PerOrderModel;
 import com.xuechuan.xcedu.mvp.presenter.PerOrderPresenter;
+import com.xuechuan.xcedu.ui.me.DelectSuceessActivity;
 import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
@@ -71,6 +72,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +104,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
         clearData();
         bindAdapterData();
         initXrfresh();
-        mXfvContentOrderCom.startRefresh();
+
     }
 
     private void initData() {
@@ -110,6 +112,11 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
         mPresenter.BasePresenter(new PerOrderModel(), this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mXfvContentOrderCom.startRefresh();
+    }
 
     private void initView(View view) {
         mContext = getActivity();
@@ -312,6 +319,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
                 mRlvMyOrderContentCom.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 mDelPositon = -1;
+                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
             }
         }else {
             L.e(vo.getStatus().getMessage());

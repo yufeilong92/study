@@ -104,8 +104,8 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
 
     private void initData() {
         mCasePresenter = new CasePresenter(new CaseModelImpl(), this);
-        mCasePresenter.getErrOrCollNumber(mContext, mTypeOid);
-        mCasePresenter.requestBuyInfom(mContext, mTypeOid);
+//        mCasePresenter.getErrOrCollNumber(mContext, mTypeOid);
+//        mCasePresenter.requestBuyInfom(mContext, mTypeOid);
     }
 
 
@@ -238,6 +238,7 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
     @Override
     public void onResume() {
         super.onResume();
+        mCasePresenter.requestBuyInfom(mContext, mTypeOid);
         mCasePresenter.requestBuyInfom(mContext, mTypeOid);
     }
 }

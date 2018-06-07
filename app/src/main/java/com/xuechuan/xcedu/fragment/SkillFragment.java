@@ -108,8 +108,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
 
     private void initData() {
         mPresenter = new SkillPresenter(new SkillModelImpl(), this);
-        mPresenter.getErrOrCollNumber(mContext, mTypeOid);
-        mPresenter.requestBuyInfom(mContext, mTypeOid);
+//        mPresenter.getErrOrCollNumber(mContext, mTypeOid);
+//        mPresenter.requestBuyInfom(mContext, mTypeOid);
 
     }
 
@@ -211,6 +211,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
         mPresenter.getErrOrCollNumber(mContext, mTypeOid);
+        mPresenter.requestBuyInfom(mContext, mTypeOid);
     }
 
     @Override

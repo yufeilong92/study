@@ -68,7 +68,7 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
      * 课目id
      */
     private static String COUNTID = "countid";
-    private int value = 0;
+    private double value = 0;
     private IWXAPI wxapi;
     private LinearLayout mLlBBankPay;
     private CheckBox mChbBPaySkill;
@@ -160,9 +160,6 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         mChbBPaySkill.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!mChbBPaySkill.isPressed()) {
-                    return;
-                }
                 if (isChecked) {
                     value += skillPrice;
                 } else {
@@ -174,9 +171,6 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         mChbBPayCollo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!mChbBPayCollo.isPressed()) {
-                    return;
-                }
                 if (isChecked) {
                     value += colloPrice;
                 } else {
@@ -188,9 +182,6 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         mChbBPayCase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!mChbBPayCase.isPressed()) {
-                    return;
-                }
                 if (isChecked) {
                     value += casePrice;
                 } else {
@@ -307,9 +298,8 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
     }
 
     private void submit() {
-        int value = 0;
+        double value = 0;
         payType = -1;
-
 
         List<Integer> list = new ArrayList<>();
         if (mChbBPaySkill.isChecked()) {
@@ -324,7 +314,7 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
             value += casePrice;
             list.add(caseId);
         }
-        if (value == 0) {
+        if (value <= 0) {
             T.showToast(mContext, "请选择要购买题库");
             return;
         }
@@ -517,7 +507,7 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
     }
 
     private void clear() {
-        value=0;
+        value = 0;
     }
 
     @Override
@@ -527,12 +517,8 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
 
     @Override
     public void PaySuccess(String type) {
-        if (mType.equals(TEXT)) {//题干
-            HomeActivity.startInstance(mContext, HomeActivity.BOOK);
-            finish();
-        } else if (mType.equals(PERSION)) {
-
-        }
+        HomeActivity.startInstance(mContext, HomeActivity.BOOK);
+        finish();
     }
 
     @Override

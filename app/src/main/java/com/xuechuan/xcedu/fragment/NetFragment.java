@@ -95,6 +95,12 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
 
     private void initData() {
         mPresenter = new NetHomePresenter(new NetHomeModelImpl(), this);
+//        mPresenter.requestClassSandProducts(mContext);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mPresenter.requestClassSandProducts(mContext);
     }
 
@@ -141,7 +147,7 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvNetBuyList.setLayoutManager(gridLayoutManager);
-        mRlvNetBuyList.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
+//        mRlvNetBuyList.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         NetHomeAdapter adapter = new NetHomeAdapter(mContext, datas);
         mRlvNetBuyList.setAdapter(adapter);
         adapter.setClickListener(new NetHomeAdapter.onItemClickListener() {
