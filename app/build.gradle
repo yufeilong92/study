@@ -97,12 +97,11 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:greendao-generator:3.2.2'
     implementation 'pub.devrel:easypermissions:1.2.0'
-    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+//    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation 'com.github.addappcn:android-pickers:1.0.3'
     implementation 'com.alibaba:fastjson:1.1.56.android'
     implementation 'com.android.support:multidex:1.0.3'
     implementation files('libs/alipaySdk-20180403.jar')
     implementation project(':update-app')
-
-
+    implementation project(':picture_library')
 }
