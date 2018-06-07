@@ -1,6 +1,5 @@
 package com.xuechuan.xcedu.ui.net;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -63,7 +62,6 @@ import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
-import com.xuechuan.xcedu.utils.EasyPermissionsUtils;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -678,14 +676,9 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_net_contact_service://客服
-                Intent intent12 = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "400-963-8119"));
-                EasyPermissionsUtils permissionsUtils = EasyPermissionsUtils.getInstance(NetBookInfomActivity.this);
-                boolean b = permissionsUtils.havsCALL_PHONEPermission();
-                if (b) {
-                    startActivity(intent12);
-                } else {
-                    permissionsUtils.showDailog(NetBookInfomActivity.this, Manifest.permission.CALL_PHONE);
-                }
+                Intent intent1 = new Intent(Intent.ACTION_DIAL,
+                        Uri.parse("tel:" + "400-963-8119"));
+                startActivity(intent1);
                 break;
             case R.id.btn_net_go_buy://购买
                 Intent intent = NetBuyActivity.newInstance(mContext, bookInfom.getPrice(), bookInfom.getId(),

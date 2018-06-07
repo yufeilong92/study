@@ -3,9 +3,7 @@ package com.xuechuan.xcedu.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.easefun.polyvsdk.PolyvDownloadProgressListener;
 import com.easefun.polyvsdk.PolyvDownloader;
@@ -29,16 +26,10 @@ import com.easefun.polyvsdk.download.listener.IPolyvDownloaderStartListener;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
-import com.xuechuan.xcedu.player.Db.PolyvDownloadInfo;
-import com.xuechuan.xcedu.player.PolyvPlayerActivity;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
-import com.xuechuan.xcedu.ui.net.NetBookPlayActivity;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
-import com.xuechuan.xcedu.vo.VideosBeanVo;
-
-import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -282,7 +273,6 @@ public class DownNetBookAdapter extends BaseAdapter {
             holder.mTvItemDownStatus.setText(DOWNLOADED);
             shoSpeed(holder, false);
             if (downOverListener != null) {
-
                 downOverListener.onDownClickListener(vo.getVideoOid(), position);
             }
 
@@ -417,6 +407,7 @@ public class DownNetBookAdapter extends BaseAdapter {
                     }
                     // TODO: 2018/5/20  上传服务器
 //                    Toast.makeText(appContext, "第" + (position + 1) + "个任务下载成功", Toast.LENGTH_SHORT).show();
+
                 }
             }
 

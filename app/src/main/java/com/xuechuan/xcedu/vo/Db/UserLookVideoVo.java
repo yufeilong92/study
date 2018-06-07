@@ -33,6 +33,18 @@ public class UserLookVideoVo implements Serializable {
      * 视频名称
      */
     private String titleName;
+    /**
+     * 保利id
+     */
+    private String vid;
+
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
 
     public String getTitleName() {
         return titleName;

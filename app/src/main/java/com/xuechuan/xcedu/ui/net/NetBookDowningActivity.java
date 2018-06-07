@@ -156,7 +156,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         mListAdapter.setDownClickListener(new DownNetBookAdapter.onDownClickListener() {
             @Override
             public void onDownClickListener(String oid, int position) {
-                mPresenter.submitBookPrgeress(mContext, oid, mKid);
+                mPresenter.submitVideo(mContext, oid, mKid);
                 DownVideoDb videoDb = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(mKid);
                 if (videoDb != null) {
                     List<DownVideoVo> downlist = videoDb.getDownlist();

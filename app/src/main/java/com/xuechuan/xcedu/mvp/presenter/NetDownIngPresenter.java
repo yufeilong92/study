@@ -1,11 +1,8 @@
 package com.xuechuan.xcedu.mvp.presenter;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 
 import com.easefun.polyvsdk.danmaku.StringUtils;
-import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BasePresenter;
 import com.xuechuan.xcedu.mvp.model.NetDownIngModel;
 import com.xuechuan.xcedu.mvp.view.NetDownIngView;
@@ -37,7 +34,7 @@ public class NetDownIngPresenter  extends BasePresenter{
      * @param videoOid
      * @param classid
      */
-    public void submitBookPrgeress(Context context, String videoOid, String classid) {
+    public void submitVideo(Context context, String videoOid, String classid) {
         if (StringUtils.isEmpty(videoOid) && StringUtils.isEmpty(classid)) {
             return;
         }

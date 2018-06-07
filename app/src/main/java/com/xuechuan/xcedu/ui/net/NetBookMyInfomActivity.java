@@ -57,7 +57,6 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.google.gson.Gson;
-import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
 import com.xuechuan.xcedu.Event.VideoIdEvent;
@@ -70,6 +69,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.fragment.NetMyBokTableFragment;
 import com.xuechuan.xcedu.fragment.NetMyBookVualueFragment;
 import com.xuechuan.xcedu.mvp.contract.VideoBooksContract;
@@ -91,7 +91,6 @@ import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.ClassBeanVideoVo;
-import com.xuechuan.xcedu.vo.CoursesBeanVo;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.NetBookTableVo;
@@ -200,6 +199,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private NetBookTableVo.DataBean mBookInfom;
     private ClassBeanVideoVo bookInfmo;
     private List<ChaptersBeanVo> mBookList;
+    private int videoProgress = 0;
+    private boolean iscontinue = false;
 
     @Override
     protected void onResume() {
@@ -343,7 +344,20 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mPresenter.initModelView(new MyVideoBooksModel(), this);
         mShowDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         mPresenter.requestBookInfoms(mContext, mClassId);
+        DbHelperAssist dao = DbHelperAssist.getInstance();
+        UserInfomDb db = dao.queryWithuuUserInfom();
+        if (db != null) {
+            List<UserLookVideoVo> lookVideoVos = db.getLookVideolist();
+            for (UserLookVideoVo vo : lookVideoVos) {
+                if (vo.getKid().equals(mClassId)) {
+                    vid = vo.getVid();
+                    videoProgress = Integer.parseInt(vo.getProgress());
+                    iscontinue = true;
+                }
+            }
+        }
     }
+
     /**
      * 播放视频
      */
@@ -358,6 +372,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mZid = vo.getVideoid();
         mTitleName = vo.getVideoname();
         play();
+        iscontinue = false;
 //        play(vo.getVid(), 3, true, false);
 //        mRlPlaylayout.setVisibility(View.GONE);
     }
@@ -669,6 +684,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         progressView.resetMaxValue();
         if (startNow) {
             //调用setVid方法视频会自动播放
+            if (iscontinue) {
+                videoView.seekTo(videoProgress);
+            }
             videoView.setVid(vid, bitrate, isMustFromLocal);
 
         }
@@ -728,6 +746,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     private void play() {
         if (!StringUtil.isEmpty(vid)) {
+
             mRlPlaylayout.setVisibility(View.GONE);
             play(vid, 3, true, false);
             mediaController.setIsPlay(true);
@@ -745,6 +764,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         vo.setPid(String.valueOf(mPid));
         vo.setZid(String.valueOf(mZid));
         vo.setTitleName(mTitleName);
+        vo.setVid(vid);
         int position = videoView.getCurrentPosition();
 //                String s = PolyvTimeUtils.generateTime(position);
         vo.setProgress(String.valueOf(position));
@@ -769,6 +789,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             L.e(tableVo.getStatus().getMessage());
         }
     }
+
     private void bindViewData(ClassBeanVideoVo bookInfmo, List<ChaptersBeanVo> bookList, boolean isall) {
         helper = new PolyvVlmsHelper();
         mTvNetBookTitle.setText(bookInfmo.getName());
