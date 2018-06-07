@@ -1,7 +1,6 @@
 package com.xuechuan.xcedu.base;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
 import com.google.gson.Gson;
@@ -14,27 +13,23 @@ import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
-import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
-import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.GetParamVo;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
+import com.xuechuan.xcedu.vo.TongVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -219,7 +214,7 @@ public class BaseHttpServcie {
      */
     private void sendRequestPostHttp(final Context context, String url, String saffid,
                                      String time, String nonce, String signature,
-                                     RequestBody requestBody, final StringCallBackView callBackView) {
+                                     final RequestBody requestBody, final StringCallBackView callBackView) {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
@@ -241,8 +236,15 @@ public class BaseHttpServcie {
                             }
                         }
                         try {
-                            new JsonParser().parse(response.body().toString());
-                            callBackView.onSuccess(response);
+                            String com = response.body().toString();
+                            new JsonParser().parse(com);
+                            Gson gson = new Gson();
+                            TongVo vo = gson.fromJson(com, TongVo.class);
+                            if (vo.getStatus().getCode() == 200) {
+                                callBackView.onSuccess(response);
+                            } else {
+                                MyAppliction.getInstance().startLogin(context);
+                            }
                         } catch (JsonParseException e) {
                             L.e("数据异常");
                             e.printStackTrace();
@@ -285,8 +287,15 @@ public class BaseHttpServcie {
                             }
                         }
                         try {
-                            new JsonParser().parse(response.body().toString());
-                            callBackView.onSuccess(response);
+                            String com = response.body().toString();
+                            new JsonParser().parse(com);
+                            Gson gson = new Gson();
+                            TongVo vo = gson.fromJson(com, TongVo.class);
+                            if (vo.getStatus().getCode() == 200) {
+                                callBackView.onSuccess(response);
+                            } else {
+                                MyAppliction.getInstance().startLogin(context);
+                            }
                         } catch (JsonParseException e) {
                             L.e("数据异常");
                             e.printStackTrace();

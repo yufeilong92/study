@@ -163,6 +163,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private boolean isPlay = false;
 
     private LinearLayout ll_title_bar;
+    private boolean isPlayafter = false;
 
     /***
      * 数据类型
@@ -226,6 +227,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         super.onStop();
         //弹出去暂停
         isPlay = videoView.onActivityStop();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
 //        danmuFragment.pause();
     }
 
@@ -237,14 +240,17 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), vid);
         }
         videoView.destroy();
-        EventBus.getDefault().removeAllStickyEvents();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
+
         mediaController.disable();
         saveLookVideo();
         MyAppliction.getInstance().setIsPlay(false);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     public static Intent newInstance(Context context, String classid) {
@@ -335,7 +341,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 break;
         }
         initData();
-        EventBus.getDefault().register(this);
+
 //        play("d740a56357c361f76cdd800b204e9800_d", 0, true, false);
     }
 
@@ -348,13 +354,14 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         UserInfomDb db = dao.queryWithuuUserInfom();
         if (db != null) {
             List<UserLookVideoVo> lookVideoVos = db.getLookVideolist();
-            for (UserLookVideoVo vo : lookVideoVos) {
-                if (vo.getKid().equals(mClassId)) {
-                    vid = vo.getVid();
-                    videoProgress = Integer.parseInt(vo.getProgress());
-                    iscontinue = true;
+            if (lookVideoVos != null && !lookVideoVos.isEmpty())
+                for (UserLookVideoVo vo : lookVideoVos) {
+                    if (vo.getKid().equals(mClassId)) {
+                        vid = vo.getVid();
+                        videoProgress = Integer.parseInt(vo.getProgress());
+                        iscontinue = true;
+                    }
                 }
-            }
         }
     }
 
@@ -384,11 +391,13 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     public void onNetMainTryPlayId(NetMyPlayTrySeeEvent event) {
         VideosBeanVo vo = event.getVo();
         L.e(vo.getVid());
-        mVideoid = vo.getVideoid();
-        mPid = vo.getChapterid();
-        mZid = vo.getVideoid();
-        vid = vo.getVid();
-        mTitleName = vo.getVideoname();
+        if (!iscontinue&&!isPlayafter) {
+            mVideoid = vo.getVideoid();
+            mPid = vo.getChapterid();
+            mZid = vo.getVideoid();
+            vid = vo.getVid();
+            mTitleName = vo.getVideoname();
+        }
     }
 
     private void initView() {
@@ -678,13 +687,14 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      */
     public void play(final String vid, final int bitrate, boolean startNow, final boolean isMustFromLocal) {
         if (TextUtils.isEmpty(vid)) return;
+        isPlayafter = true;
         videoView.release();
         mediaController.hide();
         loadingProgress.setVisibility(View.GONE);
         progressView.resetMaxValue();
         if (startNow) {
             //调用setVid方法视频会自动播放
-            if (iscontinue) {
+            if (iscontinue&&!isPlayafter) {
                 videoView.seekTo(videoProgress);
             }
             videoView.setVid(vid, bitrate, isMustFromLocal);
@@ -746,7 +756,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     private void play() {
         if (!StringUtil.isEmpty(vid)) {
-
             mRlPlaylayout.setVisibility(View.GONE);
             play(vid, 3, true, false);
             mediaController.setIsPlay(true);
@@ -759,6 +768,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     private void saveLookVideo() {
         DbHelperAssist mUserDao = DbHelperAssist.getInstance();
+        if (StringUtil.isEmpty(vid) && !isPlayafter) {
+            return;
+        }
         UserLookVideoVo vo = new UserLookVideoVo();
         vo.setKid(String.valueOf(bookInfmo.getId()));
         vo.setPid(String.valueOf(mPid));

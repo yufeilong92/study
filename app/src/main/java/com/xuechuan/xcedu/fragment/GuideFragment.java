@@ -107,6 +107,7 @@ public class GuideFragment extends BaseFragment implements View.OnClickListener 
                 SaveIsDoneUtil.getInstance().putUUID("ture");
                 Intent intent1 = new Intent(mContext, LoginActivity.class);
                 startActivity(intent1);
+                getActivity().finish();
                 break;
         }
     }
