@@ -14,6 +14,7 @@ import com.easefun.polyvsdk.PolyvDevMountInfo;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -64,7 +65,7 @@ public class MyAppliction extends MultiDexApplication {
     private PolyvSDKClient mPolyclient;
     private UserInfomVo infomVo;
     private static MyAppliction application;
-    private int READTIME = 2000;
+    private int READTIME = 20000;
     /**
      * 打开的activity
      **/
@@ -251,6 +252,7 @@ public class MyAppliction extends MultiDexApplication {
         OkGo.getInstance().init(this)
                 .setOkHttpClient(builder.build())//设置链接
                 .setCacheMode(CacheMode.NO_CACHE) //设置缓存
+                .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(3); //断网链接
 
     }

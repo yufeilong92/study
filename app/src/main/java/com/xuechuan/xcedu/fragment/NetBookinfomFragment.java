@@ -5,9 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -29,21 +27,18 @@ import com.xuechuan.xcedu.utils.StringUtil;
  */
 public class NetBookinfomFragment extends BaseFragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
+    private static final String URL = "url";
+    private String mUrl;
     private WebView mWebAgreenement;
     private ImageView mIvAgreenmentImg;
 
     public NetBookinfomFragment() {
     }
 
-    public static NetBookinfomFragment newInstance(String param1, String param2) {
+    public static NetBookinfomFragment newInstance(String url) {
         NetBookinfomFragment fragment = new NetBookinfomFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(URL, url);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +47,7 @@ public class NetBookinfomFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mUrl = getArguments().getString(URL);
         }
     }
 
@@ -73,7 +67,7 @@ public class NetBookinfomFragment extends BaseFragment {
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
-        if (StringUtil.isEmpty(mParam1)) {
+        if (StringUtil.isEmpty(mUrl)) {
             return;
         }
         initData();
@@ -96,7 +90,7 @@ public class NetBookinfomFragment extends BaseFragment {
         settings.setDisplayZoomControls(false); //隐藏原生的缩放控件
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
-        mWebAgreenement.loadUrl(mParam1);
+        mWebAgreenement.loadUrl(mUrl);
         mWebAgreenement.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

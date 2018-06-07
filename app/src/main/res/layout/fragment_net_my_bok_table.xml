@@ -4,10 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.NetMyBokTableFragment">
-    <com.andview.refreshview.XRefreshView
-        android:layout_width="match_parent"
-        android:id="@+id/xrfv_speca_refresh"
-        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rlv_speca_content"
@@ -16,11 +12,11 @@
 
         </android.support.v7.widget.RecyclerView>
         <TextView
+            android:visibility="gone"
             android:gravity="center"
             android:id="@+id/tv_net_empty_content"
             android:text="暂无内容"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.andview.refreshview.XRefreshView>
 
 </FrameLayout>

@@ -416,7 +416,7 @@ public class DownNetBookAdapter extends BaseAdapter {
                         downOverListener.onDownClickListener(downloadInfo.getVideoOid(), position);
                     }
                     // TODO: 2018/5/20  上传服务器
-                    Toast.makeText(appContext, "第" + (position + 1) + "个任务下载成功", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(appContext, "第" + (position + 1) + "个任务下载成功", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -494,9 +494,9 @@ public class DownNetBookAdapter extends BaseAdapter {
             PolyvDownloader downloader = PolyvDownloaderManager.getPolyvDownloader(vid, bitRate);
             String status = getStrWithView(tv_status);
             if (status.equals(DOWNLOADED)) {//已下载跳转播放界面
-                Intent intent = NetBookPlayActivity.newIntent(mContext, NetBookPlayActivity.PlayMode.portrait, vid, bitRate, true, true);
+//                Intent intent = NetBookPlayActivity.newIntent(mContext, NetBookPlayActivity.PlayMode.portrait, vid, bitRate, true, true);
                 // 在线视频和下载的视频播放的时候只显示播放器窗口，用该参数来控制
-                mContext.startActivity(intent);
+//                mContext.startActivity(intent);
             } else if (status.equals(DOWNLOADING) || status.equals(WAITED)) {//正在和等待下载状态
                 tv_status.setText(PAUSEED);
                 downloader.stop();

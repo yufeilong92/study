@@ -131,7 +131,6 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
     private void initView(View view) {
         mContext = getActivity();
         mIvMHear = (ImageView) view.findViewById(R.id.iv_m_hear);
-        mIvMHear.setOnClickListener(this);
         mTvMName = (TextView) view.findViewById(R.id.tv_m_name);
         mIvMEdith = (ImageView) view.findViewById(R.id.iv_m_edith);
         mIvMEdith.setOnClickListener(this);

@@ -220,6 +220,7 @@
         <!-- ====================================================== -->
         <activity
             android:name=".HomeActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask">
 
             <!--
@@ -232,15 +233,19 @@
         </activity>
         <activity
             android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.AddressShowActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.SearchActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.RegisterActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -254,76 +259,99 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.EvalueDetialActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.BookActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.BookInfomActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.SpecasListActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.ArticleListActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.SearchResultActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.AdvisoryListActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.me.PersionActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.me.SettingActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.me.AboutActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.InfomDetailActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.AnswerActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.me.FeedBackActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.AtricleListActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
 
         <service
             android:name=".service.BugBookService"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".ui.bank.MyErrorOrCollectTextActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.MockTestActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.EvalueTwoActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.AnswerResultActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.SpecialListActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.bank.FreeQuestionActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.home.AtirlceListActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".PiloActivity"
-            android:theme="@style/AppTheme_Splict"
-            android:launchMode="singleTask">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme_Splict">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -351,7 +379,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.net.NetAllBookActivity" />
+        <activity
+            android:name=".ui.net.NetAllBookActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.net.NetBookMyInfomActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -361,7 +392,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.net.NetBookDownActivity" />
+        <activity
+            android:name=".ui.net.NetBookDownActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.net.NetBookDownOverActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -371,7 +405,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.net.NetBookDowningActivity" />
+        <activity
+            android:name=".ui.net.NetBookDowningActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.net.NetBookPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -381,16 +418,32 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.net.NetBookEvalueInfomActivity" />
+        <activity
+            android:name=".ui.net.NetBookEvalueInfomActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
 
         <service
             android:name=".service.SubmitProgressService"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
-        <activity android:name=".ui.me.AddVauleActivity" />
-        <activity android:name=".ui.me.GenuineActivity" />
-        <activity android:name=".ui.me.MyMsgActivity" />
-        <activity android:name=".ui.bank.BankBuyActivity">
+        <activity
+            android:name=".ui.me.AddVauleActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.me.GenuineActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.me.MyMsgActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.bank.BankBuyActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -399,22 +452,48 @@
                 <data android:scheme="wx0c71e64b9e151c84" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.net.NetBuyActivity" />
-        <activity android:name=".ui.BuyResultActivity" />
-        <activity android:name=".ui.me.MyOrderActivity" />
+        <activity
+            android:name=".ui.net.NetBuyActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.BuyResultActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.me.MyOrderActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.me.MyOrderInfomActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_my_order_infom" />
-        <activity android:name=".ui.me.PawChangerActivity" />
+        <activity
+            android:name=".ui.me.PawChangerActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
 
         <service
             android:name=".service.SubmitHearService"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
-        <activity android:name=".jg.TestActivity" />
-        <activity android:name=".ui.me.SystemMsgActivity" />
-        <activity android:name=".ui.AgreementActivity" />
-        <activity android:name=".GuideActivity"></activity>
+        <activity
+            android:name=".jg.TestActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.me.SystemMsgActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.AgreementActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".GuideActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

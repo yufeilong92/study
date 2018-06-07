@@ -48,6 +48,19 @@ public class ClassBeanVideoVo {
      */
     private double price;
 
+    /**
+     * 详情地址
+     */
+    private String detailurl;
+
+    public String getDetailurl() {
+        return detailurl;
+    }
+
+    public void setDetailurl(String detailurl) {
+        this.detailurl = detailurl;
+    }
+
     public int getCourseid() {
         return courseid;
     }

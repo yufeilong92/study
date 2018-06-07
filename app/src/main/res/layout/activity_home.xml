@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".HomeActivity">
 
-    <android.support.v4.view.ViewPager
+    <com.xuechuan.xcedu.weight.NoScrollViewPager
         android:id="@+id/viewpage_contetn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -25,18 +25,25 @@
         android:layout_height="@dimen/space_100dp"
         android:layout_gravity="center_horizontal"
         android:background="@mipmap/ic_home_supper"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/space_16">
-
         <CheckBox
+            android:padding="@dimen/space_8"
             android:id="@+id/chb_iofom_detial_supper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@drawable/select_issupper_bg"
+            android:drawableTop="@drawable/select_issupper_bg"
+            android:button="@null"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/text_title_color"
+            android:text="11111"
             android:gravity="center" />
-        <Space style="@style/space_8_height" />
+        <Space
+            android:visibility="gone"
+            style="@style/space_8_height" />
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_iofom_detail_suppernumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

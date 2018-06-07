@@ -30,7 +30,9 @@ public class DownVideoDbDao extends AbstractDao<DownVideoDb, Long> {
         public final static Property Kid = new Property(2, String.class, "kid", false, "KID");
         public final static Property UrlImg = new Property(3, String.class, "urlImg", false, "URL_IMG");
         public final static Property KName = new Property(4, String.class, "kName", false, "K_NAME");
-        public final static Property Downlist = new Property(5, String.class, "downlist", false, "DOWNLIST");
+        public final static Property Vid = new Property(5, String.class, "vid", false, "VID");
+        public final static Property Time = new Property(6, String.class, "time", false, "TIME");
+        public final static Property Downlist = new Property(7, String.class, "downlist", false, "DOWNLIST");
     }
 
     private final DownVideoConverent downlistConverter = new DownVideoConverent();
@@ -52,7 +54,9 @@ public class DownVideoDbDao extends AbstractDao<DownVideoDb, Long> {
                 "\"KID\" TEXT," + // 2: kid
                 "\"URL_IMG\" TEXT," + // 3: urlImg
                 "\"K_NAME\" TEXT," + // 4: kName
-                "\"DOWNLIST\" TEXT);"); // 5: downlist
+                "\"VID\" TEXT," + // 5: vid
+                "\"TIME\" TEXT," + // 6: time
+                "\"DOWNLIST\" TEXT);"); // 7: downlist
     }
 
     /** Drops the underlying database table. */
@@ -90,9 +94,19 @@ public class DownVideoDbDao extends AbstractDao<DownVideoDb, Long> {
             stmt.bindString(5, kName);
         }
  
+        String vid = entity.getVid();
+        if (vid != null) {
+            stmt.bindString(6, vid);
+        }
+ 
+        String time = entity.getTime();
+        if (time != null) {
+            stmt.bindString(7, time);
+        }
+ 
         List downlist = entity.getDownlist();
         if (downlist != null) {
-            stmt.bindString(6, downlistConverter.convertToDatabaseValue(downlist));
+            stmt.bindString(8, downlistConverter.convertToDatabaseValue(downlist));
         }
     }
 
@@ -125,9 +139,19 @@ public class DownVideoDbDao extends AbstractDao<DownVideoDb, Long> {
             stmt.bindString(5, kName);
         }
  
+        String vid = entity.getVid();
+        if (vid != null) {
+            stmt.bindString(6, vid);
+        }
+ 
+        String time = entity.getTime();
+        if (time != null) {
+            stmt.bindString(7, time);
+        }
+ 
         List downlist = entity.getDownlist();
         if (downlist != null) {
-            stmt.bindString(6, downlistConverter.convertToDatabaseValue(downlist));
+            stmt.bindString(8, downlistConverter.convertToDatabaseValue(downlist));
         }
     }
 
@@ -144,7 +168,9 @@ public class DownVideoDbDao extends AbstractDao<DownVideoDb, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // kid
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // urlImg
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // kName
-            cursor.isNull(offset + 5) ? null : downlistConverter.convertToEntityProperty(cursor.getString(offset + 5)) // downlist
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // vid
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // time
+            cursor.isNull(offset + 7) ? null : downlistConverter.convertToEntityProperty(cursor.getString(offset + 7)) // downlist
         );
         return entity;
     }
@@ -156,7 +182,9 @@ public class DownVideoDbDao extends AbstractDao<DownVideoDb, Long> {
         entity.setKid(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUrlImg(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setKName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setDownlist(cursor.isNull(offset + 5) ? null : downlistConverter.convertToEntityProperty(cursor.getString(offset + 5)));
+        entity.setVid(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setDownlist(cursor.isNull(offset + 7) ? null : downlistConverter.convertToEntityProperty(cursor.getString(offset + 7)));
      }
     
     @Override

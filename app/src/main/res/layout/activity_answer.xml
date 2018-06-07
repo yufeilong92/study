@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
-                    android:text="题干题干题干题干题干题干题干题干题干题干题干题干题干题干题干"
+                    android:text=""
                     android:textColor="@color/black" />
 
                 <Button

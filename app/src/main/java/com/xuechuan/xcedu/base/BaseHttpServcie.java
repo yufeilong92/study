@@ -242,7 +242,6 @@ public class BaseHttpServcie {
                         }
                         try {
                             new JsonParser().parse(response.body().toString());
-                            OkGo.getInstance().cancelTag(mContext);
                             callBackView.onSuccess(response);
                         } catch (JsonParseException e) {
                             L.e("数据异常");

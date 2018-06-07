@@ -350,15 +350,15 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 if (isChecked) {
                     requestSupper("true");
                     integer += 1;
-                    tvNumber.setText(integer + "");
+                    chb_select.setText(integer + "");
                 } else {
                     integer -= 1;
                     requestSupper("false");
-                    tvNumber.setText(integer + "");
+                    chb_select.setText(integer + "");
                 }
             }
         });
-        tvNumber.setText(mSupperNumber);
+        chb_select.setText(mSupperNumber);
     }
 
     /**

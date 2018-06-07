@@ -144,18 +144,25 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         bindData(bean);
         if (!StringUtil.isEmpty(mCountid)) {
             if (mCountid.equals("1")) {
+                value += skillPrice;
                 mChbBPaySkill.setChecked(true);
             } else if (mCountid.equals("2")) {
+                value += colloPrice;
                 mChbBPayCollo.setChecked(true);
             } else if (mCountid.equals("3")) {
+                value += casePrice;
                 mChbBPayCase.setChecked(true);
             }
+            showCount();
         }
 
         mChbBPayWeixin.setChecked(true);
         mChbBPaySkill.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!mChbBPaySkill.isPressed()) {
+                    return;
+                }
                 if (isChecked) {
                     value += skillPrice;
                 } else {
@@ -167,6 +174,9 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         mChbBPayCollo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!mChbBPayCollo.isPressed()) {
+                    return;
+                }
                 if (isChecked) {
                     value += colloPrice;
                 } else {
@@ -178,6 +188,9 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
         mChbBPayCase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!mChbBPayCase.isPressed()) {
+                    return;
+                }
                 if (isChecked) {
                     value += casePrice;
                 } else {
@@ -490,6 +503,7 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
 */
     @Override
     public void BookIDSuccess(String con) {
+        clear();
         Gson gson = new Gson();
         BankValueVo vo = gson.fromJson(con, BankValueVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -500,6 +514,10 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
             L.e(vo.getStatus().getMessage());
 
         }
+    }
+
+    private void clear() {
+        value=0;
     }
 
     @Override

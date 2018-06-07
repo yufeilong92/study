@@ -14,8 +14,8 @@
         <CheckBox
             android:id="@+id/chb_item_down_infom_select"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/space_10"
+            android:layout_height="match_parent"
+            android:padding="@dimen/space_10"
             android:button="@drawable/select_free_chb_bg"
             android:visibility="gone" />
 

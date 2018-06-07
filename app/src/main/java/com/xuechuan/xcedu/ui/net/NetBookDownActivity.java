@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.easefun.polyvsdk.PolyvDownloader;
@@ -22,6 +23,7 @@ import com.xuechuan.xcedu.adapter.NetDownOverAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.NetDownSelectVo;
@@ -41,7 +43,7 @@ import java.util.List;
  */
 public class NetBookDownActivity extends BaseActivity implements View.OnClickListener {
 
-
+    boolean isStartIntent = true;
     private Context mContext;
     private TextView mTvNetBookDownMake;
     private RecyclerView mRlvNetLoadingGoing;
@@ -58,14 +60,17 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
     private DbHelperDownAssist mDao;
     private AlertDialog mDelectdialog;
     private LinearLayout mLlNetBookDownAll;
+    private TextView mTvMydowning;
+    private ScrollView mScroviewLayout;
+    private TextView mTvEmpty;
 
- /*   @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_net_book_down);
-        initView();
-    }*/
-
+    /*   @Override
+       protected void onCreate(Bundle savedInstanceState) {
+           super.onCreate(savedInstanceState);
+           setContentView(R.layout.activity_net_book_down);
+           initView();
+       }
+   */
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_net_book_down);
@@ -78,6 +83,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
     protected void onRestart() {
         super.onRestart();
         initData(false, false);
+
     }
 
     private void initKong() {
@@ -126,8 +132,18 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         computeStorage();
         mDao = DbHelperDownAssist.getInstance();
         //记录那些没有缓存完成的
-        List<DownVideoDb> downVideoDbs = new ArrayList<>();
         List<DownVideoDb> dbs = mDao.queryUserDownInfom();
+        if (dbs == null || dbs.isEmpty()) {
+            mScroviewLayout.setVisibility(View.GONE);
+            mTvEmpty.setVisibility(View.VISIBLE);
+            return;
+        }
+        List<DownVideoDb> downVideoDbs = new ArrayList<>();
+        List<DownVideoDb> downIngVideoDbs = new ArrayList<>();
+
+        List<DownVideoVo> downVideos = new ArrayList<>();
+        List<DownVideoVo> downIngVideos = new ArrayList<>();
+
         for (int i = 0; i < dbs.size(); i++) {
             DownVideoDb db = dbs.get(i);
             List<DownVideoVo> downlist = db.getDownlist();
@@ -135,36 +151,78 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                 for (int j = 0; j < downlist.size(); j++) {
                     DownVideoVo vo = downlist.get(j);
                     if (!vo.getStatus().equals("0")) {
-                        downVideoDbs.add(db);
-                        break;
+                        downIngVideos.add(vo);
+                    } else {
+                        downVideos.add(vo);
                     }
                 }
             }
+            //未完成
+            copeList(downIngVideoDbs, db, downIngVideos);
+            //已完成
+            copeList(downVideoDbs, db, downVideos);
         }
-        dbs.removeAll(downVideoDbs);
-        if (dbs != null && !dbs.isEmpty()) {
+//        已完成
+        if (downVideoDbs == null || downVideoDbs.isEmpty()) {
+            mLlLoadingOver.setVisibility(View.GONE);
+        }
+        if (downVideoDbs != null && !downVideoDbs.isEmpty()) {
             mSelectDoneVos = new ArrayList<>();
-            for (int i = 0; i < dbs.size(); i++) {
-                DownVideoDb db = dbs.get(i);
+            for (int i = 0; i < downVideoDbs.size(); i++) {
+                DownVideoDb db = downVideoDbs.get(i);
                 NetDownSelectVo vo = new NetDownSelectVo();
                 vo.setId(db.getKid());
                 vo.setSelect(isSelect);
                 vo.setShow(isShow);
+                List<String> list = new ArrayList<>();
+                for (DownVideoVo downVideoVo : db.getDownlist()) {
+                    list.add(downVideoVo.getZid());
+                }
+                vo.setZips(list);
                 mSelectDoneVos.add(vo);
             }
-            bindDoneViewData(dbs);
         }
+        //未完成
         mSelectNOVos = new ArrayList<>();
-        for (int i = 0; i < downVideoDbs.size(); i++) {
-            DownVideoDb db = downVideoDbs.get(i);
+        if (downIngVideos == null || downIngVideoDbs.isEmpty()) {
+            mLlNetLoadingGoing.setVisibility(View.GONE);
+        }
+        for (int i = 0; i < downIngVideoDbs.size(); i++) {
+            DownVideoDb db = downIngVideoDbs.get(i);
             NetDownSelectVo vo = new NetDownSelectVo();
             vo.setId(db.getKid());
             vo.setSelect(isSelect);
             vo.setShow(isShow);
+            List<String> list = new ArrayList<>();
+            for (DownVideoVo downVideoVo : db.getDownlist()) {
+                list.add(downVideoVo.getZid());
+            }
+            vo.setZips(list);
             mSelectNOVos.add(vo);
         }
-        bindViewData(dbs, downVideoDbs);
+        bindViewData(downVideoDbs, downIngVideoDbs);
     }
+
+    /**
+     * 拷贝数据
+     *
+     * @param downVideoDbs  展示的集合
+     * @param db
+     * @param downIngVideos 缓存的视频
+     */
+    private void copeList(List<DownVideoDb> downVideoDbs, DownVideoDb db, List<DownVideoVo> downIngVideos) {
+        if (downIngVideos == null || downIngVideos.isEmpty()) {
+            return;
+        }
+        DownVideoDb videoDb = new DownVideoDb();
+        videoDb.setUrlImg(db.getUrlImg());
+        videoDb.setStaffid(db.getStaffid());
+        videoDb.setKName(db.getKName());
+        videoDb.setKid(db.getKid());
+        videoDb.setDownlist(downIngVideos);
+        downVideoDbs.add(videoDb);
+    }
+
 
     /**
      * @param over 已完成
@@ -189,6 +247,9 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         mOverAdapter.setClickListener(new NetDownOverAdapter.onItemClickListener() {
             @Override
             public void onClickListener(DownVideoDb db, int position) {
+                if (!isStartIntent) {
+                    return;
+                }
                 Intent intent = NetBookDownOverActivity.newInstance(mContext, db.getKid());
                 startActivity(intent);
             }
@@ -223,6 +284,9 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         mNoDoneAdapter.setClickListener(new NetDownGoingAdapter.onItemClickListener() {
             @Override
             public void onClickListener(DownVideoDb db, int position) {
+                if (!isStartIntent) {
+                    return;
+                }
                 Intent intent = NetBookDowningActivity.newInstance(mContext, db.getKid());
                 startActivity(intent);
             }
@@ -279,39 +343,65 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         mLlNetDownAll.setOnClickListener(this);
         mLlNetBookDownAll = (LinearLayout) findViewById(R.id.ll_net_book_down_all);
         mLlNetBookDownAll.setOnClickListener(this);
+        mTvMydowning = (TextView) findViewById(R.id.tv_mydowning);
+        mTvMydowning.setOnClickListener(this);
+        mScroviewLayout = (ScrollView) findViewById(R.id.scroview_layout);
+        mScroviewLayout.setOnClickListener(this);
+        mTvEmpty = (TextView) findViewById(R.id.tv_empty);
+        mTvEmpty.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.btn_net_book_down_delect:
-                if (mSelectDoneVos != null && !mSelectDoneVos.isEmpty())
-                    for (NetDownSelectVo vo : mSelectDoneVos) {
-                        if (vo.isSelect()) {
-                            mSelectDoneVos.remove(vo);
-                            DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
-                            delectVideo(db.getDownlist());
-                            mDao.delectKItem(vo.getId());
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del), getStringWithId(R.string.delect)
+                        , getStringWithId(R.string.cancel), true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        if (mSelectDoneVos != null && !mSelectDoneVos.isEmpty())
+                            for (NetDownSelectVo vo : mSelectDoneVos) {
+                                if (vo.isSelect()) {
+                                    mSelectDoneVos.remove(vo);
+                                    DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
+                                    delectVideo(db.getDownlist());
+                                    List<String> zips = vo.getZips();
+                                    for (String zip : zips) {
+                                        mDao.delectZItem(vo.getId(), zip);
+                                    }
+                                }
+                            }
+                        if (mSelectNOVos != null && !mSelectNOVos.isEmpty())
+                            for (NetDownSelectVo vo : mSelectNOVos) {
+                                if (vo.isSelect()) {
+                                    mSelectDoneVos.remove(vo);
+                                    DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
+                                    delectVideo(db.getDownlist());
+                                    List<String> zips = vo.getZips();
+                                    for (String zip : zips) {
+                                        mDao.delectZItem(vo.getId(), zip);
+                                    }
 
-                        }
+                                }
+                            }
+                        initData(true, false);
+                        mNoDoneAdapter.notifyDataSetChanged();
+                        mOverAdapter.notifyDataSetChanged();
                     }
-                if (mSelectNOVos != null && !mSelectNOVos.isEmpty())
-                    for (NetDownSelectVo vo : mSelectNOVos) {
-                        if (vo.isSelect()) {
-                            mSelectDoneVos.remove(vo);
-                            DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
-                            delectVideo(db.getDownlist());
-                            mDao.delectKItem(vo.getId());
-                        }
+
+                    @Override
+                    public void onCancelClickListener() {
+
                     }
-                initData(true, false);
-                mNoDoneAdapter.notifyDataSetChanged();
-                mOverAdapter.notifyDataSetChanged();
+                });
                 break;
             case R.id.tv_net_book_down_make:
                 String trim = mTvNetBookDownMake.getText().toString().trim();
                 if (trim.equals(getString(R.string.edit))) {
                     mLlNetDownAll.setVisibility(View.VISIBLE);
+                    isStartIntent = false;
                     mTvNetBookDownMake.setText(R.string.complete);
                     if (mSelectDoneVos != null && !mSelectDoneVos.isEmpty()) {
                         for (int i = 0; i < mSelectDoneVos.size(); i++) {
@@ -331,6 +421,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     mLlNetDownAll.setVisibility(View.GONE);
                     mTvNetBookDownMake.setText(R.string.edit);
+                    isStartIntent = true;
                     if (mSelectDoneVos != null && !mSelectDoneVos.isEmpty()) {
                         for (int i = 0; i < mSelectDoneVos.size(); i++) {
                             NetDownSelectVo net = mSelectDoneVos.get(i);

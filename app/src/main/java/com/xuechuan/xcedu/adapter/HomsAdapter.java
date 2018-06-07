@@ -31,6 +31,7 @@ import com.xuechuan.xcedu.vo.HomePageVo;
 import com.xuechuan.xcedu.weight.DividerItemDecoration;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ import java.util.List;
  */
 public class HomsAdapter extends RecyclerView.Adapter {
 
-    private  String code;
+    private String code;
     private Context mContext;
     private HomePageVo mData;
     private final LayoutInflater mInflater;
@@ -196,10 +197,10 @@ public class HomsAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void setBanner(BannerViewHolder banner) {
+    private void setBanner(final BannerViewHolder banner) {
         if (mData == null)
             return;
-        List<BannerBean> beanList = mData.getData().getBanner();
+        final List<BannerBean> beanList = mData.getData().getBanner();
         ArrayList<String> list = new ArrayList<>();
         ArrayList<String> url = new ArrayList<>();
         for (int i = 0; i < beanList.size(); i++) {
@@ -216,7 +217,17 @@ public class HomsAdapter extends RecyclerView.Adapter {
             }
         });
         banner.mBanHome.setImages(list);
+
         banner.mBanHome.start();
+        banner.mBanHome.setOnBannerClickListener(new OnBannerClickListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                BannerBean bean = beanList.get(position - 1);
+                if (!StringUtil.isEmpty(bean.getGourl()))
+                    AgreementActivity.newInstance(mContext, bean.getGourl());
+
+            }
+        });
     }
 
 

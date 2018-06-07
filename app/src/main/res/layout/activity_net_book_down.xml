@@ -35,6 +35,7 @@
     <View style="@style/view_line_tab_line" />
 
     <ScrollView
+        android:id="@+id/scroview_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/space_16"
@@ -51,6 +52,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_mydowning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -137,4 +139,11 @@
 
         </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_empty"
+        android:text="@string/Nobuffer"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

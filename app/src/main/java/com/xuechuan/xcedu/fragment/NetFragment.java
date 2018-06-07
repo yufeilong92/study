@@ -147,7 +147,7 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
         adapter.setClickListener(new NetHomeAdapter.onItemClickListener() {
             @Override
             public void onClickListener(CoursesBeanVo vo, int position) {
-                Intent intent = NetBookMyInfomActivity.newInstance(mContext, vo);
+                Intent intent = NetBookMyInfomActivity.newInstance(mContext, String.valueOf(vo.getId()));
                 intent.putExtra(NetBookMyInfomActivity.CSTR_EXTRA_TITLE_STR, vo.getName());
                 startActivity(intent);
             }

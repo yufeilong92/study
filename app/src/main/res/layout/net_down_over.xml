@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <CheckBox
-            android:layout_marginRight="@dimen/space_10"
             android:button="@drawable/select_free_chb_bg"
             android:id="@+id/chb_net_down_ing_over"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+             android:padding="@dimen/space_10"
             android:gravity="center_vertical" />
 
         <ImageView

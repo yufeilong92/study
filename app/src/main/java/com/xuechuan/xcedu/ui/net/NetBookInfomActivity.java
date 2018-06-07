@@ -1,23 +1,19 @@
 package com.xuechuan.xcedu.ui.net;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,17 +42,19 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnQuestionAnswerTipsListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoPlayErrorListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
-import com.xuechuan.xcedu.PiloActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
-import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.fragment.NetBookinfomFragment;
 import com.xuechuan.xcedu.fragment.NetTableFragment;
+import com.xuechuan.xcedu.mvp.contract.VideoBooksContract;
+import com.xuechuan.xcedu.mvp.model.MyVideoBooksModel;
+import com.xuechuan.xcedu.mvp.presenter.VideoInfomsPresenter;
 import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerMediaController;
 import com.xuechuan.xcedu.player.player.PolyvPlayerProgressView;
@@ -64,13 +62,15 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.EasyPermissionsUtils;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.CoursesBeanVo;
+import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.ClassBeanVideoVo;
+import com.xuechuan.xcedu.vo.NetBookTableVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
-import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -83,12 +83,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
-
-import pub.devrel.easypermissions.EasyPermissions;
-import pub.devrel.easypermissions.PermissionRequest;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -100,7 +96,7 @@ import pub.devrel.easypermissions.PermissionRequest;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/14
  */
-public class NetBookInfomActivity extends BaseActivity implements View.OnClickListener {
+public class NetBookInfomActivity extends BaseActivity implements View.OnClickListener, VideoBooksContract.View {
     private static final String TAG = NetBookInfomActivity.class.getSimpleName();
     /**
      * 播放器的parentView
@@ -144,8 +140,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     /***
      * 数据类型
      */
-    public static final String SERIALIZABLELIST = "person_data";
-    private CoursesBeanVo dataVo;
+    public static final String CLASSID = "classid";
+    private String mClassId;
     private TextView mTvNetBookTitle;
     private MagicIndicator mNetMagicIndicator;
     private NoScrollViewPager mVpNetBar;
@@ -157,13 +153,16 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     private ImageView mIvNetBookPlay;
     private RelativeLayout mRlPlaylayout;
     private String vid;
-    private CommonPopupWindow popDown;
     private LinearLayout mLlNetPlayRoot;
     private LinearLayout mLlNetBuyLayou;
+    private ClassBeanVideoVo bookInfom;
+    private AlertDialog mShowDialog;
+    private LinearLayout mLiContent;
+    private TextView mTvEmpty;
 
-    public static Intent newInstance(Context context, CoursesBeanVo o) {
+    public static Intent newInstance(Context context, String classid) {
         Intent intent = new Intent(context, NetBookInfomActivity.class);
-        intent.putExtra(SERIALIZABLELIST, o);
+        intent.putExtra(CLASSID, classid);
         return intent;
     }
 
@@ -181,7 +180,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         }
         setContentView(R.layout.activity_net_book_infom);
         if (getIntent() != null) {
-            dataVo = (CoursesBeanVo) getIntent().getSerializableExtra(SERIALIZABLELIST);
+            mClassId = getIntent().getStringExtra(CLASSID);
         }
         initView();
         initViewData();
@@ -210,12 +209,17 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         initData();
         EventBus.getDefault().register(this);
         initVideo();
-//        play("d740a56357c361f76cdd800b204e9800_d", 0, true, false);
+    }
+
+    private void initData() {
+        VideoInfomsPresenter mPresenter = new VideoInfomsPresenter();
+        mPresenter.initModelView(new MyVideoBooksModel(), this);
+        mShowDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+        mPresenter.requestBookInfoms(mContext, mClassId);
     }
 
     private void initVideo() {
         submitPlayProgress();
-
     }
 
     public void submitPlayProgress() {
@@ -224,49 +228,26 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         String vid = view.getCurrentVid();
         Log.e(TAG, "视频播放进度: " + position + "\n" + vid);
 
+
     }
 
-    private void initData() {
-        if (dataVo != null) {
-            List<String> list;
-            mTvNetBookTitle.setText(dataVo.getName());
-            if (dataVo.isIsall()) {
-                mIvNetBookPlay.setVisibility(View.GONE);
-                list = new ArrayList<>();
-                list.add("详情");
-            } else
-                list = ArrayToListUtil.arraytoList(mContext, R.array.net_book_title);
-            mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
-            CommonNavigator commonNavigator = new CommonNavigator(this);
-            commonNavigator.setScrollPivotX(0.25f);
-            commonNavigator.setAdjustMode(true);
-            MyNetBookIndicatorAdapter adapter = new MyNetBookIndicatorAdapter(list, mVpNetBar);
-            mNetMagicIndicator.setNavigator(commonNavigator);
-            commonNavigator.setAdapter(adapter);
-            List<Fragment> fragments = creartFragment(list);
-            MyTagPagerAdapter tagPagerAdapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
-            mVpNetBar.setAdapter(tagPagerAdapter);
-            mVpNetBar.setOffscreenPageLimit(4);
-            ViewPagerHelper.bind(mNetMagicIndicator, mVpNetBar);
-            mTvNetBookAllprice.setText("￥" + dataVo.getPrice() + "");
-            if (!StringUtil.isEmpty(dataVo.getCoverimg())) {
-                MyAppliction.getInstance().displayImages(mIvNetPlay, dataVo.getCoverimg(), false);
-            }
-
-        }
-    }
-
-    private List<Fragment> creartFragment(List<String> list) {
+    /**
+     * @param isall       是否是全科
+     * @param description
+     * @param list        课程表集合
+     * @return
+     */
+    private List<Fragment> creartFragment(boolean isall, String description, List<ChaptersBeanVo> list) {
         if (list.size() < 2) {
             mNetMagicIndicator.setVisibility(View.GONE);
         }
         List<Fragment> fragments = new ArrayList<>();
-        NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance(dataVo.getDescription(), "");
+        NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance(description);
         fragments.add(bookinfomFragment);
-        if (dataVo.isIsall()) {
+        if (isall) {
         } else {
 //        NetBooKListFragment booKListFragment = NetBooKListFragment.newInstance(String.valueOf(dataVo.getId()));
-            NetTableFragment booKListFragment = NetTableFragment.newInstance(String.valueOf(dataVo.getId()));
+            NetTableFragment booKListFragment = NetTableFragment.newInstance(list);
             fragments.add(booKListFragment);
         }
         return fragments;
@@ -296,6 +277,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         mContext = this;
+        mLiContent = (LinearLayout) findViewById(R.id.ll_content);
+        mTvEmpty = (TextView) findViewById(R.id.tv_empty);
         mLlNetPlayRoot = (LinearLayout) findViewById(R.id.ll_net_play_root);
         mLlNetPlayRoot.setOnClickListener(this);
         mIvNetBookPlay = (ImageView) findViewById(R.id.iv_net_book_play);
@@ -347,7 +330,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                 .setStrokeWidth(3) //描边宽度
                 .setStrokeColor(Color.MAGENTA) //描边颜色
                 .setStrokeAlpha(70)); //描边透明度
-
     }
 
 
@@ -702,18 +684,18 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                 if (b) {
                     startActivity(intent12);
                 } else {
-                    permissionsUtils.showDailog(NetBookInfomActivity.this, Manifest.permission.CALL_PHONE );
+                    permissionsUtils.showDailog(NetBookInfomActivity.this, Manifest.permission.CALL_PHONE);
                 }
                 break;
             case R.id.btn_net_go_buy://购买
-                Intent intent = NetBuyActivity.newInstance(mContext, dataVo.getPrice(), dataVo.getId(),
-                        dataVo.getName(), dataVo.getCoverimg());
+                Intent intent = NetBuyActivity.newInstance(mContext, bookInfom.getPrice(), bookInfom.getId(),
+                        bookInfom.getName(), bookInfom.getCoverimg());
                 startActivity(intent);
                 break;
             case R.id.iv_net_play:
                 break;
             case R.id.iv_net_book_play:
-                if (dataVo.isIsall()) {
+                if (bookInfom.isIsall()) {
                     return;
                 }
                 play();
@@ -738,6 +720,60 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             T.showToast(mContext, getString(R.string.no_try_see));
         }
 
+    }
+
+    @Override
+    public void BookInfomSucces(String com) {
+        if (mShowDialog != null && mShowDialog.isShowing())
+            mShowDialog.dismiss();
+        mLiContent.setVisibility(View.VISIBLE);
+        mTvEmpty.setVisibility(View.GONE);
+        Gson gson = new Gson();
+        NetBookTableVo tableVo = gson.fromJson(com, NetBookTableVo.class);
+        if (tableVo.getStatus().getCode() == 200) {
+            NetBookTableVo.DataBean data = tableVo.getData();
+            bookInfom = data.getClassX();
+            List<ChaptersBeanVo> bookLists = data.getChapters();
+            bindViewData(bookInfom, bookLists);
+        }
+    }
+
+    private void bindViewData(ClassBeanVideoVo bookInfom, List<ChaptersBeanVo> bookLists) {
+
+        List<String> list;
+        mTvNetBookTitle.setText(bookInfom.getName());
+        if (bookInfom.isIsall()) {
+            mIvNetBookPlay.setVisibility(View.GONE);
+            list = new ArrayList<>();
+            list.add("详情");
+        } else
+            list = ArrayToListUtil.arraytoList(mContext, R.array.net_book_title);
+        mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
+        CommonNavigator commonNavigator = new CommonNavigator(this);
+        commonNavigator.setScrollPivotX(0.25f);
+        commonNavigator.setAdjustMode(true);
+        MyNetBookIndicatorAdapter adapter = new MyNetBookIndicatorAdapter(list, mVpNetBar);
+        mNetMagicIndicator.setNavigator(commonNavigator);
+        commonNavigator.setAdapter(adapter);
+        List<Fragment> fragments = creartFragment(bookInfom.isIsall(), bookInfom.getDetailurl(), bookLists);
+        MyTagPagerAdapter tagPagerAdapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
+        mVpNetBar.setAdapter(tagPagerAdapter);
+        mVpNetBar.setOffscreenPageLimit(4);
+        ViewPagerHelper.bind(mNetMagicIndicator, mVpNetBar);
+        mTvNetBookAllprice.setText("￥" + bookInfom.getPrice() + "");
+        if (!StringUtil.isEmpty(bookInfom.getCoverimg())) {
+            MyAppliction.getInstance().displayImages(mIvNetPlay, bookInfom.getCoverimg(), false);
+        }
+
+    }
+
+
+    @Override
+    public void BookInfomError(String msgt) {
+        if (mShowDialog != null && mShowDialog.isShowing())
+            mShowDialog.dismiss();
+        mLiContent.setVisibility(View.GONE);
+        mTvEmpty.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -781,18 +817,5 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-
-    /**
-     * 设置背景颜色
-     *
-     * @param bgAlpha
-     */
-    public static void setBackgroundAlpha(float bgAlpha, Context mContext) {
-        WindowManager.LayoutParams lp = ((Activity) mContext).getWindow()
-                .getAttributes();
-        lp.alpha = bgAlpha;
-        ((Activity) mContext).getWindow().setAttributes(lp);
-
-    }
 
 }

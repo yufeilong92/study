@@ -288,36 +288,43 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 L.w(message);
                 Gson gson = new Gson();
                 UserInfomVo vo = gson.fromJson(message, UserInfomVo.class);
-                if (vo == null) {
-                    return;
-                }
                 int code1 = vo.getStatus().getCode();
                 if (code1 == 200) {//注册成功
                     UserInfomVo.DataBean data = vo.getData();
                     int status = data.getStatus();
-                    dialog.dismiss();
-                    switch (status) {
-                        case 1:
-                            T.showToast(mContext, getString(R.string.registerOK));
-                            //注册激光
-                            RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
-                            tag.registJG();
-                            tag.setTagAndAlias(String.valueOf(data.getUser().getId()));
-                            //跳转首页
-                            MyAppliction.getInstance().setUserInfom(vo);
-                            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                            MyAppliction.getInstance().setUserInfom(vo);
-                            DbHelperAssist.getInstance().saveUserInfom(vo);
+                    if (mType.equals(CEX_INT_TYPE_PAW)) {//找回密码
+                        if (status == 1) {
+                            T.showToast(mContext, getString(R.string.resetpaw));
+                            Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
                             startActivity(intent);
-                            break;
-                        case -1:
-                            T.showToast(mContext, getString(R.string.phone_register));
-                            break;
-                        case -2:
-                            T.showToast(mContext, "验证码已过期或验证码不正确");
-                            break;
-                        default:
+                        }else {
+                            T.showToast(mContext, "修改失败");
+                        }
+                    } else {
+                        dialog.dismiss();
+                        switch (status) {
+                            case 1:
+                                T.showToast(mContext, getString(R.string.registerOK));
+                                //注册激光
+                                RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+                                tag.registJG();
+                                tag.setTagAndAlias(String.valueOf(data.getUser().getId()));
+                                //跳转首页
+                                MyAppliction.getInstance().setUserInfom(vo);
+                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                                MyAppliction.getInstance().setUserInfom(vo);
+                                DbHelperAssist.getInstance().saveUserInfom(vo);
+                                startActivity(intent);
+                                break;
+                            case -1:
+                                T.showToast(mContext, getString(R.string.phone_register));
+                                break;
+                            case -2:
+                                T.showToast(mContext, "验证码已过期或验证码不正确");
+                                break;
+                            default:
 
+                        }
                     }
 
                 } else {//失败

@@ -162,19 +162,16 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
                 Intent intent3 = MockTestActivity.newInstance(mContext, mTypeOid, DataMessageVo.MARKTYPESKILL);
                 intent3.putExtra(MockTestActivity.CSTR_EXTRA_TITLE_STR, "模拟考试");
                 startActivity(intent3);
-
                 break;
             case R.id.tv_b_free://自由
                 Intent intent6 = FreeQuestionActivity.newInstance(mContext, mTypeOid);
                 intent6.putExtra(FreeQuestionActivity.CSTR_EXTRA_TITLE_STR, "自由组卷");
                 startActivity(intent6);
-
                 break;
             case R.id.tv_b_special://专项
                 Intent intent4 = SpecialListActivity.newInstance(mContext, mTypeOid);
                 intent4.putExtra(SpecasListActivity.CSTR_EXTRA_TITLE_STR, "专项练习");
                 startActivity(intent4);
-
                 break;
             case R.id.tv_b_turn://顺序
                 Intent intent5 = AnswerActivity.newInstance(mContext, mTypeOid);

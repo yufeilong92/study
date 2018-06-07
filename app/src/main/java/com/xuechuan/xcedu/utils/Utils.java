@@ -856,17 +856,23 @@ public class Utils {
     /**
      * 判断是否为手机号码
      *
-     * @param num
      * @return
      */
     public static boolean isPhoneNum(String phone) {
-        // 确保每一位都是数�?
+/*        // 确保每一位都是数�?
 //        return !TextUtils.isEmpty(num) && num.matches("1[0-9]{10}")
 //                && !isRepeatedStr(num) && !isContinuousNum(num);
         if(StringUtil.isEmpty(phone)||phone.length()!=11)
             return false;
         String reg="^(1[3-5,8])\\d{9}$";
-        return phone.matches(reg);
+        return phone.matches(reg);*/
+        Pattern pattern = Pattern.compile("1[0-9]{10}");
+        Matcher matcher = pattern.matcher(phone);
+        if (matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

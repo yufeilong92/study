@@ -71,8 +71,8 @@ public class DbHelperDownAssist {
      * @param kid
      * @param zid
      */
-    public void delectZItem(String kid, String pid, String zid) {
-        if (StringUtil.isEmpty(zid) || StringUtil.isEmpty(kid) || StringUtil.isEmpty(pid)) {
+    public void delectZItem(String kid,  String zid) {
+        if (StringUtil.isEmpty(zid) || StringUtil.isEmpty(kid)) {
             return;
         }
         List<DownVideoDb> dbs = queryUserDownInfom();
@@ -85,10 +85,11 @@ public class DbHelperDownAssist {
                 List<DownVideoVo> downlist = db.getDownlist();
                 for (int j = 0; j < downlist.size(); j++) {
                     DownVideoVo vo = downlist.get(j);
-                    if (vo.getZid().equals(zid) && vo.getPid().equals(pid)) {//找到该篇
+                    if (vo.getZid().equals(zid) ) {//找到该篇
                         downlist.remove(j);
                     }
                 }
+                dao.update(db);
             }
         }
     }
@@ -292,8 +293,8 @@ public class DbHelperDownAssist {
      * @return
      */
     public List<DownVideoDb> queryUserDownInfom() {
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        return dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId)).list();
+//        String userId = SaveUUidUtil.getInstance().getUserId();
+        return dao.loadAll();
     }
 
     /**
@@ -305,9 +306,7 @@ public class DbHelperDownAssist {
         if (StringUtil.isEmpty(kid)) {
             return null;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        return dao.queryBuilder().where(DownVideoDbDao.Properties.Staffid.eq(userId),
-                DownVideoDbDao.Properties.Kid.eq(kid)).unique();
+        return dao.queryBuilder().where(DownVideoDbDao.Properties.Kid.eq(kid)).unique();
     }
 
 

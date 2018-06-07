@@ -87,7 +87,7 @@ public class NetService extends BaseHttpServcie {
      * @param classid
      * @param view
      */
-    public void requestProductdetail(String classid, int page, StringCallBackView view) {
+    public void requestProductdetail(String classid, StringCallBackView view) {
         UserInfomVo login = isLogin(mContext);
         if (login == null) {
             return;
@@ -101,7 +101,6 @@ public class NetService extends BaseHttpServcie {
         GetParamVo paramVo1 = getParamVo();
         paramVo1.setParam("classid");
         paramVo1.setValue(classid);
-        addPage(listParamVo, page);
         listParamVo.add(paramVo1);
         String url = getUrl(R.string.http_getproductdetail);
         requestHttpServiceGet(mContext, url, listParamVo, true, view);

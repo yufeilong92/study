@@ -11,8 +11,7 @@
 
         <ImageView
             style="@style/TitleBarAction"
-            android:onClick="onHomeClick"
-            android:src="@mipmap/ic_back" />
+             />
 
         <TextView
             style="@style/TitleBarText"

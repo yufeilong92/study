@@ -160,5 +160,13 @@
         android:layout_height="@dimen/spance_50"
         android:layout_gravity="center_horizontal"
         android:src="@mipmap/ic_login_wechat" />
+    <TextView
+        android:text="@string/weixinlogin"
+        android:layout_marginTop="@dimen/space_8"
+        android:layout_gravity="center"
+        android:textSize="@dimen/text_size_12"
+        android:textColor="@color/text_fu_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

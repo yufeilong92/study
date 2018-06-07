@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -18,7 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
-import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.fragment.BankFragment;
@@ -27,6 +28,7 @@ import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.weight.NoScrollViewPager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -51,13 +53,7 @@ import java.util.List;
  */
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
-    private FrameLayout mFlContent;
-    private RadioButton mRdbHomeHome;
-    private RadioButton mRdbHomeBank;
-    private RadioButton mRdbHomeNet;
-    private RadioButton mRdbHomePersonal;
     private ArrayList<Fragment> mFragmentLists;
-    private RadioGroup mRgBtns;
     private FragmentManager mSfm;
     private Context mContext;
     /**
@@ -69,11 +65,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private static String TYPE = "type";
     public static String BOOK = "1";
     public static String VIDEO = "2";
-    private AlertDialog mDialog;
     private String mType;
-    private ViewPager mViewpageContetn;
+    private NoScrollViewPager mViewpageContetn;
     private MagicIndicator mMagicindicatorHome;
-    private Object createFragment;
+    public  static String LOGIN_HOME="login_home";
+    private String mLoginType;
 
     @Override
     protected void onDestroy() {
@@ -95,29 +91,44 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_home);
-//        initView();
-//
-//    }
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        initView();
+
+    }*/
 
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
         if (getIntent() != null) {
             mType = getIntent().getStringExtra(TYPE);
+            mLoginType = getIntent().getStringExtra(Params);
         }
         initView();
         initData();
         initMagicIndicator1();
+ /*       if (!StringUtil.isEmpty(mType)) {
+            if (mType.equals(BOOK)) {
+                mViewpageContetn.setCurrentItem(1);
+            } else if (mType.equals(VIDEO)) {
+                mViewpageContetn.setCurrentItem(2);
+            }
+        }*/
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         if (!StringUtil.isEmpty(mType)) {
             if (mType.equals(BOOK)) {
                 mViewpageContetn.setCurrentItem(1);
             } else if (mType.equals(VIDEO)) {
                 mViewpageContetn.setCurrentItem(2);
             }
+        }else if (!StringUtil.isEmpty(mType)&&mType.equals(LOGIN_HOME)){
+            mViewpageContetn.setCurrentItem(0);
         }
 
     }
@@ -126,6 +137,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         List<Fragment> fragments = getcreateFragment();
         MyTagPagerAdapter adapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
         mViewpageContetn.setAdapter(adapter);
+
     }
 
     private void initMagicIndicator1() {
@@ -144,16 +156,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             public IPagerTitleView getTitleView(Context context, final int index) {
                 CommonPagerTitleView commonPagerTitleView = new CommonPagerTitleView(context);
                 View customLayout = LayoutInflater.from(context).inflate(R.layout.simple_pager_title_layout, null);
-                final RadioButton radioButton = (RadioButton) customLayout.findViewById(R.id.rdb_home);
+                final ImageView radioButton = (ImageView) customLayout.findViewById(R.id.rdb_home);
                 final TextView titleText = (TextView) customLayout.findViewById(R.id.title_text);
                 if (index == 0) {
-                    radioButton.setButtonDrawable(R.drawable.select_home_bg);
+                    radioButton.setImageResource(R.drawable.ic_tab_home_n);
                 } else if (index == 1) {
-                    radioButton.setButtonDrawable(R.drawable.select_bank_tab_bg);
+                    radioButton.setImageResource(R.drawable.ic_home_tab_bank_n);
                 } else if (index == 2) {
-                    radioButton.setButtonDrawable(R.drawable.select_net_tab_bg);
+                    radioButton.setImageResource(R.drawable.ic_home_tab_course_n);
                 } else if (index == 3) {
-                    radioButton.setButtonDrawable(R.drawable.select_m_tab_bg);
+                    radioButton.setImageResource(R.drawable.ic_home_tab_mine_n);
                 }
                 titleText.setText(list.get(index));
                 commonPagerTitleView.setContentView(customLayout);
@@ -161,13 +173,39 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onSelected(int index, int totalCount) {
-                        radioButton.setChecked(true);
+                        switch (index) {
+                            case 0:
+                                radioButton.setImageResource(R.drawable.ic_tab_home_s);
+                                break;
+                            case 1:
+                                radioButton.setImageResource(R.drawable.ic_tab_bank_s);
+                                break;
+                            case 2:
+                                radioButton.setImageResource(R.drawable.ic_home_tab_course_s);
+                                break;
+                            case 3:
+                                radioButton.setImageResource(R.drawable.ic_home_tab_mine_s);
+                                break;
+                        }
                         titleText.setTextColor(getResources().getColor(R.color.red_text));
                     }
 
                     @Override
                     public void onDeselected(int index, int totalCount) {
-                        radioButton.setChecked(false);
+                        switch (index) {
+                            case 0:
+                                radioButton.setImageResource(R.drawable.ic_tab_home_n);
+                                break;
+                            case 1:
+                                radioButton.setImageResource(R.drawable.ic_home_tab_bank_n);
+                                break;
+                            case 2:
+                                radioButton.setImageResource(R.drawable.ic_home_tab_course_n);
+                                break;
+                            case 3:
+                                radioButton.setImageResource(R.drawable.ic_home_tab_mine_n);
+                                break;
+                        }
                         titleText.setTextColor(getResources().getColor(R.color.text_fu_color));
                     }
 
@@ -200,16 +238,17 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         mMagicindicatorHome.setNavigator(commonNavigator);
-        mViewpageContetn.setOffscreenPageLimit(3);
+        mViewpageContetn.setOffscreenPageLimit(4);
         ViewPagerHelper.bind(mMagicindicatorHome, mViewpageContetn);
-
+        mViewpageContetn.setCurrentItem(0);
     }
 
 
     protected void initView() {
         mContext = this;
-        mViewpageContetn = (ViewPager) findViewById(R.id.viewpage_contetn);
+        mViewpageContetn = (NoScrollViewPager) findViewById(R.id.viewpage_contetn);
         mViewpageContetn.setOnClickListener(this);
+        mViewpageContetn.setPagingEnabled(false);
         mMagicindicatorHome = (MagicIndicator) findViewById(R.id.magicindicator_home);
         mMagicindicatorHome.setOnClickListener(this);
     }

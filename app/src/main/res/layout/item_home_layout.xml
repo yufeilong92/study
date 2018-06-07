@@ -14,7 +14,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:lines="2"
             android:id="@+id/tv_item_home_titel_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -7,19 +7,16 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.andview.refreshview.callback.IFooterCallBack;
+import com.xuechuan.xcedu.Event.SearchEvenText;
+import com.xuechuan.xcedu.Event.SearchEventWen;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.adapter.HomeReasultViewPagAdapter;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -27,7 +24,6 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.fragment.ResultAtirleFragment;
 import com.xuechuan.xcedu.fragment.ResultQuestionFragment;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
-import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.SaveHistoryUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -36,6 +32,8 @@ import com.xuechuan.xcedu.utils.Utils;
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,9 +160,12 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
             T.showToast(mContext, "内容不能为空");
             return;
         }
+        mSearchKey= getTextStr(mEtResulteSearch);
         mEtResulteSearch.setText(null);
         mInstance.saveHistory(str);
-        initIndicator();
+        EventBus.getDefault().postSticky(new SearchEvenText(mSearchKey));
+        EventBus.getDefault().postSticky(new SearchEventWen(mSearchKey));
+
     }
 
 }

@@ -145,13 +145,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if (isCheck) {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
-                        vo.setChbSelect(true);
-                    }
+                    initShow(false, false, true, true);
                 } else {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
-                        vo.setChbSelect(false);
-                    }
+                    initShow(false, false, true, false);
                 }
                 if (mListAdapter != null)
                     mListAdapter.notifyDataSetChanged();

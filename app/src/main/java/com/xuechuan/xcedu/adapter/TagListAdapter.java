@@ -73,11 +73,8 @@ public class TagListAdapter extends BaseRecyclerAdapter<TagListAdapter.ViewHolde
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);
-            String thumbnailimg = bean.getThumbnailimg();
-            String string = mContext.getResources().getString(R.string.app_content_heat);
-            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll,string+thumbnailimg, false);
+            MyAppliction.getInstance().displayImages(holder.mIvItemHomeAll,bean.getThumbnailimg(), false);
         }
-
         holder.mChbIsSupper.setChecked(bean.isIssupport());
         holder.itemView.setTag(bean);
         holder.itemView.setId(position);

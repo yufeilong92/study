@@ -79,6 +79,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
     @Override
     public void onBindViewHolder(@NonNull final ViewHolde holder, final int position) {
         final DownVideoVo vo = mData.get(position);
+
         holder.mTvItemDownInfomTitle.setText(vo.getTitle());
         String s = Utils.convertFileSizeB(vo.getFileSize());
         holder.mChbItemDownInfomSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

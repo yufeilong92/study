@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.andview.refreshview.callback.IFooterCallBack;
 import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
@@ -45,6 +46,7 @@ import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +56,10 @@ import java.util.List;
 import cn.addapp.pickers.entity.City;
 import cn.addapp.pickers.entity.County;
 import cn.addapp.pickers.entity.Province;
+import cn.addapp.pickers.listeners.OnLinkageListener;
+import cn.addapp.pickers.picker.AddressPicker;
 import cn.addapp.pickers.picker.DatePicker;
+import cn.addapp.pickers.util.ConvertUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
 
@@ -123,7 +128,8 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         mPresenter = new PersionPresenter();
         mPresenter.BasePersion(new PersionModel(), this);
         if (mInfomVo != null) {
-            MyAppliction.getInstance().displayImages(mIvMPImg, mInfomVo.getHeadicon(), true);
+            if (!StringUtil.isEmpty(mInfomVo.getHeadicon()))
+                MyAppliction.getInstance().displayImages(mIvMPImg, mInfomVo.getHeadicon(), true);
             mEtMPName.setText(mInfomVo.getNickname());
             int gender = mInfomVo.getGender();
             if (gender == 1) {
@@ -136,8 +142,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             mProvince = mInfomVo.getProvince();
             mCity = mInfomVo.getCity();
             mTvMPCity.setText(mInfomVo.getCity());
-            mTvMPPhone.setText(Utils.phoneData(mInfomVo.getPhone()));
-
+            mTvMPPhone.setText(mInfomVo.getPhone());
         }
 
     }
@@ -191,6 +196,8 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
             gender = 2;
         }
         String brithday = getTextStr(mTvMPBirthday);
+        if (mPathlist != null && !mPathlist.isEmpty())
+            mPresenter.submitPersionHear(mContext, mPathlist);
         mPresenter.submitPersionInfom(mContext, name, gender, brithday, mProvince, mCity);
     }
 
@@ -211,14 +218,14 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         int minute = c.get(Calendar.MINUTE);
         int second = c.get(Calendar.SECOND);
         DatePicker picker = new DatePicker(this);
-        picker.setCanLoop(true);
+        picker.setCanLoop(false);
         picker.setWheelModeEnable(true);
         picker.setTopPadding(15);
         picker.setRangeStart(1911, 1, 1);
         picker.setRangeEnd(3000, 1, 1);
-        picker.setSelectedItem(year, month+1, date);
+        picker.setSelectedItem(year, month + 1, date);
         picker.setWeightEnable(true);
-        picker.setLineColor(Color.BLACK);
+        picker.setLineColor(Color.WHITE);
         picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
             @Override
             public void onDatePicked(String year, String month, String day) {
@@ -260,9 +267,38 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void showCity() {
-        AddressPickTask task = new AddressPickTask(this);
+        ArrayList<Province> data = new ArrayList<>();
+        String json = null;
+        try {
+            json = ConvertUtils.toString(getAssets().open("city.json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        data.addAll(JSON.parseArray(json, Province.class));
+        AddressPicker picker = new AddressPicker(this, data);
+        picker.setCanLoop(false);
+        picker.setLineVisible(false);
+        picker.setHideCounty(true);
+        picker.setWheelModeEnable(false);
+        picker.setOnLinkageListener(new OnLinkageListener() {
+            @Override
+            public void onAddressPicked(Province province, City city, County county) {
+                if (county == null) {
+                    mTvMPCity.setText(city.getAreaName());
+                    mProvince = province.getAreaName();
+                    mCity = city.getAreaName();
+                } else {
+                    mProvince = province.getAreaName();
+                    mCity = province.getAreaName();
+                    mTvMPCity.setText(province.getAreaName() + city.getAreaName() + county.getAreaName());
+                }
+            }
+        });
+        picker.show();
+      /*  AddressPickTask task = new AddressPickTask(this);
         task.setHideProvince(false);
         task.setHideCounty(true);
+
         task.setCallback(new AddressPickTask.Callback() {
             @Override
             public void onAddressInitFailed() {
@@ -282,7 +318,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 }
             }
         });
-        task.execute("河南", "郑州", "二七");
+        task.execute("北京", "北京", "");*/
     }
 
     private void showOpenAlbum() {
@@ -410,7 +446,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                             L.d("图片压缩后的路径====" + media.getCompressPath());
                             mPathlist = new ArrayList<>();
                             mPathlist.add(media.getCompressPath());
-                            mPresenter.submitPersionHear(mContext, mPathlist);
+
                         }
                     }
                     break;

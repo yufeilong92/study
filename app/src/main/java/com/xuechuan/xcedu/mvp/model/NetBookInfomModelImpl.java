@@ -28,7 +28,7 @@ public class NetBookInfomModelImpl implements NetBookInfomModel {
     @Override
     public void requestVideoInfom(Context context, int page, String classid, final RequestResulteView view) {
         NetService service = new NetService(context);
-        service.requestProductdetail(classid, page, new StringCallBackView() {
+        service.requestProductdetail(classid, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 view.success(response.body().toString());

@@ -403,6 +403,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTimeUitl != null) {
             mTimeUitl.cancel();
         }
+        clearConstant();
         clearAll();
         saveChapterRecords();
     }
@@ -508,6 +509,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     protected void initContentView(Bundle savedInstanceState) {
         SharedSeletResultListUtil.getInstance().DeleteUser();
         setContentView(R.layout.activity_answer);
+        clearConstant();
         if (getIntent() != null) {
             //问题id
             mOid = getIntent().getStringExtra(QUESTIONID);
@@ -554,17 +556,17 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void Mainthreaddata(FreeDataEvent event) {
         initShowSet();
-        isExamHine = false;
+        isExamHine = true;
         if (dialog != null && dialog.isShowing())
             dialog.dismiss();
         mTextDetial = event.getData();
         mTvBCount.setText(String.valueOf(mTextDetial.size()));
         bindTextNumberData();
         mFreeQuestion = mFreeQuestionTrue;
-        mIvTimePlay.setVisibility(View.VISIBLE);
-        mTimeUitl = MyTimeUitl.getInstance(mContext);
-        mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
-        tabBarSetListener();
+        mIvTimePlay.setVisibility(View.GONE);
+//        mTimeUitl = MyTimeUitl.getInstance(mContext);
+//        mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
+//        tabBarSetListener();
 
 
     }
@@ -584,6 +586,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         searchtype();
     }
 
+    /**
+     * 搜索结果
+     */
     private void searchtype() {
         if (!StringUtil.isEmpty(mSearchType) && !StringUtil.isEmpty(mSearchTid) && !StringUtil.isEmpty(mSearchZid)) {
             isExamHine = true;
@@ -675,7 +680,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 考试
      */
     private void exam() {
-        if (!StringUtil.isEmpty(mStyleCase)) {
+        if (!StringUtil.isEmpty(mStyleCase)&&!StringUtil.isEmpty(mOid)) {
             isExamHine = false;
             mIvTimePlay.setVisibility(View.VISIBLE);
             mTimeUitl = MyTimeUitl.getInstance(mContext);
@@ -687,6 +692,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPECOLLORT)) {//综合
                 mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
             }
+            mPresnter.getTextContent(mContext, mOid);
             tabBarSetListener();
         }
     }
@@ -1142,13 +1148,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             return;
         }
 
-        /***
+ /*       *//***
          * 是否自由组卷界面
-         */
+         *//*
         if (!StringUtil.isEmpty(mFreeQuestion) && mFreeQuestion.equals(mFreeQuestionTrue) && !isUserLookResultJieXi) {
             bindResultExamData(isdo, item);
             return;
-        }
+        }*/
 
         /**
          * 是否查看解析界面
@@ -1650,14 +1656,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
-                Utils.showSoftInputFromWindow(AnswerActivity.this, mEtBSubmit);
+//                Utils.showSoftInputFromWindow(AnswerActivity.this, mEtBSubmit);
                 mLlBSubmitEvalue.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_b_submit_send:
                 submitEvalue();
                 break;
             case R.id.iv_title_back:
-                if (!isExamHine || !StringUtil.isEmpty(mFreeQuestion)) {
+                if (!isExamHine) {
                     DialogUtil instance = DialogUtil.getInstance();
                     instance.showTitleDialog(mContext, "确定退出答题", "退出答题"
                             , "取消", true);
@@ -1840,15 +1846,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             T.showToast(mContext, getStringWithId(R.string.content_is_empty));
             return;
         }
-        ArrayList<EvalueVo.DatasBean> beans = new ArrayList<>();
-        EvalueVo.DatasBean bean = new EvalueVo.DatasBean();
-        bean.setContent(str);
-        bean.setCreatetime(TimeUtil.dateToString(new Date()));
-        beans.add(bean);
-        addListData(beans);
-        mEvaluePresenter.submitContent(mContext, String.valueOf(mResultData.getId()), str, null, DataMessageVo.QUESTION);
         mSubmitDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
-        adapter.notifyDataSetChanged();
+        mEvaluePresenter.submitContent(mContext, String.valueOf(mResultData.getId()), str, null, DataMessageVo.QUESTION);
         Utils.hideInputMethod(mContext, mEtBSubmit);
 
     }
@@ -3268,6 +3267,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mSubmitDialog != null) {
             mSubmitDialog.dismiss();
         }
+        T.showToast(mContext,getStringWithId(R.string.evelua_sucee));
         mLiXia.setVisibility(View.VISIBLE);
         mLlBSubmitEvalue.setVisibility(View.GONE);
     }
@@ -3625,6 +3625,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         clearbg();
         clearClick();
         clearSeletItem();
+    }
+
+    private void clearConstant() {
         isExamHine = false;
         mFreeQuestion = null;
         mStyleCase = null;
@@ -3675,8 +3678,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
             default:
         }
-
-
         return super.dispatchTouchEvent(ev);
     }
 
@@ -3704,7 +3705,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTypeMark.equals("1")) {
             userLookVo.setChapterId(mOid);
             userLookVo.setNextId(String.valueOf(mMark));
-            userLookVo.setCount(String.valueOf(mTextDetial.size()));
+            if (mTextDetial != null && !mTextDetial.isEmpty())
+                userLookVo.setCount(String.valueOf(mTextDetial.size()));
             lookVos.add(userLookVo);
             assist.upDataSkillRecord(lookVos);
 
@@ -3713,7 +3715,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTypeMark.equals("2")) {
             userLookVo.setChapterId(mOid);
             userLookVo.setNextId(String.valueOf(mMark));
-            userLookVo.setCount(String.valueOf(mTextDetial.size()));
+            if (mTextDetial != null && !mTextDetial.isEmpty())
+                userLookVo.setCount(String.valueOf(mTextDetial.size()));
             lookVos.add(userLookVo);
             assist.upDataColoctRecord(lookVos);
             return;
@@ -3721,7 +3724,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTypeMark.equals("3")) {
             userLookVo.setChapterId(mOid);
             userLookVo.setNextId(String.valueOf(mMark));
-            userLookVo.setCount(String.valueOf(mTextDetial.size()));
+            if (mTextDetial != null && !mTextDetial.isEmpty())
+                userLookVo.setCount(String.valueOf(mTextDetial.size()));
             lookVos.add(userLookVo);
             assist.upDataCaseRecord(lookVos);
             return;

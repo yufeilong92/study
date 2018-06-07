@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (StringUtil.isEmpty(userId)) {
             initData();
         } else {
-            HomeActivity.newInstance(mContext, null, null);
+            HomeActivity.newInstance(mContext, HomeActivity.LOGIN_HOME, null);
             finishActivity();
         }
     }
@@ -174,7 +174,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent != null) {
-
                     String extra = intent.getStringExtra(DataMessageVo.WEISTATE);
                     String code = intent.getStringExtra(DataMessageVo.WEICODE);
 //                    requestLogin(extra, code);
@@ -270,12 +269,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         UserInfomVo vo = gson.fromJson(infom, UserInfomVo.class);
         UserInfomVo.DataBean voData = vo.getData();
         if (vo.getStatus().getCode() != 200) {//失败情况
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, "授权失败");
             return;
         }
         if (voData.isIsbinduser()) {//已经绑定数据（手机）
             //保存信息
-
             DbHelperAssist.getInstance().saveUserInfom(vo);
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
@@ -320,7 +318,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 return;
             }
             DbHelperAssist.getInstance().saveUserInfom(vo);
-            HomeActivity.newInstance(mContext, null, null);
+            HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME, null);
             //注册激光
             RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
             tag.registJG();

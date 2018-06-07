@@ -77,10 +77,11 @@
             <Space style="@style/space_20_width" />
 
             <EditText
+                android:maxLength="20"
                 android:id="@+id/et_m_p_name"
                 style="@style/m_name"
                 android:paddingLeft="@dimen/space_16"
-                android:text="小敏" />
+                android:text="" />
 
             <ImageView
                 style="@style/m_more"
@@ -151,7 +152,7 @@
                 android:id="@+id/tv_m_p_birthday"
                 style="@style/m_name"
                 android:paddingLeft="@dimen/space_16"
-                android:text="2018-15-10" />
+                android:text="" />
 
             <ImageView
                 style="@style/m_more"
@@ -176,7 +177,7 @@
                 android:id="@+id/tv_m_p_city"
                 style="@style/m_name"
                 android:paddingLeft="@dimen/space_16"
-                android:text="河南" />
+                android:text="" />
 
             <ImageView
                 style="@style/m_more"
@@ -200,11 +201,8 @@
             <TextView
                 android:id="@+id/tv_m_p_phone"
                 style="@style/m_name"
-                android:text="183175511" />
+                android:text="" />
 
-            <ImageView
-                style="@style/m_more"
-                android:layout_gravity="center_vertical" />
         </LinearLayout>
 
         <View style="@style/view_line_1_gray" />

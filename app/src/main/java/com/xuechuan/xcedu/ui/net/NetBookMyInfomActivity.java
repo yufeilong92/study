@@ -56,6 +56,7 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnVideoPlayErrorListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
+import com.google.gson.Gson;
 import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
@@ -71,6 +72,9 @@ import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.fragment.NetMyBokTableFragment;
 import com.xuechuan.xcedu.fragment.NetMyBookVualueFragment;
+import com.xuechuan.xcedu.mvp.contract.VideoBooksContract;
+import com.xuechuan.xcedu.mvp.model.MyVideoBooksModel;
+import com.xuechuan.xcedu.mvp.presenter.VideoInfomsPresenter;
 import com.xuechuan.xcedu.player.BaolIHttp.PolyvVlmsHelper;
 import com.xuechuan.xcedu.player.player.PolyvPlayerLightView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerMediaController;
@@ -86,9 +90,11 @@ import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.ClassBeanVideoVo;
 import com.xuechuan.xcedu.vo.CoursesBeanVo;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
+import com.xuechuan.xcedu.vo.NetBookTableVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
@@ -102,7 +108,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -118,7 +123,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/16
  */
-public class NetBookMyInfomActivity extends BaseActivity implements View.OnClickListener {
+public class NetBookMyInfomActivity extends BaseActivity implements View.OnClickListener, VideoBooksContract.View {
 
     private static final String TAG = NetBookMyInfomActivity.class.getSimpleName();
     /**
@@ -163,8 +168,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     /***
      * 数据类型
      */
-    public static final String SERIALIZABLELIST = "person_data";
-    private CoursesBeanVo dataVo;
+    public static final String CLSSID = "clssid";
+    private String mClassId;
     private TextView mTvNetBookTitle;
     private MagicIndicator mNetMagicIndicator;
     private NoScrollViewPager mVpNetBar;
@@ -191,6 +196,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private int mPid;
     private int mZid;
     private String mTitleName;
+    private AlertDialog mShowDialog;
+    private NetBookTableVo.DataBean mBookInfom;
+    private ClassBeanVideoVo bookInfmo;
 
     @Override
     protected void onResume() {
@@ -224,7 +232,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         super.onDestroy();
         int position = videoView.getCurrentPosition();
         if (position != 0) {
-            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()), vid);
+            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), vid);
         }
         videoView.destroy();
         EventBus.getDefault().removeAllStickyEvents();
@@ -237,9 +245,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
     }
 
-    public static Intent newInstance(Context context, CoursesBeanVo o) {
+    public static Intent newInstance(Context context, String classid) {
         Intent intent = new Intent(context, NetBookMyInfomActivity.class);
-        intent.putExtra(SERIALIZABLELIST, (Serializable) o);
+        intent.putExtra(CLSSID, classid);
         return intent;
     }
 
@@ -298,7 +306,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_net_mybook_infom);
 
         if (getIntent() != null) {
-            dataVo = (CoursesBeanVo) getIntent().getSerializableExtra(SERIALIZABLELIST);
+            mClassId = getIntent().getStringExtra(CLSSID);
         }
         initView();
         initViewData();
@@ -330,6 +338,13 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     }
 
     private void initData() {
+        VideoInfomsPresenter mPresenter = new VideoInfomsPresenter();
+        mPresenter.initModelView(new MyVideoBooksModel(), this);
+        mShowDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+        mPresenter.requestBookInfoms(mContext, mClassId);
+    }
+
+ /*   private void initData() {
         if (dataVo != null) {
             helper = new PolyvVlmsHelper();
             mTvNetBookTitle.setText(dataVo.getName());
@@ -351,25 +366,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             }
 
         }
-    }
-
-    /**
-     * 添加fragment
-     *
-     * @param list
-     * @return
-     */
-    private List<Fragment> creartFragment(List<String> list) {
-        if (list.size() < 2) {
-            mNetMagicIndicator.setVisibility(View.GONE);
-        }
-        List<Fragment> fragments = new ArrayList<>();
-        NetMyBokTableFragment tableFragment = NetMyBokTableFragment.newInstance(String.valueOf(dataVo.getId()));
-        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance("", "");
-        fragments.add(tableFragment);
-        fragments.add(bookVualueFragment);
-        return fragments;
-    }
+    }*/
 
     /**
      * 播放视频
@@ -756,7 +753,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 int position = videoView.getCurrentPosition();
 //                String s = PolyvTimeUtils.generateTime(position);
                 if (position != 0) {
-                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(dataVo.getId()), vid);
+                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), vid);
                 }
                 this.finish();
                 break;
@@ -780,7 +777,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private void saveLookVideo() {
         DbHelperAssist mUserDao = DbHelperAssist.getInstance();
         UserLookVideoVo vo = new UserLookVideoVo();
-        vo.setKid(String.valueOf(dataVo.getId()));
+        vo.setKid(String.valueOf(bookInfmo.getId()));
         vo.setPid(String.valueOf(mPid));
         vo.setZid(String.valueOf(mZid));
         vo.setTitleName(mTitleName);
@@ -788,6 +785,61 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 //                String s = PolyvTimeUtils.generateTime(position);
         vo.setProgress(String.valueOf(position));
         mUserDao.saveLookVideo(vo);
+    }
+
+    @Override
+    public void BookInfomSucces(String com) {
+        if (mShowDialog != null && mShowDialog.isShowing()) {
+            mShowDialog.dismiss();
+        }
+        Gson gson = new Gson();
+        NetBookTableVo tableVo = gson.fromJson(com, NetBookTableVo.class);
+        if (tableVo.getStatus().getCode() == 200) {
+            NetBookTableVo.DataBean bean = tableVo.getData();
+            bookInfmo = bean.getClassX();
+            List<ChaptersBeanVo> bookList = bean.getChapters();
+            bindViewData(bookInfmo, bookList, bookInfmo.isIsall());
+
+        } else {
+
+            L.e(tableVo.getStatus().getMessage());
+        }
+    }
+    private void bindViewData(ClassBeanVideoVo bookInfmo, List<ChaptersBeanVo> bookList, boolean isall) {
+        helper = new PolyvVlmsHelper();
+        mTvNetBookTitle.setText(bookInfmo.getName());
+        List<String> list = ArrayToListUtil.arraytoList(mContext, R.array.net_mybook_title);
+        mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
+        CommonNavigator commonNavigator = new CommonNavigator(this);
+        commonNavigator.setScrollPivotX(0.25f);
+        commonNavigator.setAdjustMode(true);
+        MyNetBookIndicatorAdapter adapter = new MyNetBookIndicatorAdapter(list, mVpNetBar);
+        mNetMagicIndicator.setNavigator(commonNavigator);
+        commonNavigator.setAdapter(adapter);
+        List<Fragment> fragments = creartFragment(bookList);
+        MyTagPagerAdapter tagPagerAdapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
+        mVpNetBar.setAdapter(tagPagerAdapter);
+        mVpNetBar.setOffscreenPageLimit(4);
+        ViewPagerHelper.bind(mNetMagicIndicator, mVpNetBar);
+        if (!StringUtil.isEmpty(bookInfmo.getCoverimg())) {
+            MyAppliction.getInstance().displayImages(mIvNetPlay, bookInfmo.getCoverimg(), false);
+        }
+    }
+
+    private List<Fragment> creartFragment(List<ChaptersBeanVo> bookList) {
+        List<Fragment> fragments = new ArrayList<>();
+        NetMyBokTableFragment tableFragment = NetMyBokTableFragment.newInstance(bookList);
+        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance("", "");
+        fragments.add(tableFragment);
+        fragments.add(bookVualueFragment);
+        return fragments;
+    }
+
+    @Override
+    public void BookInfomError(String msgt) {
+        if (mShowDialog != null && mShowDialog.isShowing()) {
+            mShowDialog.dismiss();
+        }
     }
 
 
@@ -970,7 +1022,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         popDown.getPopupWindow().dismiss();
-                        Intent intent = NetBookDowningActivity.newInstance(mContext, String.valueOf(dataVo.getId()));
+                        Intent intent = NetBookDowningActivity.newInstance(mContext, String.valueOf(bookInfmo.getId()));
                         startActivity(intent);
                     }
                 });
@@ -979,7 +1031,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         popDown.getPopupWindow().dismiss();
-                        Intent intent = NetBookDowningActivity.newInstance(mContext, String.valueOf(dataVo.getId()));
+                        Intent intent = NetBookDowningActivity.newInstance(mContext, String.valueOf(bookInfmo.getId()));
                         startActivity(intent);
                     }
                 });
@@ -991,7 +1043,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 GridLayoutManager manager = new GridLayoutManager(mContext, 1);
                 manager.setOrientation(GridLayoutManager.VERTICAL);
                 mRlvTableList.setLayoutManager(manager);
-                mDownAdapter = new NetMyDownTableAdapter(mContext, mTableList, dataVo.getId());
+                mDownAdapter = new NetMyDownTableAdapter(mContext, mTableList, bookInfmo.getId());
                 mRlvTableList.setAdapter(mDownAdapter);
                 mDownAdapter.setClickListener(new NetMyDownTableAdapter.onItemClickListener() {
                     @Override
@@ -1087,9 +1139,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     public DownVideoDb addListData(List table, int bitrate) {
         List<ChaptersBeanVo> mDataList = (List<ChaptersBeanVo>) table;
         DownVideoDb db = new DownVideoDb();
-        db.setKid(String.valueOf(dataVo.getId()));
-        db.setKName(dataVo.getName());
-        db.setUrlImg(dataVo.getCoverimg());
+        db.setKid(String.valueOf(bookInfmo.getId()));
+        db.setKName(bookInfmo.getName());
+        db.setUrlImg(bookInfmo.getCoverimg());
         List<DownVideoVo> list = new ArrayList<>();
         for (int i = 0; i < mDataList.size(); i++) {
             ChaptersBeanVo vo = mDataList.get(i);

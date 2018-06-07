@@ -8,14 +8,6 @@
     android:visibility="gone"
     android:paddingRight="@dimen/space_16">
 
-    <TextView
-        android:paddingTop="@dimen/space_16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/my_net"
-        android:textColor="@color/text_title_color"
-        android:textSize="@dimen/text_size_18" />
-    <Space style="@style/space_10_height" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_net_buy_list"
         android:layout_width="match_parent"

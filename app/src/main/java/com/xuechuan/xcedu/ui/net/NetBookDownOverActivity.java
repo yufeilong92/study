@@ -22,6 +22,7 @@ import com.xuechuan.xcedu.adapter.DownDoneInfomAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
@@ -59,6 +60,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
     private int mNumber = 0;
     private DbHelperDownAssist mDao;
     private TextView mTvInfomEmpty;
+    boolean isStartIntent = true;
 
  /*   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,11 +103,23 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             return;
         }
         List<DownVideoVo> downlist = mVideoDb.getDownlist();
+        List<DownVideoVo> dbDownlist = mVideoDb.getDownlist();
+        List<DownVideoVo> vos = new ArrayList<>();
+        for (int i = 0; i < dbDownlist.size(); i++) {
+            DownVideoVo vo = dbDownlist.get(i);
+            if (vo.getStatus().equals("0")) {
+                vos.add(vo);
+            }
+        }
+        downlist = vos;
+        mVideoDb.setDownlist(vos);
         if (downlist != null && !downlist.isEmpty()) {
             long count = 0;
             for (DownVideoVo vo : downlist) {
-                long fileSize = vo.getFileSize();
-                count += fileSize;
+                if (vo.getStatus().equals("0")) {
+                    long fileSize = vo.getFileSize();
+                    count += fileSize;
+                }
             }
             mCount = Utils.convertFileSizeB(count);
             mNumber = downlist.size();
@@ -156,11 +170,13 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                 }
                 if (isCheck) {
                     for (DownInfomSelectVo vo : mDataSelectList) {
-                        vo.setChbSelect(true);
+                        if (db.getZid().equals(vo.getZid()))
+                            vo.setChbSelect(true);
                     }
                 } else {
                     for (DownInfomSelectVo vo : mDataSelectList) {
-                        vo.setChbSelect(false);
+                        if (db.getZid().equals(vo.getZid()))
+                            vo.setChbSelect(false);
                     }
                 }
                 if (mInfomAdapter != null)
@@ -171,7 +187,10 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         mInfomAdapter.setClickListener(new DownDoneInfomAdapter.onItemClickListener() {
             @Override
             public void onClickListener(DownVideoVo vo, int position) {
-                Intent intent = NetBookPlayActivity.newIntent(mContext, NetBookPlayActivity.PlayMode.portrait, vo.getVid(), Integer.parseInt(vo.getBitRate()), true, true);
+                if (!isStartIntent) {
+                    return;
+                }
+                Intent intent = NetBookPlayActivity.newIntent(mContext, NetBookPlayActivity.PlayMode.landScape, vo.getVid(), Integer.parseInt(vo.getBitRate()), true, true);
                 // 在线视频和下载的视频播放的时候只显示播放器窗口，用该参数来控制
                 mContext.startActivity(intent);
             }
@@ -200,27 +219,43 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_net_down_infome_delect:
-                //选中的vid 集合
-                for (int i = 0; i < mDataSelectList.size(); i++) {
-                    DownInfomSelectVo selectVo = mDataSelectList.get(i);
-                    if (selectVo.isChbSelect()) {
-                        mDao.delectItem(mVideoDb.getKid(), selectVo.getPid(), selectVo.getZid());
-                        delectVideo(selectVo.getVid(), selectVo.getBitrate());
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del),
+                        getStringWithId(R.string.delect),
+                        getStringWithId(R.string.cancel), true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        //选中的vid 集合
+                        for (int i = 0; i < mDataSelectList.size(); i++) {
+                            DownInfomSelectVo selectVo = mDataSelectList.get(i);
+                            if (selectVo.isChbSelect()) {
+                                mDao.delectItem(mVideoDb.getKid(), selectVo.getPid(), selectVo.getZid());
+                                delectVideo(selectVo.getVid(), selectVo.getBitrate());
+                            }
+                        }
+                        initData();
+                        mInfomAdapter.notifyDataSetChanged();
                     }
-                }
-                initData();
-                mInfomAdapter.notifyDataSetChanged();
+
+                    @Override
+                    public void onCancelClickListener() {
+
+                    }
+                });
                 break;
             case R.id.tv_net_down_infom_make:
                 String str = getTextStr(mTvNetDownInfomMake);
                 if (str.equals(getString(R.string.edit))) {
                     mTvNetDownInfomMake.setText(R.string.complete);
+                    isStartIntent = false;
                     mLlNetDownInfomeAll.setVisibility(View.VISIBLE);
                     if (mDataSelectList != null && !mDataSelectList.isEmpty())
                         initShow(false, false, true, false);
                 } else {
                     mLlNetDownInfomeAll.setVisibility(View.GONE);
                     mTvNetDownInfomMake.setText(R.string.edit);
+                    isStartIntent = true;
                     if (mDataSelectList != null && !mDataSelectList.isEmpty()) {
                         initShow(true, false, false, false);
                     }

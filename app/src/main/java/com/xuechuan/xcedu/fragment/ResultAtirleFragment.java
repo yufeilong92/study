@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
+import com.xuechuan.xcedu.Event.SearchEvenText;
+import com.xuechuan.xcedu.Event.SearchEventWen;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.ArticleListAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
@@ -28,6 +30,10 @@ import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ArticleListVo;
 import com.xuechuan.xcedu.vo.ArticleVo;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +87,9 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
             mSearchkey = getArguments().getString(SEARCHKEY);
             mType = getArguments().getString(TYPELEI);
         }
+        EventBus.getDefault().register(this);
     }
+
 
     /*   @Override
        public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,6 +102,14 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
            return view;
        }
    */
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void MainThreaData(SearchEventWen text) {
+        String key = text.getmSearchData();
+        mSearchkey = key;
+        if (mXrfResultContent != null)
+            mXrfResultContent.startRefresh();
+    }
     @Override
     protected int initInflateView() {
         return R.layout.fragment_result;
@@ -292,4 +308,10 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
+    }
 }
