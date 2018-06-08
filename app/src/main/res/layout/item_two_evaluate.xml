@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
+                android:text="" />
 
             <Space style="@style/space_16_height" />
 

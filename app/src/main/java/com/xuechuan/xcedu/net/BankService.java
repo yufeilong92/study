@@ -311,10 +311,10 @@ public class BankService extends BaseHttpServcie {
         }
         UserBean user = login.getData().getUser();
         ArrayList<GetParamVo> listParamVo = getListParamVo();
-        GetParamVo paramVo = getParamVo();
+   /*     GetParamVo paramVo = getParamVo();
         paramVo.setParam("courseid");
         paramVo.setValue(courseid);
-        listParamVo.add(paramVo);
+        listParamVo.add(paramVo);*/
         GetParamVo paramVo2 = getParamVo();
         paramVo2.setParam("staffid");
         paramVo2.setValue(String.valueOf(user.getId()));

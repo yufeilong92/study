@@ -1693,13 +1693,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
 
             case R.id.iv_bar_delect:
-
                 DialogUtil dialogUtil11 = DialogUtil.getInstance();
                 dialogUtil11.showTitleDialog(mContext, "确认删除", "删除", "取消", false);
                 dialogUtil11.setTitleClickListener(new DialogUtil.onTitleClickListener() {
                     @Override
                     public void onSureClickListener() {
-                        T.showToast(mContext, getString(R.string.delect_Success));
+
                         mPresnter.submitWoringQeustinDelect(mContext, String.valueOf(mResultData.getId()));
                     }
 
@@ -3174,6 +3173,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
             mTextDetial = vo.getDatas();
             mTvBCount.setText(String.valueOf(mTextDetial.size()));
+
             bindTextNumberData();
 
         } else {
@@ -3226,6 +3226,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void SumbitCollectError(String con) {
         L.e("收藏" + con);
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
 
     @Override
@@ -3236,6 +3237,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void DoResultError(String con) {
         L.e("做题结果" + con);
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
 
     @Override
@@ -3244,11 +3246,22 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         ResultVo resultVo = gson.fromJson(con, ResultVo.class);
         if (resultVo.getStatus().getCode() == 200) {
             if (resultVo.getData().getStatusX() == 1) {
-//                T.showToast(mContext, getString(R.string.delect_Success));
+                T.showToast(mContext, getString(R.string.delect_Success));
+                if (mTextDetial != null && !mTextDetial.isEmpty())
+                    for (int i = 0; i < mTextDetial.size(); i++) {
+                        QuestionAllVo.DatasBean bean = mTextDetial.get(i);
+                        if (bean.getId() == mResultData.getId()) {
+                            mTextDetial.remove(i);
+                        }
+
+                    }
+                --mMark;
+                NextGo();
+                mTvBCount.setText(String.valueOf(mTextDetial.size()));
             }
         } else {
-//            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
-            L.e(resultVo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            L.e(resultVo.getStatus().getMessage());
         }
         L.d("错题移除" + con);
     }
@@ -3256,7 +3269,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void WoringError(String con) {
         L.e("错题移除" + con);
-
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
 
     }
 
@@ -3341,7 +3354,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void GetOneEvalueError(String con) {
-//        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
+        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
 
     }
 
@@ -3371,7 +3384,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void GetOneMoreEvalueError(String con) {
-
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
 
     /**
@@ -3584,6 +3597,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void ErrOrColListError(String con) {
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.w(con);
     }
 
