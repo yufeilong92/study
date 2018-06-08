@@ -289,7 +289,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                                     delectVideo(selectVo.getVid(), selectVo.getBitrate());
                                 }
                             }
-                            initData();
+//                            initData(true);
                             mListAdapter.notifyDataSetChanged();
                         }
 
@@ -389,7 +389,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     status = DataMessageVo.WIFI;
                 } else {
                     MyAppliction.getInstance().saveSelectNet(DataMessageVo.MONET);
-                    status =DataMessageVo.MONET;
+                    status = DataMessageVo.MONET;
                 }
                 dowmStatus(status);
             }

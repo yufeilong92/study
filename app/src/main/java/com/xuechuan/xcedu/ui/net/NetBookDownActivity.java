@@ -387,7 +387,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
 
                                 }
                             }
-                        initData(true, false);
+//                        initData(true, false);
                         mNoDoneAdapter.notifyDataSetChanged();
                         mOverAdapter.notifyDataSetChanged();
                     }

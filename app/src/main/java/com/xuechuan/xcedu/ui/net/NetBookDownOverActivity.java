@@ -235,7 +235,6 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                                 delectVideo(selectVo.getVid(), selectVo.getBitrate());
                             }
                         }
-                        initData();
                         mInfomAdapter.notifyDataSetChanged();
                     }
 
