@@ -352,6 +352,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     public void EvalueTwoErro(String com) {
         isRefresh = false;
         mXfvContentTwoDetail.stopRefresh();
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+
         L.e(com);
     }
 

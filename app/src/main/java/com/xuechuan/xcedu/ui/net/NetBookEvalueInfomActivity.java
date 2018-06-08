@@ -323,7 +323,8 @@ public class NetBookEvalueInfomActivity extends BaseActivity implements View.OnC
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, getStringWithId(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 

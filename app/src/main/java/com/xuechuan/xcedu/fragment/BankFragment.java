@@ -199,7 +199,8 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
                     List<BookHomeVo.DatasBean> datas = vo.getDatas();
                     bindTab(datas);
                 } else {
-                    T.showToast(getContext(), vo.getStatus().getMessage());
+                    L.e(vo.getStatus().getMessage());
+//                    T.showToast(getContext(), vo.getStatus().getMessage());
                 }
             }
 

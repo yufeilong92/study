@@ -224,7 +224,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onError(Response<String> response) {
-                T.showToast(mContext, response.message());
+                L.e(response.message());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+
+//                T.showToast(mContext, response.message());
             }
         });
     }
@@ -328,8 +331,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
 
                 } else {//失败
-                    String message1 = vo.getStatus().getMessage();
-                    T.showToast(mContext, message1);
+//                    String message1 = vo.getStatus().getMessage();
+                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                    T.showToast(mContext, message1);
                 }
             }
 

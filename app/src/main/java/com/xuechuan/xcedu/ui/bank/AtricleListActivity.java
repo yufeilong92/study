@@ -129,7 +129,8 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
             addListData(datas);
             setAdapter(datas);
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 

@@ -301,7 +301,8 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
             CreateText();
 
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, getStringWithId(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
 
     }

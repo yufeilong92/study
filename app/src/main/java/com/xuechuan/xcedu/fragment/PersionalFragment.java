@@ -28,6 +28,7 @@ import com.xuechuan.xcedu.ui.me.SystemMsgActivity;
 import com.xuechuan.xcedu.ui.net.NetBookDownActivity;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.PerInfomVo;
 
@@ -228,6 +229,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
             mDataInfom = vo.getData();
             bindViewData(mDataInfom);
         } else {
+            T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
         }
 

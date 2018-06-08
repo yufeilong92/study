@@ -127,7 +127,6 @@ public class UpDataService {
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
-
                 L.e(response.message());
                 callBackView.onError(response);
             }

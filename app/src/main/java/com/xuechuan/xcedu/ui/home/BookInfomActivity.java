@@ -102,7 +102,8 @@ public class BookInfomActivity extends BaseActivity {
                 if (vo.getStatus().getCode() == 200) {
                     bindOrderData(vo.getDatas());
                 } else {
-                    T.showToast(mContext, vo.getStatus().getMessage());
+                    L.e(vo.getStatus().getMessage());
+//                    T.showToast(mContext, vo.getStatus().getMessage());
                 }
             }
 

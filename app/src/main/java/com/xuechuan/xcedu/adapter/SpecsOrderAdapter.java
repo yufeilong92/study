@@ -149,12 +149,15 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
                     bindData(holder, jieVo.getDatas());
 
                 } else {
-                    T.showToast(mContext, jieVo.getStatus().getMessage());
+
+//                    T.showToast(mContext, jieVo.getStatus().getMessage());
+                    T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
                 }
             }
 
             @Override
             public void onError(Response<String> response) {
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
 
             }
         });

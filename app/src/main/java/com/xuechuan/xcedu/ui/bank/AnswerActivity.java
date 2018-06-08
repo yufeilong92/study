@@ -638,7 +638,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             //请求错题和收藏题集合
             mListPresenter = new ErrOrColListPresenter(new ErrOrColListModelImpl(), this);
             mListPresenter.requestionErrOrColCont(mContext, mCouresidUser, mUserTagid, mTagType);
-        }
+            isExamHine = true;
+       }
 
         if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {//错题模式
             mIvBarDelect.setVisibility(View.VISIBLE);
@@ -2328,6 +2329,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRlvPopContent = view.findViewById(R.id.rlv_pop_content);
                 mGvPopContent = view.findViewById(R.id.gv_pop_content);
                 mBtnSubmit = (Button) view.findViewById(R.id.btn_pop_answer_sumbit);
+                if (isExamHine) {
+                    mBtnSubmit.setVisibility(View.GONE);
+                } else {
+                    mBtnSubmit.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -2362,11 +2368,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                 });
-                if (isExamHine) {
-                    mBtnSubmit.setVisibility(View.GONE);
-                } else {
-                    mBtnSubmit.setVisibility(View.VISIBLE);
-                }
+
                 mTvPopNew.setText(String.valueOf(mMark + 1));
                 mTvPopCount.setText(String.valueOf(mTextDetial.size()));
                 bindGridViewAdapter();
@@ -3172,7 +3174,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             bindTextNumberData();
 
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+            L.e(vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
@@ -3181,7 +3185,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (dialog != null) {
             dialog.dismiss();
         }
-        T.showToast(mContext, con);
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//        T.showToast(mContext, con);
     }
 
     @Override
@@ -3195,7 +3200,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (vo.getStatus().getCode() == 200) {
             bindViewData(vo);
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
@@ -3204,7 +3210,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (dialog != null) {
             dialog.dismiss();
         }
-        T.showToast(mContext, con);
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//        T.showToast(mContext, con);
     }
 
 
@@ -3234,9 +3241,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         ResultVo resultVo = gson.fromJson(con, ResultVo.class);
         if (resultVo.getStatus().getCode() == 200) {
             if (resultVo.getData().getStatusX() == 1) {
-                T.showToast(mContext, getString(R.string.delect_Success));
+//                T.showToast(mContext, getString(R.string.delect_Success));
             }
         } else {
+//            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(resultVo.getStatus().getMessage());
         }
         L.d("错题移除" + con);
@@ -3245,6 +3253,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void WoringError(String con) {
         L.e("错题移除" + con);
+
+
     }
 
     //设置难度星星
@@ -3328,6 +3338,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void GetOneEvalueError(String con) {
+//        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
 
     }
 
@@ -3562,7 +3573,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
 
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, getStringWithId(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
 
     }

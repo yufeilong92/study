@@ -501,6 +501,7 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
             List<BankValueVo.DatasBean> list = vo.getDatas();
             initData(list);
         } else {
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
 
         }

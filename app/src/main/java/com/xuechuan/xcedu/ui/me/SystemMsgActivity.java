@@ -216,6 +216,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(orderVo.getStatus().getMessage());
         }
     }
@@ -224,6 +225,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
     public void SystemErrorr(String con) {
         mXfvContentSystem.stopRefresh();
         isRefresh = false;
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
 
     @Override
@@ -251,6 +253,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(orderVo.getStatus().getMessage());
         }
     }
@@ -258,7 +261,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
     @Override
     public void SystemMoreErrorr(String con) {
         isRefresh = false;
-
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
 
     @Override

@@ -325,7 +325,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             tag.setTagAndAlias(String.valueOf(voData.getUser().getId()));
             finishActivity();
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e( vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 

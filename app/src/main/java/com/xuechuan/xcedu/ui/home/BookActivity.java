@@ -101,7 +101,8 @@ public class BookActivity extends BaseActivity implements View.OnClickListener {
                     bindAdapter(datas);
 
                 } else {
-                    T.showToast(mContext, vo.getStatus().getMessage());
+                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                    T.showToast(mContext, vo.getStatus().getMessage());
                 }
 
             }

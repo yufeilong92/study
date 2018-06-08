@@ -253,7 +253,8 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
             }
             adapter.notifyDataSetChanged();
         } else {
-            T.showToast(mContext, status.getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+            L.e(status.getMessage());
         }
     }
 

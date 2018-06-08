@@ -25,6 +25,7 @@ import com.xuechuan.xcedu.ui.me.DelectSuceessActivity;
 import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.MyOrderVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 
@@ -322,6 +323,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
                 DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
             }
         }else {
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
         }
 

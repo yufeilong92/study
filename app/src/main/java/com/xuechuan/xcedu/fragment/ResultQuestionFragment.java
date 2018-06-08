@@ -236,7 +236,8 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
             }
             adapter.notifyDataSetChanged();
         } else {
-            T.showToast(mContext, status.getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, status.getMessage());
         }
 
     }
@@ -274,7 +275,8 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
             }
             adapter.notifyDataSetChanged();
         } else {
-            T.showToast(mContext, status.getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, status.getMessage());
         }
     }
 

@@ -192,7 +192,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
             mData = vo.getData();
             bindErrorOrCollortData(mData);
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e( vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
@@ -223,7 +224,8 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
             DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
 
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e(vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 

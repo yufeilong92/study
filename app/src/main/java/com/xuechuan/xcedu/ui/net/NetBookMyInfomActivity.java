@@ -111,6 +111,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -202,6 +204,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private List<ChaptersBeanVo> mBookList;
     private int videoProgress = 0;
     private boolean iscontinue = false;
+
 
     @Override
     protected void onResume() {
@@ -893,6 +896,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             private boolean isRuning = true;
             private Thread thread;
+            private ExecutorService executorService;
             private LinearLayout mLlPopDownDown;
             private Button mBtnPopDownRun;
             private Button mBtnPopDownLook;
@@ -920,11 +924,13 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                         if (dialog != null) {
                             dialog.dismiss();
                             isRuning = false;
+                            executorService.shutdown();
                             isShow(false, true, false, true, false);
                             mBtnPopDownSureAll.setText("全部缓存(" + vo.getDownlist().size() + ")");
                             mDownAdapter.notifyDataSetChanged();
                         } else {
                             isRuning = false;
+                            executorService.shutdown();
 //                            DbHelperDownAssist.getInstance().addDownItem(vo);
                             startDown(vo);
                             mBtnPopDownRun.setText("正在缓存(" + vo.getDownlist().size() + ")");
@@ -1004,6 +1010,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+                        isRuning=true;
                         GetNetBookService(mBookList, bitrer);
                     }
                 });
@@ -1072,7 +1079,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 if (mBookList == null || mBookList.isEmpty()) {
                     return;
                 }
-                thread = new Thread(new Runnable() {
+                executorService = Executors.newFixedThreadPool(5);
+                executorService.execute(new Runnable() {
                     @Override
                     public void run() {
                         if (isRuning) {
@@ -1084,7 +1092,20 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                         }
                     }
                 });
-                thread.start();
+
+//                thread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (isRuning) {
+//                            DownVideoDb db = addListData(list, bitrate);
+//                            Message message = new Message();
+//                            message.arg1 = 1;
+//                            message.obj = db;
+//                            handler.sendMessage(message);
+//                        }
+//                    }
+//                });
+//                thread.start();
                 //NetBookService.startActionBaz(mContext, list, bitrate, String.valueOf(dataVo.getId()));
             }
 

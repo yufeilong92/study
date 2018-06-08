@@ -372,7 +372,8 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e(vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
@@ -389,7 +390,8 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
             T.showToast(mContext, getString(R.string.evelua_sucee));
             mEtDialogContent.setText(null);
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
         L.d("视频评价" + con);
     }

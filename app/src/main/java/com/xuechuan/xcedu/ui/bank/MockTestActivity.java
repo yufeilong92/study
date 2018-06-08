@@ -118,7 +118,8 @@ public class MockTestActivity extends BaseActivity implements ExamView {
             if (mDialog!=null){
                 mDialog.dismiss();
             }
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e(vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 

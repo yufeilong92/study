@@ -135,7 +135,8 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
                 bindAdapter(vo.getDatas());
             }
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e( vo.getStatus().getMessage());
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 

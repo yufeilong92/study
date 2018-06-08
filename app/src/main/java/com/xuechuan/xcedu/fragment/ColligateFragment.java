@@ -197,7 +197,8 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             mData = errorOrColloctVo.getData();
             bindErrOrColViewData(mData);
         } else {
-            T.showToast(mContext, errorOrColloctVo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, errorOrColloctVo.getStatus().getMessage());
         }
     }
 
@@ -209,7 +210,7 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void ErrorOrCollortNumberError(String con) {
-
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
 
     @Override
@@ -220,7 +221,8 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             BuyVo.DataBean data = vo.getData();
             DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
@@ -233,7 +235,8 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
             DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
 
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
@@ -241,6 +244,6 @@ public class ColligateFragment extends BaseFragment implements View.OnClickListe
     public void onResume() {
         super.onResume();
         colPresenter.requestBuyInfom(mContext, mTypeOid);
-        colPresenter.requestBuyInfom(mContext,mTypeOid);
+        colPresenter.getErrOrCollNumber(mContext, mTypeOid);
     }
 }

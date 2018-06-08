@@ -88,6 +88,7 @@ public class GenuineActivity extends BaseActivity implements View.OnClickListene
         if (vo.getStatus().getCode() == 200) {
             T.showToast(mContext, "此验证是正版码");
         } else {
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
         }
     }

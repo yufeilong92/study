@@ -324,7 +324,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onError(Response<String> response) {
-                T.showToast(mContext, response.message());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                T.showToast(mContext, response.message());
             }
         });
 

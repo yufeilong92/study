@@ -123,6 +123,7 @@ public class PayUtil implements PayView {
         } else {
             if (mPayUtilsView != null)
                 mPayUtilsView.PayError(payType);
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
         }
 

@@ -291,6 +291,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                                     .setConstraint(isConstraint);
                             return updateAppBean;
                         } else {
+                            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
                             L.e(vo.getStatus().getMessage());
                         }
                         return null;

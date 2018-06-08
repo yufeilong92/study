@@ -144,13 +144,15 @@ public class ArticleListActivity extends BaseActivity {
                     }
                     adapter.notifyDataSetChanged();
                 } else {
-                    T.showToast(mContext, status.getMessage());
+                    T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                    T.showToast(mContext, status.getMessage());
                 }
             }
 
             @Override
             public void onError(Response<String> response) {
                 isRefresh = false;
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
                 L.e(response.message());
             }
         });
@@ -190,14 +192,16 @@ public class ArticleListActivity extends BaseActivity {
                     }
                     adapter.notifyDataSetChanged();
                 } else {
-                    T.showToast(mContext, status.getMessage());
+                    T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                    T.showToast(mContext, status.getMessage());
                 }
             }
 
             @Override
             public void onError(Response<String> response) {
                 isRefresh = false;
-                L.e(response.message());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                L.e(response.message());
             }
         });
     }

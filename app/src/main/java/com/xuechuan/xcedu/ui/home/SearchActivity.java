@@ -168,13 +168,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     List<String> datas = vo.getDatas();
                     BuildTextViewData(mFlSearchHost, datas);
                 } else {
-                    T.showToast(mContext, response.message());
+                    T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                    T.showToast(mContext, response.message());
                 }
             }
 
             @Override
             public void onError(Response<String> response) {
-                T.showToast(mContext, response.message());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                T.showToast(mContext, response.message());
             }
         });
 
@@ -275,7 +277,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             mFlSearchHost.removeAllViews();
             BuildTextViewData(mFlSearchHost, mLists);
         } else {
-            T.showToast(mContext, status.getMessage());
+
+//            T.showToast(mContext, status.getMessage());
+            T.showToast(mContext, getStringWithId(R.string.net_error));
         }
     }
 

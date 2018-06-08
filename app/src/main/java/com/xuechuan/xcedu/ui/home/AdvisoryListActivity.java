@@ -158,7 +158,8 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                     }
                     adapter.notifyDataSetChanged();
                 } else {
-                    T.showToast(mContext, status.getMessage());
+                    T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                    T.showToast(mContext, status.getMessage());
                 }
             }
 
@@ -166,6 +167,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
             public void onError(Response<String> response) {
                 isRefresh = false;
                 L.e(response.message());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             }
         });
     }
@@ -202,7 +204,8 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                     }
                     adapter.notifyDataSetChanged();
                 } else {
-                    T.showToast(mContext, status.getMessage());
+                    T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//                    T.showToast(mContext, status.getMessage());
                 }
             }
 
@@ -210,6 +213,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
             public void onError(Response<String> response) {
                 isRefresh = false;
                 L.e(response.message());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             }
         });
     }
