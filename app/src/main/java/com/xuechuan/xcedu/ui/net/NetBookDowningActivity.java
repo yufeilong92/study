@@ -18,14 +18,18 @@ import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.DownNetBookAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.mvp.model.NetDownIngModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.NetDownIngPresenter;
 import com.xuechuan.xcedu.mvp.view.NetDownIngView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
@@ -123,6 +127,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+
                     initShow(false, false, true, true);
                 } else {
                     initShow(false, false, true, false);
@@ -130,7 +135,13 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 mListAdapter.notifyDataSetChanged();
             }
         });
-
+        int number = 0;
+        for (DownVideoVo vo : mDataBean.getDownlist()) {
+            if (vo.getStatus().equals(0)) {
+                number += 1;
+            }
+        }
+        mTvNetDowningDo.setText(number + "");
 
     }
 
@@ -145,9 +156,20 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if (isCheck) {
-                    initShow(false, false, true, true);
+                    for (DownInfomSelectVo vo : mDataSelectList) {
+                        if (vo.getZid().equals(db.getZid())) {
+                            vo.setChbSelect(true);
+                        }
+                    }
+//                    initShow(false, false, true, true);
                 } else {
-                    initShow(false, false, true, false);
+                    for (DownInfomSelectVo vo : mDataSelectList) {
+                        if (vo.getZid().equals(db.getZid())) {
+                            vo.setChbSelect(false
+                            );
+                        }
+                    }
+//                    initShow(false, false, true, false);
                 }
                 if (mListAdapter != null)
                     mListAdapter.notifyDataSetChanged();
@@ -205,7 +227,6 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 if (isShowTos) {
                     mTvNetDowningStop.setText(R.string.start_down);
                     T.showToast(mContext, getString(R.string.no_down_video));
-
                 }
             }
         }
@@ -230,7 +251,6 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
-
         mTvNetDowningMake = (TextView) findViewById(R.id.tv_net_downing_make);
         mTvNetDowningMake.setOnClickListener(this);
         mTvNetDowningDo = (TextView) findViewById(R.id.tv_net_downing_do);
@@ -252,16 +272,33 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_net_down_delect://删除
-                //选中的vid 集合
-                for (int i = 0; i < mDataSelectList.size(); i++) {
-                    DownInfomSelectVo selectVo = mDataSelectList.get(i);
-                    if (selectVo.isChbSelect()) {
-                        mDao.delectItem(mDataBean.getKid(), selectVo.getPid(), selectVo.getZid());
-                        delectVideo(selectVo.getVid(), selectVo.getBitrate());
-                    }
+                boolean b = Utils.handleOnDoubleClick();
+                if (b) {
+                } else {
+                    DialogUtil dialogUtil = DialogUtil.getInstance();
+                    dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del)
+                            , getStringWithId(R.string.delect), getStringWithId(R.string.cancel), true);
+                    dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                        @Override
+                        public void onSureClickListener() {
+                            //选中的vid 集合
+                            for (int i = 0; i < mDataSelectList.size(); i++) {
+                                DownInfomSelectVo selectVo = mDataSelectList.get(i);
+                                if (selectVo.isChbSelect()) {
+                                    mDao.delectItem(mDataBean.getKid(), selectVo.getPid(), selectVo.getZid());
+                                    delectVideo(selectVo.getVid(), selectVo.getBitrate());
+                                }
+                            }
+                            initData();
+                            mListAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelClickListener() {
+
+                        }
+                    });
                 }
-                initData();
-                mListAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_net_downing_make://编辑
                 String str = getTextStr(mTvNetDowningMake);
@@ -286,14 +323,82 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 String start = getTextStr(mTvNetDowningStop);
                 if (start.equals(getString(R.string.start_down))) {//开始下载
 //                    mTvNetDowningStop.setText(R.string.stopdown);
-                    startDownAll(true);
+                    String net = MyAppliction.getInstance().getSelectNet();
+                    if (StringUtil.isEmpty(net)) {
+                        showNetDialog();
+                    } else {
+                        dowmStatus(net);
+                    }
 //                    mListAdapter.downloadAll();
                 } else {//暂停下载
                     mTvNetDowningStop.setText(R.string.start_down);
                     mListAdapter.pauseAll();
                 }
+
                 break;
         }
+    }
+
+    private void dowmStatus(String net) {
+        String selectNet = MyAppliction.getInstance().getUsetNetSatus();
+        if (StringUtil.isEmpty(selectNet)) {
+            down();
+            return;
+        }
+        if (net.equals(selectNet)) {
+            down();
+        } else {
+            showNetDialog();
+        }
+
+
+    }
+
+    /**
+     * 开始下载
+     */
+    private void down() {
+        startDownAll(true);
+    }
+
+    /**
+     * 提示网络问题
+     */
+    private void showNetDialog() {
+        boolean netConnect = Utils.isNetConnect(mContext);
+        if (!netConnect) {
+            T.showToast(mContext, "检测你当前无网络");
+            return;
+        }
+        final boolean connect = Utils.isWifiConnect(mContext);
+        if (connect) {
+            MyAppliction.getInstance().saveSelectNet(DataMessageVo.WIFI);
+            dowmStatus(DataMessageVo.WIFI);
+            return;
+        }
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        String net = connect ? "Wifi" : "移动";
+        dialogUtil.showTitleDialog(mContext, "当前网络为" + net + ",是确认否下载",
+                getStringWithId(R.string.sure), getStringWithId(R.string.cancel), true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                String status = null;
+                if (connect) {
+                    MyAppliction.getInstance().saveSelectNet(DataMessageVo.WIFI);
+                    status = DataMessageVo.WIFI;
+                } else {
+                    MyAppliction.getInstance().saveSelectNet(DataMessageVo.MONET);
+                    status =DataMessageVo.MONET;
+                }
+                dowmStatus(status);
+            }
+
+            @Override
+            public void onCancelClickListener() {
+
+            }
+        });
     }
 
     private void delectVideo(String vid, String bitrate) {
@@ -339,4 +444,6 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     public void submitError(String con) {
         L.e(con);
     }
+
+
 }

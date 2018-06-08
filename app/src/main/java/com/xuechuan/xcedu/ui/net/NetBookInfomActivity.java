@@ -316,11 +316,11 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
                 .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
                 .setDuration(10000) //时长
-                .setText(MyAppliction.getInstance().getUserInfom().getData().getUser().getPhone()) //文本
+                .setText(MyAppliction.getInstance().getUserData().getData().getPhone()) //文本
                 .setSize(16) //字体大小
                 .setColor(Color.YELLOW) //字体颜色
                 .setTextAlpha(70) //字体透明度
-                .setInterval(1000) //隐藏时间
+                .setInterval(30000) //隐藏时间
                 .setLifeTime(1000) //显示时间
                 .setTweenTime(1000) //渐隐渐现时间
                 .setHasStroke(true) //是否有描边

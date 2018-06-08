@@ -35,7 +35,7 @@
             android:id="@+id/iv_evaluate_hear"
             android:layout_width="@dimen/space_48"
             android:layout_height="@dimen/space_48"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@mipmap/common_icon_defaultpicture" />
 
         <Space style="@style/space_20_width" />
 

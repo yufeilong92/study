@@ -120,6 +120,13 @@ public class DataMessageVo {
     public static String WEIXINAPP_SECRET = "19a5f96dc807032fcb7f9d2a289ec0a1";
     //协议网址
     public static String AGREEMENT = "http://www.xuechuanedu.cn/agreement-policy/fuwuxieyi.html";
+    //wifi
+    public static String WIFI="wifi";
+    //移动
+    public static String MONET ="monet";
+    //没网
+    public static String NONETWORK="nonetwork";
+
 
 
 }

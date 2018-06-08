@@ -96,6 +96,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         initView();
+        setNet();
         regToWx();
         String userId = SaveUUidUtil.getInstance().getUserId();
         if (StringUtil.isEmpty(userId)) {
@@ -105,6 +106,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             finishActivity();
         }
     }
+
+    private void setNet() {
+        boolean b = Utils.isNetConnect(mContext);
+        if (b) {
+            boolean wifi = Utils.isWifiConnect(mContext);
+            if (wifi) {
+                MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.WIFI);
+            } else {
+                MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.MONET);
+            }
+        } else {
+            MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.NONETWORK);
+        }
+
+    }
+
     //注册微信
     private void regToWx() {
         api = WXAPIFactory.createWXAPI(mContext, DataMessageVo.APP_ID, true);
@@ -191,7 +208,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
                     mBtnLoginLogin.setEnabled(false);
-                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg_point);
+                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg);
                     return;
                 }
                 String trim = mEtLoginPassword.getText().toString().trim();
@@ -318,14 +335,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 return;
             }
             DbHelperAssist.getInstance().saveUserInfom(vo);
-            HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME);
+            HomeActivity.newInstance(mContext, HomeActivity.LOGIN_HOME);
             //注册激光
             RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
             tag.registJG();
             tag.setTagAndAlias(String.valueOf(voData.getUser().getId()));
             finishActivity();
         } else {
-            L.e( vo.getStatus().getMessage());
+            L.e(vo.getStatus().getMessage());
 //            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }

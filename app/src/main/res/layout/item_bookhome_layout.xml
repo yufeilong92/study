@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:padding="@dimen/space_16"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@mipmap/banner" />
 
     <TextView
         android:id="@+id/tv_bookhome_title"

@@ -108,6 +108,11 @@ public class MyAppliction extends MultiDexApplication {
         this.infomVo = infomVo;
     }
 
+    /**
+     * 用户个人信息
+     *
+     * @param vo
+     */
     public void setUserData(PerInfomVo vo) {
         this.mPerInfom = vo;
     }
@@ -364,5 +369,30 @@ public class MyAppliction extends MultiDexApplication {
         context.startActivity(new Intent(context, LoginActivity.class));
     }
 
+    /**
+     * 用户网络状态 1，wift 2 ,移动 3 没有网
+     */
+    private String NetStaus;
+
+    public void saveUserNetSatus(String status) {
+        this.NetStaus = status;
+    }
+
+    public String getUsetNetSatus() {
+        return NetStaus;
+    }
+
+    /**
+     * 用户选中网络下载状态
+     */
+    private String SelectNetStaus;
+
+    public void saveSelectNet(String stuas) {
+        this.SelectNetStaus = stuas;
+    }
+
+    public String getSelectNet() {
+        return SelectNetStaus;
+    }
 
 }

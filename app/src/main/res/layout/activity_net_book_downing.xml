@@ -108,13 +108,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_48"
+            android:layout_height="@dimen/space_56"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
             android:orientation="vertical">
           <View
             style="@style/view_line_tab_line"/>
             <TextView
+
                 android:id="@+id/tv_net_downing_stop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -127,9 +128,10 @@
                 android:visibility="gone"
                 android:id="@+id/rl_net_down_delect"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/space_56"
                 android:paddingLeft="@dimen/space_16"
                 android:paddingRight="@dimen/space_16"
+                android:paddingBottom="@dimen/space_8"
               >
                 <CheckBox
                     android:button="@drawable/select_free_chb_bg"

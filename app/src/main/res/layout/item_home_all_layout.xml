@@ -78,5 +78,5 @@
         android:layout_width="@dimen/space_100dp"
         android:layout_height="@dimen/space_70"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@mipmap/f_t" />
 </LinearLayout>

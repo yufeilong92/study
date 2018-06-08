@@ -227,6 +227,7 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         PerInfomVo vo = gson.fromJson(cont, PerInfomVo.class);
         if (vo.getStatus().getCode() == 200) {
             mDataInfom = vo.getData();
+            MyAppliction.getInstance().setUserData(vo);
             bindViewData(mDataInfom);
         } else {
             T.showToast(mContext,mContext.getResources().getString(R.string.net_error));

@@ -304,8 +304,8 @@
         <activity
             android:name=".ui.bank.AnswerActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.me.FeedBackActivity"
             android:launchMode="singleTask"
@@ -495,7 +495,17 @@
             android:name=".GuideActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.me.DelectSuceessActivity"></activity>
+        <activity android:name=".ui.me.DelectSuceessActivity" />
+
+        <receiver
+            android:name=".service.NetWorkStateReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -66,6 +66,7 @@ import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.adapter.NetMyDownTableAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
@@ -89,6 +90,7 @@ import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.ClassBeanVideoVo;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
@@ -245,7 +247,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         videoView.destroy();
 
         mediaController.disable();
-        saveLookVideo();
+        if (isPlayafter) {
+            saveLookVideo();
+        }
         MyAppliction.getInstance().setIsPlay(false);
 
     }
@@ -394,7 +398,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     public void onNetMainTryPlayId(NetMyPlayTrySeeEvent event) {
         VideosBeanVo vo = event.getVo();
         L.e(vo.getVid());
-        if (!iscontinue&&!isPlayafter) {
+        if (!iscontinue && !isPlayafter) {
             mVideoid = vo.getVideoid();
             mPid = vo.getChapterid();
             mZid = vo.getVideoid();
@@ -440,11 +444,11 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
                 .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
                 .setDuration(10000) //时长
-                .setText(MyAppliction.getInstance().getUserInfom().getData().getUser().getPhone()) //文本
+                .setText(MyAppliction.getInstance().getUserData().getData().getPhone()) //文本
                 .setSize(16) //字体大小
                 .setColor(Color.YELLOW) //字体颜色
                 .setTextAlpha(70) //字体透明度
-                .setInterval(1000) //隐藏时间
+                .setInterval(30000) //隐藏时间
                 .setLifeTime(1000) //显示时间
                 .setTweenTime(1000) //渐隐渐现时间
                 .setHasStroke(true) //是否有描边
@@ -697,7 +701,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         progressView.resetMaxValue();
         if (startNow) {
             //调用setVid方法视频会自动播放
-            if (iscontinue&&!isPlayafter) {
+            if (iscontinue && !isPlayafter) {
                 videoView.seekTo(videoProgress);
             }
             videoView.setVid(vid, bitrate, isMustFromLocal);
@@ -1009,9 +1013,13 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 mBtnPopDownAll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-                        isRuning=true;
-                        GetNetBookService(mBookList, bitrer);
+                        String net = MyAppliction.getInstance().getSelectNet();
+                        if (StringUtil.isEmpty(net)) {
+                            showNetDialog(true, null, -1);
+                        } else {
+                            dowmStatus(true, net, null, -1);
+                        }
+//                        downAll();
                     }
                 });
                 //取消按钮
@@ -1043,6 +1051,12 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
             }
 
+            private void downAll() {
+                dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+                isRuning = true;
+                GetNetBookService(mBookList, bitrer);
+            }
+
             private void bindAdapter() {
                 GridLayoutManager manager = new GridLayoutManager(mContext, 1);
                 manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -1052,23 +1066,96 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 mDownAdapter.setClickListener(new NetMyDownTableAdapter.onItemClickListener() {
                     @Override
                     public void onClickListener(ChaptersBeanVo obj, int position) {
-                        //添加到数据库
-                        List<ChaptersBeanVo> list = new ArrayList<>();
-                        ChaptersBeanVo vo = new ChaptersBeanVo();
-                        vo.setChapterid(obj.getChapterid());
-                        vo.setChaptername(obj.getChaptername());
-                        vo.setCourseid(obj.getCourseid());
-                        List<VideosBeanVo> vos = new ArrayList<>();
-                        VideosBeanVo beanVo = obj.getVideos().get(position);
-                        vos.add(beanVo);
-                        vo.setVideos(vos);
-                        list.add(vo);
-                        isRuning = true;
-                        GetNetBookService(list, bitrer);
+                        String net = MyAppliction.getInstance().getSelectNet();
+                        if (StringUtil.isEmpty(net)) {
+                            showNetDialog(false, obj, position);
+                        } else {
+                            dowmStatus(false, net, obj, position);
+                        }
+                    }
+                });
+            }
 
+            /**
+             *
+             * @param isAll 是否全部下载
+             * @param net 网络状态1wifi 2 移动
+             * @param obj
+             * @param position
+             */
+            private void dowmStatus(boolean isAll, String net, ChaptersBeanVo obj, int position) {
+                String selectNet = MyAppliction.getInstance().getUsetNetSatus();
+                if (StringUtil.isEmpty(selectNet)) {
+                    if (isAll) {
+                        downAll();
+                    } else {
+                        down(obj, position);
+                    }
+                    return;
+                }
+                if (net.equals(selectNet)) {
+                    if (isAll) {
+                        downAll();
+                    } else {
+                        down(obj, position);
+                    }
+                } else {
+                    showNetDialog(isAll, obj, position);
+                }
+            }
+
+            private void showNetDialog(final boolean isAll, final ChaptersBeanVo obj, final int position) {
+                boolean netConnect = Utils.isNetConnect(mContext);
+                if (!netConnect) {
+                    T.showToast(mContext, "检测你当前无网络");
+                    return;
+                }
+                final boolean connect = Utils.isWifiConnect(mContext);
+                //如果是wifi直接下载
+                if (connect) {
+                    MyAppliction.getInstance().saveSelectNet(DataMessageVo.WIFI);
+                    dowmStatus(isAll, DataMessageVo.WIFI, obj, position);
+                    return;
+                }
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                String net = connect ? "Wifi" : "移动";
+                dialogUtil.showTitleDialog(mContext, "当前网络为" + net + ",是否确认否下载",
+                        getStringWithId(R.string.sure), getStringWithId(R.string.cancel), true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        String status = null;
+                        if (connect) {
+                            MyAppliction.getInstance().saveSelectNet(DataMessageVo.WIFI);
+                            status = DataMessageVo.WIFI;
+                        } else {
+                            MyAppliction.getInstance().saveSelectNet(DataMessageVo.MONET);
+                            status = DataMessageVo.MONET;
+                        }
+                        dowmStatus(isAll, status, obj, position);
+                    }
+
+                    @Override
+                    public void onCancelClickListener() {
 
                     }
                 });
+            }
+
+            private void down(ChaptersBeanVo obj, int position) {
+                //添加到数据库
+                List<ChaptersBeanVo> list = new ArrayList<>();
+                ChaptersBeanVo vo = new ChaptersBeanVo();
+                vo.setChapterid(obj.getChapterid());
+                vo.setChaptername(obj.getChaptername());
+                vo.setCourseid(obj.getCourseid());
+                List<VideosBeanVo> vos = new ArrayList<>();
+                VideosBeanVo beanVo = obj.getVideos().get(position);
+                vos.add(beanVo);
+                vo.setVideos(vos);
+                list.add(vo);
+                isRuning = true;
+                GetNetBookService(list, bitrer);
             }
 
             /**
