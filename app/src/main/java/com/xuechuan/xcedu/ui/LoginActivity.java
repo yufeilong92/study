@@ -342,6 +342,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             tag.setTagAndAlias(String.valueOf(voData.getUser().getId()));
             finishActivity();
         } else {
+            T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
 //            T.showToast(mContext, vo.getStatus().getMessage());
         }
@@ -352,6 +353,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (mDialog != null) {
             mDialog.dismiss();
         }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
         L.e(con);
     }
 

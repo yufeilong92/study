@@ -232,6 +232,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void BuyError(String con) {
+        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
         L.e(con);
     }
 
