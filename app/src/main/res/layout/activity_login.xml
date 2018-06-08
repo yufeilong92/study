@@ -88,6 +88,7 @@
         android:layout_marginRight="@dimen/space_39"
         android:background="@drawable/btn_login_bg"
         android:text="@string/login"
+        android:textSize="@dimen/text_size_18"
         android:textColor="@color/white" />
 
     <Space style="@style/space_20_height" />

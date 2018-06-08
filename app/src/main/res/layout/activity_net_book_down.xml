@@ -59,8 +59,9 @@
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
                     android:text="正在缓存"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_14" />
+                    android:textSize="@dimen/text_size_18" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rlv_net_loading_going"
@@ -88,8 +89,9 @@
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
                     android:text="已缓存"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_14" />
+                    android:textSize="@dimen/text_size_18" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rlv_loading_over"

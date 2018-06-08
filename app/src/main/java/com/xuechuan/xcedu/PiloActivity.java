@@ -208,7 +208,7 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
         user.setToken(token.getSigntoken());
         user.setTokenexpire(token.getExpiretime());
         DbHelperAssist.getInstance().saveUserInfom(userInfom);
-        HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME, "");
+        HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME);
         //注册激光
         RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
         tag.registJG();

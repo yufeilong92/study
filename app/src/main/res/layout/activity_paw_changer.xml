@@ -42,6 +42,7 @@
         android:paddingLeft="@dimen/space_8"
         android:paddingRight="@dimen/space_8"
         android:textSize="@dimen/text_size_14"
+        android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_48"
         android:layout_marginLeft="@dimen/space_16"

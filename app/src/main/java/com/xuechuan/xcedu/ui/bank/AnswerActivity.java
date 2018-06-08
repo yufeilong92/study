@@ -639,7 +639,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mListPresenter = new ErrOrColListPresenter(new ErrOrColListModelImpl(), this);
             mListPresenter.requestionErrOrColCont(mContext, mCouresidUser, mUserTagid, mTagType);
             isExamHine = true;
-       }
+        }
 
         if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {//错题模式
             mIvBarDelect.setVisibility(View.VISIBLE);
@@ -681,7 +681,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 考试
      */
     private void exam() {
-        if (!StringUtil.isEmpty(mStyleCase)&&!StringUtil.isEmpty(mOid)) {
+        if (!StringUtil.isEmpty(mStyleCase) && !StringUtil.isEmpty(mOid)) {
             isExamHine = false;
             mIvTimePlay.setVisibility(View.VISIBLE);
             mTimeUitl = MyTimeUitl.getInstance(mContext);
@@ -1094,18 +1094,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         UseSelectItemInfomVo item = null;
         this.mTextDetialNew = vo;
         mResultData = vo.getData();
-        List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
-        if (user != null && !user.isEmpty()) {
-            for (int i = 0; i < user.size(); i++) {
-                UseSelectItemInfomVo vo1 = user.get(i);
-                if (vo1.getId() == mResultData.getId()) {//做过
-                    isdo = true;
-                    item = user.get(i);
-                    break;
-                }
-            }
-
-        }
         //赋值
         if (isBuy) {// 已购买显示解析
             mLiBResolveBuy.setVisibility(View.GONE);
@@ -1114,12 +1102,27 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mRlLookEvalue.setVisibility(View.GONE);
         } else {//未购买 隐藏解析
             mLlBAnswerKey.setVisibility(View.GONE);
-            mLiBResolveBuy.setVisibility(View.VISIBLE);
             mLlBJiexi.setVisibility(View.GONE);
+            mLiBResolveBuy.setVisibility(View.GONE);
             mLlBRightLu.setVisibility(View.GONE);
             mRlLookEvalue.setVisibility(View.GONE);
             mRlvEualeContent.setVisibility(View.GONE);
         }
+        List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
+        if (user != null && !user.isEmpty()) {
+            for (int i = 0; i < user.size(); i++) {
+                UseSelectItemInfomVo vo1 = user.get(i);
+                if (vo1.getId() == mResultData.getId()) {//做过
+                    isdo = true;
+                    item = user.get(i);
+                    if (!isBuy)
+                        mLiBResolveBuy.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+
+        }
+
         //  判断问题类型单选/多选->提供选择处理
         switch (mResultData.getQuestiontype()) {
             case 2://单选
@@ -1149,7 +1152,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             return;
         }
 
- /*       *//***
+        /*       *//***
          * 是否自由组卷界面
          *//*
         if (!StringUtil.isEmpty(mFreeQuestion) && mFreeQuestion.equals(mFreeQuestionTrue) && !isUserLookResultJieXi) {
@@ -1657,7 +1660,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
-//                Utils.showSoftInputFromWindow(AnswerActivity.this, mEtBSubmit);
+                Utils.showSoftInputFromWindow(AnswerActivity.this, mEtBSubmit);
                 mLlBSubmitEvalue.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_b_submit_send:
@@ -3278,7 +3281,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mSubmitDialog != null) {
             mSubmitDialog.dismiss();
         }
-        T.showToast(mContext,getStringWithId(R.string.evelua_sucee));
+        T.showToast(mContext, getStringWithId(R.string.evelua_sucee));
         mLiXia.setVisibility(View.VISIBLE);
         mLlBSubmitEvalue.setVisibility(View.GONE);
     }

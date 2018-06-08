@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_70"
         android:orientation="horizontal"
-        android:paddingLeft="36dp"
-        android:paddingRight="36dp">
+        android:paddingLeft="@dimen/space_22"
+        android:paddingRight="@dimen/space_22">
 
         <LinearLayout
             android:id="@+id/li_b_case_error"
@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageView
@@ -47,7 +46,9 @@
                     android:id="@+id/tv_case_wroing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12"
+                    android:text="0道" />
             </LinearLayout>
 
         </LinearLayout>
@@ -85,7 +86,9 @@
                     android:id="@+id/tv_case_coolect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12"
+                    android:text="0道" />
             </LinearLayout>
 
         </LinearLayout>

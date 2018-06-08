@@ -304,6 +304,7 @@
         <activity
             android:name=".ui.bank.AnswerActivity"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.me.FeedBackActivity"

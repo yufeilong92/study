@@ -84,6 +84,7 @@
                 android:text="" />
 
             <ImageView
+                android:visibility="gone"
                 style="@style/m_more"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
@@ -130,6 +131,7 @@
             </RadioGroup>
 
             <ImageView
+                android:visibility="gone"
                 style="@style/m_more"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>

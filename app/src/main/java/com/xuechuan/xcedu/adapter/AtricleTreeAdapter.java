@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextPaint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -58,12 +59,15 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
 
         TreeViewHolder viewHolder = (TreeViewHolder) holder;
         viewHolder.mTvAtricleTree.setText(node.getName());
+        TextPaint paint = viewHolder.mTvAtricleTree.getPaint();
         if (node.getIcon() == -1) {
             viewHolder.mIcon.setVisibility(View.GONE);
+            paint.setFakeBoldText(false);
             viewHolder.mIvTreeMark.setVisibility(View.INVISIBLE);
             viewHolder.mLiLook.setVisibility(View.GONE);
             setdata(node, assist, lookVos, userLookVo, viewHolder);
         } else {
+            paint.setFakeBoldText(true);
             viewHolder.mLiLook.setVisibility(View.GONE);
             viewHolder.mIcon.setVisibility(View.VISIBLE);
             viewHolder.mIvTreeMark.setVisibility(View.VISIBLE);

@@ -74,14 +74,17 @@ public class BookOrderAdapter extends RecyclerView.Adapter<BookOrderAdapter.View
         if (isShow && position == 0) {
             isShow = false;
             holder.mTvBookhomeOrder.setTextColor(mContext.getResources().getColor(R.color.red_text));
+            holder.mTvBookhomeOrder.setBackgroundColor(mContext.getResources().getColor(R.color.white));
             mActivity.bindJieData(datasBean.getChildren());
         }
         if (!isShow&&position == mPosition) {
             isSelect=false;
             holder.mTvBookhomeOrder.setTextColor(mContext.getResources().getColor(R.color.red_text));
+            holder.mTvBookhomeOrder.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
         if (!isShow&&mPosition!=-1&&isSelect){
             holder.mTvBookhomeOrder.setTextColor(mContext.getResources().getColor(R.color.text_title_color));
+            holder.mTvBookhomeOrder.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
         }
 
         holder.mTvBookhomeOrder.setText(datasBean.getTitle());

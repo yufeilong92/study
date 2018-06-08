@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (StringUtil.isEmpty(userId)) {
             initData();
         } else {
-            HomeActivity.newInstance(mContext, HomeActivity.LOGIN_HOME, null);
+            HomeActivity.newInstance(mContext, HomeActivity.LOGIN_HOME);
             finishActivity();
         }
     }
@@ -318,7 +318,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 return;
             }
             DbHelperAssist.getInstance().saveUserInfom(vo);
-            HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME, null);
+            HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME);
             //注册激光
             RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
             tag.registJG();

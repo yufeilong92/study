@@ -334,6 +334,11 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
     </style>
+    <style name="view_line_1_gray_jia">
+        <item name="android:background">@color/book_line</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
 
     <style name="view_line_titel_line">
         <item name="android:background">@mipmap/ic_title_line</item>

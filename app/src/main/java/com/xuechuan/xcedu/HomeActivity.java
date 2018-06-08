@@ -68,7 +68,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private String mType;
     private NoScrollViewPager mViewpageContetn;
     private MagicIndicator mMagicindicatorHome;
-    public  static String LOGIN_HOME="login_home";
+    public  static String LOGIN_HOME="loginhome";
     private String mLoginType;
 
     @Override
@@ -77,10 +77,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         OkGo.getInstance().cancelTag(mContext);
     }
 
-    public static void newInstance(Context context, String params1, String param2) {
+    public static void newInstance(Context context, String params1) {
         Intent intent = new Intent(context, HomeActivity.class);
         intent.putExtra(Params, params1);
-        intent.putExtra(Params1, param2);
         context.startActivity(intent);
     }
 
@@ -127,10 +126,17 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             } else if (mType.equals(VIDEO)) {
                 mViewpageContetn.setCurrentItem(2);
             }
-        }else if (!StringUtil.isEmpty(mType)&&mType.equals(LOGIN_HOME)){
+        }else if (!StringUtil.isEmpty(mLoginType)&&mLoginType.equals(LOGIN_HOME)){
             mViewpageContetn.setCurrentItem(0);
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mLoginType="";
+        mType="";
     }
 
     private void initData() {

@@ -320,5 +320,6 @@
     <string name="weixinlogin">微信登录</string>
     <string name="resetpaw">重置密码成功</string>
     <string name="Nobuffer">暂无缓存</string>
+    <string name="Allarticle">全部文章</string>
 
 </resources>

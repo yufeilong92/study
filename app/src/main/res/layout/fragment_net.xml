@@ -19,11 +19,15 @@
 
         <ImageView
             android:id="@+id/iv_net_mydown"
-            style="@style/TitleBarAction"
+            android:layout_width="@dimen/space_22"
+            android:layout_height="match_parent"
             android:src="@mipmap/c_nav_icon_myd" />
         <ImageView
             android:id="@+id/iv_net_all"
-            style="@style/TitleBarAction"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_width="@dimen/space_22"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/space_16"
             android:src="@mipmap/c_nav_icon_all" />
 
     </LinearLayout>

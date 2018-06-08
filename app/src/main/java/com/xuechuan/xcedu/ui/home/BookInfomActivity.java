@@ -123,7 +123,7 @@ public class BookInfomActivity extends BaseActivity {
         final BookOrderAdapter bookOrderAdapter = new BookOrderAdapter(mContext, datas,BookInfomActivity.this);
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
-        mRlvBookinfomZhang.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
+//        mRlvBookinfomZhang.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvBookinfomZhang.setLayoutManager(manager);
         mRlvBookinfomZhang.setAdapter(bookOrderAdapter);
         bookOrderAdapter.setClickListener(new BookOrderAdapter.onItemClickListener() {

@@ -210,7 +210,7 @@
 
         <View
             android:id="@+id/v_line1"
-            style="@style/view_line_tab_line"
+            style="@style/view_line_1_gray"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/space_48" />
 

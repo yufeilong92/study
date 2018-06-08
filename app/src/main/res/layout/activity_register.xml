@@ -190,7 +190,7 @@
                     android:id="@+id/chb_register_agreen"
                     android:layout_width="@dimen/space_20"
                     android:layout_height="@dimen/space_20"
-                    android:button="@drawable/select_free_chb_bg" />
+                    android:button="@drawable/select_chb_rab_bg" />
 
                 <TextView
                     android:textColor="@color/text_fu_color"

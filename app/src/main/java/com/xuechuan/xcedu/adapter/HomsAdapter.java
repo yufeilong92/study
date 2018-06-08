@@ -137,7 +137,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Intent instance = AtirlceListActivity.newInstance(mContext, "");
-                instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, mContext.getResources().getString(R.string.home_infom_all));
+                instance.putExtra(ArticleListActivity.CSTR_EXTRA_TITLE_STR, mContext.getResources().getString(R.string.Allarticle));
                 mContext.startActivity(instance);
             }
         });

@@ -48,14 +48,6 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
     private Context mContext;
     private String mParam1;
     private String mParam2;
-
-    private ArrayList<Fragment> mlist;
-    private CheckBox mChbBSkill;
-    private ImageView mIvBLineBg;
-    private CheckBox mChbBColled;
-    private ImageView mIvBLineBg1;
-    private CheckBox mChbBCase;
-    private ImageView mIvBLineBg2;
     private ViewPager mVpgContent;
     private MagicIndicator mMagicindicatorBank;
 
@@ -142,48 +134,6 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
         mlist.add(caseFragment);
         return mlist;
     }
-
-    private void initViewData() {
-        mlist = new ArrayList<>();
-        SkillFragment skillFragment = SkillFragment.newInstance("1");
-        ColligateFragment colligateFragment = ColligateFragment.newInstance("2");
-        CaseFragment caseFragment = CaseFragment.newInstance("3");
-        mlist.add(skillFragment);
-        mlist.add(colligateFragment);
-        mlist.add(caseFragment);
-        final ArrayList<String> mTabs = ArrayToListUtil.arraytoList(mContext, R.array.bank_tab);
-        FragmentManager manager = getFragmentManager();
-        BankFragmentAdapter fragmentAdapter = new BankFragmentAdapter(manager, mContext, mlist, mTabs);
-        mVpgContent.setAdapter(fragmentAdapter);
-        mVpgContent.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == 0) {
-                    selectTabBg(true, false, false);
-                } else if (position == 1) {
-                    selectTabBg(false, true, false);
-                } else if (position == 2) {
-                    selectTabBg(false, false, true);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-        mVpgContent.setCurrentItem(0);
-        mVpgContent.setOffscreenPageLimit(3);
-        selectTabBg(true, false, false);
-    }
-
-
-    /**
-     * 请求章节题目
-     */
     private void requestChapters() {
         HomeService service = new HomeService(getContext());
 /*        service.setIsShowDialog(true);
@@ -219,65 +169,12 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
     private void initView(View view) {
         mContext = getActivity();
         mMagicindicatorBank = (MagicIndicator) view.findViewById(R.id.magicindicator_bank);
-/*        mChbBSkill = (CheckBox) view.findViewById(R.id.chb_b_skill);
-        mChbBSkill.setOnClickListener(this);
-        mIvBLineBg = (ImageView) view.findViewById(R.id.iv_b_line_bg);
-        mIvBLineBg.setOnClickListener(this);
-        mChbBColled = (CheckBox) view.findViewById(R.id.chb_b_Colled);
-        mChbBColled.setOnClickListener(this);
-        mIvBLineBg1 = (ImageView) view.findViewById(R.id.iv_b_line_bg1);
-        mIvBLineBg1.setOnClickListener(this);
-        mChbBCase = (CheckBox) view.findViewById(R.id.chb_b_case);
-        mChbBCase.setOnClickListener(this);
-        mIvBLineBg2 = (ImageView) view.findViewById(R.id.iv_b_line_bg2);
-        mIvBLineBg2.setOnClickListener(this);*/
         mVpgContent = (ViewPager) view.findViewById(R.id.vpg_content);
         mVpgContent.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-    /*    switch (v.getId()) {
-            case R.id.chb_b_skill:
-                mVpgContent.setCurrentItem(0, true);
-                break;
-            case R.id.chb_b_Colled:
-                mVpgContent.setCurrentItem(1, true);
-                break;
-            case R.id.chb_b_case:
-                mVpgContent.setCurrentItem(2, true);
-                break;
-            default:
-
-        }*/
-    }
-
-    private void selectTabBg(boolean skill, boolean co, boolean cased) {
-        mChbBSkill.setChecked(skill);
-        mChbBColled.setChecked(co);
-        mChbBCase.setChecked(cased);
-        Drawable homeDrawable;
-        if (skill) {
-            homeDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_s);
-        } else {
-            homeDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_n);
-        }
-        mIvBLineBg.setImageDrawable(homeDrawable);
-        Drawable banDrawable;
-        if (co) {
-            banDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_s);
-        } else {
-            banDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_n);
-        }
-        mIvBLineBg1.setImageDrawable(banDrawable);
-        Drawable netDrawable;
-        if (cased) {
-            netDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_s);
-        } else {
-            netDrawable = getResources().getDrawable(R.mipmap.ic_tab_line_n);
-        }
-        mIvBLineBg2.setImageDrawable(netDrawable);
 
     }
-
 }
