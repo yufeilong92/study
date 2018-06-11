@@ -242,7 +242,7 @@ public class BaseHttpServcie {
                             TongVo vo = gson.fromJson(com, TongVo.class);
                             if (vo.getStatus().getCode() == 200) {
                                 callBackView.onSuccess(response);
-                            } else {
+                            } else if (vo.getStatus().getCode() == 406){
                                 MyAppliction.getInstance().startLogin(context);
                             }
                         } catch (JsonParseException e) {

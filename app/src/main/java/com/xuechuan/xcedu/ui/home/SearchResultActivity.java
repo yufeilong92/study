@@ -161,7 +161,6 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
             return;
         }
         mSearchKey= getTextStr(mEtResulteSearch);
-        mEtResulteSearch.setText(null);
         mInstance.saveHistory(str);
         EventBus.getDefault().postSticky(new SearchEvenText(mSearchKey));
         EventBus.getDefault().postSticky(new SearchEventWen(mSearchKey));

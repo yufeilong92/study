@@ -160,7 +160,7 @@ public class MyAppliction extends MultiDexApplication {
         initJPush();
         initUM();
         initImagerLoader();
-        DBHelper.initDb(this);
+
         SaveUUidUtil.initSharedPreference(this);
         SaveIsDoneUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);

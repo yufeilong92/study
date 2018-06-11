@@ -123,8 +123,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initData() {
-        int versionCode = Utils.getVersionCode(mContext);
-        mTvMSettingCode.setText(versionCode + "");
+        String versionCode = Utils.getVersionName(mContext);
+        mTvMSettingCode.setText(versionCode);
         mTvMSettingWeixin.setText(mName);
         mPresenter = new SettingViewPresenter();
         mPresenter.initModelView(new SettingViewModel(), this);

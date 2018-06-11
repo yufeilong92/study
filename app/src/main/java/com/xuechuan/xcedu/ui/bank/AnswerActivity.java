@@ -427,7 +427,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * 搜索界面
      *
      * @param context
-     * @param courseid
+     * @param courseid 课id
      * @param id
      * @return
      */
@@ -1266,8 +1266,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
         mTvBAnswer.setText(mResultData.getChoiceanswer());
-        Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
-        mTvBRosoleContent.setText(spanned);
+        Spanned spanned1 = Html.fromHtml(mResultData.getAnalysis());
+        mTvBRosoleContent.setText(spanned1);
 //        mTvBRosoleContent.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
         mTvBAccuracy.setText(mResultData.getAccuracy());
         mChbBCollect.setChecked(mResultData.isIsfav());
@@ -1431,6 +1431,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         Spanned html = Html.fromHtml(mResultData.getQuestion());
 //        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
         mTvBMatter.setText(html);
+
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1446,6 +1447,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         //正确答案
         mTvBAnswer.setText(mResultData.getChoiceanswer());
         mChbBCollect.setChecked(mResultData.isIsfav());
+        Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
+        mTvBRosoleContent.setText(spanned);
 
     }
 
@@ -1688,8 +1691,16 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_look_wen_answer:
                 isUserLookWenJieXi = true;
-                mLlLookWenDa.setVisibility(View.VISIBLE);
                 mBtnLookWenAnswer.setVisibility(View.GONE);
+                if (isBuy){
+                    mLlLookWenDa.setVisibility(View.VISIBLE);
+                    mLiBResolveBuy.setVisibility(View.GONE);
+                }else {
+                    mLiBResolveBuy.setVisibility(View.VISIBLE);
+                    mLlLookWenDa.setVisibility(View.GONE);
+                }
+
+
                 break;
 
             case R.id.iv_bar_delect:
@@ -2639,7 +2650,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
-                                pic, SHARE_MEDIA.QQ);
+                                pic, SHARE_MEDIA.QZONE);
                     }
                 });
                 weibo.setOnClickListener(new View.OnClickListener() {
@@ -2651,7 +2662,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                 , SHARE_MEDIA.SINA
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
-                                pic, SHARE_MEDIA.QQ);
+                                pic, SHARE_MEDIA.SINA);
                     }
                 });
                 weixin.setOnClickListener(new View.OnClickListener() {
@@ -2662,7 +2673,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
-                                pic, SHARE_MEDIA.QQ);
+                                pic, SHARE_MEDIA.WEIXIN);
                     }
                 });
                 circle.setOnClickListener(new View.OnClickListener() {
@@ -2673,7 +2684,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
-                                pic, SHARE_MEDIA.QQ);
+                                pic, SHARE_MEDIA.WEIXIN_CIRCLE);
                     }
                 });
             }
@@ -3354,7 +3365,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void GetOneEvalueError(String con) {
-        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
 
     }
 

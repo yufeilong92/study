@@ -38,7 +38,7 @@ public class DBHelper {
          * test-db 数据库名称
          */
         DatabaseContext databaseContext = new DatabaseContext(context);
-        mHelper = new MyOpenHelper(context, "userinfom.db", null);
+        mHelper = new MyOpenHelper(databaseContext, "userinfom.db", null);
         db = mHelper.getWritableDatabase();
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();

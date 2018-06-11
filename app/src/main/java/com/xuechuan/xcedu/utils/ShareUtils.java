@@ -1,6 +1,7 @@
 package com.xuechuan.xcedu.utils;
 
 import android.app.Activity;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -99,16 +100,16 @@ public class ShareUtils {
                 .setCallback(new UMShareListener() {
                     @Override
                     public void onStart(SHARE_MEDIA share_media) {
-
+                        Log.e("开始", "==========");
                     }
-
                     @Override
                     public void onResult(final SHARE_MEDIA share_media) {
+                        Log.e("结束", "==========");
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if (share_media.name().equals("WEIXIN_FAVORITE")) {
-                                    Toast.makeText(activity, share_media + " 收藏成功", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, share_media + "分享成功", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(activity, share_media + " 分享成功", Toast.LENGTH_SHORT).show();
                                 }

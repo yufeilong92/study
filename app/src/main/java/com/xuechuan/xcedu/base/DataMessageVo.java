@@ -87,9 +87,7 @@ public class DataMessageVo {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.CAMERA,
-            Manifest.permission.CALL_PHONE
-    };
+            Manifest.permission.CAMERA};
     //微信支付
     public static int PAYTYPE_WEIXIN = 2;
     //支付包

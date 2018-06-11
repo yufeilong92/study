@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
+import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.jg.RegisterTag;
@@ -138,6 +139,7 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     }
 
     private void initData() {
+        DBHelper.initDb(MyAppliction.getInstance());
         String userId = SaveUUidUtil.getInstance().getUserId();
         UserInfomDb userInfomDb = DbHelperAssist.getInstance().queryWithuuId(userId);
         if (userInfomDb != null && userInfomDb.getVo() != null) {

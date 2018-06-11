@@ -206,7 +206,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
+                if (s.length() <= 0) {
                     mBtnLoginLogin.setEnabled(false);
                     mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg);
                     return;
@@ -231,7 +231,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
                     mBtnLoginLogin.setEnabled(false);
-                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg_point);
+                    mBtnLoginLogin.setBackgroundResource(R.drawable.btn_login_bg);
                     return;
                 }
                 String trim = mEtLoginUsername.getText().toString().trim();

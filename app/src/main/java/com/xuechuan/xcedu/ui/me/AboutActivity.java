@@ -48,7 +48,7 @@ public class AboutActivity extends BaseActivity {
     }
 
     private void initData() {
-        int versionCode = Utils.getVersionCode(mContext);
+        String versionCode = Utils.getVersionName(mContext);
         mTvAboutappCode.setText(versionCode + "");
 
     }
