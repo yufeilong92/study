@@ -358,7 +358,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 mArrary.remove(mCancelPostion);
                 adapter.notifyDataSetChanged();
                 mCancelPostion = -1;
-                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
+                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.CANCELSUCCESS);
             }
 //            T.showToast(mContext, getStrWithId(R.string.submit_success));
         } else {

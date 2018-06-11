@@ -43,6 +43,8 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/text_size_16"
                     android:text="历年真题"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_18"
                     android:textColor="@color/black" />
 
                 <android.support.v7.widget.RecyclerView
@@ -54,6 +56,8 @@
                     android:layout_height="@dimen/space_48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/text_size_16"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_18"
                     android:text="独家密卷"
                     android:textColor="@color/black" />
 

@@ -261,9 +261,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         mTvNetDowningStop.setOnClickListener(this);
         mChbNetDownAll = (CheckBox) findViewById(R.id.chb_net_down_all);
         mBtnNetDownDelect = (Button) findViewById(R.id.btn_net_down_delect);
+        mBtnNetDownDelect.setOnClickListener(this);
         mRlNetDownDelect = (RelativeLayout) findViewById(R.id.rl_net_down_delect);
         mContext = this;
-        mBtnNetDownDelect.setOnClickListener(this);
         mTvNetDownEmpty = (TextView) findViewById(R.id.tv_net_down_empty);
         mTvNetDownEmpty.setOnClickListener(this);
     }
@@ -272,6 +272,16 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_net_down_delect://删除
+                boolean isSelect = false;
+                for (DownInfomSelectVo vo : mDataSelectList) {
+                    if (vo.isChbSelect()) {
+                        isSelect = true;
+                    }
+                }
+                if (!isSelect) {
+                    T.showToast(mContext, getString(R.string.please_del_video));
+                    return;
+                }
                 boolean b = Utils.handleOnDoubleClick();
                 if (b) {
                 } else {

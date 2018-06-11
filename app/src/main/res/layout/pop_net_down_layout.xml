@@ -24,7 +24,7 @@
                 android:layout_height="@dimen/space_30"
                 android:background="@drawable/select_net_pop_clarity_btn"
                 android:button="@null"
-                android:checked="true"
+
                 android:gravity="center"
                 android:padding="@dimen/space_4"
                 android:text="超清"
@@ -42,6 +42,7 @@
                 android:gravity="center"
                 android:padding="@dimen/space_4"
                 android:text="高清"
+                android:checked="true"
                 android:textColor="@drawable/select_net_pop_rdb_textcolor"
                 android:textSize="@dimen/text_size_16" />
 
@@ -89,7 +90,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/space_56"
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 

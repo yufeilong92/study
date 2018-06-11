@@ -913,7 +913,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             private RadioButton mChbNetPopDownLiu;
             private RadioButton mChbNetPopDownGao;
             private RadioButton mChbNetPopDownChao;
-            int bitrer = 3;
+            int bitrer = 2;
             boolean isSure = false;
             private DownVideoDb vo;
             private AlertDialog dialog;

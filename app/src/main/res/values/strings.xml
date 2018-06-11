@@ -321,5 +321,6 @@
     <string name="resetpaw">重置密码成功</string>
     <string name="Nobuffer">暂无缓存</string>
     <string name="Allarticle">全部文章</string>
+    <string name="please_del_video">请选择要删除的视频</string>
 
 </resources>

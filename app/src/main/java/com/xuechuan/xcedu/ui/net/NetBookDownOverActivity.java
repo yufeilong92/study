@@ -23,6 +23,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
@@ -220,6 +221,18 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_net_down_infome_delect:
+                boolean isSelect = false;
+                if (mDataSelectList != null && !mDataSelectList.isEmpty()) {
+                    for (DownInfomSelectVo vo : mDataSelectList) {
+                        if (vo.isChbSelect()) {
+                            isSelect = true;
+                        }
+                    }
+                }
+                if (!isSelect){
+                    T.showToast(mContext, getString(R.string.please_del_video));
+                    return;
+                }
                 DialogUtil dialogUtil = DialogUtil.getInstance();
                 dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del),
                         getStringWithId(R.string.delect),

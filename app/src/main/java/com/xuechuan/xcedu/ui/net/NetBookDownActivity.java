@@ -24,8 +24,10 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
+import com.xuechuan.xcedu.vo.DownInfomSelectVo;
 import com.xuechuan.xcedu.vo.NetDownSelectVo;
 
 import java.util.ArrayList;
@@ -356,6 +358,24 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.btn_net_book_down_delect:
+                boolean isSelect = false;
+                if (mSelectDoneVos != null && !mSelectDoneVos.isEmpty()) {
+                    for (NetDownSelectVo vo : mSelectDoneVos) {
+                        if (vo.isSelect()) {
+                            isSelect = true;
+                        }
+                    }
+                }
+                if (mSelectNOVos != null && !mSelectNOVos.isEmpty())
+                    for (NetDownSelectVo vo : mSelectNOVos) {
+                        if (vo.isSelect()) {
+                            isSelect = true;
+                        }
+                    }
+                if (!isSelect) {
+                    T.showToast(mContext, getString(R.string.please_del_video));
+                    return;
+                }
                 DialogUtil dialogUtil = DialogUtil.getInstance();
                 dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del), getStringWithId(R.string.delect)
                         , getStringWithId(R.string.cancel), true);

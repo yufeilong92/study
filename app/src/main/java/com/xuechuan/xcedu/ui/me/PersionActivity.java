@@ -459,6 +459,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
+            finish();
             T.showToast(mContext, getString(R.string.sava_success));
         } else {
             T.showToast(mContext, getString(R.string.save_errror));
