@@ -27,6 +27,7 @@ import com.xuechuan.xcedu.ui.bank.MockTestActivity;
 import com.xuechuan.xcedu.ui.bank.MyErrorOrCollectTextActivity;
 import com.xuechuan.xcedu.ui.bank.SpecialListActivity;
 import com.xuechuan.xcedu.ui.home.SpecasListActivity;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.BuyVo;
@@ -216,23 +217,22 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
         BuyVo vo = gson.fromJson(con, BuyVo.class);
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
+            boolean course3 = data.isCourse3();
+            data.setIsbought(course3);
+            data.setCourseid(3);
             DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
+
         } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
+            L.e(con);
+            T.showToast(mContext,getStrWithId(R.string.net_error));
+//            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
 
     @Override
     public void BuyError(String con) {
-        Gson gson = new Gson();
-        BuyVo vo = gson.fromJson(con, BuyVo.class);
-        if (vo.getStatus().getCode() == 200) {
-            BuyVo.DataBean data = vo.getData();
-            DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
-
-        } else {
-            T.showToast(mContext, vo.getStatus().getMessage());
-        }
+        L.e(con);
+        T.showToast(mContext,getStrWithId(R.string.net_error));
     }
 
     @Override

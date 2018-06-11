@@ -33,6 +33,42 @@ public class BuyVo extends BaseVo {
          * 当前科目
          */
         private int courseid;
+        /**
+         *技术实务是否购买
+         */
+        private boolean course1;
+        /**
+         *综合能力是否购买
+         */
+        private boolean course2;
+        /**
+         *	案例分析是否购买
+         */
+        private boolean course3;
+
+        public boolean isCourse1() {
+            return course1;
+        }
+
+        public void setCourse1(boolean course1) {
+            this.course1 = course1;
+        }
+
+        public boolean isCourse2() {
+            return course2;
+        }
+
+        public void setCourse2(boolean course2) {
+            this.course2 = course2;
+        }
+
+        public boolean isCourse3() {
+            return course3;
+        }
+
+        public void setCourse3(boolean course3) {
+            this.course3 = course3;
+        }
 
         public boolean isIsbought() {
             return isbought;

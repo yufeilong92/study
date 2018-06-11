@@ -75,6 +75,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,7 +193,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
             mData = vo.getData();
             bindErrorOrCollortData(mData);
         } else {
-            L.e( vo.getStatus().getMessage());
+            L.e(vo.getStatus().getMessage());
 //            T.showToast(mContext, vo.getStatus().getMessage());
         }
     }
@@ -221,6 +222,9 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
         BuyVo vo = gson.fromJson(msg, BuyVo.class);
         if (vo.getStatus().getCode() == 200) {
             BuyVo.DataBean data = vo.getData();
+            boolean course1 = data.isCourse1();
+            data.setIsbought(course1);
+            data.setCourseid(1);
             DbHelperAssist.getInstance().upDataBuyInfom(String.valueOf(data.getCourseid()), data.isIsbought());
 
         } else {
@@ -232,7 +236,7 @@ public class SkillFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void BuyError(String con) {
-        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.e(con);
     }
 
