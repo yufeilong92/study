@@ -65,11 +65,11 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
     private onItemChbClickListener clickChbListener;
 
     public interface onItemChbClickListener {
-        public void onClickChbListener(Object obj, boolean isCheck,int position);
-        }
+        public void onClickChbListener(Object obj, boolean isCheck, int position);
+    }
 
-        public void setClickChbListener(onItemChbClickListener clickListener) {
-            this.clickChbListener = clickListener;
+    public void setClickChbListener(onItemChbClickListener clickListener) {
+        this.clickChbListener = clickListener;
     }
 
     /**
@@ -97,8 +97,8 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position, boolean isItem) {
-      final   EvalueVo.DatasBean bean = mData.get(position);
+    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
+        final EvalueVo.DatasBean bean = mData.get(position);
         if (!StringUtil.isEmpty(mSelectType)) {
             if (mSelectType.equals(AnswerActivity.mSelectViewBgYJ)) {//夜间
                 holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.night_layout_bg));
@@ -107,6 +107,7 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
                 holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.night_text_color));
                 holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.night_text_color));
                 holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.night_text_color));
+                holder.mViewLine.setBackgroundColor(getLayoutColor(R.color.night_line_bg));
             } else if (mSelectType.equals(AnswerActivity.mSelectViewBgHY)) {//护眼
                 holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.eye_layout_bg));
                 holder.mTvEvalueUserName.setTextColor(getLayoutColor(R.color.black));
@@ -114,6 +115,7 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
                 holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.text_fu_color));
                 holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.text_fu_color));
                 holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.text_fu_color));
+                holder.mViewLine.setBackgroundColor(getLayoutColor(R.color.eye_line_bg));
             } else {//正常
                 holder.mLiItemRoot.setBackgroundColor(getLayoutColor(R.color.white));
                 holder.mTvEvalueUserName.setTextColor(getLayoutColor(R.color.black));
@@ -121,15 +123,12 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
                 holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.text_fu_color));
                 holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.text_fu_color));
                 holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.text_fu_color));
+                holder.mViewLine.setBackgroundColor(getLayoutColor(R.color.white));
             }
         }
 
         holder.mTvEvalueUserName.setText(bean.getNickname());
-        if (bean.isIssupport()) {
-            holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
-        } else {
-            holder.mChbEvaluaIssupper.setText("赞");
-        }
+        holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());
@@ -140,13 +139,21 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
         holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
-
         holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (clickChbListener!=null){
-                    clickChbListener.onClickChbListener(bean,isChecked,position);
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                int number = Integer.parseInt(holder.mChbEvaluaIssupper.getText().toString());
+                if (isChecked) {
+                    holder.mChbEvaluaIssupper.setText((number + 1)+"");
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEQC);
+                } else {
+                    holder.mChbEvaluaIssupper.setText((number -1)+"");
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEQC);
                 }
+              /*  if (clickChbListener != null) {
+                    clickChbListener.onClickChbListener(bean, isChecked, position);
+                }*/
             }
         });
         holder.itemView.setTag(bean);
@@ -181,10 +188,12 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
         public CheckBox mChbEvaluaIssupper;
         public TextView mTvEvalueSuppernumber;
         public LinearLayout mLiItemRoot;
+        public View mViewLine;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.mIvEvaluateHear = (ImageView) itemView.findViewById(R.id.iv_evaluate_hear);
+            this.mViewLine = (View) itemView.findViewById(R.id.view_line);
             this.mTvEvalueUserName = (TextView) itemView.findViewById(R.id.tv_evalue_user_name);
             this.mTvEvalueContent = (TextView) itemView.findViewById(R.id.tv_evalue_content);
             this.mTvEvalueTime = (TextView) itemView.findViewById(R.id.tv_evalue_time);

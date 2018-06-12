@@ -91,7 +91,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvTreeContent.setLayoutManager(gridLayoutManager);
-        mRlvTreeContent.addItemDecoration(new DividerItemDecoration(this, GridLayoutManager.VERTICAL));
+//        mRlvTreeContent.addItemDecoration(new DividerItemDecoration(this, GridLayoutManager.VERTICAL));
         AtricleTreeAdapter adapter = new AtricleTreeAdapter(mRlvTreeContent, this, mNodeLists,
                 0, R.mipmap.ic_spread_gray, R.mipmap.ic_more_go, mOid, datas);
 

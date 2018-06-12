@@ -16,7 +16,7 @@ public class UserLookVo {
      */
     private String chapterId;
     /**
-     * 第几题
+     * 第几题(/第几次正确)
      */
     private String nextId;
     /**

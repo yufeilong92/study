@@ -43,6 +43,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
 //                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
             } else*/ if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
                 MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.WIFI);
+
 //                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
             } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
                 MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.MONET);

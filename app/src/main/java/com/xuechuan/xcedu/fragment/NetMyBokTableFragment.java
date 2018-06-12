@@ -43,8 +43,6 @@ public class NetMyBokTableFragment extends BaseFragment {
 
     public NetMyBokTableFragment() {
     }
-
-
     public static NetMyBokTableFragment newInstance(List<ChaptersBeanVo> bookList) {
         NetMyBokTableFragment fragment = new NetMyBokTableFragment();
         Bundle args = new Bundle();
@@ -59,7 +57,6 @@ public class NetMyBokTableFragment extends BaseFragment {
         if (getArguments() != null) {
             mBookList = (List<ChaptersBeanVo>) getArguments().getSerializable(CLASSID);
         }
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -94,11 +91,16 @@ public class NetMyBokTableFragment extends BaseFragment {
             mTvNetEmptyContent.setVisibility(View.GONE);
         }
         bindAdapterData();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void MainRefrsh(RefreshPlayIconEvent event) {
-        
+        String vid = event.getVid();
+        String name = event.getName();
+        adapter.refreshData(vid,name);
     }
 
     private void bindAdapterData() {

@@ -43,8 +43,6 @@
                 android:maxLines="2"
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
-            <Space style="@style/space_16_height" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,13 +67,14 @@
                     android:drawableLeft="@mipmap/ic_comment"
                     android:drawablePadding="@dimen/space_8"
                     android:text="评论" />
-
+x
                 <Space style="@style/space_16_width" />
-
                 <CheckBox
+                    android:paddingTop="@dimen/space_16"
+                    android:paddingLeft="@dimen/space_8"
+                    android:paddingBottom="@dimen/space_16"
                     android:textSize="@dimen/text_size_12"
                     android:textColor="@color/text_fu_color"
-                    android:paddingLeft="@dimen/space_8"
                     android:text="222"
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"

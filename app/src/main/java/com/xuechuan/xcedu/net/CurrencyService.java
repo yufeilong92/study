@@ -92,7 +92,7 @@ public class CurrencyService extends BaseHttpServcie {
         JSONObject obj = getJsonObj();
         try {
             obj.put("staffid", user.getId());
-            obj.put("targetid", targetid);
+            obj.put("targetid",Integer.valueOf(targetid));
             obj.put("issupport", issupport);
             obj.put("usetype", usetype);
 

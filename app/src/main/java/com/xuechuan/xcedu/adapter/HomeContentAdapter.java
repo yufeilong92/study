@@ -74,12 +74,11 @@ public class HomeContentAdapter extends BaseRecyclerAdapter<HomeContentAdapter.V
         holder.mTvItemHomeTitelContent.setText(vo.getTitle());
         String ymdt = TimeUtil.getYMDT(vo.getPublishdate());
         holder.mTvItemHomeTimeContent.setText(ymdt);
-
         if (StringUtil.isEmpty(vo.getGourl())) {
             holder.mIvItemHomeContent.setVisibility(View.GONE);
         } else {
             MyAppliction.getInstance().displayImages(holder.mIvItemHomeContent, vo.getThumbnailimg(), false);
-            holder.mIvItemHomeContent.setVisibility(View.GONE);
+            holder.mIvItemHomeContent.setVisibility(View.VISIBLE);
         }
         holder.mTvItemHomeAddressContent.setText(vo.getSource());
         holder.itemView.setId(position);

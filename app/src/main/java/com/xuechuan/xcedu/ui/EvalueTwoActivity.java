@@ -143,15 +143,11 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         TextView mTvEvalueTime = (TextView) view.findViewById(R.id.tv_evalue_time);
         TextView mTvEvalueEvalue = (TextView) view.findViewById(R.id.tv_evalue_evalue);
         final CheckBox mChbEvaluaIssupper = (CheckBox) view.findViewById(R.id.chb_evalua_issupper);
-        TextView mTvEvalueSuppernumber = (TextView) view.findViewById(R.id.tv_evalue_suppernumber);
+        final TextView mTvEvalueSuppernumber = (TextView) view.findViewById(R.id.tv_evalue_suppernumber);
         View line = (View) view.findViewById(R.id.v_line_hear);
         line.setVisibility(View.VISIBLE);
         mTvEvalueUserName.setText(bean.getNickname());
-        if (bean.isIssupport()) {
-            mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
-        } else {
-            mChbEvaluaIssupper.setText("赞");
-        }
+        mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         mChbEvaluaIssupper.setChecked(bean.isIssupport());
         mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());
@@ -166,9 +162,12 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!mChbEvaluaIssupper.isPressed()) return;
                 SuppertUtil util = SuppertUtil.getInstance(mContext);
+                int nubmer = Integer.parseInt(mChbEvaluaIssupper.getText().toString());
                 if (isChecked) {
+                    mChbEvaluaIssupper.setText((nubmer + 1) + "");
                     util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEA);
                 } else {
+                    mChbEvaluaIssupper.setText((nubmer - 1) + "");
                     util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEA);
                 }
             }

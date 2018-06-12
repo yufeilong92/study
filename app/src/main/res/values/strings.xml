@@ -5,6 +5,9 @@
     <string name="app_content_heat">http://app1.xuechuanedu.cn</string>
     <!--<string name="app_content_heat">http://192.168.1.111:8080</string>-->
     <!--<string name="app_content_heat">http://192.168.1.110:8080</string>-->
+
+
+    <string name="http_video_setting">/polyvideosettings/android.json</string>
     <!--微信接口-->
     <string name="http_url_weixin">/api/auth/login</string>
     <string name="http_url_text">/api/test/post</string>
@@ -322,5 +325,6 @@
     <string name="Nobuffer">暂无缓存</string>
     <string name="Allarticle">全部文章</string>
     <string name="please_del_video">请选择要删除的视频</string>
+    <string name="suppr_suc">点赞成功</string>
 
 </resources>

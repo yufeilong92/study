@@ -50,6 +50,7 @@ import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ArticleBean;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.InfomDetailVo;
+import com.xuechuan.xcedu.vo.ResultVo;
 import com.xuechuan.xcedu.vo.UserBean;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
@@ -258,32 +259,33 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 loadMoreData();
             }
         });
+      /*  adapter.setChbClickListener(new InfomDetailAdapter.onItemChbClickListener() {
+            @Override
+            public void onChbClickListener(Object obj, boolean isChecak, int position) {
+                EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                EvalueVo.DatasBean vo = (EvalueVo.DatasBean) mArray.get(position);
+                vo.setIssupport(isChecak);
+                if (isChecak) {
+                    vo.setSupportcount(bean.getSupportcount() + 1);
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEAC);
+                    adapter.notifyItemChanged(position);
+                } else {
+                    vo.setSupportcount(bean.getSupportcount() - 1);
+                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEAC);
+                    adapter.notifyItemChanged(position);
+                }
+            }
+        });
+*/
         adapter.setClickListener(new InfomDetailAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
                 EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
                 EventBus.getDefault().postSticky(new EvalueTwoEvent(bean));
                 Intent intent = EvalueTwoActivity.newInstance(mContext,
-                        String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()),DataMessageVo.ARTICLE);
+                        String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()), DataMessageVo.ARTICLE);
                 startActivity(intent);
-            }
-        });
-        adapter.setChbClickListener(new InfomDetailAdapter.onItemChbClickListener() {
-            @Override
-            public void onChbClickListener(Object obj, boolean isChecak, int position) {
-                EvalueVo.DatasBean bean= (EvalueVo.DatasBean) obj;
-                SuppertUtil util = SuppertUtil.getInstance(mContext);
-                EvalueVo.DatasBean vo = (EvalueVo.DatasBean) mArray.get(position);
-                vo.setIssupport(isChecak);
-                if (isChecak) {
-                    vo.setSupportcount(vo.getSupportcount() + 1);
-                    util.submitSupport(String.valueOf(bean.getTargetid()),"true",DataMessageVo.USERTYPEAC);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    vo.setSupportcount(vo.getSupportcount() - 1);
-                    util.submitSupport(String.valueOf(bean.getTargetid()),"false",DataMessageVo.USERTYPEAC);
-                    adapter.notifyDataSetChanged();
-                }
             }
         });
 
@@ -340,7 +342,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void bindHearData() {
         tvHearNumber.setVisibility(View.VISIBLE);
-        tvHearNumber.setText("评论("+mArray.size()+")");
+        tvHearNumber.setText("评论(" + mArray.size() + ")");
         mliSupper.setVisibility(View.VISIBLE);
         integer = Integer.parseInt(mSupperNumber);
         chb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -447,14 +449,24 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             return;
         }
         CurrencyService currencyService = new CurrencyService(mContext);
-        currencyService.subimtSpport(mTargetid, isSupper, mType, new StringCallBackView() {
+        currencyService.subimtSpport(mTargetid, isSupper, DataMessageVo.USERTYPEA, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
-                L.w(response.body().toString());
+                String s = response.body().toString();
+                Gson gson = new Gson();
+                ResultVo vo = gson.fromJson(s, ResultVo.class);
+                if (vo.getStatus().getCode() == 200) {
+                    T.showToast(mContext, getString(R.string.suppr_suc));
+                } else {
+                    L.e(s);
+                    T.showToast(mContext, getStringWithId(R.string.net_error));
+                }
             }
 
             @Override
             public void onError(Response<String> response) {
+                L.e(response.message());
+                T.showToast(mContext, getStringWithId(R.string.net_error));
             }
         });
     }
@@ -506,6 +518,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     T.showToast(mContext, vo.getStatus().getMessage());
                 }
             }
+
             @Override
             public void onError(Response<String> response) {
 

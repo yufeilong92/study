@@ -224,7 +224,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
             public void OnBannerClick(int position) {
                 BannerBean bean = beanList.get(position - 1);
                 if (!StringUtil.isEmpty(bean.getGourl()))
-                    AgreementActivity.newInstance(mContext, bean.getGourl());
+                    mContext.startActivity(AgreementActivity.newInstance(mContext, bean.getGourl()));
 
             }
         });

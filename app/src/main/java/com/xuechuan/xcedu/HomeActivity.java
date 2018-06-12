@@ -19,7 +19,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.fragment.BankFragment;
@@ -27,7 +31,9 @@ import com.xuechuan.xcedu.fragment.HomesFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
+import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.vo.VideoSettingVo;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -68,10 +74,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private String mType;
     private NoScrollViewPager mViewpageContetn;
     private MagicIndicator mMagicindicatorHome;
-    public  static String LOGIN_HOME="loginhome";
+    public static String LOGIN_HOME = "loginhome";
     private String mLoginType;
-    public static String mHomeMeType="4";
-    public static String Type="4";
+    public static String mHomeMeType = "4";
+    public static String Type = "4";
 
     @Override
     protected void onDestroy() {
@@ -117,6 +123,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mViewpageContetn.setCurrentItem(2);
             }
         }*/
+
+
     }
 
     @Override
@@ -128,9 +136,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             } else if (mType.equals(VIDEO)) {
                 mViewpageContetn.setCurrentItem(2);
             }
-        }else if (!StringUtil.isEmpty(mLoginType)&&mLoginType.equals(LOGIN_HOME)){
+        } else if (!StringUtil.isEmpty(mLoginType) && mLoginType.equals(LOGIN_HOME)) {
             mViewpageContetn.setCurrentItem(0);
-        }else if (!StringUtil.isEmpty(mType)&&mType.equals(mHomeMeType)){
+        } else if (!StringUtil.isEmpty(mType) && mType.equals(mHomeMeType)) {
             mViewpageContetn.setCurrentItem(3);
         }
 
@@ -139,8 +147,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-        mLoginType="";
-        mType="";
+        mLoginType = "";
+        mType = "";
 
     }
 
@@ -148,7 +156,35 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         List<Fragment> fragments = getcreateFragment();
         MyTagPagerAdapter adapter = new MyTagPagerAdapter(getSupportFragmentManager(), fragments);
         mViewpageContetn.setAdapter(adapter);
+        requestVideoSetting();
 
+    }
+
+    private void requestVideoSetting() {
+        String videoSetting = mContext.getResources().getString(R.string.http_video_setting);
+        String http = mContext.getResources().getString(R.string.app_content_heat);
+        String concat = http.concat(videoSetting);
+        OkGo.<String>get(concat)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String com = response.body().toString();
+                        L.e("视频设置=="+com);
+                        Gson gson = new Gson();
+                        VideoSettingVo vo = gson.fromJson(com, VideoSettingVo.class);
+                        if (vo.getStatus().getCode() == 200) {
+                            if (vo.getData() == null) {
+                                return;
+                            }
+                            MyAppliction.getInstance().saveVideoSetting(vo.getData());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                    }
+                });
     }
 
     private void initMagicIndicator1() {

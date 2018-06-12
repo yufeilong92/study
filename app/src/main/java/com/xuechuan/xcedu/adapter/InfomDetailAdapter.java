@@ -8,13 +8,16 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
+import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.EvalueVo;
@@ -85,13 +88,10 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
 
     @Override
     public void onBindViewHolder(final ViewHoler holder, final int position, boolean isItem) {
+
         final EvalueVo.DatasBean bean = mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
-        if (bean.isIssupport()) {
-            holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
-        } else {
-            holder.mChbEvaluaIssupper.setText("赞");
-        }
+        holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());
@@ -102,15 +102,34 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
             MyAppliction.getInstance().displayImages(holder.mIvEvaluateHear, bean.getHeadicon(), true);
         }
 
+        holder.mChbEvaluaIssupper.getParent().requestDisallowInterceptTouchEvent(true);
         holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!holder.mChbEvaluaIssupper.isPressed()) return;
-                if (clickChbListener != null) {
-                    clickChbListener.onChbClickListener(bean, isChecked, position);
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                int number = Integer.valueOf((String) holder.mChbEvaluaIssupper.getText().toString());
+                if (isChecked) {
+                    holder.mChbEvaluaIssupper.setText((number + 1) + "");
+                    util.submitSupport(String.valueOf(bean.getId()), "true", DataMessageVo.USERTYPEAC);
+                } else {
+                    if (number <= 0) {
+                        holder.mChbEvaluaIssupper.setText((0) + "");
+                    } else {
+                        holder.mChbEvaluaIssupper.setText((number - 1) + "");
+                    }
+                    util.submitSupport(String.valueOf(bean.getId()), "false", DataMessageVo.USERTYPEAC);
+//                    notifyItemChanged(position);
                 }
             }
+
+        /*         if (!holder.mChbEvaluaIssupper.isPressed()) return;
+                if (clickChbListener != null) {
+
+                    clickChbListener.onChbClickListener(bean, isChecked, position);
+                }
+            }*/
         });
+
 
         holder.mTvEvalueEvalue.setText(bean.getCommentcount() + "");
         holder.itemView.setTag(bean);
@@ -141,6 +160,8 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
             this.mTvEvalueEvalue = (TextView) itemView.findViewById(R.id.tv_evalue_evalue);
             this.mChbEvaluaIssupper = (CheckBox) itemView.findViewById(R.id.chb_evalua_issupper);
             this.mTvEvalueSuppernumber = (TextView) itemView.findViewById(R.id.tv_evalue_suppernumber);
+
+
         }
     }
 

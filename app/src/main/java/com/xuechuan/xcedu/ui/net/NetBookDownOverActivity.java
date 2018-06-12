@@ -95,9 +95,40 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         initView();
         mDao = DbHelperDownAssist.getInstance();
         initData();
-
+        bindAdapter();
     }
 
+     private void bindViewData(){
+         mVideoDb = mDao.queryUserDownInfomWithKid(mKid);
+         if (mVideoDb == null) {
+             mTvInfomEmpty.setVisibility(View.VISIBLE);
+             mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
+             mTvNetDownInfomMake.setVisibility(View.GONE);
+             return;
+         }
+         List<DownVideoVo> dbDownlist = mVideoDb.getDownlist();
+         List<DownVideoVo> vos = new ArrayList<>();
+         for (int i = 0; i < dbDownlist.size(); i++) {
+             DownVideoVo vo = dbDownlist.get(i);
+             if (vo.getStatus().equals("0")) {
+                 vos.add(vo);
+             }
+         }
+         if (vos != null && !vos.isEmpty()) {
+             long count = 0;
+             for (DownVideoVo vo : vos) {
+                 if (vo.getStatus().equals("0")) {
+                     long fileSize = vo.getFileSize();
+                     count += fileSize;
+                 }
+             }
+             mCount = Utils.convertFileSizeB(count);
+             mNumber = vos.size();
+         }
+         mTvDownBookInfomeName.setText(mVideoDb.getKName());
+         mTvNetDownInfomeCout.setText(mCount);
+         mTvNetDownInfomeNumber.setText(mNumber + "");
+     }
     private void initData() {
         mVideoDb = mDao.queryUserDownInfomWithKid(mKid);
         if (mVideoDb == null) {
@@ -128,6 +159,9 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             mCount = Utils.convertFileSizeB(count);
             mNumber = downlist.size();
         }
+        mTvDownBookInfomeName.setText(mVideoDb.getKName());
+        mTvNetDownInfomeCout.setText(mCount);
+        mTvNetDownInfomeNumber.setText(mNumber + "");
         mDataSelectList = new ArrayList<>();
         for (DownVideoVo vo : mVideoDb.getDownlist()) {
             DownInfomSelectVo selectVo = new DownInfomSelectVo();
@@ -141,10 +175,6 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             selectVo.setPlaySelect(false);
             mDataSelectList.add(selectVo);
         }
-        bindAdapter();
-        mTvDownBookInfomeName.setText(mVideoDb.getKName());
-        mTvNetDownInfomeCout.setText(mCount);
-        mTvNetDownInfomeNumber.setText(mNumber + "");
         MyAppliction.getInstance().displayImages(mIvNetDownInfomImg, mVideoDb.getUrlImg(), false);
         mChbNetDownInfomeAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -257,6 +287,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                                 delectVideo(selectVo.getVid(), selectVo.getBitrate());
                             }
                         }
+                        bindViewData();
                         mInfomAdapter.notifyDataSetChanged();
                     }
 

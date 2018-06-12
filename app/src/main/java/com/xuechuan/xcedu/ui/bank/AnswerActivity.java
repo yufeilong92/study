@@ -1879,9 +1879,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             setTvColor(mTvBCContent);
             setTvColor(mTvBDContent);
             setTvColor(mTvBEContent);
+        } else if (mSelectViewBgZC.equals(mSelectViewBgHY)) {
+            setTvColor(mTvBAContent);
+            setTvColor(mTvBBContent);
+            setTvColor(mTvBCContent);
+            setTvColor(mTvBDContent);
+            setTvColor(mTvBEContent);
         }
         mBtnBSureKey.setBackgroundResource(R.drawable.btn_b_sure_n);
-
     }
 
 
@@ -2017,38 +2022,43 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void updataRightQuestion(UserLookVo vo) {
-        ArrayList<UserLookVo> data = new ArrayList<>();
-        if (data != null || !data.isEmpty()) {
-            data.clear();
-        }
-        data.add(vo);
         if (!StringUtil.isEmpty(mTagType) && mTagType.equals(ERRTYPE)) {//错题模式
+            ArrayList<UserLookVo> data = new ArrayList<>();
+            if (data != null || !data.isEmpty()) {
+                data.clear();
+            }
+            data.add(vo);
             UserInfomDb db = DbHelperAssist.getInstance().queryWithuuUserInfom();
             if (mCouresidUser.equals("1")) {//技术
                 if (db == null) {
                     return;
                 }
+                //更新数据库
                 DbHelperAssist.getInstance().upDataWoringSkill(data);
+                //查询
+                db = DbHelperAssist.getInstance().queryWithuuUserInfom();
                 String delectQuestion = db.getDelectQuestion();
                 List<UserLookVo> skill = db.getWrongDataSkill();
-                delectWroingQuestion(delectQuestion, skill);
+                delectWroingQuestion(delectQuestion, skill, vo.getChapterId());
             } else if (mCouresidUser.equals("2")) {//综合
                 if (db == null) {
                     return;
                 }
                 DbHelperAssist.getInstance().updataWoringColoct(data);
+                db = DbHelperAssist.getInstance().queryWithuuUserInfom();
                 String delectQuestion = db.getDelectQuestion();
                 List<UserLookVo> colo = db.getWrongDataColoct();
-                delectWroingQuestion(delectQuestion, colo);
+                delectWroingQuestion(delectQuestion, colo, vo.getChapterId());
 
             } else if (mCouresidUser.equals("3")) {//案例
                 if (db == null) {
                     return;
                 }
                 DbHelperAssist.getInstance().updateWoringCase(data);
+                db = DbHelperAssist.getInstance().queryWithuuUserInfom();
                 String delectQuestion = db.getDelectQuestion();
                 List<UserLookVo> caselist = db.getWrongDataCase();
-                delectWroingQuestion(delectQuestion, caselist);
+                delectWroingQuestion(delectQuestion, caselist, vo.getChapterId());
             }
 
         }
@@ -2056,24 +2066,30 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     /***
      * 提交删除错题
-     * @param delectQuestion
+     * @param delectQuestion 几次移除错误
      * @param skill
      */
-    private void delectWroingQuestion(String delectQuestion, List<UserLookVo> skill) {
+    private void delectWroingQuestion(String delectQuestion, List<UserLookVo> skill, String id) {
         if (skill == null || skill.isEmpty()) {
             return;
         }
         if (StringUtil.isEmpty(delectQuestion)) {
             for (UserLookVo userLookVo : skill) {
-                String nextId = userLookVo.getNextId();
-                if (nextId.equals("3")) {//发送移除
+                String count = userLookVo.getNextId();
+                if (count.equals("3")) {//发送移除
                     mPresnter.submitWoringQeustinDelect(mContext, userLookVo.getChapterId());
                     DbHelperAssist.getInstance().delectDBWring(userLookVo.getChapterId(), mCouresidUser);
                 }
             }
         } else {
-            for (UserLookVo vo : skill) {
-                if (vo.getNextId().equals(delectQuestion)) {
+            for (int i = 0; i < skill.size(); i++) {
+                UserLookVo vo = skill.get(i);
+                if (StringUtil.isEmpty(vo.getNextId())) {
+                    continue;
+                }
+                int count = Integer.parseInt(vo.getNextId());
+                int set = Integer.parseInt(delectQuestion);
+                if (vo.getNextId() != null && id.equals(vo.getChapterId()) && count >= set) {
                     mPresnter.submitWoringQeustinDelect(mContext, vo.getChapterId());
                     DbHelperAssist.getInstance().delectDBWring(vo.getChapterId(), mCouresidUser);
                 }
@@ -3616,7 +3632,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         vos.add(userLookVo);
                     }
                     DbHelperAssist.getInstance().saveWoringCase(vos);
-
+//
                 }
             }
             mTextDetial = list;

@@ -11,19 +11,20 @@ package com.xuechuan.xcedu.Event;
  * @Copyright: 2018
  */
 public class RefreshPlayIconEvent {
-    public String vid;
-    public int index;
 
-    public RefreshPlayIconEvent(String vid, int index) {
+    public String vid;
+    public String name;
+
+    public RefreshPlayIconEvent(String vid, String name) {
         this.vid = vid;
-        this.index = index;
+        this.name = name;
     }
 
     public String getVid() {
         return vid;
     }
 
-    public int getIndex() {
-        return index;
+    public String getName() {
+        return name;
     }
 }

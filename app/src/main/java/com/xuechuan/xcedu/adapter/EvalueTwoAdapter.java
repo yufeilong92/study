@@ -71,13 +71,13 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, boolean isItem) {
+    public void onBindViewHolder(final ViewHolder holder, int position, boolean isItem) {
         final CommentcommentsVo bean = (CommentcommentsVo) mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
         if (bean.isIssupport()) {
             holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
         } else {
-            holder.mTvEvalueSuppernumber.setText("赞");
+            holder.mTvEvalueSuppernumber.setText("0");
         }
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
@@ -93,9 +93,12 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SuppertUtil util = SuppertUtil.getInstance(mContext);
+                int nubmer = Integer.parseInt(holder.mTvEvalueSuppernumber.getText().toString());
                 if (isChecked) {
+                    holder.mTvEvalueSuppernumber.setText((nubmer + 1) + "");
                     util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEAC);
                 } else {
+                    holder.mTvEvalueSuppernumber.setText((nubmer - 1) + "");
                     util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEAC);
                 }
 

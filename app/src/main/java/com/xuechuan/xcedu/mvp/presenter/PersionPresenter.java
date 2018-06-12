@@ -42,16 +42,15 @@ public class PersionPresenter implements PersionContract.Presenter {
         model.submitPersionInfom(context, nickname, gender, birthday, province, city, new RequestResulteView() {
             @Override
             public void success(String result) {
-                if (mDialog != null || mDialog.isShowing())
+                if (mDialog != null && mDialog.isShowing())
                     mDialog.dismiss();
                 view.SubmitPersionSuccess(result);
             }
 
             @Override
             public void error(String result) {
-                if (mDialog != null || mDialog.isShowing())
+                if (mDialog != null && mDialog.isShowing())
                     mDialog.dismiss();
-                mDialog.dismiss();
                 view.SubmitPersionError(result);
             }
         });

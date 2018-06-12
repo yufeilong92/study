@@ -45,6 +45,7 @@ import com.xuechuan.xcedu.service.SubmitHearService;
 import com.xuechuan.xcedu.service.SubmitProgressService;
 import com.xuechuan.xcedu.utils.AddressPickTask;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.FileUtil;
 import com.xuechuan.xcedu.utils.ImageUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -557,6 +558,8 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
+            File file = new File(mPath);
+            file.delete();
             SubmitHearService.startActionBaz(mContext, 10000, "上传完成");
 
         } else {

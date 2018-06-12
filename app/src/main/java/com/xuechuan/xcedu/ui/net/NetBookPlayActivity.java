@@ -47,17 +47,19 @@ import com.xuechuan.xcedu.player.player.PolyvPlayerProgressView;
 import com.xuechuan.xcedu.player.player.PolyvPlayerVolumeView;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
 import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
+import com.xuechuan.xcedu.vo.VideoSettingVo;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 /**
- * @Title:  NetBookPlayActivity
+ * @version V 1.0 xxxxxxxx
+ * @Title: NetBookPlayActivity
  * @Package com.xuechuan.xcedu.ui.net
  * @Description: 离线播放页
  * @author: L-BackPacker
- * @date:   2018/5/21 10:43
- * @version V 1.0 xxxxxxxx
- * @verdescript  版本号 修改时间  修改人 修改的概要说明
+ * @date: 2018/5/21 10:43
+ * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/21
  */
 public class NetBookPlayActivity extends BaseActivity {
@@ -110,7 +112,7 @@ public class NetBookPlayActivity extends BaseActivity {
         initView();
 
         PolyvScreenUtils.generateHeight16_9(this);
-        PolyvScreenUtils.initTitleBar(ll_title_bar,null,null);
+        PolyvScreenUtils.initTitleBar(ll_title_bar, null, null);
         int playModeCode = getIntent().getIntExtra("playMode", NetBookPlayActivity.PlayMode.portrait.getCode());
         NetBookPlayActivity.PlayMode playMode = NetBookPlayActivity.PlayMode.getPlayMode(playModeCode);
         if (playMode == null)
@@ -127,11 +129,8 @@ public class NetBookPlayActivity extends BaseActivity {
                 mediaController.changeToPortrait();
                 break;
         }
-        play(vid,bitrate,startNow,isMustFromLocal);
+        play(vid, bitrate, startNow, isMustFromLocal);
     }
-
-
-
 
 
     private void findIdAndNew() {
@@ -145,26 +144,58 @@ public class NetBookPlayActivity extends BaseActivity {
         volumeView = (PolyvPlayerVolumeView) findViewById(R.id.polyv_player_volume_view);
         progressView = (PolyvPlayerProgressView) findViewById(R.id.polyv_player_progress_view);
         loadingProgress = (ProgressBar) findViewById(R.id.loading_progress);
-        mediaController.initTitltBar(ll_title_bar,null,null);
+        mediaController.initTitltBar(ll_title_bar, null, null);
         mediaController.initConfig(viewLayout);
         videoView.setMediaController(mediaController);
         videoView.setPlayerBufferingIndicator(loadingProgress);
         // 设置跑马灯
+        int Duration = 10000;
+        int textSize = 18;
+        int style = PolyvMarqueeItem.STYLE_ROLL;
+        String textColor = "#DC143C";
+        int TextAlpha = 70;
+        int Interval = 10000;
+        int LifeTime = 10000;
+        int TweenTime = 10000;
+        if (MyAppliction.getInstance().getVideoSet() != null) {
+            VideoSettingVo.DataBean set = MyAppliction.getInstance().getVideoSet();
+            switch (set.getStyle()) {
+                case 1:
+                    style = PolyvMarqueeItem.STYLE_ROLL;
+                    break;
+                case 2:
+                    style = PolyvMarqueeItem.STYLE_FLICK;
+                    break;
+                case 3:
+                    style = PolyvMarqueeItem.STYLE_ROLL_FLICK;
+                    break;
+
+            }
+            Duration = set.getDuration();
+            textSize = set.getTextsize();
+            textColor = set.getTextcolor();
+            TextAlpha = set.getTextalpha();
+            Interval = set.getInterval();
+            LifeTime = set.getLifetime();
+            TweenTime = set.getTweentime();
+
+        }
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
-                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
-                .setDuration(10000) //时长
+                .setStyle(style) //样式
+                .setDuration(Duration) //时长
                 .setText(MyAppliction.getInstance().getUserData().getData().getPhone()) //文本
-                .setSize(16) //字体大小
-                .setColor(Color.YELLOW) //字体颜色
-                .setTextAlpha(70) //字体透明度
-                .setInterval(30000) //隐藏时间
-                .setLifeTime(10000) //显示时间
-                .setTweenTime(1000) //渐隐渐现时间
+                .setSize(textSize) //字体大小
+                .setColor(Color.parseColor(textColor)) //字体颜色
+                .setTextAlpha(TextAlpha) //字体透明度
+                .setInterval(Interval) //隐藏时间
+                .setLifeTime(LifeTime) //显示时间
+                .setTweenTime(TweenTime) //渐隐渐现时间
                 .setHasStroke(true) //是否有描边
                 .setBlurStroke(true) //是否模糊描边
                 .setStrokeWidth(3) //描边宽度
                 .setStrokeColor(Color.MAGENTA) //描边颜色
                 .setStrokeAlpha(70)); //描边透明度
+
     }
 
     private void initView() {
@@ -250,16 +281,12 @@ public class NetBookPlayActivity extends BaseActivity {
         });
 
 
-
-
         videoView.setOnQuestionAnswerTipsListener(new IPolyvOnQuestionAnswerTipsListener() {
 
             @Override
             public void onTips(@NonNull String msg) {
             }
         });
-
-
 
 
         videoView.setOnGestureLeftUpListener(new IPolyvOnGestureLeftUpListener() {
@@ -418,7 +445,6 @@ public class NetBookPlayActivity extends BaseActivity {
         volumeView.hide();
         lightView.hide();
     }
-
 
 
     @Override

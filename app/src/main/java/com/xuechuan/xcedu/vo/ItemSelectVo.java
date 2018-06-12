@@ -13,6 +13,9 @@ package com.xuechuan.xcedu.vo;
 public class ItemSelectVo {
     private String id;
     private boolean isSelect;
+    /**
+     * 保利视频id
+     */
     private String videoid;
 
     public String getId() {

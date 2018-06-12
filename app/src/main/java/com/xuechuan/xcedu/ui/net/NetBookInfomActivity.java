@@ -68,6 +68,7 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.ClassBeanVideoVo;
 import com.xuechuan.xcedu.vo.NetBookTableVo;
+import com.xuechuan.xcedu.vo.VideoSettingVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
 
@@ -313,21 +314,54 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         videoView.setMediaController(mediaController);
         videoView.setPlayerBufferingIndicator(loadingProgress);
         // 设置跑马灯
+        int Duration = 10000;
+        int textSize = 18;
+        int style=PolyvMarqueeItem.STYLE_ROLL;
+        String textColor = "#DC143C";
+        int TextAlpha = 70;
+        int Interval = 10000;
+        int LifeTime = 10000;
+        int TweenTime = 10000;
+        if (MyAppliction.getInstance().getVideoSet() != null) {
+            VideoSettingVo.DataBean set = MyAppliction.getInstance().getVideoSet();
+            switch(set.getStyle())
+            {
+                case 1:
+                    style=PolyvMarqueeItem.STYLE_ROLL;
+                    break;
+                case 2:
+                    style=PolyvMarqueeItem.STYLE_FLICK;
+                    break;
+                case 3:
+                    style=PolyvMarqueeItem.STYLE_ROLL_FLICK;
+                    break;
+
+            }
+            Duration = set.getDuration();
+            textSize = set.getTextsize();
+            textColor = set.getTextcolor();
+            TextAlpha = set.getTextalpha();
+            Interval = set.getInterval();
+            LifeTime = set.getLifetime();
+            TweenTime = set.getTweentime();
+
+        }
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
-                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
-                .setDuration(10000) //时长
+                .setStyle(style) //样式
+                .setDuration(Duration) //时长
                 .setText(MyAppliction.getInstance().getUserData().getData().getPhone()) //文本
-                .setSize(16) //字体大小
-                .setColor(Color.YELLOW) //字体颜色
-                .setTextAlpha(70) //字体透明度
-                .setInterval(30000) //隐藏时间
-                .setLifeTime(1000) //显示时间
-                .setTweenTime(1000) //渐隐渐现时间
+                .setSize(textSize) //字体大小
+                .setColor(Color.parseColor(textColor)) //字体颜色
+                .setTextAlpha(TextAlpha) //字体透明度
+                .setInterval(Interval) //隐藏时间
+                .setLifeTime(LifeTime) //显示时间
+                .setTweenTime(TweenTime) //渐隐渐现时间
                 .setHasStroke(true) //是否有描边
                 .setBlurStroke(true) //是否模糊描边
                 .setStrokeWidth(3) //描边宽度
                 .setStrokeColor(Color.MAGENTA) //描边颜色
                 .setStrokeAlpha(70)); //描边透明度
+
     }
 
 

@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.utils;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.mvp.contract.SupportContract;
 import com.xuechuan.xcedu.mvp.model.SupportModel;
 import com.xuechuan.xcedu.mvp.presenter.SupportPresenter;
@@ -53,13 +54,15 @@ public class SuppertUtil implements SupportContract.View {
 //                T.showToast(mContext, "取消成功");
             }
         } else {
+//            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
         }
     }
 
     @Override
     public void SupportErr(String con) {
-
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+        L.e(con);
     }
 
 

@@ -26,11 +26,13 @@ import java.util.List;
  */
 public class DbHelperAssist {
 
-    private final UserInfomDbDao dao;
+    private UserInfomDbDao dao;
     private static DbHelperAssist assist = null;
 
     public DbHelperAssist() {
-           dao = DBHelper.getDaoSession().getUserInfomDbDao();
+        if (dao == null) {
+            dao = DBHelper.getDaoSession().getUserInfomDbDao();
+        }
 
     }
 
@@ -380,8 +382,7 @@ public class DbHelperAssist {
         if (mdata == null || mdata.isEmpty()) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
@@ -392,26 +393,41 @@ public class DbHelperAssist {
             skillData = mdata;
             for (int i = 0; i < skillData.size(); i++) {
                 UserLookVo vo = skillData.get(i);
+                vo.setChapterId(vo.getChapterId());
                 vo.setNextId("1");
             }
 
         } else {
+            boolean isSave = false;
+            int numbers = -1;
             for (int i = 0; i < skillData.size(); i++) {
                 UserLookVo woringvo = skillData.get(i);
                 for (int i1 = 0; i1 < mdata.size(); i1++) {
-                    if (woringvo.getChapterId().equals(woringvo.getChapterId())) {
-                        String nextId = woringvo.getNextId();
-                        if (StringUtil.isEmpty(nextId)) {
-                            woringvo.setNextId("1");
-                        } else {
-                            int number = Integer.parseInt(nextId);
-                            number += 1;
-                            woringvo.setNextId(String.valueOf(number));
-                        }
+                    UserLookVo userLookVo = mdata.get(i1);
+                    if (woringvo.getChapterId().equals(userLookVo.getChapterId())) {
+                        isSave = true;
+                        numbers = i;
                     }
                 }
             }
+            if (isSave) {
+                UserLookVo vo = skillData.get(numbers);
+                String nextId = vo.getNextId();
+                if (StringUtil.isEmpty(nextId)) {
+                    vo.setNextId("1");
+                } else {
+                    int number = Integer.parseInt(nextId);
+                    number += 1;
+                    vo.setNextId(number + "");
+                }
+            } else {
+                UserLookVo vo = mdata.get(0);
+                vo.setNextId("1");
+                skillData.add(vo);
+            }
+
         }
+
         infomDb.setWrongDataSkill(skillData);
         dao.update(infomDb);
     }
@@ -424,8 +440,7 @@ public class DbHelperAssist {
         if (mdata == null || mdata.isEmpty()) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
@@ -436,24 +451,38 @@ public class DbHelperAssist {
             caselData = mdata;
             for (int i = 0; i < caselData.size(); i++) {
                 UserLookVo vo = caselData.get(i);
+                vo.setChapterId(vo.getChapterId());
                 vo.setNextId("1");
             }
         } else {
+            boolean isSave = false;
+            int numbers = -1;
             for (int i = 0; i < caselData.size(); i++) {
                 UserLookVo woringvo = caselData.get(i);
                 for (int i1 = 0; i1 < mdata.size(); i1++) {
-                    if (woringvo.getChapterId().equals(woringvo.getChapterId())) {
-                        String nextId = woringvo.getNextId();
-                        if (StringUtil.isEmpty(nextId)) {
-                            woringvo.setNextId("1");
-                        } else {
-                            int number = Integer.parseInt(nextId);
-                            number += 1;
-                            woringvo.setNextId(String.valueOf(number));
-                        }
+                    UserLookVo userLookVo = mdata.get(i1);
+                    if (woringvo.getChapterId().equals(userLookVo.getChapterId())) {
+                        isSave = true;
+                        numbers = i;
                     }
                 }
             }
+            if (isSave) {
+                UserLookVo vo = caselData.get(numbers);
+                String nextId = vo.getNextId();
+                if (StringUtil.isEmpty(nextId)) {
+                    vo.setNextId("1");
+                } else {
+                    int number = Integer.parseInt(nextId);
+                    number += 1;
+                    vo.setNextId(number + "");
+                }
+            } else {
+                UserLookVo vo = mdata.get(0);
+                vo.setNextId("1");
+                caselData.add(vo);
+            }
+
         }
         infomDb.setWrongDataCase(caselData);
         dao.update(infomDb);
@@ -468,8 +497,7 @@ public class DbHelperAssist {
         if (mdata == null || mdata.isEmpty()) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
@@ -480,23 +508,36 @@ public class DbHelperAssist {
             colocData = mdata;
             for (int i = 0; i < colocData.size(); i++) {
                 UserLookVo vo = colocData.get(i);
+                vo.setChapterId(vo.getChapterId());
                 vo.setNextId("1");
             }
         } else {
+            boolean isSave = false;
+            int numbers = -1;
             for (int i = 0; i < colocData.size(); i++) {
                 UserLookVo woringvo = colocData.get(i);
                 for (int i1 = 0; i1 < mdata.size(); i1++) {
-                    if (woringvo.getChapterId().equals(woringvo.getChapterId())) {
-                        String nextId = woringvo.getNextId();
-                        if (StringUtil.isEmpty(nextId)) {
-                            woringvo.setNextId("1");
-                        } else {
-                            int number = Integer.parseInt(nextId);
-                            number += 1;
-                            woringvo.setNextId(String.valueOf(number));
-                        }
+                    UserLookVo userLookVo = mdata.get(i1);
+                    if (woringvo.getChapterId().equals(userLookVo.getChapterId())) {
+                        isSave = true;
+                        numbers = i;
                     }
                 }
+            }
+            if (isSave) {
+                UserLookVo vo = colocData.get(numbers);
+                String nextId = vo.getNextId();
+                if (StringUtil.isEmpty(nextId)) {
+                    vo.setNextId("1");
+                } else {
+                    int number = Integer.parseInt(nextId);
+                    number += 1;
+                    vo.setNextId(number + "");
+                }
+            } else {
+                UserLookVo vo = mdata.get(0);
+                vo.setNextId("1");
+                colocData.add(vo);
             }
         }
         infomDb.setWrongDataColoct(colocData);
@@ -512,8 +553,7 @@ public class DbHelperAssist {
         if (mdata == null || mdata.isEmpty()) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
@@ -551,8 +591,7 @@ public class DbHelperAssist {
         if (mdata == null || mdata.isEmpty()) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
@@ -591,8 +630,7 @@ public class DbHelperAssist {
         if (mdata == null || mdata.isEmpty()) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
             saveUserInfom(userInfom);
@@ -624,15 +662,14 @@ public class DbHelperAssist {
 
     /***
      * 删除满足条件id
-     * @param id id
+     * @param id id //章节id
      * @param mark 类型
      */
     public void delectDBWring(String id, String mark) {
         if (StringUtil.isEmpty(id)) {
             return;
         }
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
+        UserInfomDb infomDb = queryWithuuUserInfom();
         if (infomDb == null) {
             return;
         }
@@ -647,6 +684,7 @@ public class DbHelperAssist {
                     skill.remove(i);
                 }
             }
+
             infomDb.setWrongDataSkill(skill);
             dao.update(infomDb);
         }

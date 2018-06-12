@@ -28,8 +28,9 @@
         android:id="@+id/web_agreenement"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/space_16"
-        android:layout_marginRight="@dimen/space_16"
+
+        android:paddingLeft="@dimen/space_16"
+        android:paddingRight="@dimen/space_16"
         android:visibility="gone">
 
     </WebView>

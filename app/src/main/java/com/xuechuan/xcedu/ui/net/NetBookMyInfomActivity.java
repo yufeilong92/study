@@ -59,6 +59,7 @@ import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
+import com.xuechuan.xcedu.Event.RefreshPlayIconEvent;
 import com.xuechuan.xcedu.Event.VideoIdEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
@@ -96,6 +97,7 @@ import com.xuechuan.xcedu.vo.ClassBeanVideoVo;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.NetBookTableVo;
+import com.xuechuan.xcedu.vo.VideoSettingVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
 import com.xuechuan.xcedu.weight.NoScrollViewPager;
@@ -209,6 +211,12 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //回来后继续播放
@@ -252,12 +260,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         }
         MyAppliction.getInstance().setIsPlay(false);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     public static Intent newInstance(Context context, String classid) {
@@ -365,6 +367,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 for (UserLookVideoVo vo : lookVideoVos) {
                     if (vo.getKid().equals(mClassId)) {
                         vid = vo.getVid();
+                        mTitleName = vo.getTitleName();
                         videoProgress = Integer.parseInt(vo.getProgress());
                         iscontinue = true;
                     }
@@ -441,16 +444,48 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         videoView.setMediaController(mediaController);
         videoView.setPlayerBufferingIndicator(loadingProgress);
         // 设置跑马灯
+        int Duration = 10000;
+        int textSize = 18;
+        int style=PolyvMarqueeItem.STYLE_ROLL;
+        String textColor = "#DC143C";
+        int TextAlpha = 70;
+        int Interval = 10000;
+        int LifeTime = 10000;
+        int TweenTime = 10000;
+        if (MyAppliction.getInstance().getVideoSet() != null) {
+            VideoSettingVo.DataBean set = MyAppliction.getInstance().getVideoSet();
+            switch(set.getStyle())
+            {
+                case 1:
+                    style=PolyvMarqueeItem.STYLE_ROLL;
+                    break;
+                case 2:
+                    style=PolyvMarqueeItem.STYLE_FLICK;
+                    break;
+                case 3:
+                    style=PolyvMarqueeItem.STYLE_ROLL_FLICK;
+                    break;
+
+            }
+            Duration = set.getDuration();
+            textSize = set.getTextsize();
+            textColor = set.getTextcolor();
+            TextAlpha = set.getTextalpha();
+            Interval = set.getInterval();
+            LifeTime = set.getLifetime();
+            TweenTime = set.getTweentime();
+
+        }
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
-                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
-                .setDuration(10000) //时长
+                .setStyle(style) //样式
+                .setDuration(Duration) //时长
                 .setText(MyAppliction.getInstance().getUserData().getData().getPhone()) //文本
-                .setSize(16) //字体大小
-                .setColor(Color.YELLOW) //字体颜色
-                .setTextAlpha(70) //字体透明度
-                .setInterval(30000) //隐藏时间
-                .setLifeTime(1000) //显示时间
-                .setTweenTime(1000) //渐隐渐现时间
+                .setSize(textSize) //字体大小
+                .setColor(Color.parseColor(textColor)) //字体颜色
+                .setTextAlpha(TextAlpha) //字体透明度
+                .setInterval(Interval) //隐藏时间
+                .setLifeTime(LifeTime) //显示时间
+                .setTweenTime(TweenTime) //渐隐渐现时间
                 .setHasStroke(true) //是否有描边
                 .setBlurStroke(true) //是否模糊描边
                 .setStrokeWidth(3) //描边宽度
@@ -534,7 +569,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                         Log.e(TAG, PolyvSDKUtil.getExceptionFullMessage(e1, -1));
                         return;
                     }
-
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(adMatter.getAddrUrl()));
                     startActivity(intent);
@@ -694,18 +728,18 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      */
     public void play(final String vid, final int bitrate, boolean startNow, final boolean isMustFromLocal) {
         if (TextUtils.isEmpty(vid)) return;
-        isPlayafter = true;
+
         videoView.release();
         mediaController.hide();
         loadingProgress.setVisibility(View.GONE);
         progressView.resetMaxValue();
         if (startNow) {
             //调用setVid方法视频会自动播放
-            if (iscontinue && !isPlayafter) {
-                videoView.seekTo(videoProgress);
+            if (iscontinue && !isPlayafter && !StringUtil.isEmpty(mTitleName)) {
+                EventBus.getDefault().postSticky(new RefreshPlayIconEvent(vid, mTitleName));
             }
+            isPlayafter = true;
             videoView.setVid(vid, bitrate, isMustFromLocal);
-
         }
     }
 
@@ -802,7 +836,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             bookInfmo = bean.getClassX();
             mBookList = bean.getChapters();
             bindViewData(bookInfmo, mBookList, bookInfmo.isIsall());
-
         } else {
 
             L.e(tableVo.getStatus().getMessage());
@@ -900,6 +933,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             private boolean isRuning = true;
             int downnumber = 0;
+            int downnumberOver = 0;
             private Thread thread;
             private ExecutorService executorService;
             private LinearLayout mLlPopDownDown;
@@ -940,7 +974,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                             startDown(vo);
                             mBtnPopDownRun.setVisibility(View.VISIBLE);
                             mBtnPopDownLook.setVisibility(View.GONE);
-                            mBtnPopDownRun.setText("正在缓存(" + (downnumber + vo.getDownlist().size()) + ")");
+                            mBtnPopDownRun.setText("正在缓存(" + (downnumber + downnumberOver) + ")");
                             mDownAdapter.notifyDataSetChanged();
 
                         }
@@ -977,16 +1011,16 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     List<DownVideoVo> downlist = videoDb.getDownlist();
                     for (DownVideoVo vo : downlist) {
                         if (vo.getStatus().equals("1") || vo.getStatus().equals("2")) {
-                            downnumber += 1;
+                            downnumberOver += 1;
                         }
                     }
-                    if (downnumber == 0) {
+                    if (downnumberOver == 0) {
                         mBtnPopDownRun.setVisibility(View.GONE);
                         mBtnPopDownLook.setVisibility(View.VISIBLE);
                     } else {
                         mBtnPopDownRun.setVisibility(View.VISIBLE);
                         mBtnPopDownLook.setVisibility(View.GONE);
-                        mBtnPopDownRun.setText("正在缓存(" + downnumber + ")");
+                        mBtnPopDownRun.setText("正在缓存(" + downnumberOver + ")");
                     }
                 }
                 mIvNetPopBack.setOnClickListener(new View.OnClickListener() {

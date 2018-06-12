@@ -68,7 +68,7 @@ public class HomeAllAdapter extends BaseRecyclerAdapter<HomeAllAdapter.ViewHolde
         holder.mTvItemHomeTitleAll.setText(bean.getTitle());
         holder.mTvItemHomeLookAll.setText(bean.getViewcount() + "");
         holder.mChbIsSupper.setText(bean.getSupportcount() + "");
-        if (StringUtil.isEmpty( bean.getThumbnailimg())) {
+        if (StringUtil.isEmpty(bean.getThumbnailimg())) {
             holder.mIvItemHomeAll.setVisibility(View.GONE);
         } else {
             holder.mIvItemHomeAll.setVisibility(View.VISIBLE);

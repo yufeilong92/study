@@ -96,6 +96,7 @@
         <!--android:layout_marginBottom="@dimen/space_48"-->
         <!--android:background="@color/white" />-->
         <ListView
+            android:scrollbars="none"
             android:paddingLeft="@dimen/space_16"
             android:paddingRight="@dimen/space_16"
             android:id="@+id/rlv_net_downing_list"

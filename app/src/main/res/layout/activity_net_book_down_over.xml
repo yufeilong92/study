@@ -31,15 +31,17 @@
     </LinearLayout>
 
     <View style="@style/view_line_tab_line" />
-<TextView
-    android:visibility="gone"
-    android:id="@+id/tv_infom_empty"
-    android:gravity="center"
-    android:textSize="@dimen/text_size_14"
-    android:textColor="@color/text_title_color"
-    android:text="暂无下载内容"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_infom_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="暂无下载内容"
+        android:textColor="@color/text_title_color"
+        android:textSize="@dimen/text_size_14"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,59 +107,61 @@
     </LinearLayout>
 
     <View style="@style/view_line_1" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <ScrollView
+            android:fillViewport="true"
+            android:scrollbarThumbVertical="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rlv_net_down_infome_list"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/space_16"
-                android:paddingLeft="@dimen/space_16"
-                android:paddingRight="@dimen/space_16" />
+                android:orientation="vertical">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rlv_net_down_infome_list"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/space_16"
+                    android:paddingLeft="@dimen/space_16"
+                    android:paddingRight="@dimen/space_16" />
+                <LinearLayout
+                    android:id="@+id/ll_net_down_infome_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View style="@style/view_line_tab_line" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_48"
+                        android:paddingLeft="@dimen/space_16"
+                        android:paddingRight="@dimen/space_16">
+
+                        <CheckBox
+                            android:id="@+id/chb_net_down_infome_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:button="@drawable/select_free_chb_bg"
+                            android:paddingLeft="@dimen/space_10"
+                            android:text="全选"
+                            android:textColor="@color/hint_text"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <Button
+                            android:id="@+id/btn_net_down_infome_delect"
+                            android:layout_width="@dimen/space_70"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="@dimen/space_8"
+                            android:layout_marginTop="@dimen/space_8"
+                            android:background="@drawable/btn_login_bg_normal"
+                            android:text="@string/delect"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_14" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
         </ScrollView>
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_net_down_infome_all"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
-            <View style="@style/view_line_tab_line" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_48"
-                android:paddingLeft="@dimen/space_16"
-                android:paddingRight="@dimen/space_16">
-
-                <CheckBox
-                    android:button="@drawable/select_free_chb_bg"
-                    android:id="@+id/chb_net_down_infome_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="全选"
-                    android:paddingLeft="@dimen/space_10"
-                    android:textColor="@color/hint_text"
-                    android:textSize="@dimen/text_size_14" />
-                <Button
-                    android:id="@+id/btn_net_down_infome_delect"
-                    android:layout_width="@dimen/space_70"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="@dimen/space_8"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:background="@drawable/btn_login_bg_normal"
-                    android:text="@string/delect"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_14" />
-            </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
 </LinearLayout>

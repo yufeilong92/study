@@ -88,6 +88,7 @@
                 android:id="@+id/iv_net_my_play"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_200"
+                android:scaleType="fitXY"
                 android:src="@mipmap/banner" />
 
             <ImageView

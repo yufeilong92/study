@@ -15,7 +15,10 @@ import com.xuechuan.xcedu.Event.NetMyPlayEvent;
 import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
 import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
+import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
+import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.ItemSelectVo;
 import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
@@ -45,7 +48,6 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
     private ImageView mIvNetGoorbuy;
     //    用户选中集合
     public static List<SelectVo> mSelect = new ArrayList<>();
-    private String vid;
 
     public NetMyTableAdapter(Context mContext, List<ChaptersBeanVo> mData) {
         this.mContext = mContext;
@@ -54,11 +56,27 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
         mInflater = LayoutInflater.from(mContext);
     }
 
-    public void refreshData(String vid) {
-        this.vid = vid;
-        for (int i = 0; i < mSelect.size(); i++) {
-
+    public void refreshData(String vid, String name) {
+        int Zid = -1;
+        int Bvid = -1;
+        for (int i = 0; i < mData.size(); i++) {
+            ChaptersBeanVo vo = mData.get(i);
+            for (int k = 0; k < vo.getVideos().size(); k++) {
+                VideosBeanVo beanVo = vo.getVideos().get(k);
+                if (beanVo.getVid().equals(vid) && beanVo.getVideoname().equals(name)) {
+                    Bvid = k;
+                    Zid = i;
+                    break;
+                }
+            }
         }
+        if (Zid == -1 && Bvid == -1) {
+            return;
+        }
+        init(mData);
+        SelectVo vo1 = mSelect.get(Zid);
+        ItemSelectVo itemSelect = vo1.getData().get(Bvid);
+        itemSelect.setSelect(true);
         notifyDataSetChanged();
     }
 

@@ -38,6 +38,7 @@ import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.vo.HttpInfomVo;
 import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
+import com.xuechuan.xcedu.vo.VideoSettingVo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -395,4 +396,13 @@ public class MyAppliction extends MultiDexApplication {
         return SelectNetStaus;
     }
 
+    private VideoSettingVo.DataBean vo;
+
+    public void saveVideoSetting(VideoSettingVo.DataBean vo) {
+        this.vo = vo;
+    }
+
+    public VideoSettingVo.DataBean getVideoSet() {
+        return vo;
+    }
 }
