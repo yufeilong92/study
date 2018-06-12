@@ -2,8 +2,13 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.Formatter;
@@ -28,6 +33,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.model.Progress;
+import com.xuechuan.xcedu.MainActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -39,6 +45,7 @@ import com.xuechuan.xcedu.service.SubmitHearService;
 import com.xuechuan.xcedu.service.SubmitProgressService;
 import com.xuechuan.xcedu.utils.AddressPickTask;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.ImageUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -46,6 +53,7 @@ import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -104,6 +112,8 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     private PerInfomVo.DataBean mInfomVo;
     private AlertDialog mDialog;
     private ArrayList<String> mPathlist;
+    private String mPath;
+    private AlertDialog imgDialgo;
 
     /*@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -347,6 +357,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void openAlbum() {
+
         PictureSelector.create(PersionActivity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(themid)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
@@ -364,14 +375,14 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 //                .enableCrop(cb_crop.isChecked())// 是否裁剪
                 .compress(true)// 是否压缩
                 .synOrAsy(true)//同步true或异步false 压缩 默认同步
-                //.compressSavePath(getPath())//压缩图片保存地址
+                .compressSavePath(getPath())//压缩图片保存地址
                 //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                 .glideOverride(480, 480)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
 //                .isGif(cb_isGif.isChecked())// 是否显示gif图片
 //                .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
-//                .circleDimmedLayer(cb_crop_circular.isChecked())// 是否圆形裁剪
+                .circleDimmedLayer(true)// 是否圆形裁剪
 //                .showCropFrame(cb_showCropFrame.isChecked())// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
 //                .showCropGrid(cb_showCropGrid.isChecked())// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
 //                .openClickSound(cb_voice.isChecked())// 是否开启点击声音
@@ -382,7 +393,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 //.previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
                 .cropCompressQuality(90)// 裁剪压缩质量 默认100
                 .minimumCompressSize(100)// 小于100kb的图片不压缩
-                //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
+//                .cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                 //.rotateEnabled(true) // 裁剪是否可旋转图片
                 //.scaleEnabled(true)// 裁剪是否可放大缩小图片
                 //.videoQuality()// 视频录制质量 0 or 1
@@ -410,7 +421,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
 //               .isGif(cb_isGif.isChecked())// 是否显示gif图片
 //               .freeStyleCropEnabled(cb_styleCrop.isChecked())// 裁剪框是否可拖拽
-//               .circleDimmedLayer(cb_crop_circular.isChecked())// 是否圆形裁剪
+                .circleDimmedLayer(true)// 是否圆形裁剪
 //               .showCropFrame(cb_showCropFrame.isChecked())// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
 //               .showCropGrid(cb_showCropGrid.isChecked())// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
 //               .openClickSound(cb_voice.isChecked())// 是否开启点击声音
@@ -425,6 +436,43 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 //.videoQuality()// 视频录制质量 0 or 1
                 //.videoSecond()////显示多少秒以内的视频or音频也可适用
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+    }
+
+    private String getPath() {
+        String dbDir = android.os.Environment.getExternalStorageDirectory().toString();
+        dbDir += "/xuechuan";
+        dbDir += "/imgage";//数据库所在目录
+        String dbPath = dbDir;//数据库路径
+        //判断目录是否存在，不存在则创建该目录
+//        File dirFile = new File(dbDir);
+        File dbFile = new File(dbPath);
+        if (!dbFile.exists())
+            dbFile.mkdirs();
+        //数据库文件是否创建成功
+        boolean isFileCreateSuccess = false;
+        //判断文件是否存在，不存在则创建该文件
+        if (!dbFile.exists()) {
+            try {
+                isFileCreateSuccess = dbFile.createNewFile();//创建文件
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        File outfile = null;
+        if (isFileCreateSuccess) {
+            outfile = dbFile;
+        } else {
+            outfile = new File("/sdcard/image");
+        }
+        // 如果文件不存在，则创建一个新文件
+        if (!outfile.isDirectory()) {
+            try {
+                outfile.mkdir();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return outfile.getPath();
     }
 
     @Override
@@ -442,17 +490,48 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     for (LocalMedia media : selectList) {
                         Log.i("图片-----》", media.getPath());
-                        if (media.isCompressed()) {
+                        mPath = media.getPath();
+                        imgDialgo = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+                        getPath(mPath);
+                    /*    if (media.isCompressed()) {
                             L.d("图片压缩后的路径====" + media.getCompressPath());
+                            Bitmap bitmap = BitmapFactory.decodeFile(media.getPath());
+                            mIvMPImg.setImageBitmap(bitmap);
                             mPathlist = new ArrayList<>();
                             mPathlist.add(media.getCompressPath());
-
-                        }
+                        }*/
                     }
                     break;
             }
         }
     }
+
+    private void getPath(final String paths) {
+        //因为压缩是一个耗时的过程，所以采用异步的方式
+        new Thread((new Runnable() {
+            @Override
+            public void run() {
+                mPath = ImageUtil.getSmallBitmap(paths);
+                handler.sendEmptyMessage(0);
+            }
+        })).start();
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (imgDialgo != null && imgDialgo.isShowing())
+                imgDialgo.dismiss();
+            if (mPath != null) {
+                Log.e("压缩图片==", mPath);
+                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
+                mIvMPImg.setImageBitmap(bitmap);
+                mPathlist = new ArrayList<>();
+                mPathlist.add(mPath);
+            }
+        }
+    };
 
     @Override
     public void SubmitPersionSuccess(String con) {

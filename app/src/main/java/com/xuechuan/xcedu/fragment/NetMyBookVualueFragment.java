@@ -81,13 +81,6 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().removeAllStickyEvents();
-        EventBus.getDefault().unregister(this);
-    }
-
     public NetMyBookVualueFragment() {
     }
 
@@ -98,12 +91,6 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void MainVideoEvale(VideoIdEvent event) {
-        mVideoId = event.getVideoId();
-        loadNewData();
     }
 
 /*    @Override
@@ -122,12 +109,27 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            mVideoId = getArguments().getString(ARG_PARAM1);
+        }
         initView(view);
         initData();
         clearData();
         bindAdapterData();
         initXrfresh();
 //        loadNewData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void MainVideoEvale(VideoIdEvent event) {
+        mVideoId = event.getVideoId();
+        loadNewData();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initData() {

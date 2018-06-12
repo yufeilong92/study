@@ -144,11 +144,11 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
     }
 
     private void bindBuyView(List<CoursesBeanVo> datas) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvNetBuyList.setLayoutManager(gridLayoutManager);
 //        mRlvNetBuyList.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
-        NetHomeAdapter adapter = new NetHomeAdapter(mContext, datas);
+        final NetHomeAdapter adapter = new NetHomeAdapter(mContext, datas);
         mRlvNetBuyList.setAdapter(adapter);
         adapter.setClickListener(new NetHomeAdapter.onItemClickListener() {
             @Override

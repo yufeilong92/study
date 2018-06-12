@@ -4,31 +4,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.andview.refreshview.XRefreshView;
-import com.andview.refreshview.XRefreshViewFooter;
-import com.google.gson.Gson;
-import com.xuechuan.xcedu.Event.BookTableEvent;
+import com.xuechuan.xcedu.Event.RefreshPlayIconEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.NetMyTableAdapter;
-import com.xuechuan.xcedu.adapter.NetTableAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
-import com.xuechuan.xcedu.base.DataMessageVo;
-import com.xuechuan.xcedu.mvp.model.NetBookInfomModelImpl;
-import com.xuechuan.xcedu.mvp.presenter.NetBookInfomPresenter;
-import com.xuechuan.xcedu.mvp.view.NetBookInfomView;
-import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
-import com.xuechuan.xcedu.vo.NetBookTableVo;
+import com.xuechuan.xcedu.vo.SelectVo;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,11 +33,13 @@ import java.util.List;
  */
 public class NetMyBokTableFragment extends BaseFragment {
     private static final String CLASSID = "classid";
+
     private RecyclerView mRlvSpecaContent;
     private TextView mTvNetEmptyContent;
     private List<ChaptersBeanVo> mBookList;
     private Context mContext;
     private NetMyTableAdapter adapter;
+    private List<SelectVo> mSelect;
 
     public NetMyBokTableFragment() {
     }
@@ -67,16 +59,24 @@ public class NetMyBokTableFragment extends BaseFragment {
         if (getArguments() != null) {
             mBookList = (List<ChaptersBeanVo>) getArguments().getSerializable(CLASSID);
         }
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
     }
 
     /*   @Override
-       public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                Bundle savedInstanceState) {
-           View view = inflater.inflate(R.layout.fragment_net_my_bok_table, container, false);
-           initView(view);
-           return view;
-       }
-   */
+           public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                    Bundle savedInstanceState) {
+               View view = inflater.inflate(R.layout.fragment_net_my_bok_table, container, false);
+               initView(view);
+               return view;
+           }
+       */
     @Override
     protected int initInflateView() {
         return R.layout.fragment_net_my_bok_table;
@@ -96,6 +96,11 @@ public class NetMyBokTableFragment extends BaseFragment {
         bindAdapterData();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void MainRefrsh(RefreshPlayIconEvent event) {
+        
+    }
+
     private void bindAdapterData() {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -103,6 +108,7 @@ public class NetMyBokTableFragment extends BaseFragment {
         mRlvSpecaContent.setLayoutManager(gridLayoutManager);
         mRlvSpecaContent.setAdapter(adapter);
     }
+
 
     private void initView(View view) {
         mContext = getActivity();

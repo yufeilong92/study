@@ -29,7 +29,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:padding="@dimen/space_8"
-                android:text=""
+                android:text="全国"
                 android:textColor="@color/text_title_color"
                 android:textSize="@dimen/text_size_16" />
           <ImageView

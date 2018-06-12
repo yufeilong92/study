@@ -37,6 +37,7 @@ import com.xuechuan.xcedu.mvp.view.PayView;
 import com.xuechuan.xcedu.ui.BuyResultActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.MyBigDecimal;
 import com.xuechuan.xcedu.utils.PayUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -47,6 +48,8 @@ import com.xuechuan.xcedu.vo.PayResult;
 import com.xuechuan.xcedu.vo.WechatsignBeanVo;
 import com.xuechuan.xcedu.vo.BuyZfbResultVo;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -161,9 +164,9 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    value += skillPrice;
+                    value = MyBigDecimal.addI(value,skillPrice);
                 } else {
-                    value -= skillPrice;
+                    value = MyBigDecimal.sub(value,skillPrice);
                 }
                 showCount();
             }
@@ -172,9 +175,11 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    value += colloPrice;
+                    value = MyBigDecimal.addI(value,colloPrice);
+//                    value += colloPrice;
                 } else {
-                    value -= colloPrice;
+                    value = MyBigDecimal.sub(value,colloPrice);
+//                    value -= colloPrice;
                 }
                 showCount();
             }
@@ -183,9 +188,11 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    value += casePrice;
+                    value = MyBigDecimal.addI(value,casePrice);
+//                    value += casePrice;
                 } else {
-                    value -= casePrice;
+                    value = MyBigDecimal.sub(value,casePrice);
+//                    value -= casePrice;
                 }
                 showCount();
             }
@@ -229,7 +236,7 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
                     break;
                 case 2://技术
                     mTvBSkillPayValue.setText(String.valueOf(vo.getPrice()));
-                    skillPrice = vo.getPrice();
+                    skillPrice =  vo.getPrice();
                     skillId = vo.getId();
                     break;
                 case 3://案例
@@ -303,15 +310,18 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
 
         List<Integer> list = new ArrayList<>();
         if (mChbBPaySkill.isChecked()) {
-            value += skillPrice;
+            value = MyBigDecimal.addI(value,skillPrice);
+//            value += skillPrice;
             list.add(skillId);
         }
         if (mChbBPayCollo.isChecked()) {
-            value += colloPrice;
+            value = MyBigDecimal.addI(value,colloPrice);
+//            value += colloPrice;
             list.add(colloid);
         }
         if (mChbBPayCase.isChecked()) {
-            value += casePrice;
+            value = MyBigDecimal.addI(value,casePrice);
+//            value += casePrice;
             list.add(caseId);
         }
         if (value <= 0) {

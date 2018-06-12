@@ -833,7 +833,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private List<Fragment> creartFragment(List<ChaptersBeanVo> bookList) {
         List<Fragment> fragments = new ArrayList<>();
         NetMyBokTableFragment tableFragment = NetMyBokTableFragment.newInstance(bookList);
-        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance("", "");
+        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance(vid, "");
         fragments.add(tableFragment);
         fragments.add(bookVualueFragment);
         return fragments;
@@ -899,6 +899,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         mDao = DbHelperDownAssist.getInstance();
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             private boolean isRuning = true;
+            int downnumber = 0;
             private Thread thread;
             private ExecutorService executorService;
             private LinearLayout mLlPopDownDown;
@@ -937,7 +938,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                             executorService.shutdown();
 //                            DbHelperDownAssist.getInstance().addDownItem(vo);
                             startDown(vo);
-                            mBtnPopDownRun.setText("正在缓存(" + vo.getDownlist().size() + ")");
+                            mBtnPopDownRun.setVisibility(View.VISIBLE);
+                            mBtnPopDownLook.setVisibility(View.GONE);
+                            mBtnPopDownRun.setText("正在缓存(" + (downnumber + vo.getDownlist().size()) + ")");
                             mDownAdapter.notifyDataSetChanged();
 
                         }
@@ -969,12 +972,30 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 
             @Override
             protected void initEvent() {
+                DownVideoDb videoDb = mDao.queryUserDownInfomWithKid(mClassId);
+                if (videoDb != null && videoDb.getDownlist() != null && !videoDb.getDownlist().isEmpty()) {
+                    List<DownVideoVo> downlist = videoDb.getDownlist();
+                    for (DownVideoVo vo : downlist) {
+                        if (vo.getStatus().equals("1") || vo.getStatus().equals("2")) {
+                            downnumber += 1;
+                        }
+                    }
+                    if (downnumber == 0) {
+                        mBtnPopDownRun.setVisibility(View.GONE);
+                        mBtnPopDownLook.setVisibility(View.VISIBLE);
+                    } else {
+                        mBtnPopDownRun.setVisibility(View.VISIBLE);
+                        mBtnPopDownLook.setVisibility(View.GONE);
+                        mBtnPopDownRun.setText("正在缓存(" + downnumber + ")");
+                    }
+                }
                 mIvNetPopBack.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         popDown.getPopupWindow().dismiss();
                     }
                 });
+
                 bindAdapter();
                 mChbNetPopDownChao.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -1066,6 +1087,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 mDownAdapter.setClickListener(new NetMyDownTableAdapter.onItemClickListener() {
                     @Override
                     public void onClickListener(ChaptersBeanVo obj, int position) {
+                        downnumber += 1;
                         String net = MyAppliction.getInstance().getSelectNet();
                         if (StringUtil.isEmpty(net)) {
                             showNetDialog(false, obj, position);
@@ -1143,6 +1165,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             }
 
             private void down(ChaptersBeanVo obj, int position) {
+
                 //添加到数据库
                 List<ChaptersBeanVo> list = new ArrayList<>();
                 ChaptersBeanVo vo = new ChaptersBeanVo();

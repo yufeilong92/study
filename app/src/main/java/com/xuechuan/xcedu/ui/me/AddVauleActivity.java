@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.mvp.model.AddVauleModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.AddVaulePresenter;
 import com.xuechuan.xcedu.mvp.view.AddVauleView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ResultVo;
@@ -33,6 +35,7 @@ public class AddVauleActivity extends BaseActivity implements View.OnClickListen
     private Button mBtnMAddValue;
     private Context mContext;
     private AddVaulePresenter mPresenter;
+    private AlertDialog dialog;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class AddVauleActivity extends BaseActivity implements View.OnClickListen
     private void initData() {
         mPresenter = new AddVaulePresenter(new AddVauleModelImpl(), this);
     }
+
     private void initView() {
         mEtMAddCode = (EditText) findViewById(R.id.et_m_add_code);
         mBtnMAddValue = (Button) findViewById(R.id.btn_m_add_value);
@@ -73,16 +77,20 @@ public class AddVauleActivity extends BaseActivity implements View.OnClickListen
             T.showToast(mContext, R.string.code_empty);
             return;
         }
+        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
         mPresenter.requestAddValueWithCode(mContext, code);
 
     }
 
     @Override
     public void AddVauleSuccess(String com) {
+        dialog.dismiss();
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(com, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            T.showToast(mContext, getString(R.string.code_suceess));
+            finish();
+            T.showToast(mContext, vo.getData().getMessage());
+//            T.showToast(mContext, getString(R.string.code_suceess));
         } else {
             T.showToast(mContext, getString(R.string.code_error));
             L.e(vo.getStatus().getMessage());
@@ -92,7 +100,8 @@ public class AddVauleActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void AddVauleError(String com) {
-        T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
+        dialog.dismiss();
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.e(com);
     }
 }

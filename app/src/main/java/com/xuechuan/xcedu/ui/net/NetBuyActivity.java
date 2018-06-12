@@ -163,6 +163,8 @@ public class NetBuyActivity extends BaseActivity implements View.OnClickListener
                 showChb(false, true);
             }
         });
+        mChbNetPayWeixin.setChecked(true);
+        statusType = 2;
         mChbNetPayWeixin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

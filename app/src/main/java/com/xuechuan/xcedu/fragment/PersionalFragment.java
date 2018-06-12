@@ -156,7 +156,6 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         mLlMSetting.setOnClickListener(this);
 
         mIvPersionImg = (ImageView) view.findViewById(R.id.iv_persion_img);
-        mIvPersionImg.setOnClickListener(this);
         mIvMPSystem = (ImageView) view.findViewById(R.id.iv_m_p_system);
         mIvMPSystem.setOnClickListener(this);
         mIvMPTiShi = (ImageView) view.findViewById(R.id.iv_m_p_ti_shi);

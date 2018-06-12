@@ -33,7 +33,7 @@ public class MyDownloadListener implements IPolyvDownloaderProgressListener {
     public MyDownloadListener(Context context, DownVideoDb db, DownVideoVo downloadInfo) {
         this.contextWeakReference = new WeakReference<>(context);
         this.downloadInfo = downloadInfo;
-        this.downVideDb=db;
+        this.downVideDb = db;
         mDao = DbHelperDownAssist.getInstance();
     }
 
@@ -41,7 +41,7 @@ public class MyDownloadListener implements IPolyvDownloaderProgressListener {
     public void onDownloadSuccess() {
         if (total == 0)
             total = 1;
-        mDao.addUpDataItem( downVideDb,downloadInfo, total, total);
+        mDao.addUpDataItem(downVideDb, downloadInfo, total, total);
     }
 
     @Override

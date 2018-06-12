@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 import com.lzy.okgo.OkGo;
+import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.MainActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.ui.me.PersionActivity;
@@ -58,10 +59,10 @@ public class SubmitHearService extends IntentService {
     }
 
     private void handleActionBaz(int path, String param2) {
-        CreateNation(1000,param2, path);
+        CreateNation(1000, param2, path);
     }
 
-    private void CreateNation(int max,String cont, int prgress) {
+    private void CreateNation(int max, String cont, int prgress) {
 
         Bitmap btm = BitmapFactory.decodeResource(getResources(),
                 R.drawable.m_setting_about_xcimg);
@@ -75,7 +76,8 @@ public class SubmitHearService extends IntentService {
         mBuilder.setAutoCancel(true);//自己维护通知的消失
         //构建一个Intent
         Intent resultIntent = new Intent(getBaseContext(),
-                PersionActivity.class);
+                HomeActivity.class);
+        resultIntent.putExtra(HomeActivity.Type, HomeActivity.mHomeMeType);
         //封装一个Intent
         PendingIntent resultPendingIntent = PendingIntent.getActivity(
                 getBaseContext(), 0, resultIntent,

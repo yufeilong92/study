@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StatFs;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -136,13 +138,16 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             }
         });
         int number = 0;
+        boolean isfale = false;
         for (DownVideoVo vo : mDataBean.getDownlist()) {
-            if (vo.getStatus().equals(0)) {
+            if (vo.getStatus().equals("0")) {
                 number += 1;
+            } else if (vo.getStatus().equals("1") || vo.getStatus().equals("2")) {
+                isfale = true;
             }
         }
         mTvNetDowningDo.setText(number + "");
-
+        startDownAll(isfale);
     }
 
     private void bindAdapter() {
@@ -202,7 +207,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             }
         });
 
-        startDownAll(false);
+
     }
 
     /**
@@ -291,6 +296,13 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
                         @Override
                         public void onSureClickListener() {
+                            final AlertDialog dialog = DialogUtil.showDialog(mContext, "", "删除中...");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                }
+                            }, 2000);
                             //选中的vid 集合
                             for (int i = 0; i < mDataSelectList.size(); i++) {
                                 DownInfomSelectVo selectVo = mDataSelectList.get(i);

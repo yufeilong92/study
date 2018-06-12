@@ -45,12 +45,21 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
     private ImageView mIvNetGoorbuy;
     //    用户选中集合
     public static List<SelectVo> mSelect = new ArrayList<>();
+    private String vid;
 
     public NetMyTableAdapter(Context mContext, List<ChaptersBeanVo> mData) {
         this.mContext = mContext;
         this.mData = mData;
         init(mData);
         mInflater = LayoutInflater.from(mContext);
+    }
+
+    public void refreshData(String vid) {
+        this.vid = vid;
+        for (int i = 0; i < mSelect.size(); i++) {
+
+        }
+        notifyDataSetChanged();
     }
 
     private void init(List<ChaptersBeanVo> mData) {
@@ -63,9 +72,11 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
             selectVo.setParenid(i + "");
             ArrayList<ItemSelectVo> list = new ArrayList<>();
             for (int j = 0; j < vo.getVideos().size(); j++) {
+                VideosBeanVo beanVo = vo.getVideos().get(j);
                 ItemSelectVo itemSelect = new ItemSelectVo();
                 itemSelect.setId(j + "");
                 itemSelect.setSelect(false);
+                itemSelect.setVideoid(beanVo.getVid());
                 list.add(itemSelect);
             }
             selectVo.setData(list);
@@ -90,6 +101,7 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
         ChaptersBeanVo vo = mData.get(position);
         holder.mIvNetGoorbuy.setImageResource(R.mipmap.ic_more_go);
         holder.mTvNetTitle.setText(vo.getChaptername());
+
         List<VideosBeanVo> videos = vo.getVideos();
         if (videos != null && !videos.isEmpty()) {
             if (position == 0) {

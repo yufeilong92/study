@@ -83,7 +83,31 @@ public class ScreenShot {
     public static String savePic(Bitmap b) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
                 Locale.US);
-        File outfile = new File("/sdcard/image");
+        String dbDir = android.os.Environment.getExternalStorageDirectory().toString();
+        dbDir += "/xuechuan";
+        dbDir += "/imgage";//数据库所在目录
+        String dbPath = dbDir;//数据库路径
+        //判断目录是否存在，不存在则创建该目录
+//        File dirFile = new File(dbDir);
+        File dbFile = new File(dbPath);
+        if (!dbFile.exists())
+            dbFile.mkdirs();
+        //数据库文件是否创建成功
+        boolean isFileCreateSuccess = false;
+        //判断文件是否存在，不存在则创建该文件
+        if (!dbFile.exists()) {
+            try {
+                isFileCreateSuccess=dbFile.createNewFile();//创建文件
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        File outfile=null;
+        if (isFileCreateSuccess){
+            outfile=dbFile;
+        }else {
+            outfile = new File("/sdcard/image");
+        }
         // 如果文件不存在，则创建一个新文件
         if (!outfile.isDirectory()) {
             try {

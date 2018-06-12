@@ -393,6 +393,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private String mSearchType;
     private TextView mTvNam;
     private ImageView mIvJianPan;
+    private boolean isBtnClickDel = false;
 
 
     @Override
@@ -952,7 +953,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mIvBMore = (ImageView) findViewById(R.id.iv_b_more);
         mIvBMore.setOnClickListener(this);
         mTvRootEmpty = (TextView) findViewById(R.id.tv_root_empty);
-        mTvRootEmpty.setOnClickListener(this);
+
         mTvBType = (TextView) findViewById(R.id.tv_b_type);
         mTvBType.setOnClickListener(this);
         mTvBMatter = (TextView) findViewById(R.id.tv_b_matter);
@@ -1692,10 +1693,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             case R.id.btn_look_wen_answer:
                 isUserLookWenJieXi = true;
                 mBtnLookWenAnswer.setVisibility(View.GONE);
-                if (isBuy){
+                if (isBuy) {
                     mLlLookWenDa.setVisibility(View.VISIBLE);
                     mLiBResolveBuy.setVisibility(View.GONE);
-                }else {
+                } else {
                     mLiBResolveBuy.setVisibility(View.VISIBLE);
                     mLlLookWenDa.setVisibility(View.GONE);
                 }
@@ -1709,7 +1710,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 dialogUtil11.setTitleClickListener(new DialogUtil.onTitleClickListener() {
                     @Override
                     public void onSureClickListener() {
-
+                        isBtnClickDel = true;
                         mPresnter.submitWoringQeustinDelect(mContext, String.valueOf(mResultData.getId()));
                     }
 
@@ -1736,7 +1737,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mMark <= mTextDetial.size() - 2) {
             ++mMark;
         } else {//没有题了
-            if (!StringUtil.isEmpty(mFreeQuestion) || !StringUtil.isEmpty(mStyleCase)) {
+            if (!StringUtil.isEmpty(mStyleCase)) {
                 T.showToast(mContext, "已经是最后一题,请交卷");
             } else {
                 T.showToast(mContext, "已经是最后一题 ");
@@ -2228,6 +2229,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
+                            DbHelperAssist.getInstance().upLooklistDelect();
                             DbHelperAssist.getInstance().upDataDelect("1");
                         }
                     }
@@ -2236,6 +2238,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
+                            DbHelperAssist.getInstance().upLooklistDelect();
                             DbHelperAssist.getInstance().upDataDelect("3");
                         }
                     }
@@ -2244,6 +2247,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
+                            DbHelperAssist.getInstance().upLooklistDelect();
                             DbHelperAssist.getInstance().upDataDelect("5");
                         }
                     }
@@ -2252,6 +2256,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
+                            DbHelperAssist.getInstance().upLooklistDelect();
                             DbHelperAssist.getInstance().upDataDelect("NO");
                         }
                     }
@@ -2342,19 +2347,20 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRlvPopContent = view.findViewById(R.id.rlv_pop_content);
                 mGvPopContent = view.findViewById(R.id.gv_pop_content);
                 mBtnSubmit = (Button) view.findViewById(R.id.btn_pop_answer_sumbit);
+
+            }
+
+            @Override
+            protected void initEvent() {
                 if (isExamHine) {
                     mBtnSubmit.setVisibility(View.GONE);
                 } else {
                     mBtnSubmit.setVisibility(View.VISIBLE);
                 }
-            }
 
-            @Override
-            protected void initEvent() {
                 mBtnSubmit.setOnClickListener(new View.OnClickListener() {//交卷
                     @Override
                     public void onClick(View v) {
-
                         List<UseSelectItemInfomVo> user = SharedSeletResultListUtil.getInstance().getUser();
                         if (user.size() < mTextDetial.size()) {
                             DialogUtil dialogUtil = DialogUtil.getInstance();
@@ -2465,7 +2471,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 double score = 0;
                 for (int i = 0; i < user.size(); i++) {
                     UseSelectItemInfomVo vo = user.get(i);
-                    if (vo.getItemStatus().equals("0")) {
+                    if (vo.getItemStatus() != null && vo.getItemStatus().equals("0")) {
                         String type = vo.getType();
                         if (type.equals(mTitleTypeOnly)) {
                             score += 1;
@@ -2474,7 +2480,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                             score += 2;
                         }
                     }
-                    if (vo.getItemStatus().equals("2")) {
+                    if (vo.getItemStatus() != null && vo.getItemStatus().equals("2")) {
                         double more = 0;
                         String a = vo.getSelectItemA();
                         String b = vo.getSelectItemB();
@@ -3177,6 +3183,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRlRootLayout.setVisibility(View.GONE);
                 dialog.dismiss();
                 mTvRootEmpty.setVisibility(View.VISIBLE);
+                if (mTimeUitl != null) {
+                    mTimeUitl.cancel();
+                }
+                mActivityTitleText.setText(null);
+                mIvTimePlay.setVisibility(View.GONE);
+
                 return;
             } else {
                 mTvRootEmpty.setVisibility(View.GONE);
@@ -3257,7 +3269,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         ResultVo resultVo = gson.fromJson(con, ResultVo.class);
         if (resultVo.getStatus().getCode() == 200) {
             if (resultVo.getData().getStatusX() == 1) {
-                T.showToast(mContext, getString(R.string.delect_Success));
+                if (!isBtnClickDel) {
+                    return;
+                }
+                if (isBtnClickDel)
+                    T.showToast(mContext, getString(R.string.delect_Success));
                 if (mTextDetial != null && !mTextDetial.isEmpty())
                     for (int i = 0; i < mTextDetial.size(); i++) {
                         QuestionAllVo.DatasBean bean = mTextDetial.get(i);
@@ -3266,8 +3282,18 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         }
 
                     }
+                if (mTextDetial.size() == 0) {
+                    mRlRootLayout.setVisibility(View.GONE);
+                    mTvRootEmpty.setVisibility(View.VISIBLE);
+                    mIvBarDelect.setVisibility(View.GONE);
+                    return;
+                }
                 --mMark;
-                NextGo();
+                if (mMark >= mTextDetial.size()) {
+                    goBefore();
+                } else {
+                    NextGo();
+                }
                 mTvBCount.setText(String.valueOf(mTextDetial.size()));
             }
         } else {
@@ -3732,6 +3758,22 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onPause() {
         super.onPause();
+        if (mTimeUitl != null && !StringUtil.isEmpty(mStyleCase) &&
+                mTvRootEmpty.getVisibility() == View.GONE) {
+
+            mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
+            DialogUtil dialogUtil = DialogUtil.getInstance();
+            dialogUtil.showStopDialog(mContext);
+            mTimeUitl.pause();
+            dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
+                @Override
+                public void onNextClickListener() {
+                    mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_cont);
+                    mTimeUitl.resume();
+                }
+            });
+        }
+
         Log.e(TAG, "onPause: ");
     }
 

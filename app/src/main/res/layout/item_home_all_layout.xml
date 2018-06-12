@@ -22,7 +22,6 @@
             android:ellipsize="end"
             android:lineSpacingExtra="@dimen/space_4"
             android:maxLines="2"
-            android:minLines="2"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/space_16" />
 

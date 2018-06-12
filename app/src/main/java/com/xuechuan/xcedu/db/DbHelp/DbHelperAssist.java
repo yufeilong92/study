@@ -30,7 +30,7 @@ public class DbHelperAssist {
     private static DbHelperAssist assist = null;
 
     public DbHelperAssist() {
-        dao = DBHelper.getDaoSession().getUserInfomDbDao();
+           dao = DBHelper.getDaoSession().getUserInfomDbDao();
 
     }
 
@@ -199,7 +199,8 @@ public class DbHelperAssist {
         }
 
     }
-    private void  cope(UserBean Uvo,UserBean SaVo){
+
+    private void cope(UserBean Uvo, UserBean SaVo) {
 
     }
 
@@ -322,6 +323,24 @@ public class DbHelperAssist {
             upDataDelect(number);
         }
         userInfomDb.setDelectQuestion(number);
+        dao.update(userInfomDb);
+    }
+
+    /**
+     * 更新删用户查看记录
+     */
+    public void upLooklistDelect() {
+
+        String userId = SaveUUidUtil.getInstance().getUserId();
+        UserInfomDb userInfomDb = queryWithuuId(userId);
+        if (userInfomDb == null) {
+            UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
+            userInfomDb.setVo(vo);
+            saveUserInfom(vo);
+        }
+        userInfomDb.setWrongDataSkill(null);
+        userInfomDb.setWrongDataCase(null);
+        userInfomDb.setWrongDataColoct(null);
         dao.update(userInfomDb);
     }
 
@@ -705,6 +724,7 @@ public class DbHelperAssist {
 
     /**
      * 查询用户视频记录
+     *
      * @param kid
      * @return
      */
@@ -719,7 +739,7 @@ public class DbHelperAssist {
             return null;
         }
         for (UserLookVideoVo vo : lookVideolist) {
-            if (vo.getKid().equals(kid) ) {
+            if (vo.getKid().equals(kid)) {
                 return vo;
             }
         }

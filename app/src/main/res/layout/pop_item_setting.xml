@@ -81,6 +81,7 @@
             android:button="@drawable/select_setting_one" />
 
         <RadioButton
+            android:checked="true"
             android:id="@+id/rdb_pop_3"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_width="wrap_content"

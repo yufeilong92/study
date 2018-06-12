@@ -33,7 +33,7 @@ public class FeedBackPresenter {
      * @param link
      */
     public void submitFeedBack(Context context, String content, String link) {
-        if (StringUtil.isEmpty(content) || StringUtil.isEmpty(link)) {
+        if (StringUtil.isEmpty(content) ) {
             return;
         }
         model.submitFeedBack(context, content, link, new RequestResulteView() {

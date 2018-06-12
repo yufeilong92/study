@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.mvp.model.FeedBackModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.FeedBackPresenter;
 import com.xuechuan.xcedu.mvp.view.FeedBackView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -34,6 +36,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
     private Button mBtnMFeedSubmit;
     private Context mContext;
     private FeedBackPresenter mPresenter;
+    private AlertDialog alertDialog;
 
 /*
     @Override
@@ -79,17 +82,21 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         String phone = getTextStr(mEtMFeedPhone);
+        alertDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit));
         mPresenter.submitFeedBack(mContext, suggest, phone);
-        mEtMFeedSuggest.setText(null);
-        mEtMFeedPhone.setText(null);
     }
 
     @Override
     public void feedSuccess(String con) {
+        if (alertDialog!=null&&alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
             finish();
+            mEtMFeedSuggest.setText(null);
+            mEtMFeedPhone.setText(null);
             T.showToast(mContext, getStringWithId(R.string.submit_success));
         } else {
             T.showToast(mContext, getString(R.string.submit_error));
@@ -99,6 +106,9 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void feedError(String con) {
+        if (alertDialog!=null&&alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
         T.showToast(mContext, getString(R.string.submit_error));
         L.e(con);
     }

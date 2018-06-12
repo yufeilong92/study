@@ -18,6 +18,7 @@ import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
 import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.net.RegisterService;
@@ -184,6 +185,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.chb_show_passw:
                 Utils.showPassWord(mChbShowPassw, mEtRegisterPaws);
                 break;
+            case R.id.tv_regiths_agreem:
+                Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT);
+                intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR, "注册协议");
+                startActivity(intent);
+                break;
         }
     }
 
@@ -298,9 +304,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     if (mType.equals(CEX_INT_TYPE_PAW)) {//找回密码
                         if (status == 1) {
                             T.showToast(mContext, getString(R.string.resetpaw));
-                            Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
-                        }else {
+                        } else {
                             T.showToast(mContext, "修改失败");
                         }
                     } else {

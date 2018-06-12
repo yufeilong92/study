@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -240,6 +242,13 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                 dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
                     @Override
                     public void onSureClickListener() {
+                        final AlertDialog dialog = DialogUtil.showDialog(mContext, "", "删除中...");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.dismiss();
+                            }
+                        }, 2000);
                         //选中的vid 集合
                         for (int i = 0; i < mDataSelectList.size(); i++) {
                             DownInfomSelectVo selectVo = mDataSelectList.get(i);

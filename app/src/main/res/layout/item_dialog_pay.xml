@@ -12,7 +12,30 @@
         android:text="@string/pay_type"
         android:textColor="@color/text_title_color"
         android:textSize="@dimen/text_size_14" />
+    <LinearLayout
+        android:id="@+id/ll_net_weixin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/space_16">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spance_50"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/common_pay_wexin"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center_vertical"
+            android:text="@string/weixin"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_size_14" />
+
+        <CheckBox
+            android:id="@+id/chb_net_pay_weixin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/select_pay_rdb_bg" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_net_pay_zfb"
         android:layout_width="match_parent"
@@ -38,30 +61,7 @@
             android:button="@drawable/select_pay_rdb_bg" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_net_weixin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/space_16">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/spance_50"
-            android:layout_weight="1"
-            android:drawableLeft="@mipmap/common_pay_wexin"
-            android:drawablePadding="@dimen/space_10"
-            android:gravity="center_vertical"
-            android:text="@string/weixin"
-            android:textColor="@color/text_title_color"
-            android:textSize="@dimen/text_size_14" />
-
-        <CheckBox
-            android:id="@+id/chb_net_pay_weixin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@drawable/select_pay_rdb_bg" />
-    </LinearLayout>
 
     <Button
         android:id="@+id/btn_dialog_sure_pay"

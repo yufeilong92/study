@@ -169,14 +169,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initCreateView(View view, Bundle savedInstanceState) {
         initView(view);
+        initData();
         initBaiduLocation();
-//        initData();
     }
 
     private void initData() {
-        code = PushXmlUtil.getInstance().getLocationCode(mContext, "河南省");
+        code = PushXmlUtil.getInstance().getLocationCode(mContext, getTextStr(mTvAddress));
         if (!StringUtil.isEmpty(code)) {
-            mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
+//            mDialog = DialogUtil.showDialog(mContext, null, getStrWithId(R.string.loading));
             requestData(code);
         }
     }
@@ -232,7 +232,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     bindInfomData(advisory);
                     bindAllData(article);
                     bindBanner(banner);
-
 
                 } else {//失败
                     if (mDialog == null)

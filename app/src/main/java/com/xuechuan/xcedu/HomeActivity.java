@@ -70,6 +70,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private MagicIndicator mMagicindicatorHome;
     public  static String LOGIN_HOME="loginhome";
     private String mLoginType;
+    public static String mHomeMeType="4";
+    public static String Type="4";
 
     @Override
     protected void onDestroy() {
@@ -128,6 +130,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         }else if (!StringUtil.isEmpty(mLoginType)&&mLoginType.equals(LOGIN_HOME)){
             mViewpageContetn.setCurrentItem(0);
+        }else if (!StringUtil.isEmpty(mType)&&mType.equals(mHomeMeType)){
+            mViewpageContetn.setCurrentItem(3);
         }
 
     }
@@ -137,6 +141,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onPause();
         mLoginType="";
         mType="";
+
     }
 
     private void initData() {

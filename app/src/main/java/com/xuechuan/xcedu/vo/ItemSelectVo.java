@@ -13,8 +13,18 @@ package com.xuechuan.xcedu.vo;
 public class ItemSelectVo {
     private String id;
     private boolean isSelect;
+    private String videoid;
+
     public String getId() {
         return id;
+    }
+
+    public String getVideoid() {
+        return videoid;
+    }
+
+    public void setVideoid(String videoid) {
+        this.videoid = videoid;
     }
 
     public void setId(String id) {

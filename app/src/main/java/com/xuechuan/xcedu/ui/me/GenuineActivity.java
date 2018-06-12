@@ -86,7 +86,7 @@ public class GenuineActivity extends BaseActivity implements View.OnClickListene
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(com, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            T.showToast(mContext, "此验证是正版码");
+            T.showToast(mContext, vo.getData().getMessage());
         } else {
             T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());

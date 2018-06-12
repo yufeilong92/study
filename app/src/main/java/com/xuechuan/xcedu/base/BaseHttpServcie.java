@@ -243,6 +243,7 @@ public class BaseHttpServcie {
                             if (vo.getStatus().getCode() == 200) {
                                 callBackView.onSuccess(response);
                             } else if (vo.getStatus().getCode() == 406){
+                                T.showToast(context,"登录超时，请重新登陆");
                                 MyAppliction.getInstance().startLogin(context);
                             }
                         } catch (JsonParseException e) {
