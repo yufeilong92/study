@@ -193,7 +193,8 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
     private void initData() {
         mPresenter = new HomePresenter();
         mPresenter.initModelView(new HomeModel(), this);
-        mPresenter.requestHomePager(mContext, "0");
+        String code = PushXmlUtil.getInstance().getLocationCode(mContext, "全国");
+        mPresenter.requestHomePager(mContext, code);
     }
 
     private void initXrfresh() {

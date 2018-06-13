@@ -2,7 +2,7 @@
 <provinces>
     <province>
         <name>全国</name>
-        <code>000000</code>
+        <code>100000</code>
     </province>
     <province>
         <name>北京</name>

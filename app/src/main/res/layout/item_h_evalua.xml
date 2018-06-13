@@ -26,13 +26,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:textStyle="bold"
                 android:id="@+id/tv_evalue_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="用户名字"
                 android:textColor="@color/text_title_color"
-                android:textSize="@dimen/text_size_14" />
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
 
             <Space style="@style/space_16_height" />
 
@@ -45,58 +45,59 @@
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textSize="@dimen/text_size_12"
-                    android:textColor="@color/text_fu_color"
                     android:id="@+id/tv_evalue_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1分钟" />
+                    android:text="1分钟"
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12" />
 
                 <TextView
-                    android:textSize="@dimen/text_size_12"
-                    android:textColor="@color/text_fu_color"
                     android:id="@+id/tv_evalue_evalue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/ic_comment"
                     android:drawablePadding="@dimen/space_8"
-                    android:text="评论" />
+                    android:text="评论"
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12" />
 
                 <Space style="@style/space_16_width" />
 
                 <CheckBox
-                    android:paddingTop="@dimen/space_16"
-                    android:paddingLeft="@dimen/space_8"
-                    android:paddingBottom="@dimen/space_16"
-                    android:textSize="@dimen/text_size_12"
-                    android:textColor="@color/text_fu_color"
-                    android:text="222"
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@drawable/select_issupper_home" />
+                    android:button="@drawable/select_issupper_home"
+                    android:paddingBottom="@dimen/space_16"
+                    android:paddingLeft="@dimen/space_8"
+                    android:paddingTop="@dimen/space_16"
+                    android:text="222"
+                    android:textColor="@color/text_fu_color"
+                    android:textSize="@dimen/text_size_12" />
 
                 <Space
-                    android:visibility="gone"
-                    style="@style/space_8_width" />
+                    style="@style/space_8_width"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/tv_evalue_suppernumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="99" />
+                    android:text="99"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <Space style="@style/space_16_height" />
+
     <View style="@style/view_line_1" />
 </LinearLayout>

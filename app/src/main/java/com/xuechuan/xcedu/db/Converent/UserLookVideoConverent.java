@@ -36,7 +36,7 @@ public class UserLookVideoConverent implements PropertyConverter<List<UserLookVi
         } else {
             Type type = new TypeToken<ArrayList<UserLookVideoVo>>() {
             }.getType();
-            ArrayList<UserLookVideoVo> list = new Gson().fromJson(databaseValue, type);
+           List<UserLookVideoVo> list = new Gson().fromJson(databaseValue, type);
             return list;
         }
     }

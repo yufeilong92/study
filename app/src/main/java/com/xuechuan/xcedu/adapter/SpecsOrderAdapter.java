@@ -177,7 +177,7 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
                 SpecasJieVo.DatasBean vo = (SpecasJieVo.DatasBean) obj;
                 /*Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
-                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl());
+                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),AgreementActivity.NOSHAREMARK);
                 mContext.startActivity(intent);
             }
         });

@@ -19,7 +19,10 @@
             style="@style/TitleBarText"
             android:text="" />
 
-        <ImageView style="@style/TitleBarAction" />
+        <ImageView
+            android:id="@+id/iv_title_more"
+            android:src="@mipmap/ic_more"
+            style="@style/TitleBarAction" />
 
     </LinearLayout>
 
@@ -61,6 +64,7 @@
                 android:gravity="center_vertical"
                 android:hint="我来说两句..."
                 android:maxLines="4"
+                android:maxLength="200"
                 android:paddingBottom="@dimen/space_8"
                 android:paddingLeft="@dimen/space_16"
                 android:paddingRight="@dimen/space_16"

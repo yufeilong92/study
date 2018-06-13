@@ -18,18 +18,27 @@
             style="@style/TitleBarText"
             android:text="" />
 
-        <ImageView style="@style/TitleBarAction" />
+        <ImageView
+            android:id="@+id/iv_title_more"
+            android:src="@mipmap/ic_more"
+            style="@style/TitleBarAction" />
 
     </LinearLayout>
 
     <View style="@style/view_line_tab_line" />
+<LinearLayout
+    android:id="@+id/ll_root_view"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
     <WebView
         android:id="@+id/web_agreenement"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:paddingLeft="@dimen/space_16"
+        android:scrollbarStyle="outsideInset"
         android:paddingRight="@dimen/space_16"
         android:visibility="gone">
 
@@ -42,4 +51,5 @@
         android:layout_gravity="center"
         android:scaleType="center"
         android:visibility="gone" />
+</LinearLayout>
 </LinearLayout>

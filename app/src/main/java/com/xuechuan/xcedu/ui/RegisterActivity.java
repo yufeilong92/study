@@ -186,7 +186,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Utils.showPassWord(mChbShowPassw, mEtRegisterPaws);
                 break;
             case R.id.tv_regiths_agreem:
-                Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT);
+                Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT,AgreementActivity.NOSHAREMARK);
                 intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR, "注册协议");
                 startActivity(intent);
                 break;

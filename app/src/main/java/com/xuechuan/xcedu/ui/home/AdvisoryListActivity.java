@@ -245,7 +245,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                 String gourl = vo.getGourl();
       /*          Intent intent = InfomDetailActivity.startInstance(mContext, gourl,
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
-                Intent intent = AgreementActivity.newInstance(mContext, gourl);
+                Intent intent = AgreementActivity.newInstance(mContext, gourl,AgreementActivity.SHAREMARK);
                 mContext.startActivity(intent);
             }
         });

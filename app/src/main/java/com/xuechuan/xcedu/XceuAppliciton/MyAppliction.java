@@ -161,10 +161,10 @@ public class MyAppliction extends MultiDexApplication {
         initJPush();
         initUM();
         initImagerLoader();
-
         SaveUUidUtil.initSharedPreference(this);
         SaveIsDoneUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
+
     }
 
     private void initUM() {
@@ -255,9 +255,14 @@ public class MyAppliction extends MultiDexApplication {
         builder.writeTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 //全局的连接超时时间
         builder.connectTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+//        NO_CACHE：不使用缓存，该模式下cacheKey、cacheTime 参数均无效
+//        DEFAULT：按照HTTP协议的默认缓存规则，例如有304响应头时缓存。
+//        REQUEST_FAILED_READ_CACHE：先请求网络，如果请求网络失败，则读取缓存，如果读取缓存失败，本次请求失败。
+//        IF_NONE_CACHE_REQUEST：如果缓存不存在才请求网络，否则使用缓存。
+//        FIRST_CACHE_THEN_REQUEST：先使用缓存，不管是否存在，仍然请求网络。
         OkGo.getInstance().init(this)
                 .setOkHttpClient(builder.build())//设置链接
-                .setCacheMode(CacheMode.NO_CACHE) //设置缓存
+                .setCacheMode(CacheMode.REQUEST_FAILED_READ_CACHE) //设置缓存
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(3); //断网链接
 
@@ -384,7 +389,7 @@ public class MyAppliction extends MultiDexApplication {
     }
 
     /**
-     * 用户选中网络下载状态
+     * 用户选中网络下载状态  移动MONT
      */
     private String SelectNetStaus;
 

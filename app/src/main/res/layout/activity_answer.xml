@@ -231,6 +231,7 @@
                 android:paddingLeft="@dimen/space_8"/>
 
             <EditText
+                android:maxLength="200"
                 android:id="@+id/et_b_submit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

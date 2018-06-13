@@ -1,7 +1,11 @@
 package com.xuechuan.xcedu.ui.net;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andview.refreshview.callback.IFooterCallBack;
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
@@ -31,6 +36,7 @@ import com.xuechuan.xcedu.mvp.presenter.NetDownIngPresenter;
 import com.xuechuan.xcedu.mvp.view.NetDownIngView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.NetworkToolUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
@@ -65,6 +71,10 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     private RelativeLayout mRlNetDownDelect;
     private Context mContext;
     private TextView mTvNetDownEmpty;
+    //有网
+    private String MNETWORK = "network";
+    //无网
+    private String NOTETWORK = "notnet";
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +93,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
     private DownNetBookAdapter mListAdapter;
     private DbHelperDownAssist mDao;
     private NetDownIngPresenter mPresenter;
+    private int mFirst = 0;
+    private MyNetBroadcast netBorect;
+    private int NoDonw = 0;
 
     public static Intent newInstance(Context context, String kid) {
         Intent intent = new Intent(context, NetBookDowningActivity.class);
@@ -100,6 +113,18 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         initView();
         mPresenter = new NetDownIngPresenter(new NetDownIngModelImpl(), this);
         initData();
+
+        netBorect = new MyNetBroadcast();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.intent.category.DEFAULT");
+        registerReceiver(netBorect, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(netBorect);
     }
 
     private void initData() {
@@ -166,7 +191,6 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                             vo.setChbSelect(true);
                         }
                     }
-//                    initShow(false, false, true, true);
                 } else {
                     for (DownInfomSelectVo vo : mDataSelectList) {
                         if (vo.getZid().equals(db.getZid())) {
@@ -174,7 +198,6 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                             );
                         }
                     }
-//                    initShow(false, false, true, false);
                 }
                 if (mListAdapter != null)
                     mListAdapter.notifyDataSetChanged();
@@ -188,11 +211,14 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 if (videoDb != null) {
                     List<DownVideoVo> downlist = videoDb.getDownlist();
                     boolean isOver = false;
+                    int number = 0;
                     if (downlist != null && !downlist.isEmpty()) {
                         for (DownVideoVo vo : downlist) {
-                            if (!vo.getStatus().equals("0")) {
+                            if (vo.getStatus().equals("0")) {
+                                number += 1;
+                            } else {
+                                NoDonw += 0;
                                 isOver = true;
-                                break;
                             }
                         }
                     }
@@ -201,6 +227,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     } else {
                         mTvNetDowningStop.setText(R.string.start_down);
                     }
+                    mTvNetDowningDo.setText(number + "");
                     computeStorage();
                 }
 
@@ -342,15 +369,12 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
 
                 break;
             case R.id.tv_net_downing_stop://开始下载
+
                 String start = getTextStr(mTvNetDowningStop);
                 if (start.equals(getString(R.string.start_down))) {//开始下载
 //                    mTvNetDowningStop.setText(R.string.stopdown);
-                    String net = MyAppliction.getInstance().getSelectNet();
-                    if (StringUtil.isEmpty(net)) {
-                        showNetDialog();
-                    } else {
-                        dowmStatus(net);
-                    }
+                    if (network()) return;
+                    startdown();
 //                    mListAdapter.downloadAll();
                 } else {//暂停下载
                     mTvNetDowningStop.setText(R.string.start_down);
@@ -361,66 +385,11 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private void dowmStatus(String net) {
-        String selectNet = MyAppliction.getInstance().getUsetNetSatus();
-        if (StringUtil.isEmpty(selectNet)) {
-            down();
-            return;
-        }
-        if (net.equals(selectNet)) {
-            down();
-        } else {
-            showNetDialog();
-        }
-
-
-    }
-
     /**
      * 开始下载
      */
-    private void down() {
+    private void startdown() {
         startDownAll(true);
-    }
-
-    /**
-     * 提示网络问题
-     */
-    private void showNetDialog() {
-        boolean netConnect = Utils.isNetConnect(mContext);
-        if (!netConnect) {
-            T.showToast(mContext, "检测你当前无网络");
-            return;
-        }
-        final boolean connect = Utils.isWifiConnect(mContext);
-        if (connect) {
-            MyAppliction.getInstance().saveSelectNet(DataMessageVo.WIFI);
-            dowmStatus(DataMessageVo.WIFI);
-            return;
-        }
-        DialogUtil dialogUtil = DialogUtil.getInstance();
-        String net = connect ? "Wifi" : "移动";
-        dialogUtil.showTitleDialog(mContext, "当前网络为" + net + ",是确认否下载",
-                getStringWithId(R.string.sure), getStringWithId(R.string.cancel), true);
-        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
-            @Override
-            public void onSureClickListener() {
-                String status = null;
-                if (connect) {
-                    MyAppliction.getInstance().saveSelectNet(DataMessageVo.WIFI);
-                    status = DataMessageVo.WIFI;
-                } else {
-                    MyAppliction.getInstance().saveSelectNet(DataMessageVo.MONET);
-                    status = DataMessageVo.MONET;
-                }
-                dowmStatus(status);
-            }
-
-            @Override
-            public void onCancelClickListener() {
-
-            }
-        });
     }
 
     private void delectVideo(String vid, String bitrate) {
@@ -467,5 +436,135 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         L.e(con);
     }
 
+    private class MyNetBroadcast extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("网络状态发生变化");
+            //检测API是不是小于21，因为到了API21之后getNetworkInfo(int networkType)方法被弃用
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
 
+                //获得ConnectivityManager对象
+                ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                //获取ConnectivityManager对象对应的NetworkInfo对象
+                //获取WIFI连接的信息
+                NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                //获取移动数据连接的信息
+                NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            /*if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+                MyAppliction.getInstance().saveUserNetSatus("1");
+//                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
+            } else*/
+                if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+//                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
+                } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+//                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
+                    mFirst += 1;
+                    downNet(MNETWORK);
+                } else {
+                    mFirst += 1;
+                    downNet(NOTETWORK);
+                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                //这里的就不写了，前面有写，大同小异
+                System.out.println("API level 大于21");
+                //获得ConnectivityManager对象
+                ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                //获取移动数据连接的信息
+                NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+         /*   if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+//                MyAppliction.getInstance().saveUserNetSatus("1");
+                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
+            } else */
+                if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+                    MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.WIFI);
+//                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
+                } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+                    mFirst += 1;
+                    downNet(MNETWORK);
+//                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
+                } else {
+                    mFirst += 1;
+                    downNet(NOTETWORK);
+                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
+     * 下载
+     */
+    private void downNet(String type) {
+        if (mFirst == 1) {
+            return;
+        }
+        String net = MyAppliction.getInstance().getSelectNet();
+        String trim = mTvNetDowningStop.getText().toString().trim();
+        if (trim.equals(getStringWithId(R.string.stopdown)))
+            return;
+        if (NoDonw == 0) {//下载数
+            return;
+        }
+        if (type.equals(NOTETWORK)) {//没有网络
+            mListAdapter.pauseAll();
+            return;
+        }
+        if (StringUtil.isEmpty(net)) {
+            ShowDownNetDialog();
+            return;
+        }
+        mListAdapter.downloadAll();
+
+
+    }
+
+    /**
+     * 网络判断
+     *
+     * @return
+     */
+    private boolean network() {
+        NetworkToolUtil toolUtil = NetworkToolUtil.getInstance(mContext);
+        String stauts = toolUtil.getNetWorkToolStauts();
+        if (stauts.equals(DataMessageVo.NONETWORK)) {
+            T.showToast(mContext, getString(R.string.net_error_play));
+            return true;
+        }
+        if (stauts.equals(DataMessageVo.MONET)) {//移动网络
+            String net = MyAppliction.getInstance().getSelectNet();
+            if (StringUtil.isEmpty(net)) {
+                ShowDownNetDialog();
+                return true;
+            }
+            if (net.equals(DataMessageVo.MONET)) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 下载提示
+     */
+    public void ShowDownNetDialog() {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, getString(R.string.net_down), getStringWithId(R.string.sure)
+                , getStringWithId(R.string.cancel), true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                startdown();
+                MyAppliction.getInstance().saveSelectNet(DataMessageVo.MONET);
+            }
+
+            @Override
+            public void onCancelClickListener() {
+
+            }
+        });
+    }
 }

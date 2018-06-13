@@ -26,6 +26,7 @@ import com.lzy.okgo.model.Response;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomesFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
@@ -113,6 +114,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             mType = getIntent().getStringExtra(TYPE);
             mLoginType = getIntent().getStringExtra(Params);
         }
+        DBHelper.initDb(MyAppliction.getInstance());
         initView();
         initData();
         initMagicIndicator1();

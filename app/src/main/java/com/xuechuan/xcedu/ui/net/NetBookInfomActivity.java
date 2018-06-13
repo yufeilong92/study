@@ -1,9 +1,13 @@
 package com.xuechuan.xcedu.ui.net;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -49,6 +53,7 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.fragment.NetBookinfomFragment;
 import com.xuechuan.xcedu.fragment.NetTableFragment;
 import com.xuechuan.xcedu.mvp.contract.VideoBooksContract;
@@ -63,6 +68,7 @@ import com.xuechuan.xcedu.player.util.PolyvScreenUtils;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.NetworkToolUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
@@ -158,6 +164,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     private AlertDialog mShowDialog;
     private LinearLayout mLiContent;
     private TextView mTvEmpty;
+    private MyNetBorect netBorect;
+    private int mFirst = 0;
 
     public static Intent newInstance(Context context, String classid) {
         Intent intent = new Intent(context, NetBookInfomActivity.class);
@@ -208,6 +216,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         initData();
         EventBus.getDefault().register(this);
         initVideo();
+
     }
 
     private void initData() {
@@ -226,7 +235,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         int position = view.getCurrentPosition();
         String vid = view.getCurrentVid();
         Log.e(TAG, "视频播放进度: " + position + "\n" + vid);
-
 
     }
 
@@ -284,7 +292,6 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         mIvNetBookPlay.setOnClickListener(this);
         mRlPlaylayout = (RelativeLayout) findViewById(R.id.rl_play_layout);
         mIvNetPlay = (ImageView) findViewById(R.id.iv_net_play);
-        mIvNetPlay.setOnClickListener(this);
         mTvNetBookAllprice = (TextView) findViewById(R.id.tv_net_book_allprice);
         mTvNetBookAllprice.setOnClickListener(this);
         mTvNetContactService = (TextView) findViewById(R.id.tv_net_contact_service);
@@ -316,7 +323,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         // 设置跑马灯
         int Duration = 10000;
         int textSize = 18;
-        int style=PolyvMarqueeItem.STYLE_ROLL;
+        int style = PolyvMarqueeItem.STYLE_ROLL;
         String textColor = "#DC143C";
         int TextAlpha = 70;
         int Interval = 10000;
@@ -324,16 +331,15 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         int TweenTime = 10000;
         if (MyAppliction.getInstance().getVideoSet() != null) {
             VideoSettingVo.DataBean set = MyAppliction.getInstance().getVideoSet();
-            switch(set.getStyle())
-            {
+            switch (set.getStyle()) {
                 case 1:
-                    style=PolyvMarqueeItem.STYLE_ROLL;
+                    style = PolyvMarqueeItem.STYLE_ROLL;
                     break;
                 case 2:
-                    style=PolyvMarqueeItem.STYLE_FLICK;
+                    style = PolyvMarqueeItem.STYLE_FLICK;
                     break;
                 case 3:
-                    style=PolyvMarqueeItem.STYLE_ROLL_FLICK;
+                    style = PolyvMarqueeItem.STYLE_ROLL_FLICK;
                     break;
 
             }
@@ -585,6 +591,15 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         });
 
 
+        registerBrocad();
+    }
+
+    private void registerBrocad() {
+        netBorect = new MyNetBorect();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.intent.category.DEFAULT");
+        registerReceiver(netBorect, filter);
     }
 
     /**
@@ -651,6 +666,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
             EventBus.getDefault().unregister(this);
         }
         mediaController.disable();
+        unregisterReceiver(netBorect);
         MyAppliction.getInstance().setIsPlay(false);
     }
 
@@ -719,17 +735,43 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                         bookInfom.getName(), bookInfom.getCoverimg());
                 startActivity(intent);
                 break;
-            case R.id.iv_net_play:
-                break;
+
             case R.id.iv_net_book_play:
+                if (network()) return;
                 if (bookInfom.isIsall()) {
                     return;
                 }
                 play();
                 break;
-            default:
-
         }
+    }
+
+    /**
+     * 网络判断
+     *
+     * @return
+     */
+    private boolean network() {
+        NetworkToolUtil toolUtil = NetworkToolUtil.getInstance(mContext);
+        String stauts = toolUtil.getNetWorkToolStauts();
+        if (stauts.equals(DataMessageVo.NONETWORK)) {
+            T.showToast(mContext, getString(R.string.net_error_play));
+            return true;
+        }
+        if (stauts.equals(DataMessageVo.MONET)) {//移动网络
+            String net = MyAppliction.getInstance().getSelectNet();
+            if (StringUtil.isEmpty(net)) {
+                ShowNetDialog(true, false);
+                return true;
+            }
+            if (net.equals(DataMessageVo.MONET)) {
+                if (bookInfom.isIsall()) {
+                    return true;
+                }
+                play();
+            }
+        }
+        return false;
     }
 
     /**
@@ -757,16 +799,16 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         mTvEmpty.setVisibility(View.GONE);
         Gson gson = new Gson();
         NetBookTableVo tableVo = gson.fromJson(com, NetBookTableVo.class);
-        if (tableVo.getStatus().getCode() == 200) {
-            NetBookTableVo.DataBean data = tableVo.getData();
-            bookInfom = data.getClassX();
-            List<ChaptersBeanVo> bookLists = data.getChapters();
-            bindViewData(bookInfom, bookLists);
-        }
+        if (tableVo != null)
+            if (tableVo.getStatus().getCode() == 200) {
+                NetBookTableVo.DataBean data = tableVo.getData();
+                bookInfom = data.getClassX();
+                List<ChaptersBeanVo> bookLists = data.getChapters();
+                bindViewData(bookInfom, bookLists);
+            }
     }
 
     private void bindViewData(ClassBeanVideoVo bookInfom, List<ChaptersBeanVo> bookLists) {
-
         List<String> list;
         mTvNetBookTitle.setText(bookInfom.getName());
         if (bookInfom.isIsall()) {
@@ -844,5 +886,129 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    private class MyNetBorect extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("网络状态发生变化");
+            //检测API是不是小于21，因为到了API21之后getNetworkInfo(int networkType)方法被弃用
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                //获得ConnectivityManager对象
+                ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                //获取ConnectivityManager对象对应的NetworkInfo对象
+                //获取WIFI连接的信息
+                NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                //获取移动数据连接的信息
+                NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
+            /*if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+                MyAppliction.getInstance().saveUserNetSatus("1");
+            } else*/
+                if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+//                    Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
+                } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+                    mFirst += 1;
+                    mobileNet();
+//                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
+                } else {
+
+//                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                //这里的就不写了，前面有写，大同小异
+                System.out.println("API level 大于21");
+                //获得ConnectivityManager对象
+                ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                //获取移动数据连接的信息
+                NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
+         /*   if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+//                MyAppliction.getInstance().saveUserNetSatus("1");
+            } else */
+                if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+//                    Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
+                } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+                    mFirst+=1;
+                    mobileNet();
+//                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
+                } else {
+
+//                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
+     * 移动网络
+     */
+    private void mobileNet() {
+        if (mFirst == 1) {
+            return;
+        }
+        String net = MyAppliction.getInstance().getSelectNet();
+        boolean play = isPlay();
+        if (StringUtil.isEmpty(net)) {
+            if (play) {//是否播放
+                pausePlay();
+            }
+            ShowNetDialog(false, play);
+        }
+    }
+
+    /**
+     * 暂停播放播放
+     *
+     * @return
+     */
+    private void pausePlay() {
+        videoView.stopPlayback();
+    }
+
+    /**
+     * 是否播放
+     */
+    private boolean isPlay() {
+        return videoView.isPlayState();
+    }
+
+    /**
+     * 开始
+     */
+    private void startPlay() {
+        videoView.setAutoContinue(true);
+        videoView.resume();
+    }
+
+    /**
+     * @param click   是否是点击
+     * @param playing 是否正在播放
+     */
+    public void ShowNetDialog(final boolean click, final boolean playing) {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, getString(R.string.net_look), getStringWithId(R.string.sure)
+                , getStringWithId(R.string.cancel), false);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                if (bookInfom.isIsall()) {
+                    return;
+                }
+                if (click) {
+                    play();
+                }
+                if (playing) {
+                    startPlay();
+                }
+                MyAppliction.getInstance().saveSelectNet(DataMessageVo.MONET);
+            }
+
+            @Override
+            public void onCancelClickListener() {
+
+            }
+        });
+    }
 
 }

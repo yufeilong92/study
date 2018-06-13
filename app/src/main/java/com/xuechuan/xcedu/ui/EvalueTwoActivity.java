@@ -135,7 +135,6 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void initHearView(View view, final TargetcommentBeanVo bean) {
         mCommonid = String.valueOf(bean.getId());
-
         mLlEdLayout.setVisibility(View.VISIBLE);
         ImageView mIvEvaluateHear = (ImageView) view.findViewById(R.id.iv_evaluate_hear);
         TextView mTvEvalueUserName = (TextView) view.findViewById(R.id.tv_evalue_user_name);
@@ -352,7 +351,6 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         isRefresh = false;
         mXfvContentTwoDetail.stopRefresh();
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
-
         L.e(com);
     }
 
@@ -389,6 +387,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     public void EvalueTwoErroMore(String com) {
         isRefresh = false;
         mXfvContentTwoDetail.stopRefresh();
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.e(com);
     }
 }

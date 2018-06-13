@@ -29,7 +29,7 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestHomePager(Context context, String code) {
         if (StringUtil.isEmpty(code)) {
-            code = "0";
+            code = "100000";
         }
         model.requestHomePager(context, code, new RequestResulteView() {
             @Override

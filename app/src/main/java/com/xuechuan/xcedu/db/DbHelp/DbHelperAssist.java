@@ -333,17 +333,17 @@ public class DbHelperAssist {
      */
     public void upLooklistDelect() {
 
-        String userId = SaveUUidUtil.getInstance().getUserId();
-        UserInfomDb userInfomDb = queryWithuuId(userId);
-        if (userInfomDb == null) {
+        UserInfomDb infomDb = queryWithuuUserInfom();
+        if (infomDb == null) {
             UserInfomVo vo = MyAppliction.getInstance().getUserInfom();
-            userInfomDb.setVo(vo);
+            infomDb.setVo(vo);
             saveUserInfom(vo);
         }
-        userInfomDb.setWrongDataSkill(null);
-        userInfomDb.setWrongDataCase(null);
-        userInfomDb.setWrongDataColoct(null);
-        dao.update(userInfomDb);
+        ArrayList<UserLookVo> vos = new ArrayList<>();
+        infomDb.setWrongDataSkill(vos);
+        infomDb.setWrongDataCase(vos);
+        infomDb.setWrongDataColoct(vos);
+        dao.update(infomDb);
     }
 
     /**
@@ -407,6 +407,7 @@ public class DbHelperAssist {
                     if (woringvo.getChapterId().equals(userLookVo.getChapterId())) {
                         isSave = true;
                         numbers = i;
+
                     }
                 }
             }

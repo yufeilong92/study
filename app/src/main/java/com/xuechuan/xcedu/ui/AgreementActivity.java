@@ -4,19 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
+import com.xuechuan.xcedu.utils.Defaultcontent;
+import com.xuechuan.xcedu.utils.DialogBgUtil;
+import com.xuechuan.xcedu.utils.ShareUtils;
+import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -28,24 +35,33 @@ import com.xuechuan.xcedu.base.BaseActivity;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/30
  */
-public class AgreementActivity extends BaseActivity {
+public class AgreementActivity extends BaseActivity implements View.OnClickListener {
 
     private WebView mWebAgreenement;
     private ImageView mIvAgreenmentImg;
+    private String mViewTitle;
+    private ImageView mIvTitleMore;
+    private LinearLayout mLlRootView;
 
-    /*    @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_agreement);
-            initView();
-        }*/
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_agreement);
+        initView();
+    }*/
+
     private static String URLDATA = "urldata";
     private String mUrl;
     private Context mContext;
+    private CommonPopupWindow popShare;
+    private static String typeMark = "mark";
+    public static String SHAREMARK = "share";
+    public static String NOSHAREMARK = "noshaor";
 
-    public static Intent newInstance(Context context, String urldata) {
+    public static Intent newInstance(Context context, String urldata, String mark) {
         Intent intent = new Intent(context, AgreementActivity.class);
         intent.putExtra(URLDATA, urldata);
+        intent.putExtra(typeMark, mark);
         return intent;
     }
 
@@ -53,12 +69,19 @@ public class AgreementActivity extends BaseActivity {
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_agreement);
+        initView();
         if (getIntent() != null) {
             mUrl = getIntent().getStringExtra(URLDATA);
+            String mType = getIntent().getStringExtra(typeMark);
+            if (mType.equals(SHAREMARK)) {
+                mIvTitleMore.setVisibility(View.VISIBLE);
+            } else {
+                mIvTitleMore.setVisibility(View.GONE);
+            }
         }
-        initView();
         initData();
     }
+
 
     private void initData() {
         mIvAgreenmentImg.setImageResource(R.drawable.animation_loading);
@@ -79,6 +102,8 @@ public class AgreementActivity extends BaseActivity {
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
         mWebAgreenement.loadUrl(mUrl);
         mWebAgreenement.setWebViewClient(new WebViewClient() {
+
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url == null) return false;
@@ -100,6 +125,7 @@ public class AgreementActivity extends BaseActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                mViewTitle = view.getTitle();
                 mWebAgreenement.setVisibility(View.GONE);
                 mIvAgreenmentImg.setVisibility(View.VISIBLE);
                 drawable.start();
@@ -120,5 +146,116 @@ public class AgreementActivity extends BaseActivity {
         mContext = this;
         mWebAgreenement = (WebView) findViewById(R.id.web_agreenement);
         mIvAgreenmentImg = (ImageView) findViewById(R.id.iv_agreenment_img);
+        mIvTitleMore = (ImageView) findViewById(R.id.iv_title_more);
+        mIvTitleMore.setOnClickListener(this);
+        mLlRootView = (LinearLayout) findViewById(R.id.ll_root_view);
     }
+
+    /**
+     * 分享布局
+     */
+    private void showShareLayout() {
+        popShare = new CommonPopupWindow(this, R.layout.pop_item_share, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+            private TextView qqzon;
+            private TextView qq;
+            private TextView weibo;
+            private TextView circle;
+            private TextView weixin;
+
+            @Override
+            protected void initView() {
+                View view = getContentView();
+                weixin = (TextView) view.findViewById(R.id.tv_pop_weixin_share);
+                circle = (TextView) view.findViewById(R.id.tv_pop_crile_share);
+                weibo = (TextView) view.findViewById(R.id.tv_pop_weibo_share);
+                qq = (TextView) view.findViewById(R.id.tv_pop_qq_share);
+                qqzon = (TextView) view.findViewById(R.id.tv_pop_qqzon_share);
+            }
+
+            @Override
+            protected void initEvent() {
+                qq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
+                                , "", mUrl, R.mipmap.m_setting_about_xcimg
+                                , SHARE_MEDIA.QQ);
+//                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.QQ);
+                    }
+                });
+                qqzon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
+                                , "", mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
+                        );
+//                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.QZONE);
+                    }
+                });
+                weibo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
+                                , "", mUrl, R.mipmap.m_setting_about_xcimg
+                                , SHARE_MEDIA.SINA
+                        );
+//                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.SINA);
+                    }
+                });
+                weixin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
+                                , "", mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                        );
+//                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.WEIXIN);
+                    }
+                });
+                circle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
+                                , "", mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                        );
+//                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.WEIXIN_CIRCLE);
+                    }
+                });
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        DialogBgUtil.setBackgroundAlpha(1f, AgreementActivity.this);
+                    }
+                });
+            }
+        };
+        popShare.showAtLocation(mLlRootView, Gravity.BOTTOM, 0, 0);
+        DialogBgUtil.setBackgroundAlpha(0.5f, AgreementActivity.this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_title_more:
+                showShareLayout();
+                break;
+        }
+    }
+
+
 }

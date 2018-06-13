@@ -326,5 +326,10 @@
     <string name="Allarticle">全部文章</string>
     <string name="please_del_video">请选择要删除的视频</string>
     <string name="suppr_suc">点赞成功</string>
+    <string name="net_look">正在使用非WIFI网络，播放将产生流量费用</string>
+    <string name="net_down">正在使用非WIFI网络，下载将产生流量费用</string>
+    <string name="net_error_down">当前网络异常,无法下载</string>
+    <string name="net_error_play">网络异常,无法播放</string>
+    <string name="service_xieyi">服务协议</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,9 +10,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,7 +23,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,9 +33,9 @@ import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.InfomDetailAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.BaseVo;
@@ -40,24 +46,24 @@ import com.xuechuan.xcedu.mvp.presenter.InfomDetailPresenter;
 import com.xuechuan.xcedu.net.CurrencyService;
 import com.xuechuan.xcedu.net.HomeService;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
+import com.xuechuan.xcedu.utils.Defaultcontent;
+import com.xuechuan.xcedu.utils.DialogBgUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.ScreenShot;
+import com.xuechuan.xcedu.utils.ShareUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
-import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ArticleBean;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.InfomDetailVo;
 import com.xuechuan.xcedu.vo.ResultVo;
-import com.xuechuan.xcedu.vo.UserBean;
-import com.xuechuan.xcedu.vo.UserInfomVo;
+import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class InfomDetailActivity extends BaseActivity implements View.OnClickListener, InfomDetailContract.View {
@@ -102,6 +108,10 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView tvNumber;
     private TextView tvHearNumber;
     private InfomDetailPresenter mPresenter;
+    private ImageView mIvTitleMore;
+    private XRefreshView mXfvContentDetail;
+    private CommonPopupWindow popShare;
+    private String mViewTitle;
 
     /***
      *
@@ -129,14 +139,14 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         return intent;
     }
 
-    /*
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_infom_detail);
-            initView();
-        }
-    */
+
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_infom_detail);
+        initView();
+    }*/
+
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_infom_detail);
@@ -226,6 +236,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         mRlInfomLayout.setOnClickListener(this);
         mLlInfomSend = (LinearLayout) findViewById(R.id.ll_infom_send);
         mLlInfomSend.setOnClickListener(this);
+        mIvTitleMore = (ImageView) findViewById(R.id.iv_title_more);
+        mIvTitleMore.setOnClickListener(this);
     }
 
     private void initxfvView() {
@@ -409,6 +421,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                mViewTitle = view.getTitle();
                 li.setVisibility(View.GONE);
             }
 
@@ -497,6 +510,9 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 Utils.hideInputMethod(mContext, mEtInfomContent);
                 submit(textStr);
                 break;
+            case R.id.iv_title_more:
+                showShareLayout();
+                break;
         }
     }
 
@@ -545,6 +561,104 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         integer = data.getSupportcount();
         chb_select.setChecked(data.isIssupport());
         bindHearData();
+    }
+
+    /**
+     * 分享布局
+     */
+    private void showShareLayout() {
+        popShare = new CommonPopupWindow(this, R.layout.pop_item_share, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+
+            private TextView qqzon;
+            private TextView qq;
+            private TextView weibo;
+            private TextView circle;
+            private TextView weixin;
+
+            @Override
+            protected void initView() {
+                View view = getContentView();
+                weixin = (TextView) view.findViewById(R.id.tv_pop_weixin_share);
+                circle = (TextView) view.findViewById(R.id.tv_pop_crile_share);
+                weibo = (TextView) view.findViewById(R.id.tv_pop_weibo_share);
+                qq = (TextView) view.findViewById(R.id.tv_pop_qq_share);
+                qqzon = (TextView) view.findViewById(R.id.tv_pop_qqzon_share);
+            }
+
+            @Override
+            protected void initEvent() {
+                qq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mViewTitle
+                                , "",mUrl, R.mipmap.m_setting_about_xcimg
+                                , SHARE_MEDIA.QQ);
+//                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.QQ);
+                    }
+                });
+                qqzon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mViewTitle
+                                , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
+                        );
+//                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.QZONE);
+                    }
+                });
+                weibo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mViewTitle
+                                , "",mUrl, R.mipmap.m_setting_about_xcimg
+                                , SHARE_MEDIA.SINA
+                        );
+//                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.SINA);
+                    }
+                });
+                weixin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mViewTitle
+                                , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                        );
+//                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.WEIXIN);
+                    }
+                });
+                circle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mViewTitle
+                                , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                        );
+//                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
+//                                pic, SHARE_MEDIA.WEIXIN_CIRCLE);
+                    }
+                });
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        DialogBgUtil.setBackgroundAlpha(1f, InfomDetailActivity.this);
+                    }
+                });
+            }
+        };
+        popShare.showAtLocation(mRlInfomLayout, Gravity.BOTTOM, 0, 0);
+        DialogBgUtil.setBackgroundAlpha(0.5f, InfomDetailActivity.this);
     }
 
     @Override

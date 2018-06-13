@@ -62,8 +62,8 @@ public class AboutActivity extends BaseActivity {
         mTvAboutappServiceAgreement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT);
-                intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR,"服务协议");
+                Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT,AgreementActivity.NOSHAREMARK);
+                intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR,getString(R.string.service_xieyi));
                 startActivity(intent);
             }
         });

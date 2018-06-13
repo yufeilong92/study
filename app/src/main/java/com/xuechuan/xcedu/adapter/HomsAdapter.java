@@ -159,7 +159,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
                 AdvisoryBean vo = (AdvisoryBean) obj;
               /*  Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
-                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl());
+                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),AgreementActivity.SHAREMARK);
                 mContext.startActivity(intent);
             }
         });
@@ -224,7 +224,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
             public void OnBannerClick(int position) {
                 BannerBean bean = beanList.get(position - 1);
                 if (!StringUtil.isEmpty(bean.getGourl()))
-                    mContext.startActivity(AgreementActivity.newInstance(mContext, bean.getGourl()));
+                    mContext.startActivity(AgreementActivity.newInstance(mContext, bean.getGourl(),AgreementActivity.NOSHAREMARK));
 
             }
         });
