@@ -6,18 +6,20 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
-import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.Event.VideoIdEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.NetMyBookEvaleAdapter;
@@ -27,13 +29,13 @@ import com.xuechuan.xcedu.mvp.model.NetVideoEvalueModelImple;
 import com.xuechuan.xcedu.mvp.presenter.NetVideoEvaluePresenter;
 import com.xuechuan.xcedu.mvp.view.NetVideoEvalueView;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
+import com.xuechuan.xcedu.utils.DialogBgUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
-import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.EvalueInfomVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.ResultVo;
+import com.xuechuan.xcedu.weight.CommonPopupWindow;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,6 +71,8 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     private TextView mEtNetBookEvalue;
     private ImageView mIvNetBookSend;
     private NetMyBookEvaleAdapter adapter;
+    private CommonPopupWindow inputEvaluePop;
+    private RelativeLayout mRlRootMybook;
 
 
     @Override
@@ -117,7 +121,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         clearData();
         bindAdapterData();
         initXrfresh();
-//        loadNewData();
+        loadNewData();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -125,6 +129,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         mVideoId = event.getVideoId();
         loadNewData();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -161,7 +166,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
                 startActivity(intent);
             }
         });
-        adapter.setChbClickListener(new NetMyBookEvaleAdapter.onItemChbClickListener() {
+   /*     adapter.setChbClickListener(new NetMyBookEvaleAdapter.onItemChbClickListener() {
             @Override
             public void onClickChbListener(EvalueVo.DatasBean bean, boolean isChick, int position) {
                 EvalueVo.DatasBean vo = (EvalueVo.DatasBean) mArrary.get(position);
@@ -177,7 +182,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
                     adapter.notifyDataSetChanged();
                 }
             }
-        });
+        });*/
     }
 
     private void initXrfresh() {
@@ -221,6 +226,8 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         mTvNetEmptyContent.setOnClickListener(this);
         mEtNetBookEvalue = (TextView) view.findViewById(R.id.et_net_book_evalue);
         mEtNetBookEvalue.setOnClickListener(this);
+        mRlRootMybook = (RelativeLayout) view.findViewById(R.id.rl_root_mybook);
+        mRlRootMybook.setOnClickListener(this);
     }
 
     private void clearData() {
@@ -259,6 +266,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_net_book_evalue://发送
+//                showAnswerCardResultLayout();
                 if (StringUtil.isEmpty(mVideoId)) {
                     T.showToast(mContext, "请选择播放视频，再来评价");
                     return;
@@ -316,7 +324,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         isRefresh = false;
         L.e("视频评价" + con);
         Gson gson = new Gson();
-        EvalueInfomVo vo = gson.fromJson(con, EvalueInfomVo.class);
+        EvalueVo vo = gson.fromJson(con, EvalueVo.class);
         if (vo.getStatus().getCode() == 200) {//成功
             List list = vo.getDatas();
             clearData();
@@ -353,7 +361,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         L.e("视频评价vodie" + con);
         L.e(getNowPage() + "集合长度" + mArrary.size());
         Gson gson = new Gson();
-        EvalueInfomVo vo = gson.fromJson(con, EvalueInfomVo.class);
+        EvalueVo vo = gson.fromJson(con, EvalueVo.class);
         if (vo.getStatus().getCode() == 200) {//成功
             List list = vo.getDatas();
 //                    clearData();
@@ -400,8 +408,44 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void SubmitEvalueError(String con) {
+        T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.e("视频评价" + con);
     }
 
+
+    private void showAnswerCardResultLayout() {
+        inputEvaluePop = new CommonPopupWindow(mContext, R.layout.item_input_layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+            private Button mBtnSubmit;
+            private EditText mEtSubmitEvalue;
+            @Override
+            protected void initView() {
+                View view = getContentView();
+                mEtSubmitEvalue = view.findViewById(R.id.et_submit_evalue);
+                mBtnSubmit = view.findViewById(R.id.btn_submit);
+
+            }
+
+            @Override
+            protected void initEvent() {
+                mBtnSubmit.requestFocus();
+                mBtnSubmit.setFocusableInTouchMode(true);
+                mBtnSubmit.setFocusable(true);
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        DialogBgUtil.setBackgroundAlpha(1f, mContext);
+                    }
+                });
+            }
+        };
+        inputEvaluePop.showAtLocation(mRlRootMybook, Gravity.BOTTOM, 0, 0);
+        DialogBgUtil.setBackgroundAlpha(0.5f, mContext);
+    }
 
 }

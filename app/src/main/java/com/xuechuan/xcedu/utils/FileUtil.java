@@ -19,7 +19,7 @@ public class FileUtil {
     private static String mDataRootPath = "";
 
     //保存图片的目录
-    private final static String IMG_PATH = "/LB/image";
+    private final static String IMG_PATH = "/xuechuan/image";
     private final static String IMG_SUFFIX = ".png";
 
 

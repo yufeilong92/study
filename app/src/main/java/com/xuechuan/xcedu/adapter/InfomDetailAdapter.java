@@ -113,7 +113,7 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
                     util.submitSupport(String.valueOf(bean.getId()), "true", DataMessageVo.USERTYPEAC);
                 } else {
                     if (number <= 0) {
-                        holder.mChbEvaluaIssupper.setText((0) + "");
+                        holder.mChbEvaluaIssupper.setText(0 + "");
                     } else {
                         holder.mChbEvaluaIssupper.setText((number - 1) + "");
                     }

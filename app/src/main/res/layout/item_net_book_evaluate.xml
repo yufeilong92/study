@@ -25,6 +25,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/tv_evalue_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,11 +40,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
                 android:maxLines="2"
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
-            <Space style="@style/space_16_height" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,6 +50,8 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/text_fu_color"
                     android:id="@+id/tv_evalue_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,6 +59,8 @@
                     android:text="1分钟" />
 
                 <TextView
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/text_fu_color"
                     android:id="@+id/tv_evalue_evalue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,12 +71,16 @@
                 <Space style="@style/space_16_width" />
 
                 <CheckBox
+                    android:text="2222"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/text_fu_color"
+                    android:paddingTop="@dimen/space_16"
+                    android:paddingLeft="@dimen/space_8"
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/select_issupper_home"
-                    android:button="@null" />
-
+                    android:paddingBottom="@dimen/space_16"
+                    android:button="@drawable/select_issupper_home" />
                 <Space
                     android:visibility="gone"
                     style="@style/space_8_width" />

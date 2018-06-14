@@ -1,5 +1,6 @@
 package com.xuechuan.xcedu.db.DbHelp;
 
+import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.db.DownVideoDbDao;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
@@ -24,6 +25,7 @@ public class DbHelperDownAssist {
     private static DbHelperDownAssist assist;
 
     public DbHelperDownAssist() {
+        DBHelper.getDaoSession().clear();
         dao = DBHelper.getDaoSession().getDownVideoDbDao();
     }
 
@@ -71,7 +73,7 @@ public class DbHelperDownAssist {
      * @param kid
      * @param zid
      */
-    public void delectZItem(String kid,  String zid) {
+    public void delectZItem(String kid, String zid) {
         if (StringUtil.isEmpty(zid) || StringUtil.isEmpty(kid)) {
             return;
         }
@@ -85,7 +87,7 @@ public class DbHelperDownAssist {
                 List<DownVideoVo> downlist = db.getDownlist();
                 for (int j = 0; j < downlist.size(); j++) {
                     DownVideoVo vo = downlist.get(j);
-                    if (vo.getZid().equals(zid) ) {//找到该篇
+                    if (vo.getZid().equals(zid)) {//找到该篇
                         downlist.remove(j);
                     }
                 }
@@ -179,7 +181,8 @@ public class DbHelperDownAssist {
         if (downlist == null || downlist.isEmpty()) {
             return false;
         }
-        for (DownVideoVo videoVo : downlist) {
+        for (int i = 0; i < downlist.size(); i++) {
+            DownVideoVo videoVo = downlist.get(i);
             if (videoVo.getZid().equals(vo.getZid()) && videoVo.getPid().equals(vo.getPid())) {
                 return true;
             }
@@ -233,10 +236,10 @@ public class DbHelperDownAssist {
                 downlist.remove(i);
             }
         }
+
         if (downlist.size() > 0) {//有
+            videoDb.setDownlist(downlist);
             dao.update(videoDb);
-        } else {//没有缓存了
-            dao.deleteByKey(videoDb.getId());
         }
     }
 
@@ -294,6 +297,7 @@ public class DbHelperDownAssist {
      */
     public List<DownVideoDb> queryUserDownInfom() {
 //        String userId = SaveUUidUtil.getInstance().getUserId();
+        DBHelper.getDaoSession().clear();
         return dao.loadAll();
     }
 
@@ -306,6 +310,7 @@ public class DbHelperDownAssist {
         if (StringUtil.isEmpty(kid)) {
             return null;
         }
+        DBHelper.getDaoSession().clear();
         return dao.queryBuilder().where(DownVideoDbDao.Properties.Kid.eq(kid)).unique();
     }
 

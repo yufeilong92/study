@@ -39,6 +39,8 @@ public class EvalueInterfacePresenter implements EvalueInterfaceContract.Present
         if (StringUtil.isEmpty(comment)) {
             return;
         }
+
+
         model.SubmitContent(context, targetid, comment, commentid, usetype, new RequestResulteView() {
             @Override
             public void success(String result) {

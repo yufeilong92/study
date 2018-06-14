@@ -105,6 +105,14 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
                     Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(id),
                             mOid);
                     startActivity(intent);
+                } else {
+                    List children = node.getChildren();
+                    if (children == null || children.isEmpty()){
+                        Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(node.getpId()),
+                                mOid);
+                        startActivity(intent);
+                    }
+
                 }
             }
         });

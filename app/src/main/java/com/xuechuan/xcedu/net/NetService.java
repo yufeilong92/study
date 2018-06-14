@@ -182,7 +182,7 @@ public class NetService extends BaseHttpServcie {
         paramVo.setValue(String.valueOf(user.getId()));
         listParamVo.add(paramVo);
         GetParamVo paramVo1 = getParamVo();
-        paramVo1.setParam("video");
+        paramVo1.setParam("videoid");
         paramVo1.setValue(videoid);
         addPage(listParamVo, page);
         listParamVo.add(paramVo1);

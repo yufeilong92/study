@@ -257,7 +257,9 @@ public class DialogUtil {
         builder.setView(view)
                 .setCancelable(cancelable)
                 .create();
+
         final AlertDialog show = builder.show();
+
         sure.setOnClickListener(new View.OnClickListener() {//取消
             @Override
             public void onClick(View v) {

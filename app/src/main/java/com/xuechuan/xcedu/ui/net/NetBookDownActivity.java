@@ -16,8 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.easefun.polyvsdk.PolyvDownloader;
-import com.easefun.polyvsdk.PolyvDownloaderManager;
+import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.NetDownGoingAdapter;
 import com.xuechuan.xcedu.adapter.NetDownOverAdapter;
@@ -28,7 +27,6 @@ import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.Db.DownVideoVo;
-import com.xuechuan.xcedu.vo.DownInfomSelectVo;
 import com.xuechuan.xcedu.vo.NetDownSelectVo;
 
 import java.util.ArrayList;
@@ -78,18 +76,18 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_net_book_down);
         initView();
+        mDao = DbHelperDownAssist.getInstance();
         initData(false, false);
-        initKong();
+        initDownOrDownring();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         initData(false, false);
-
     }
 
-    private void initKong() {
+    private void initDownOrDownring() {
         mChbNetBookDownAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -133,7 +131,6 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
 
     private void initData(boolean isShow, boolean isSelect) {
         computeStorage();
-        mDao = DbHelperDownAssist.getInstance();
         //记录那些没有缓存完成的
         List<DownVideoDb> dbs = mDao.queryUserDownInfom();
         if (dbs == null || dbs.isEmpty()) {
@@ -154,10 +151,10 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
             if (downlist != null && !downlist.isEmpty()) {
                 for (int j = 0; j < downlist.size(); j++) {
                     DownVideoVo vo = downlist.get(j);
-                    if (!vo.getStatus().equals("0")) {
-                        downIngVideos.add(vo);
-                    } else {
+                    if (vo.getStatus().equals("0")) {
                         downVideos.add(vo);
+                    } else {
+                        downIngVideos.add(vo);
                     }
                 }
             }
@@ -497,11 +494,13 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
             protected Void doInBackground(String... strings) {
                 String vid = strings[0];
                 String bitrates = strings[1];
-                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
-                downloader.deleteVideo();
+//                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
+//                downloader.deleteVideo();
+                PolyvDownloaderUtils.deleteVideo(vid,Integer.parseInt(bitrates));
                 return null;
             }
         };
         asyncTask.execute(vid, bitrate);
     }
+
 }

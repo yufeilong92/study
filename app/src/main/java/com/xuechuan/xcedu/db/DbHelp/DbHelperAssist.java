@@ -31,6 +31,7 @@ public class DbHelperAssist {
 
     public DbHelperAssist() {
         if (dao == null) {
+            DBHelper.getDaoSession().clear();
             dao = DBHelper.getDaoSession().getUserInfomDbDao();
         }
 
@@ -231,6 +232,7 @@ public class DbHelperAssist {
      */
     public UserInfomDb queryWithuuUserInfom() {
         String userId = SaveUUidUtil.getInstance().getUserId();
+        DBHelper.getDaoSession().clear();
         UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
         if (infomDb == null) {
             return null;
@@ -725,6 +727,7 @@ public class DbHelperAssist {
             return;
         }
         String userId = SaveUUidUtil.getInstance().getUserId();
+        DBHelper.getDaoSession().clear();
         UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
         if (infomDb == null) {
             UserInfomVo userInfom = MyAppliction.getInstance().getUserInfom();
@@ -769,6 +772,7 @@ public class DbHelperAssist {
      */
     public UserLookVideoVo queryUserLookVideoWithKid(String kid) {
         String userId = SaveUUidUtil.getInstance().getUserId();
+        DBHelper.getDaoSession().clear();
         UserInfomDb infomDb = dao.queryBuilder().where(UserInfomDbDao.Properties.Moid.eq(userId)).unique();
         if (infomDb == null) {
             return null;

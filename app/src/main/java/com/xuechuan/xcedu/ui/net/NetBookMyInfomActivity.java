@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,6 +42,7 @@ import com.easefun.polyvsdk.PolyvBitRate;
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKUtil;
+import com.easefun.polyvsdk.Video;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeItem;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeView;
 import com.easefun.polyvsdk.video.PolyvPlayErrorReason;
@@ -256,7 +258,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         super.onDestroy();
         int position = videoView.getCurrentPosition();
         if (position != 0) {
-            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), vid);
+            SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), String.valueOf(mVideoid));
         }
         videoView.destroy();
 
@@ -374,6 +376,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 for (UserLookVideoVo vo : lookVideoVos) {
                     if (vo.getKid().equals(mClassId)) {
                         vid = vo.getVid();
+                        mVideoid = Integer.parseInt(vo.getZid());
                         mTitleName = vo.getTitleName();
                         videoProgress = Integer.parseInt(vo.getProgress());
                         iscontinue = true;
@@ -414,6 +417,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             mZid = vo.getVideoid();
             vid = vo.getVid();
             mTitleName = vo.getVideoname();
+            EventBus.getDefault().postSticky(new VideoIdEvent(String.valueOf(mVideoid)));
         }
     }
 
@@ -799,7 +803,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 int position = videoView.getCurrentPosition();
 //                String s = PolyvTimeUtils.generateTime(position);
                 if (position != 0) {
-                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), vid);
+                    SubmitProgressService.startActionFoo(mContext, String.valueOf(position),
+                            String.valueOf(bookInfmo.getId()), String.valueOf(mVideoid));
                 }
                 this.finish();
                 break;
@@ -823,6 +828,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private void saveLookVideo() {
         DbHelperAssist mUserDao = DbHelperAssist.getInstance();
         if (StringUtil.isEmpty(vid) && !isPlayafter) {
+            return;
+        }
+        if (mZid == 0) {
             return;
         }
         UserLookVideoVo vo = new UserLookVideoVo();
@@ -879,7 +887,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     private List<Fragment> creartFragment(List<ChaptersBeanVo> bookList) {
         List<Fragment> fragments = new ArrayList<>();
         NetMyBokTableFragment tableFragment = NetMyBokTableFragment.newInstance(bookList);
-        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance(vid, "");
+        NetMyBookVualueFragment bookVualueFragment = NetMyBookVualueFragment.newInstance(String.valueOf(mVideoid), "");
         fragments.add(tableFragment);
         fragments.add(bookVualueFragment);
         return fragments;
@@ -979,7 +987,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                             executorService.shutdown();
                             isShow(false, true, false, true, false);
                             mBtnPopDownSureAll.setText("全部缓存(" + vo.getDownlist().size() + ")");
-                            mDownAdapter.notifyDataSetChanged();
+//                            mDownAdapter.notifyDataSetChanged();
                         } else {
                             isRuning = false;
                             executorService.shutdown();
@@ -988,7 +996,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                             mBtnPopDownRun.setVisibility(View.VISIBLE);
                             mBtnPopDownLook.setVisibility(View.GONE);
                             mBtnPopDownRun.setText("正在缓存(" + (downnumber + downnumberOver) + ")");
-                            mDownAdapter.notifyDataSetChanged();
 
                         }
                     }
@@ -1121,6 +1128,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 GetNetBookService(mBookList, bitrer);
             }
 
+            /**
+             * 下载适配器
+             */
             private void bindAdapter() {
                 GridLayoutManager manager = new GridLayoutManager(mContext, 1);
                 manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -1244,7 +1254,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                 if (stauts.equals(DataMessageVo.MONET)) {//移动网络
                     String net = MyAppliction.getInstance().getSelectNet();
                     if (StringUtil.isEmpty(net)) {
-                        ShowDownNetDialog(isAll,obj,position);
+                        ShowDownNetDialog(isAll, obj, position);
                         return true;
                     }
                     if (net.equals(DataMessageVo.MONET)) {
@@ -1286,15 +1296,60 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         setBackgroundAlpha(0.5f, NetBookMyInfomActivity.this);
     }
 
-    private void startDown(DownVideoDb vo) {
+    private void startDown(final DownVideoDb vo) {
         for (int i = 0; i < vo.getDownlist().size(); i++) {
-            DownVideoVo vo1 = vo.getDownlist().get(i);
-            if (mDao != null && !mDao.isAdd(vo, vo1)) {
-                mDao.addDownItem(vo);
-                PolyvDownloader polyvDownloader = PolyvDownloaderManager.getPolyvDownloader(vid, Integer.parseInt(vo1.getBitRate()));
-                polyvDownloader.setPolyvDownloadProressListener(new MyDownloadListener(mContext, vo, vo1));
-                polyvDownloader.start(mContext);
-            }
+            final DownVideoVo vo1 = vo.getDownlist().get(i);
+            Video.loadVideo(vid, new Video.OnVideoLoaded() {
+                @Override
+                public void onloaded(@Nullable Video v) {
+                    if (v == null) {
+                        Toast.makeText(mContext, "获取下载信息失败，请重试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // 码率数
+                    String[] items = PolyvBitRate.getBitRateNameArray(v.getDfNum());
+                    if (items.length == 1) {
+                        vo1.setBitRate("1");
+                    }
+                    if (items.length == 2) {
+                        int rate = Integer.parseInt(vo1.getBitRate());
+                        if (rate == 3) {
+                            vo1.setBitRate("2");
+                        }
+                        if (rate == 1) {
+                            vo1.setBitRate("1");
+                        }
+
+                    }
+                    if (items.length == 3) {
+                        int rate = Integer.parseInt(vo1.getBitRate());
+                        if (rate == 3) {
+                            vo1.setBitRate("3");
+                        }
+                        if (rate == 2) {
+                            vo1.setBitRate("2");
+                        }
+                        if (rate == 1) {
+                            vo1.setBitRate("1");
+                        }
+                    }
+                    doDown(vo, vo1);
+
+                }
+            });
+
+        }
+    }
+
+    private void doDown(DownVideoDb vo, DownVideoVo vo1) {
+        if (mDao != null && !mDao.isAdd(vo, vo1)) {
+            mDao.addDownItem(vo);
+            PolyvDownloader polyvDownloader = PolyvDownloaderManager.getPolyvDownloader(vid, Integer.parseInt(vo1.getBitRate()));
+            polyvDownloader.setPolyvDownloadProressListener(new MyDownloadListener(mContext, vo, vo1));
+            polyvDownloader.start(mContext);
+            mDownAdapter.notifyDataSetChanged();
+        } else {
+            T.showToast(mContext, "已经添加到下载队列");
         }
     }
 

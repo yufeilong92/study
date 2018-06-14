@@ -23,6 +23,7 @@ import com.andview.refreshview.callback.IFooterCallBack;
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.easefun.polyvsdk.PolyvSDKClient;
+import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
 import com.google.gson.Gson;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
@@ -113,7 +114,6 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         initView();
         mPresenter = new NetDownIngPresenter(new NetDownIngModelImpl(), this);
         initData();
-
         netBorect = new MyNetBroadcast();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -314,40 +314,36 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     T.showToast(mContext, getString(R.string.please_del_video));
                     return;
                 }
-                boolean b = Utils.handleOnDoubleClick();
-                if (b) {
-                } else {
-                    DialogUtil dialogUtil = DialogUtil.getInstance();
-                    dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del)
-                            , getStringWithId(R.string.delect), getStringWithId(R.string.cancel), true);
-                    dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
-                        @Override
-                        public void onSureClickListener() {
-                            final AlertDialog dialog = DialogUtil.showDialog(mContext, "", "删除中...");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.dismiss();
-                                }
-                            }, 2000);
-                            //选中的vid 集合
-                            for (int i = 0; i < mDataSelectList.size(); i++) {
-                                DownInfomSelectVo selectVo = mDataSelectList.get(i);
-                                if (selectVo.isChbSelect()) {
-                                    mDao.delectItem(mDataBean.getKid(), selectVo.getPid(), selectVo.getZid());
-                                    delectVideo(selectVo.getVid(), selectVo.getBitrate());
-                                }
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showTitleDialog(mContext, getStringWithId(R.string.is_del)
+                        , getStringWithId(R.string.delect), getStringWithId(R.string.cancel), true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        final AlertDialog dialog = DialogUtil.showDialog(mContext, "", "删除中...");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.dismiss();
                             }
+                        }, 2000);
+                        //选中的vid 集合
+                        for (int i = 0; i < mDataSelectList.size(); i++) {
+                            DownInfomSelectVo selectVo = mDataSelectList.get(i);
+                            if (selectVo.isChbSelect()) {
+                                mDao.delectItem(mDataBean.getKid(), selectVo.getPid(), selectVo.getZid());
+                                delectVideo(selectVo.getVid(), selectVo.getBitrate());
+                            }
+                        }
 //                            initData(true);
-                            mListAdapter.notifyDataSetChanged();
-                        }
+                        mListAdapter.notifyDataSetChanged();
+                    }
 
-                        @Override
-                        public void onCancelClickListener() {
+                    @Override
+                    public void onCancelClickListener() {
 
-                        }
-                    });
-                }
+                    }
+                });
                 break;
             case R.id.tv_net_downing_make://编辑
                 String str = getTextStr(mTvNetDowningMake);
@@ -398,8 +394,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             protected Void doInBackground(String... strings) {
                 String vid = strings[0];
                 String bitrates = strings[1];
-                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
-                downloader.deleteVideo();
+//                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
+//                downloader.deleteVideo();
+                PolyvDownloaderUtils.deleteVideo(vid,Integer.parseInt(bitrates));
                 return null;
             }
         };
@@ -463,7 +460,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 } else {
                     mFirst += 1;
                     downNet(NOTETWORK);
-                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                    T.showToast(mContext, getStringWithId(R.string.net_error));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -488,7 +485,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 } else {
                     mFirst += 1;
                     downNet(NOTETWORK);
-                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                    T.showToast(mContext, getStringWithId(R.string.net_error));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -504,7 +501,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         }
         String net = MyAppliction.getInstance().getSelectNet();
         String trim = mTvNetDowningStop.getText().toString().trim();
-        if (trim.equals(getStringWithId(R.string.stopdown)))
+        if (!trim.equals(getStringWithId(R.string.stopdown)))
             return;
         if (NoDonw == 0) {//下载数
             return;

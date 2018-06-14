@@ -86,11 +86,7 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final EvalueVo.DatasBean bean = mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
-        if (bean.isIssupport()) {
-            holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
-        } else {
-            holder.mChbEvaluaIssupper.setText("赞");
-        }
+        holder.mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());
@@ -103,9 +99,26 @@ public class NetMyBookEvaleAdapter extends BaseRecyclerAdapter<NetMyBookEvaleAda
         holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+               int number= Integer.parseInt(holder.mChbEvaluaIssupper.getText().toString().trim());
+                SuppertUtil util = SuppertUtil.getInstance(mContext);
+                if (isChecked) {
+                    holder.mChbEvaluaIssupper.setText((number + 1) + "");
+                    util.submitSupport(String.valueOf(bean.getId()), "true", DataMessageVo.USERTYPEVC);
+                } else {
+                    if (number <= 0) {
+                        holder.mChbEvaluaIssupper.setText(0 + "");
+                    } else {
+                        holder.mChbEvaluaIssupper.setText((number - 1) + "");
+                    }
+                    util.submitSupport(String.valueOf(bean.getId()), "false", DataMessageVo.USERTYPEVC);
+//                    notifyItemChanged(position);
+                }
+
+            /*
                 if (clickChbListener != null) {
                     clickChbListener.onClickChbListener(bean, isChecked, position);
                 }
+                */
 
             }
         });

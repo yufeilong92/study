@@ -60,6 +60,7 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
         TreeViewHolder viewHolder = (TreeViewHolder) holder;
         viewHolder.mTvAtricleTree.setText(node.getName());
         TextPaint paint = viewHolder.mTvAtricleTree.getPaint();
+
         if (node.getIcon() == -1) {
             viewHolder.mIcon.setVisibility(View.GONE);
             paint.setFakeBoldText(false);

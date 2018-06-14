@@ -25,6 +25,8 @@ public class SuppertUtil implements SupportContract.View {
     private final SupportPresenter presenter;
     private String IsSupport;
 
+
+
     public SuppertUtil(Context mContext) {
         this.mContext = mContext;
         presenter = new SupportPresenter();
@@ -48,14 +50,16 @@ public class SuppertUtil implements SupportContract.View {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            if (!StringUtil.isEmpty(IsSupport) && IsSupport.equals("true")) {
+/*            if (!StringUtil.isEmpty(IsSupport) && IsSupport.equals("true")) {
+//                vo.getData().getStatusX();
+//                vo.getData().getMessage();
 //                T.showToast(mContext, "点赞成功");
             } else if (!StringUtil.isEmpty(IsSupport) && IsSupport.equals("false")) {
 //                T.showToast(mContext, "取消成功");
-            }
+            }*/
         } else {
-//            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
-            L.e(vo.getStatus().getMessage());
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+//            L.e(vo.getStatus().getMessage());
         }
     }
 

@@ -84,6 +84,11 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
      * 地址
      */
     private static String URLPARAM = "urlparam";
+
+    /**
+     * 标题
+     */
+    private static String TITLE = "title";
     /**
      * 数据
      */
@@ -112,6 +117,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private XRefreshView mXfvContentDetail;
     private CommonPopupWindow popShare;
     private String mViewTitle;
+    private String mTitle;
 
     /***
      *
@@ -122,12 +128,13 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
      * @param supper 点赞数
      * @return
      */
-    public static Intent startInstance(Context context, String url, String id, String usertype, String supper) {
+    public static Intent startInstance(Context context, String url, String id, String usertype, String supper,String title ) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
         intent.putExtra(URLPARAM, url);
         intent.putExtra(MOID, id);
         intent.putExtra(MTYPE, usertype);
         intent.putExtra(SUPPER, supper);
+        intent.putExtra(TITLE, title);
         return intent;
     }
 
@@ -155,6 +162,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             mTargetid = getIntent().getStringExtra(MOID);
             mType = getIntent().getStringExtra(MTYPE);
             mSupperNumber = getIntent().getStringExtra(SUPPER);
+            mTitle = getIntent().getStringExtra(TITLE);
 
         }
         initView();
@@ -421,7 +429,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                mViewTitle = view.getTitle();
+
                 li.setVisibility(View.GONE);
             }
 
@@ -591,7 +599,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mViewTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mTitle
                                 , "",mUrl, R.mipmap.m_setting_about_xcimg
                                 , SHARE_MEDIA.QQ);
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -602,7 +610,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mViewTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mTitle
                                 , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -613,7 +621,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mViewTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mTitle
                                 , "",mUrl, R.mipmap.m_setting_about_xcimg
                                 , SHARE_MEDIA.SINA
                         );
@@ -625,7 +633,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mViewTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mTitle
                                 , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -636,7 +644,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mViewTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mTitle
                                 , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),

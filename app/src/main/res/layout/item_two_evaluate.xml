@@ -33,13 +33,10 @@
                 android:textColor="@color/text_title_color"
                 android:textSize="@dimen/text_size_14" />
 
-            <Space style="@style/space_16_height" />
-
             <TextView
                 android:id="@+id/tv_evalue_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:text="" />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,17 +61,18 @@
                     android:text="评论"
                     android:visibility="gone" />
                 <CheckBox
+                    android:text="22"
                     android:paddingTop="@dimen/space_16"
-                    android:paddingRight="@dimen/space_16"
-                    android:paddingLeft="@dimen/space_16"
+                    android:paddingLeft="@dimen/space_8"
+                    android:paddingBottom="@dimen/space_16"
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/select_issupper_home"
-                    android:button="@null"
+                    android:button="@drawable/select_issupper_home"
                     android:textColor="@color/text_fu_color"
                     android:textSize="@dimen/text_size_12" />
                 <TextView
+                    android:visibility="gone"
                     android:textColor="@color/text_fu_color"
                     android:textSize="@dimen/text_size_12"
                     android:id="@+id/tv_evalue_suppernumber"

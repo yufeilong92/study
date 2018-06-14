@@ -229,15 +229,15 @@ public class BankBuyActivity extends BaseActivity implements MyTextContract.View
     private void bindData(List<BankValueVo.DatasBean> bean) {
         for (BankValueVo.DatasBean vo : bean) {
             switch (vo.getCourseid()) {
-                case 1://综合能力
-                    mTvBColloPayValue.setText(String.valueOf(vo.getPrice()));
-                    colloPrice = vo.getPrice();
-                    colloid = vo.getId();
-                    break;
-                case 2://技术
+                case 1://技术
                     mTvBSkillPayValue.setText(String.valueOf(vo.getPrice()));
                     skillPrice =  vo.getPrice();
                     skillId = vo.getId();
+                    break;
+                case 2://综合能力
+                    mTvBColloPayValue.setText(String.valueOf(vo.getPrice()));
+                    colloPrice = vo.getPrice();
+                    colloid = vo.getId();
                     break;
                 case 3://案例
                     mTvBCasePayValue.setText(String.valueOf(vo.getPrice()));

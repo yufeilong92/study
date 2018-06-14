@@ -73,6 +73,7 @@ public class SubmitProgressService extends IntentService {
 
     private void handleActionFoo(final String prgress, final String classId, final String videoId) {
         NetService service = new NetService(this);
+        L.e("提交进度"+prgress+"classId==="+classId+":videoid"+videoId);
         service.SubmitViewProgres(videoId, classId, prgress, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {

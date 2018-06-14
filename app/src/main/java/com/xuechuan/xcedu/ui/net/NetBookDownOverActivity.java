@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderManager;
+import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.DownDoneInfomAdapter;
@@ -190,6 +191,12 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        bindViewData();
+    }
+
     private void bindAdapter() {
         GridLayoutManager manager = new GridLayoutManager(NetBookDownOverActivity.this, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -348,14 +355,15 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
      *
      * @param vid
      */
-    private void delectVideo(String vid, String bitrate) {
+    private void delectVideo(String vid, final String bitrate) {
         AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... strings) {
                 String vid = strings[0];
                 String bitrates = strings[1];
-                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
-                downloader.deleteVideo();
+                PolyvDownloaderUtils.deleteVideo(vid,Integer.parseInt(bitrates));
+//                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
+//                downloader.deleteVideo();
                 return null;
             }
         };

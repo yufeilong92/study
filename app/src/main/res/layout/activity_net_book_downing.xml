@@ -81,6 +81,7 @@
         android:textSize="@dimen/text_size_18"
         android:textColor="@color/black"
         android:gravity="center"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <RelativeLayout
@@ -96,7 +97,6 @@
         <!--android:layout_marginBottom="@dimen/space_48"-->
         <!--android:background="@color/white" />-->
         <ListView
-            android:scrollbars="none"
             android:paddingLeft="@dimen/space_16"
             android:paddingRight="@dimen/space_16"
             android:id="@+id/rlv_net_downing_list"

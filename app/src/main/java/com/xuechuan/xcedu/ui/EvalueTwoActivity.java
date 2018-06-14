@@ -107,6 +107,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         return intent;
     }
 
+
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +147,8 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         View line = (View) view.findViewById(R.id.v_line_hear);
         line.setVisibility(View.VISIBLE);
         mTvEvalueUserName.setText(bean.getNickname());
-        mChbEvaluaIssupper.setText(bean.getSupportcount() + "");
+        mChbEvaluaIssupper.setClickable(false);
+        mChbEvaluaIssupper.setText(String.valueOf(bean.getSupportcount())+ "");
         mChbEvaluaIssupper.setChecked(bean.isIssupport());
         mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());
@@ -164,10 +166,10 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
                 int nubmer = Integer.parseInt(mChbEvaluaIssupper.getText().toString());
                 if (isChecked) {
                     mChbEvaluaIssupper.setText((nubmer + 1) + "");
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEA);
+                    util.submitSupport(String.valueOf(bean.getId()), "true", DataMessageVo.USERTYPEA);
                 } else {
                     mChbEvaluaIssupper.setText((nubmer - 1) + "");
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEA);
+                    util.submitSupport(String.valueOf(bean.getId()), "false", DataMessageVo.USERTYPEA);
                 }
             }
         });
@@ -217,6 +219,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void initAdapter() {
         adapter = new EvalueTwoAdapter(mContext, mArray);
+        adapter.setTypte(mType);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvInfomtwoContent.setLayoutManager(gridLayoutManager);
@@ -261,6 +264,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void submitEvalut(String str) {
         mEtInfomTwoContent.setText("");
+
         mInfomPresenter.SubmitContent(mContext, mTargetid, str, mCommonid, mType);
     }
 

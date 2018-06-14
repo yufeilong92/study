@@ -146,10 +146,16 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
                 int number = Integer.parseInt(holder.mChbEvaluaIssupper.getText().toString());
                 if (isChecked) {
                     holder.mChbEvaluaIssupper.setText((number + 1)+"");
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEQC);
+                    util.submitSupport(String.valueOf(bean.getId()), "true", DataMessageVo.USERTYPEQC);
+
                 } else {
-                    holder.mChbEvaluaIssupper.setText((number -1)+"");
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEQC);
+                    if (number==0){
+                        holder.mChbEvaluaIssupper.setText(0+ "");
+                    }else {
+                        holder.mChbEvaluaIssupper.setText((number - 1) + "");
+
+                    }
+                    util.submitSupport(String.valueOf(bean.getId()), "false", DataMessageVo.USERTYPEQC);
                 }
               /*  if (clickChbListener != null) {
                     clickChbListener.onClickChbListener(bean, isChecked, position);

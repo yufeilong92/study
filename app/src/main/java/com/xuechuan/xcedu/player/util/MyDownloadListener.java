@@ -41,7 +41,7 @@ public class MyDownloadListener implements IPolyvDownloaderProgressListener {
     public void onDownloadSuccess() {
         if (total == 0)
             total = 1;
-        mDao.addUpDataItem(downVideDb, downloadInfo, total, total);
+//        mDao.addUpDataItem(downVideDb, downloadInfo, total, total);
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.SuppertUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.TimeSampUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.CommentcommentsVo;
@@ -40,6 +41,10 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
     private final LayoutInflater mInflater;
 
     private onItemClickListener clickListener;
+    private String mType = "";
+    public void setTypte(String mType) {
+        this.mType = mType;
+    }
 
 
     public interface onItemClickListener {
@@ -74,11 +79,7 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
     public void onBindViewHolder(final ViewHolder holder, int position, boolean isItem) {
         final CommentcommentsVo bean = (CommentcommentsVo) mData.get(position);
         holder.mTvEvalueUserName.setText(bean.getNickname());
-        if (bean.isIssupport()) {
-            holder.mTvEvalueSuppernumber.setText(bean.getSupportcount() + "");
-        } else {
-            holder.mTvEvalueSuppernumber.setText("0");
-        }
+        holder.mChbEvaluaIssupper.setText(String.valueOf(bean.getSupportcount()) + "");
         holder.mChbEvaluaIssupper.setChecked(bean.isIssupport());
         holder.mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());
@@ -92,14 +93,20 @@ public class EvalueTwoAdapter extends BaseRecyclerAdapter<EvalueTwoAdapter.ViewH
         holder.mChbEvaluaIssupper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int number = Integer.parseInt(holder.mChbEvaluaIssupper.getText().toString().trim());
                 SuppertUtil util = SuppertUtil.getInstance(mContext);
-                int nubmer = Integer.parseInt(holder.mTvEvalueSuppernumber.getText().toString());
                 if (isChecked) {
-                    holder.mTvEvalueSuppernumber.setText((nubmer + 1) + "");
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "true", DataMessageVo.USERTYPEAC);
+                    holder.mChbEvaluaIssupper.setText((number + 1) + "");
+                    util.submitSupport(String.valueOf(bean.getId()), "true", mType);
+
                 } else {
-                    holder.mTvEvalueSuppernumber.setText((nubmer - 1) + "");
-                    util.submitSupport(String.valueOf(bean.getTargetid()), "false", DataMessageVo.USERTYPEAC);
+                    if (number==0){
+                        holder.mChbEvaluaIssupper.setText(0+ "");
+                    }else {
+                    holder.mChbEvaluaIssupper.setText((number - 1) + "");
+
+                    }
+                    util.submitSupport(String.valueOf(bean.getId()), "false", mType);
                 }
 
             }
