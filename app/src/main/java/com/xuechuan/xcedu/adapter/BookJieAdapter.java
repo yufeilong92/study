@@ -62,10 +62,11 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final ChildrenBeanVo vo = mData.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder,  int position) {
+        final  int mPostion=position;
+        final ChildrenBeanVo vo = mData.get(mPostion);
         holder.mTvItemJieTitle.setText(vo.getTitle());
-        if (mClickList.contains(position)) {
+        if (mClickList.contains(mPostion)) {
             holder.mRlvJieContent.setVisibility(View.VISIBLE);
             holder.mIvJieGo.setImageResource(R.mipmap.ic_spread_gray);
             requestJieData(holder, vo);
@@ -86,14 +87,14 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
                     mContext.startActivity(intent);
                     return;
                 }
-                if (!mClickList.contains(position)) {
-                    mClickList.add(position);
+                if (!mClickList.contains(mPostion)) {
+                    mClickList.add(mPostion);
                     holder.mIvJieGo.setImageResource(R.mipmap.ic_spread_gray);
                     holder.mRlvJieContent.setVisibility(View.VISIBLE);
                     requestJieData(holder, vo);
                 } else {
                     for (int i = 0; i < mClickList.size(); i++) {
-                        if (mClickList.get(i) == position) {
+                        if (mClickList.get(i) == mPostion) {
                             mClickList.remove(i);
                             holder.mIvJieGo.setImageResource(R.mipmap.ic_more_go);
                             holder.mRlvJieContent.setVisibility(View.GONE);
@@ -103,7 +104,7 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
 
             }
         });
-//        holder.itemView.setId(position);
+//        holder.itemView.setId(mPostion);
 //        holder.itemView.setTag(vo);
 
     }

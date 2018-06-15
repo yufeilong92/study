@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.easefun.polyvsdk.download.util.PolyvDownloaderUtils;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.NetDownGoingAdapter;
 import com.xuechuan.xcedu.adapter.NetDownOverAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -76,7 +77,8 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_net_book_down);
         initView();
-        mDao = DbHelperDownAssist.getInstance();
+//        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
         initData(false, false);
         initDownOrDownring();
     }
@@ -496,7 +498,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                 String bitrates = strings[1];
 //                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
 //                downloader.deleteVideo();
-                PolyvDownloaderUtils.deleteVideo(vid,Integer.parseInt(bitrates));
+                PolyvDownloaderUtils.deleteVideo(vid, Integer.parseInt(bitrates));
                 return null;
             }
         };

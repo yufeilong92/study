@@ -21,12 +21,12 @@ import java.util.List;
  */
 public class DbHelperDownAssist {
 
-    private final DownVideoDbDao dao;
+    private  DownVideoDbDao dao;
     private static DbHelperDownAssist assist;
 
     public DbHelperDownAssist() {
-        DBHelper.getDaoSession().clear();
-        dao = DBHelper.getDaoSession().getDownVideoDbDao();
+        if (dao == null)
+            dao = DBHelper.getDaoSession().getDownVideoDbDao();
     }
 
     public static DbHelperDownAssist getInstance() {
@@ -240,7 +240,11 @@ public class DbHelperDownAssist {
         if (downlist.size() > 0) {//有
             videoDb.setDownlist(downlist);
             dao.update(videoDb);
+        } else {
+            dao.deleteByKey(videoDb.getId());
         }
+
+
     }
 
     /**

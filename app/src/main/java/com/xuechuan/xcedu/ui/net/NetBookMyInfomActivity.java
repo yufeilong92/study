@@ -950,7 +950,8 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
-        mDao = DbHelperDownAssist.getInstance();
+//        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
         popDown = new CommonPopupWindow(this, R.layout.pop_net_down_layout, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             private boolean isRuning = true;
             int downnumber = 0;
@@ -1480,13 +1481,15 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 //                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
             } else*/
                 if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+                    startPlay();
 //                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
                 } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
 //                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                     mFirst += 1;
                     mobileNet();
                 } else {
-                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                    pausePlay();
+                    T.showToast(mContext, getStringWithId(R.string.no_net));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -1503,13 +1506,15 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             } else */
                 if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
                     MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.WIFI);
+                    startPlay();
 //                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
                 } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
                     mFirst += 1;
                     mobileNet();
 //                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                 } else {
-                    T.showToast(mContext, getStringWithId(R.string.net_error));
+//                    pausePlay();
+                    T.showToast(mContext, getStringWithId(R.string.no_net));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -1542,7 +1547,10 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      * @return
      */
     private void pausePlay() {
+        if (!isPlayafter) return;
         videoView.stopPlayback();
+//    videoView.pause();
+
     }
 
     /**
@@ -1556,6 +1564,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      * 开始
      */
     private void startPlay() {
+        if (!isPlayafter) return;
         videoView.setAutoContinue(true);
         videoView.resume();
 //        videoView.start();

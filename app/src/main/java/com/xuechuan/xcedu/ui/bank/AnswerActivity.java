@@ -12,10 +12,12 @@ import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -822,6 +824,16 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
 
+        mEtBSubmit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    submitEvalue();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void initEvalueAdapter() {
@@ -1664,8 +1676,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_answer_addevlua://添加评价
                 mLiXia.setVisibility(View.GONE);
-                Utils.showSoftInputFromWindow(AnswerActivity.this, mEtBSubmit);
                 mLlBSubmitEvalue.setVisibility(View.VISIBLE);
+                Utils.showSoftInputFromWindow(AnswerActivity.this, mEtBSubmit);
                 break;
             case R.id.iv_b_submit_send:
                 submitEvalue();
@@ -1720,8 +1732,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 });
                 break;
             case R.id.iv_ban_jianpan:
-                mLiXia.setVisibility(View.VISIBLE);
+                doHineInput();
+               /* mLiXia.setVisibility(View.VISIBLE);
                 mLlBSubmitEvalue.setVisibility(View.GONE);
+                Utils.hideInputMethod(mContext,mEtBSubmit);*/
                 break;
         }
     }
@@ -2656,7 +2670,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 qq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
 //                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, mResultData.getQuestion()
 //                                , "",pic, R.mipmap.m_setting_about_xcimg
 //                                , SHARE_MEDIA.QQ);
@@ -2667,7 +2681,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 qqzon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
                       /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
                         );*/
@@ -2678,7 +2692,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 weibo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
                       /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,  mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg
                                 , SHARE_MEDIA.SINA
@@ -2690,7 +2704,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 weixin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
                       /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,  mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
                         );*/
@@ -2701,7 +2715,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 circle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
                     /*    ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
                         );*/
@@ -3728,6 +3742,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                doHineInput();
                 xStant = ev.getX();
                 yStart = ev.getY();
                 break;
@@ -3762,6 +3777,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             default:
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void doHineInput() {
+        if (mLlBSubmitEvalue.getVisibility() == View.VISIBLE) {
+            mLiXia.setVisibility(View.VISIBLE);
+            mLlBSubmitEvalue.setVisibility(View.GONE);
+            Utils.hideInputMethod(mContext, mEtBSubmit);
+        }
     }
 
 

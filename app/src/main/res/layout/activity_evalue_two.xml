@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <EditText
+                <com.xuechuan.xcedu.weight.ContentEditText
                     android:id="@+id/et_infom_two_content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -69,6 +69,8 @@
                     android:maxLines="4"
                     android:minLines="2"
                     android:maxLength="200"
+                    android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+                    android:imeOptions="actionSend"
                     android:paddingBottom="@dimen/space_4"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"

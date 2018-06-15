@@ -94,42 +94,51 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             mKid = getIntent().getStringExtra(KID);
         }
         initView();
-        mDao = DbHelperDownAssist.getInstance();
+//        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
         initData();
         bindAdapter();
     }
 
-     private void bindViewData(){
-         mVideoDb = mDao.queryUserDownInfomWithKid(mKid);
-         if (mVideoDb == null) {
-             mTvInfomEmpty.setVisibility(View.VISIBLE);
-             mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
-             mTvNetDownInfomMake.setVisibility(View.GONE);
-             return;
-         }
-         List<DownVideoVo> dbDownlist = mVideoDb.getDownlist();
-         List<DownVideoVo> vos = new ArrayList<>();
-         for (int i = 0; i < dbDownlist.size(); i++) {
-             DownVideoVo vo = dbDownlist.get(i);
-             if (vo.getStatus().equals("0")) {
-                 vos.add(vo);
-             }
-         }
-         if (vos != null && !vos.isEmpty()) {
-             long count = 0;
-             for (DownVideoVo vo : vos) {
-                 if (vo.getStatus().equals("0")) {
-                     long fileSize = vo.getFileSize();
-                     count += fileSize;
-                 }
-             }
-             mCount = Utils.convertFileSizeB(count);
-             mNumber = vos.size();
-         }
-         mTvDownBookInfomeName.setText(mVideoDb.getKName());
-         mTvNetDownInfomeCout.setText(mCount);
-         mTvNetDownInfomeNumber.setText(mNumber + "");
-     }
+    private void bindViewData() {
+        mVideoDb = mDao.queryUserDownInfomWithKid(mKid);
+        if (mVideoDb == null) {
+            mTvInfomEmpty.setVisibility(View.VISIBLE);
+            mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
+            mTvNetDownInfomMake.setVisibility(View.GONE);
+            return;
+        }
+        List<DownVideoVo> dbDownlist = mVideoDb.getDownlist();
+        List<DownVideoVo> vos = new ArrayList<>();
+        for (int i = 0; i < dbDownlist.size(); i++) {
+            DownVideoVo vo = dbDownlist.get(i);
+            if (vo.getStatus().equals("0")) {
+                vos.add(vo);
+            }
+        }
+        if (vos != null && !vos.isEmpty()) {
+            long count = 0;
+            for (DownVideoVo vo : vos) {
+                if (vo.getStatus().equals("0")) {
+                    long fileSize = vo.getFileSize();
+                    count += fileSize;
+                }
+            }
+            mCount = Utils.convertFileSizeB(count);
+            mNumber = vos.size();
+        }
+        mVideoDb.setDownlist(vos);
+        if (vos == null || vos.isEmpty()) {
+            mTvInfomEmpty.setVisibility(View.VISIBLE);
+            mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
+            mTvNetDownInfomMake.setVisibility(View.GONE);
+            return;
+        }
+        mTvDownBookInfomeName.setText(mVideoDb.getKName());
+        mTvNetDownInfomeCout.setText(mCount);
+        mTvNetDownInfomeNumber.setText(mNumber + "");
+    }
+
     private void initData() {
         mVideoDb = mDao.queryUserDownInfomWithKid(mKid);
         if (mVideoDb == null) {
@@ -268,7 +277,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                         }
                     }
                 }
-                if (!isSelect){
+                if (!isSelect) {
                     T.showToast(mContext, getString(R.string.please_del_video));
                     return;
                 }
@@ -290,11 +299,13 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                         for (int i = 0; i < mDataSelectList.size(); i++) {
                             DownInfomSelectVo selectVo = mDataSelectList.get(i);
                             if (selectVo.isChbSelect()) {
+
                                 mDao.delectItem(mVideoDb.getKid(), selectVo.getPid(), selectVo.getZid());
                                 delectVideo(selectVo.getVid(), selectVo.getBitrate());
                             }
                         }
                         bindViewData();
+                        mInfomAdapter.setRefreshData(mVideoDb);
                         mInfomAdapter.notifyDataSetChanged();
                     }
 
@@ -361,7 +372,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             protected Void doInBackground(String... strings) {
                 String vid = strings[0];
                 String bitrates = strings[1];
-                PolyvDownloaderUtils.deleteVideo(vid,Integer.parseInt(bitrates));
+                PolyvDownloaderUtils.deleteVideo(vid, Integer.parseInt(bitrates));
 //                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
 //                downloader.deleteVideo();
                 return null;

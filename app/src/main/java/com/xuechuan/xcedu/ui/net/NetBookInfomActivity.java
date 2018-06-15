@@ -905,13 +905,15 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
                 MyAppliction.getInstance().saveUserNetSatus("1");
             } else*/
                 if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+                    startPlay();
 //                    Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
                 } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
                     mFirst += 1;
                     mobileNet();
 //                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                 } else {
-
+//                    pausePlay();
+                    T.showToast(mContext,getStringWithId(R.string.no_net));
 //                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -927,13 +929,15 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 //                MyAppliction.getInstance().saveUserNetSatus("1");
             } else */
                 if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+                    startPlay();
 //                    Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
                 } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
-                    mFirst+=1;
+                    mFirst += 1;
                     mobileNet();
 //                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                 } else {
-
+//                    pausePlay();
+                    T.showToast(mContext,getStringWithId(R.string.no_net));
 //                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -963,6 +967,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
      * @return
      */
     private void pausePlay() {
+        boolean play = MyAppliction.getInstance().getPlay();
+        if (!play) return;
         videoView.stopPlayback();
     }
 
@@ -977,6 +983,8 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
      * 开始
      */
     private void startPlay() {
+        boolean play = MyAppliction.getInstance().getPlay();
+        if (!play) return;
         videoView.setAutoContinue(true);
         videoView.resume();
     }

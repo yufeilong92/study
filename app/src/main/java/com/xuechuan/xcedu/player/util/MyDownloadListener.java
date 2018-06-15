@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.easefun.polyvsdk.PolyvDownloaderErrorReason;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderProgressListener;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.player.Db.PolyvDownloadInfo;
@@ -34,7 +35,8 @@ public class MyDownloadListener implements IPolyvDownloaderProgressListener {
         this.contextWeakReference = new WeakReference<>(context);
         this.downloadInfo = downloadInfo;
         this.downVideDb = db;
-        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
+//        mDao = DbHelperDownAssist.getInstance();
     }
 
     @Override

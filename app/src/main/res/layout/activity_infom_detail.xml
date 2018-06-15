@@ -21,64 +21,76 @@
 
         <ImageView
             android:id="@+id/iv_title_more"
-            android:src="@mipmap/ic_more"
-            style="@style/TitleBarAction" />
+            style="@style/TitleBarAction"
+            android:src="@mipmap/ic_more" />
 
     </LinearLayout>
 
     <View style="@style/view_line_tab_line" />
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/rl_infom_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <com.andview.refreshview.XRefreshView
             android:id="@+id/xfv_content_detail"
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/space_56"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/space_56">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rlv_infomdetail_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </com.andview.refreshview.XRefreshView>
+
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ll_infom_send"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="@dimen/space_10">
-            <EditText
-                android:id="@+id/et_infom_content"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/btn_home_search_bg"
-                android:gravity="center_vertical"
-                android:hint="我来说两句..."
-                android:maxLines="4"
-                android:maxLength="200"
-                android:paddingBottom="@dimen/space_8"
-                android:paddingLeft="@dimen/space_16"
-                android:paddingRight="@dimen/space_16"
-                android:paddingTop="@dimen/space_8"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_14" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <Button
-                android:id="@+id/btn_infom_send"
-                android:layout_width="@dimen/space_48"
-                android:layout_height="@dimen/space_48"
-                android:layout_gravity="center_vertical"
-                android:background="@mipmap/common_com_send"
-                />
+            <View style="@style/view_line_tab_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_8">
+
+                <com.xuechuan.xcedu.weight.ContentEditText
+                    android:id="@+id/et_infom_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_home_search_bg"
+                    android:gravity="center_vertical"
+                    android:hint="我来说两句..."
+                    android:imeOptions="actionSend"
+                    android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+                    android:maxLength="200"
+                    android:maxLines="4"
+                    android:minLines="2"
+                    android:paddingBottom="@dimen/space_4"
+                    android:paddingLeft="@dimen/space_16"
+                    android:paddingRight="@dimen/space_16"
+                    android:paddingTop="@dimen/space_4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_14" />
+
+                <Button
+                    android:id="@+id/btn_infom_send"
+                    android:layout_width="@dimen/space_48"
+                    android:layout_height="@dimen/space_48"
+                    android:layout_gravity="center_vertical"
+                    android:background="@mipmap/common_com_send" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 

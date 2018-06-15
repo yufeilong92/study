@@ -1,10 +1,13 @@
 package com.xuechuan.xcedu.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.widget.ScrollView;
+
+import com.xuechuan.xcedu.R;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,7 +35,7 @@ public class ScreenShot {
      * @param scrollView
      * @return
      */
-    public static Bitmap getBitmapByView(ScrollView scrollView) {
+    public static Bitmap getBitmapByView(Context context, ScrollView scrollView) {
         int h = 0;
         Bitmap bitmap = null;
         // 获取scrollview实际高度
@@ -46,7 +49,13 @@ public class ScreenShot {
                 Bitmap.Config.RGB_565);
         final Canvas canvas = new Canvas(bitmap);
         scrollView.draw(canvas);
-        return bitmap;
+        //要拼接的图片
+        Bitmap bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.qbank_shareimg);
+        //拼后图片
+        Bitmap bitmap2 = ImgerSplit.add2Bitmap(bitmap, bitmap1);
+        //压缩
+        Bitmap bitmap4 = compressImage(bitmap2);
+        return bitmap4;
     }
 
     /**

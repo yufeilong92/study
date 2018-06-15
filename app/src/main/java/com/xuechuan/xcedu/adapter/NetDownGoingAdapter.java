@@ -85,8 +85,9 @@ public class NetDownGoingAdapter extends RecyclerView.Adapter<NetDownGoingAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHodle holder, final int position) {
-        final DownVideoDb db = mData.get(position);
+    public void onBindViewHolder(@NonNull final ViewHodle holder,  int position) {
+        final  int mPostion=position;
+        final DownVideoDb db = mData.get(mPostion);
         for (int i = 0; i < selectVo.size(); i++) {
             NetDownSelectVo vo = selectVo.get(i);
             if (db.getKid().equals(vo.getId())) {
@@ -107,7 +108,7 @@ public class NetDownGoingAdapter extends RecyclerView.Adapter<NetDownGoingAdapte
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (! holder.mChbNetDownIng.isPressed()) return;
                 if (chbClickListener != null) {
-                    chbClickListener.onChecaListener(db, isChecked, position);
+                    chbClickListener.onChecaListener(db, isChecked, mPostion);
                 }
             }
         });
@@ -126,7 +127,7 @@ public class NetDownGoingAdapter extends RecyclerView.Adapter<NetDownGoingAdapte
             @Override
             public void onClick(View v) {
                 if (clickListener != null) {
-                    clickListener.onClickListener(db, position);
+                    clickListener.onClickListener(db, mPostion);
                 }
             }
         });

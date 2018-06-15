@@ -16,6 +16,8 @@ import com.lzy.okgo.request.base.Request;
  */
 public interface StringCallBackView {
     public void onSuccess(Response<String> response);
+//    public void onSuccess(String success);
 
     public void onError(Response<String> response);
+//    public void onError(String msg);
 }

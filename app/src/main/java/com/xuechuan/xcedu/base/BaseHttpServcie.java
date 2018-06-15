@@ -15,6 +15,7 @@ import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.NetworkToolUtil;
 import com.xuechuan.xcedu.utils.StringSort;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -242,8 +243,8 @@ public class BaseHttpServcie {
                             TongVo vo = gson.fromJson(com, TongVo.class);
                             if (vo.getStatus().getCode() == 200) {
                                 callBackView.onSuccess(response);
-                            } else if (vo.getStatus().getCode() == 406){
-                                T.showToast(context,"登录超时，请重新登陆");
+                            } else if (vo.getStatus().getCode() == 406) {
+                                T.showToast(context, "登录超时，请重新登陆");
                                 MyAppliction.getInstance().startLogin(context);
                             }
                         } catch (JsonParseException e) {
@@ -269,7 +270,6 @@ public class BaseHttpServcie {
         if (StringUtil.isEmpty(saffid)) {
             saffid = "0";
         }
-
         String hear = context.getResources().getString(R.string.app_content_heat);
         url = hear.concat(url);
         L.d("请求地址", url);
@@ -301,7 +301,7 @@ public class BaseHttpServcie {
                             L.e("数据异常");
                             e.printStackTrace();
                         }
-                        callBackView.onSuccess(response);
+//                        callBackView.onSuccess(response);
                     }
 
                     @Override

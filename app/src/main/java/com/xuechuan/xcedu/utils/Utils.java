@@ -54,6 +54,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1608,11 +1610,18 @@ public class Utils {
     /**
      * EditText获取焦点并显示软键盘
      */
-    public static void showSoftInputFromWindow(Activity activity, EditText editText) {
+    public static void showSoftInputFromWindow(final Activity activity,final EditText editText) {
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
         editText.requestFocus();
-        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                InputMethodManager inputManager = (InputMethodManager) activity
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(editText, 0);
+            }
+        }, 300);
     }
 
     public static String convertFileSizeB(long size) {

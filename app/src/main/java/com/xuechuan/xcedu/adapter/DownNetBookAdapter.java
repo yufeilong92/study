@@ -24,6 +24,7 @@ import com.easefun.polyvsdk.download.listener.IPolyvDownloaderProgressListener;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderSpeedListener;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderStartListener;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.player.util.PolyvErrorMessageUtils;
@@ -45,7 +46,7 @@ public class DownNetBookAdapter extends BaseAdapter {
 
 
     private static Context appContext;
-    private final DownVideoDb mDownVideo;
+    private DownVideoDb mDownVideo;
     /**
      * 用户选中集合
      */
@@ -57,15 +58,29 @@ public class DownNetBookAdapter extends BaseAdapter {
     private final DbHelperDownAssist mDao;
 
     private onDownClickListener downOverListener;
+    private DownVideoDb refreshData;
+
+    public void setRefreshData(DownVideoDb refreshData) {
+        if (refreshData != null && refreshData.getDownlist() != null) {
+            this.mDatalists = refreshData.getDownlist();
+            this.mDownVideo = refreshData;
+        }
+    }
 
     public interface onDownClickListener {
-        public void onDownClickListener(String  videOid, int position);
+        public void onDownClickListener(String videOid, int position);
     }
 
     public void setDownClickListener(onDownClickListener clickListener) {
         this.downOverListener = clickListener;
     }
 
+    /**
+     * @param context
+     * @param mDatalists      课目下的数据
+     * @param lv_download     显示布局
+     * @param mDataSelectList 选中的布局
+     */
 
     public DownNetBookAdapter(Context context, DownVideoDb mDatalists, ListView lv_download, List<DownInfomSelectVo> mDataSelectList) {
         this.mDatalists = mDatalists.getDownlist();
@@ -75,7 +90,8 @@ public class DownNetBookAdapter extends BaseAdapter {
         appContext = context.getApplicationContext();
         this.mInflater = LayoutInflater.from(this.mContext);
         this.lv_download = lv_download;
-        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
+//        mDao = DbHelperDownAssist.getInstance();
         init();
     }
 

@@ -74,10 +74,11 @@ public class NetMyTablejiEAdapter extends BaseRecyclerAdapter<NetMyTablejiEAdapt
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
-        final VideosBeanVo vo = mData.get(position);
+        final  int mPostion=position;
+        final VideosBeanVo vo = mData.get(mPostion);
         holder.mTvNetTitle.setText(vo.getVideoname());
         SelectVo selectVo = mSelect.get(mFatherPosition);
-        ItemSelectVo itemSelect = selectVo.getData().get(position);
+        ItemSelectVo itemSelect = selectVo.getData().get(mPostion);
         if (itemSelect.isSelect()) {
             holder.mChbNetPlay.setChecked(true);
         } else {
@@ -89,7 +90,7 @@ public class NetMyTablejiEAdapter extends BaseRecyclerAdapter<NetMyTablejiEAdapt
             @Override
             public void onClick(View v) {
                 if (clickListener!=null){
-                    clickListener.onClickListener(vo,position);
+                    clickListener.onClickListener(vo,mPostion);
                 }
             }
         });

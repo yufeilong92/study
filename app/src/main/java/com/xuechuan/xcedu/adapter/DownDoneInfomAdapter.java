@@ -47,8 +47,13 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
 
     private onItemClickListener clickListener;
 
+    public void setRefreshData(DownVideoDb mVideoDb) {
+        if (mVideoDb != null && mVideoDb.getDownlist() != null)
+            this.mData = mVideoDb.getDownlist();
+    }
+
     public interface onItemClickListener {
-        public void onClickListener( DownVideoVo vo, int position);
+        public void onClickListener(DownVideoVo vo, int position);
     }
 
     public void setClickListener(onItemClickListener clickListener) {
@@ -77,9 +82,9 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolde holder, final int position) {
-        final DownVideoVo vo = mData.get(position);
-
+    public void onBindViewHolder(@NonNull final ViewHolde holder, int position) {
+        final int mposition = position;
+        final DownVideoVo vo = mData.get(mposition);
         holder.mTvItemDownInfomTitle.setText(vo.getTitle());
         String s = Utils.convertFileSizeB(vo.getFileSize());
         holder.mChbItemDownInfomSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -87,7 +92,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!holder.mChbItemDownInfomSelect.isPressed()) return;
                 if (chbClickListener != null) {
-                    chbClickListener.onChecaListener(vo, isChecked, position);
+                    chbClickListener.onChecaListener(vo, isChecked, mposition);
                 }
             }
         });
@@ -100,7 +105,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
                         holder.mChbItemDownInfomSelect.setVisibility(View.VISIBLE);
                         if (selectVo.isChbSelect()) {//显示选中
                             holder.mChbItemDownInfomSelect.setChecked(true);
-                        }else {
+                        } else {
                             holder.mChbItemDownInfomSelect.setChecked(false);
                         }
                     } else {
@@ -110,7 +115,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
                         holder.mChbItemDownInfomPlay.setVisibility(View.VISIBLE);
                         if (selectVo.isPlaySelect()) {//显示选中
                             holder.mChbItemDownInfomPlay.setChecked(true);
-                        }else {
+                        } else {
                             holder.mChbItemDownInfomPlay.setChecked(false);
                         }
                     } else {
@@ -119,7 +124,7 @@ public class DownDoneInfomAdapter extends RecyclerView.Adapter<DownDoneInfomAdap
                 }
             }
         holder.itemView.setTag(vo);
-        holder.itemView.setId(position);
+        holder.itemView.setId(mposition);
     }
 
     @Override

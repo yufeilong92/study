@@ -73,10 +73,11 @@ public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.V
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
-        final VideosBeanVo vo = mData.get(position);
+    public void onBindViewHolder(final ViewHolder holder,  int position, boolean isItem) {
+        final int mPostion=position;
+        final VideosBeanVo vo = mData.get(mPostion);
         SelectVo selectVo = mSelect.get(mFatherPosition);
-        ItemSelectVo itemSelect = selectVo.getData().get(position);
+        ItemSelectVo itemSelect = selectVo.getData().get(mPostion);
         holder.mChbNetPlay.setVisibility(View.VISIBLE);
         if (itemSelect.isSelect()) {
             holder.mChbNetPlay.setChecked(true);
@@ -93,7 +94,7 @@ public class NetTablejiEAdapter extends BaseRecyclerAdapter<NetTablejiEAdapter.V
             @Override
             public void onClick(View v) {
                 if (clickListener!=null){
-                    clickListener.onClickListener(vo,position);
+                    clickListener.onClickListener(vo,mPostion);
                 }
 
             }

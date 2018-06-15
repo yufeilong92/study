@@ -29,6 +29,7 @@ import com.xuechuan.xcedu.mvp.contract.EvalueInterfaceContract;
 import com.xuechuan.xcedu.mvp.model.EvalueInterfaceModel;
 import com.xuechuan.xcedu.mvp.presenter.EvalueInterfacePresenter;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.KeyboardUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.SuppertUtil;
@@ -229,6 +230,14 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     private void initData() {
         mInfomPresenter = new EvalueInterfacePresenter();
         mInfomPresenter.initModelView(new EvalueInterfaceModel(), this);
+        KeyboardUtil keyboardUtil = KeyboardUtil.getInstance(mContext);
+        keyboardUtil.setEditTextSendKey(mEtInfomTwoContent);
+        keyboardUtil.setSendClickListener(new KeyboardUtil.onKeySendClickListener() {
+            @Override
+            public void onSendClickListener() {
+                doSubmitEvalue();
+            }
+        });
     }
 
     private void initView() {
@@ -250,16 +259,20 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_infom_two_send:
-                String str = getTextStr(mEtInfomTwoContent);
-                if (StringUtil.isEmpty(str)) {
-                    T.showToast(mContext, getStringWithId(R.string.content_is_empty));
-                    return;
-                }
-                submitEvalut(str);
-                mDialog1 = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
-                Utils.hideInputMethod(mContext, mEtInfomTwoContent);
+                doSubmitEvalue();
                 break;
         }
+    }
+
+    private void doSubmitEvalue() {
+        String str = getTextStr(mEtInfomTwoContent);
+        if (StringUtil.isEmpty(str)) {
+            T.showToast(mContext, getStringWithId(R.string.content_is_empty));
+            return;
+        }
+        submitEvalut(str);
+        mDialog1 = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
+        Utils.hideInputMethod(mContext, mEtInfomTwoContent);
     }
 
     private void submitEvalut(String str) {

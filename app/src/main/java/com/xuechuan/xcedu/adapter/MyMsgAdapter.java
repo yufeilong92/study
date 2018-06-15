@@ -73,8 +73,9 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
-        final MyMsgVo.DatasBean datas = (MyMsgVo.DatasBean) mData.get(position);
+    public void onBindViewHolder(final ViewHolder holder,  int position, boolean isItem) {
+        final  int mPostion=position;
+        final MyMsgVo.DatasBean datas = (MyMsgVo.DatasBean) mData.get(mPostion);
         int notifytype = datas.getNotifytype();
         if (notifytype == 1) {
             holder.mTvMPType.setText("回复了你");
@@ -108,7 +109,7 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showShareLayout(holder.itemView, datas, position);
+                showShareLayout(holder.itemView, datas, mPostion);
                 holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
                 return false;
             }

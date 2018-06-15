@@ -49,6 +49,7 @@ import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.Defaultcontent;
 import com.xuechuan.xcedu.utils.DialogBgUtil;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.KeyboardUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.ScreenShot;
 import com.xuechuan.xcedu.utils.ShareUtils;
@@ -186,6 +187,14 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         });
         mPresenter = new InfomDetailPresenter();
         mPresenter.initModelView(new InfomDetailModel(), this);
+        KeyboardUtil keyboardUtil = KeyboardUtil.getInstance(mContext);
+        keyboardUtil.setEditTextSendKey(mEtInfomContent);
+        keyboardUtil.setSendClickListener(new KeyboardUtil.onKeySendClickListener() {
+            @Override
+            public void onSendClickListener() {
+                doSubmitEvalue();
+            }
+        });
 
     }
 
@@ -510,18 +519,22 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_infom_send:
-                String textStr = getTextStr(mEtInfomContent);
-                if (StringUtil.isEmpty(textStr)) {
-                    T.showToast(mContext, getString(R.string.content_is_empty));
-                    return;
-                }
-                Utils.hideInputMethod(mContext, mEtInfomContent);
-                submit(textStr);
+                doSubmitEvalue();
                 break;
             case R.id.iv_title_more:
                 showShareLayout();
                 break;
         }
+    }
+
+    private void doSubmitEvalue() {
+        String textStr = getTextStr(mEtInfomContent);
+        if (StringUtil.isEmpty(textStr)) {
+            T.showToast(mContext, getString(R.string.content_is_empty));
+            return;
+        }
+        Utils.hideInputMethod(mContext, mEtInfomContent);
+        submit(textStr);
     }
 
     private void submit(final String content) {

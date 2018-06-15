@@ -31,6 +31,7 @@ import com.umeng.socialize.PlatformConfig;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
+import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.SaveIsDoneUtil;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
@@ -76,6 +77,7 @@ public class MyAppliction extends MultiDexApplication {
      */
     private boolean isTime = true;
     private PerInfomVo mPerInfom;
+    private DbHelperDownAssist instance;
 
     public static MyAppliction getInstance() {
         if (application == null)
@@ -148,6 +150,13 @@ public class MyAppliction extends MultiDexApplication {
     }
 
     private static ImageLoader imageLoader = ImageLoader.getInstance();
+
+    public DbHelperDownAssist getDownDao() {
+        if (instance == null) {
+            instance = DbHelperDownAssist.getInstance();
+        }
+        return instance;
+    }
 
     @Override
     public void onCreate() {

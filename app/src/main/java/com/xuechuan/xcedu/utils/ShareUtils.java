@@ -90,8 +90,8 @@ public class ShareUtils {
                 .share();*/
     }
 
-    public static void shareImg(final Activity activity, String title, String imp, SHARE_MEDIA platform) {
-        File file = new File(imp);
+    public static void shareImg(final Activity activity, String title, final String imp, SHARE_MEDIA platform) {
+      final   File file = new File(imp);
         UMImage umImage = new UMImage(activity, file);
         new ShareAction(activity)
                 .setPlatform(platform)
@@ -133,6 +133,7 @@ public class ShareUtils {
 
                     @Override
                     public void onCancel(final SHARE_MEDIA share_media) {
+
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

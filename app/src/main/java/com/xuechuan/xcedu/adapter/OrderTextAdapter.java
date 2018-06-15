@@ -53,8 +53,9 @@ public class OrderTextAdapter extends BaseRecyclerAdapter<OrderTextAdapter.ViewH
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
-        if (mClickList.contains(position)) {
+    public void onBindViewHolder(final ViewHolder holder,  int position, boolean isItem) {
+        final int mPostion=position;
+        if (mClickList.contains(mPostion)) {
             holder.mRlvTextBChild.setVisibility(View.VISIBLE);
         } else {
             holder.mRlvTextBChild.setVisibility(View.GONE);
@@ -62,13 +63,13 @@ public class OrderTextAdapter extends BaseRecyclerAdapter<OrderTextAdapter.ViewH
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mClickList.contains(position)) {
-                    mClickList.add(position);
+                if (!mClickList.contains(mPostion)) {
+                    mClickList.add(mPostion);
                     holder.mRlvTextBChild.setVisibility(View.VISIBLE);
                     requestOrderChild(holder);
                 } else {
                     for (int i = 0; i < mClickList.size(); i++) {
-                        if (mClickList.get(i) == position) {
+                        if (mClickList.get(i) == mPostion) {
                             mClickList.remove(i);
                             holder.mRlvTextBChild.setVisibility(View.GONE);
                         }

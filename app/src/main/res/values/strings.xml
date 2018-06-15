@@ -331,5 +331,6 @@
     <string name="net_error_down">当前网络异常,无法下载</string>
     <string name="net_error_play">网络异常,无法播放</string>
     <string name="service_xieyi">服务协议</string>
+    <string name="no_net">当前网络异常,请检查网络</string>
 
 </resources>

@@ -87,14 +87,15 @@ public class NetDownOverAdapter extends RecyclerView.Adapter<NetDownOverAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHodle holder, final int position) {
-        final DownVideoDb db = mData.get(position);
+    public void onBindViewHolder(@NonNull final ViewHodle holder,  int position) {
+        final int mPostion=position;
+        final DownVideoDb db = mData.get(mPostion);
         holder.mChbNetDownIng.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!holder.mChbNetDownIng.isPressed()) return;
                 if (chbClickListener != null) {
-                    chbClickListener.onChecaListener(db, isChecked, position);
+                    chbClickListener.onChecaListener(db, isChecked, mPostion);
                 }
             }
         });
@@ -127,7 +128,7 @@ public class NetDownOverAdapter extends RecyclerView.Adapter<NetDownOverAdapter.
         MyAppliction.getInstance().displayImages(holder.mIvNetDownImg, db.getUrlImg(), false);
         holder.mTvNetDowningTitle.setText(db.getKName());
         holder.itemView.setTag(db);
-        holder.itemView.setId(position);
+        holder.itemView.setId(mPostion);
 
     }
 

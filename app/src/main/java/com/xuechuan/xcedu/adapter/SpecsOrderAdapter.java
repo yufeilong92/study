@@ -84,15 +84,16 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
-        final DatasBeanVo vo = mData.get(position);
+    public void onBindViewHolder(final ViewHolder holder,  int position, boolean isItem) {
+        final int mPostion=position;
+        final DatasBeanVo vo = mData.get(mPostion);
 
         holder.itemView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
-//                        manager.scrollToPositionWithOffset(position, 0);
+//                        manager.scrollToPositionWithOffset(mPostion, 0);
                         break;
                     default:
 
@@ -101,7 +102,7 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
             }
         });
 
-        if (mClickSelect.contains(position)) {
+        if (mClickSelect.contains(mPostion)) {
             holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
             reqeustData(holder, vo);
         } else {
@@ -111,13 +112,13 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mClickSelect.contains(position)) {
-                    mClickSelect.add(position);
+                if (!mClickSelect.contains(mPostion)) {
+                    mClickSelect.add(mPostion);
                     holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
                     reqeustData(holder, vo);
                 } else {
                     for (int i = 0; i < mClickSelect.size(); i++) {
-                        if (mClickSelect.get(i) == position) {
+                        if (mClickSelect.get(i) == mPostion) {
                             mClickSelect.remove(i);
                             holder.mRlvItemSpecasContent.setVisibility(View.GONE);
                         }
@@ -126,7 +127,7 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
            /*     if (holder.mRlvItemSpecasContent.getVisibility() == View.VISIBLE) {
                     holder.mRlvItemSpecasContent.setVisibility(View.GONE);
                 } else {
-                    mClickSelect.add(position);
+                    mClickSelect.add(mPostion);
                     holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
                 }
           */

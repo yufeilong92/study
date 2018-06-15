@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,9 +34,11 @@ import com.xuechuan.xcedu.mvp.presenter.NetVideoEvaluePresenter;
 import com.xuechuan.xcedu.mvp.view.NetVideoEvalueView;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.DialogBgUtil;
+import com.xuechuan.xcedu.utils.KeyboardUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.EvalueVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 import com.xuechuan.xcedu.weight.CommonPopupWindow;
@@ -266,50 +272,16 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_net_book_evalue://发送
-//                showAnswerCardResultLayout();
                 if (StringUtil.isEmpty(mVideoId)) {
                     T.showToast(mContext, "请选择播放视频，再来评价");
                     return;
                 }
-                showInputDialog();
+                showAnswerCardResultLayout();
                 break;
             default:
 
         }
     }
-
-    private EditText mEtDialogContent;
-    private Button mBtnInputCancle;
-    private Button mBtnInputSure;
-
-    /**
-     * 显示输入框内容
-     */
-    private void showInputDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_inpout, null);
-        mEtDialogContent = view.findViewById(R.id.et_dialog_content);
-        mBtnInputCancle = view.findViewById(R.id.btn_input_cancle);
-        mBtnInputSure = view.findViewById(R.id.btn_input_sure);
-        builder.setView(view);
-        builder.setCancelable(true);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        mBtnInputSure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitEvalue(getTextStr(mEtDialogContent));
-                dialog.dismiss();
-            }
-        });
-        mBtnInputCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-    }
-
     private void submitEvalue(String str) {
         if (StringUtil.isEmpty(str)) {
             T.showToast(mContext, getStrWithId(R.string.content_is_empty));
@@ -398,7 +370,6 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
             T.showToast(mContext, getString(R.string.evelua_sucee));
-            mEtDialogContent.setText(null);
         } else {
             T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
 //            T.showToast(mContext, vo.getStatus().getMessage());
@@ -414,22 +385,36 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
 
     private void showAnswerCardResultLayout() {
-        inputEvaluePop = new CommonPopupWindow(mContext, R.layout.item_input_layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+
+        inputEvaluePop = new CommonPopupWindow(mContext, R.layout.item_input_layout, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT) {
             private Button mBtnSubmit;
             private EditText mEtSubmitEvalue;
+
             @Override
             protected void initView() {
                 View view = getContentView();
                 mEtSubmitEvalue = view.findViewById(R.id.et_submit_evalue);
                 mBtnSubmit = view.findViewById(R.id.btn_submit);
-
             }
-
             @Override
             protected void initEvent() {
-                mBtnSubmit.requestFocus();
-                mBtnSubmit.setFocusableInTouchMode(true);
-                mBtnSubmit.setFocusable(true);
+                Utils.showSoftInputFromWindow(getActivity(), mEtSubmitEvalue);
+                mBtnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        submitEvalue(getTextStr(mEtSubmitEvalue));
+                        inputEvaluePop.getPopupWindow().dismiss();
+                    }
+                });
+                KeyboardUtil keyboardUtil = KeyboardUtil.getInstance(mContext);
+                keyboardUtil.setEditTextSendKey(mEtSubmitEvalue);
+                keyboardUtil.setSendClickListener(new KeyboardUtil.onKeySendClickListener() {
+                    @Override
+                    public void onSendClickListener() {
+                        submitEvalue(getTextStr(mEtSubmitEvalue));
+                        inputEvaluePop.getPopupWindow().dismiss();
+                    }
+                });
             }
 
             @Override

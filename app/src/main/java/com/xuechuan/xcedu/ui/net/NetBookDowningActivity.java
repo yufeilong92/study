@@ -110,7 +110,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         if (getIntent() != null) {
             mKid = getIntent().getStringExtra(KID);
         }
-        mDao = DbHelperDownAssist.getInstance();
+//        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
         initView();
         mPresenter = new NetDownIngPresenter(new NetDownIngModelImpl(), this);
         initData();
@@ -127,7 +128,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         unregisterReceiver(netBorect);
     }
 
-    private void initData() {
+    private void doComputeView() {
         computeStorage();
         mDataBean = mDao.queryUserDownInfomWithKid(mKid);
         if (mDataBean == null || mDataBean.getDownlist() == null || mDataBean.getDownlist().isEmpty()) {
@@ -136,6 +137,27 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             return;
         }
         mTvNetDownEmpty.setVisibility(View.GONE);
+        int number = 0;
+        if (mDataBean.getDownlist() != null && !mDataBean.getDownlist().isEmpty())
+            for (DownVideoVo vo : mDataBean.getDownlist()) {
+                if (vo.getStatus().equals("0")) {
+                    number += 1;
+                } else {
+
+                }
+            }
+         else{
+            mTvNetDownEmpty.setVisibility(View.VISIBLE);
+            mTvNetDowningMake.setText(getStringWithId(R.string.edit));
+            computeStorage();
+            mTvNetDowningDo.setText(0 + "");
+            return;
+        }
+        mTvNetDowningDo.setText(number + "");
+    }
+
+    private void initData() {
+        doComputeView();
         mDataSelectList = new ArrayList<>();
         for (DownVideoVo vo : mDataBean.getDownlist()) {
             DownInfomSelectVo selectVo = new DownInfomSelectVo();
@@ -207,7 +229,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             @Override
             public void onDownClickListener(String oid, int position) {
                 mPresenter.submitVideo(mContext, oid, mKid);
-                DownVideoDb videoDb = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(mKid);
+//                DownVideoDb videoDb = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(mKid);
+                DownVideoDb videoDb = MyAppliction.getInstance().getDownDao().queryUserDownInfomWithKid(mKid);
                 if (videoDb != null) {
                     List<DownVideoVo> downlist = videoDb.getDownlist();
                     boolean isOver = false;
@@ -336,6 +359,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                             }
                         }
 //                            initData(true);
+                        doComputeView();
+                        mListAdapter.setRefreshData(mDataBean);
                         mListAdapter.notifyDataSetChanged();
                     }
 
@@ -394,9 +419,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             protected Void doInBackground(String... strings) {
                 String vid = strings[0];
                 String bitrates = strings[1];
-//                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
-//                downloader.deleteVideo();
-                PolyvDownloaderUtils.deleteVideo(vid,Integer.parseInt(bitrates));
+                PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, Integer.parseInt(bitrates));
+                downloader.deleteVideo(vid, Integer.parseInt(bitrates));
+                PolyvDownloaderUtils.deleteVideo(vid, Integer.parseInt(bitrates));
                 return null;
             }
         };
@@ -459,6 +484,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     downNet(MNETWORK);
                 } else {
                     mFirst += 1;
+                    mListAdapter.pauseAll();
+                    mTvNetDowningStop.setText(R.string.stopdown);
                     downNet(NOTETWORK);
 //                    T.showToast(mContext, getStringWithId(R.string.net_error));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
@@ -484,6 +511,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
 //                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                 } else {
                     mFirst += 1;
+                    mListAdapter.pauseAll();
+                    mTvNetDowningStop.setText(R.string.stopdown);
                     downNet(NOTETWORK);
 //                    T.showToast(mContext, getStringWithId(R.string.net_error));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
@@ -528,7 +557,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         NetworkToolUtil toolUtil = NetworkToolUtil.getInstance(mContext);
         String stauts = toolUtil.getNetWorkToolStauts();
         if (stauts.equals(DataMessageVo.NONETWORK)) {
-            T.showToast(mContext, getString(R.string.net_error_play));
+            T.showToast(mContext, getString(R.string.net_error_down));
             return true;
         }
         if (stauts.equals(DataMessageVo.MONET)) {//移动网络

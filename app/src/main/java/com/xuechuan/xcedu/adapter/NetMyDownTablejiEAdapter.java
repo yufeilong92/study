@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -68,7 +69,8 @@ public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTable
     public void onBindViewHolder(final ViewHolder holder, final int position, boolean isItem) {
         final VideosBeanVo vo = mData.get(position);
         holder.mTvNetTitle.setText(vo.getVideoname());
-        DownVideoDb dbList = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(String.valueOf(kid));
+//        DownVideoDb dbList = DbHelperDownAssist.getInstance().queryUserDownInfomWithKid(String.valueOf(kid));
+        DownVideoDb dbList = MyAppliction.getInstance().getDownDao().queryUserDownInfomWithKid(String.valueOf(kid));
         holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));
         if (dbList == null) {
             holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.black));

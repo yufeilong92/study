@@ -24,6 +24,7 @@ import com.easefun.polyvsdk.download.listener.IPolyvDownloaderProgressListener;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderSpeedListener;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderStartListener;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.player.PolyvPlayerActivity;
@@ -58,7 +59,8 @@ public class DownloadListViewAdapter extends BaseAdapter {
         appContext = context.getApplicationContext();
         this.inflater = LayoutInflater.from(this.context);
         this.lv_download = lv_download;
-        mDao = DbHelperDownAssist.getInstance();
+        mDao = MyAppliction.getInstance().getDownDao();
+//        mDao = DbHelperDownAssist.getInstance();
         init();
     }
 

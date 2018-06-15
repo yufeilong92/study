@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.easefun.polyvsdk.PolyvSDKUtil;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
+import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
 import com.xuechuan.xcedu.db.DownVideoDb;
 import com.xuechuan.xcedu.player.BaolIHttp.PolyvVlmsHelper;
@@ -99,7 +100,8 @@ public class NetDownUtil {
             }
         }
         db.setDownlist(list);
-        DbHelperDownAssist.getInstance().addDownItem(db);
+//        DbHelperDownAssist.getInstance().addDownItem(db);
+        MyAppliction.getInstance().getDownDao().addDownItem(db);
         if (itemListener != null) {
             itemListener.onDone();
         }
