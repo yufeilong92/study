@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_8"
                 android:paddingBottom="@dimen/space_4"
-                android:paddingLeft="@dimen/space_16"
+                android:paddingLeft="@dimen/space_8"
                 android:paddingTop="@dimen/space_4"
                 android:text="21分钟"
                 android:textColor="@color/text_fu_color"

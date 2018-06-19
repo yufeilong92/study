@@ -2,7 +2,7 @@
     <string name="app_name">学川教育</string>
 
     <!--//请求头-->
-    <string name="app_content_heat">http://app1.xuechuanedu.cn</string>
+    <string name="app_content_heat">https://app1.xuechuanedu.cn</string>
     <!--<string name="app_content_heat">http://192.168.1.111:8080</string>-->
     <!--<string name="app_content_heat">http://192.168.1.110:8080</string>-->
 

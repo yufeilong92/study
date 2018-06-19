@@ -24,6 +24,7 @@ import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xuechuan.xcedu.Event.ShowItemEvent;
 import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
@@ -49,6 +50,7 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
@@ -335,6 +337,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 return;
             }
             DbHelperAssist.getInstance().saveUserInfom(vo);
+            EventBus.getDefault().postSticky(new ShowItemEvent(0));
             HomeActivity.newInstance(mContext, HomeActivity.LOGIN_HOME);
             //注册激光
             RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
@@ -342,7 +345,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             tag.setTagAndAlias(String.valueOf(voData.getUser().getId()));
             finishActivity();
         } else {
-            T.showToast(mContext,mContext.getResources().getString(R.string.net_error));
+            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
 //            T.showToast(mContext, vo.getStatus().getMessage());
         }
@@ -353,7 +356,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (mDialog != null) {
             mDialog.dismiss();
         }
-        T.showToast(mContext,getStringWithId(R.string.net_error));
+        T.showToast(mContext, getStringWithId(R.string.net_error));
         L.e(con);
     }
 

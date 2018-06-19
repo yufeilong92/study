@@ -85,9 +85,9 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
 
     private void initXrfresh() {
         mXfvContentMsg.restoreLastRefreshTime(lastRefreshTime);
+        mXfvContentMsg.setPullRefreshEnable(true);
         mXfvContentMsg.setPullLoadEnable(true);
         mXfvContentMsg.setAutoLoadMore(true);
-        mXfvContentMsg.setPullRefreshEnable(true);
         mXfvContentMsg.setEmptyView(mIvContentEmpty);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
         mXfvContentMsg.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
@@ -183,13 +183,11 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             } else {
-                mXfvContentMsg.setPullRefreshEnable(true);
                 mXfvContentMsg.setLoadComplete(true);
                 adapter.notifyDataSetChanged();
                 return;
             }
             if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
-                mXfvContentMsg.setPullRefreshEnable(true);
                 mXfvContentMsg.setLoadComplete(true);
             } else {
                 mXfvContentMsg.setPullLoadEnable(true);

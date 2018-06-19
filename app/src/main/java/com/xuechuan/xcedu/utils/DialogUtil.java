@@ -194,13 +194,13 @@ public class DialogUtil {
 
 
     }
-
-    /**
+/*
+    *//**
      * 时间暂停
      *
      * @param context
      * @return
-     */
+     *//*
     public void showStopDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_show_time, null);
@@ -220,6 +220,34 @@ public class DialogUtil {
             }
         });
 
+
+    }*/
+
+    /**
+     * 时间暂停
+     *
+     * @param context
+     * @return
+     */
+    public AlertDialog showStopDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_show_time, null);
+        builder.setView(view)
+                .setCancelable(false)
+                .create();
+        final AlertDialog dialog = builder.show();
+        Button butGo = view.findViewById(R.id.btn_stop_next);
+        butGo.setOnClickListener(new View.OnClickListener() {//取消
+            @Override
+            public void onClick(View v) {
+                if (stopclicklistener != null) {
+                    dialog.dismiss();
+                    stopclicklistener.onNextClickListener();
+                }
+
+            }
+        });
+        return dialog;
 
     }
 

@@ -396,6 +396,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private TextView mTvNam;
     private ImageView mIvJianPan;
     private boolean isBtnClickDel = false;
+    private AlertDialog mStopdialog;
+    private AlertDialog mStopAlertDialog;
 
 
     @Override
@@ -710,7 +712,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             public void onClick(View v) {
                 mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
                 DialogUtil dialogUtil = DialogUtil.getInstance();
-                dialogUtil.showStopDialog(mContext);
+                if (mStopAlertDialog == null ||!mStopAlertDialog.isShowing())
+                    mStopAlertDialog = dialogUtil.showStopDialog(mContext);
                 mTimeUitl.pause();
                 dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
                     @Override
@@ -2670,7 +2673,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 qq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext, mSloViewShow));
 //                        ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, mResultData.getQuestion()
 //                                , "",pic, R.mipmap.m_setting_about_xcimg
 //                                , SHARE_MEDIA.QQ);
@@ -2681,7 +2684,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 qqzon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext, mSloViewShow));
                       /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
                         );*/
@@ -2692,7 +2695,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 weibo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext, mSloViewShow));
                       /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,  mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg
                                 , SHARE_MEDIA.SINA
@@ -2704,7 +2707,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 weixin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext, mSloViewShow));
                       /*  ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url,  mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
                         );*/
@@ -2715,7 +2718,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 circle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext,mSloViewShow));
+                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mContext, mSloViewShow));
                     /*    ShareUtils.shareWeb(AnswerActivity.this, Defaultcontent.url, mResultData.getQuestion()
                                 , "",pic, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
                         );*/
@@ -3802,7 +3805,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
             mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
             DialogUtil dialogUtil = DialogUtil.getInstance();
-            dialogUtil.showStopDialog(mContext);
+            if (mStopdialog == null || !mStopdialog.isShowing())
+                mStopdialog = dialogUtil.showStopDialog(mContext);
+
             mTimeUitl.pause();
             dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
                 @Override

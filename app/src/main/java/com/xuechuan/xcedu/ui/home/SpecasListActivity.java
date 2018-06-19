@@ -36,7 +36,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class SpecasListActivity extends BaseActivity {
+public class  SpecasListActivity extends BaseActivity {
 
     private RecyclerView mRlvSpecaContent;
 

@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.xuechuan.xcedu.Event.ShowItemEvent;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
@@ -44,6 +45,10 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNav
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.CommonPagerTitleView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +72,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
      * 填充的布局
      */
     private int mFragmentLayout = R.id.fl_content;
-    private static String Params = "Params";
-    private static String Params1 = "Params";
+    private static String PARAMS = "Params";
     private static String TYPE = "type";
     public static String BOOK = "1";
     public static String VIDEO = "2";
@@ -84,11 +88,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         OkGo.getInstance().cancelTag(mContext);
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
     }
 
     public static void newInstance(Context context, String params1) {
         Intent intent = new Intent(context, HomeActivity.class);
-        intent.putExtra(Params, params1);
+        intent.putExtra(PARAMS, params1);
         context.startActivity(intent);
     }
 
@@ -112,7 +118,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_home);
         if (getIntent() != null) {
             mType = getIntent().getStringExtra(TYPE);
-            mLoginType = getIntent().getStringExtra(Params);
+            mLoginType = getIntent().getStringExtra(PARAMS);
         }
         DBHelper.initDb(MyAppliction.getInstance());
         initView();
@@ -130,6 +136,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void MianSelectShowItem(ShowItemEvent event) {
+        mViewpageContetn.setCurrentItem(0);
+    }
+
+    @Override
     protected void onRestart() {
         super.onRestart();
         if (!StringUtil.isEmpty(mType)) {
@@ -138,9 +157,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             } else if (mType.equals(VIDEO)) {
                 mViewpageContetn.setCurrentItem(2);
             }
-        } else if (!StringUtil.isEmpty(mLoginType) && mLoginType.equals(LOGIN_HOME)) {
+        }/* else if (!StringUtil.isEmpty(mLoginType) && mLoginType.equals(LOGIN_HOME)) {
             mViewpageContetn.setCurrentItem(0);
-        } else if (!StringUtil.isEmpty(mType) && mType.equals(mHomeMeType)) {
+        }*/ else if (!StringUtil.isEmpty(mType) && mType.equals(mHomeMeType)) {
             mViewpageContetn.setCurrentItem(3);
         }
 
@@ -151,7 +170,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onPause();
         mLoginType = "";
         mType = "";
-
     }
 
     private void initData() {
@@ -171,7 +189,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onSuccess(Response<String> response) {
                         String com = response.body().toString();
-                        L.e("视频设置=="+com);
+                        L.e("视频设置==" + com);
                         Gson gson = new Gson();
                         VideoSettingVo vo = gson.fromJson(com, VideoSettingVo.class);
                         if (vo.getStatus().getCode() == 200) {

@@ -61,6 +61,7 @@ import java.util.List;
  */
 public class NetBookDowningActivity extends BaseActivity implements View.OnClickListener, NetDownIngView {
 
+    private static final String TETYWIFI = "wifi";
     private TextView mTvNetDowningMake;
     private TextView mTvNetDowningDo;
     private TextView mTvDowning;
@@ -146,7 +147,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
 
                 }
             }
-         else{
+        else {
             mTvNetDownEmpty.setVisibility(View.VISIBLE);
             mTvNetDowningMake.setText(getStringWithId(R.string.edit));
             computeStorage();
@@ -477,6 +478,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
 //                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
             } else*/
                 if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+                    downNet(TETYWIFI);
 //                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
                 } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
 //                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
@@ -485,7 +487,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 } else {
                     mFirst += 1;
                     mListAdapter.pauseAll();
-                    mTvNetDowningStop.setText(R.string.stopdown);
+                    mTvNetDowningStop.setText(R.string.start_down);
                     downNet(NOTETWORK);
 //                    T.showToast(mContext, getStringWithId(R.string.net_error));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
@@ -503,8 +505,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
             } else */
                 if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
-                    MyAppliction.getInstance().saveUserNetSatus(DataMessageVo.WIFI);
-//                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
+                    downNet(TETYWIFI);
+//  Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
                 } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
                     mFirst += 1;
                     downNet(MNETWORK);
@@ -512,7 +514,7 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                 } else {
                     mFirst += 1;
                     mListAdapter.pauseAll();
-                    mTvNetDowningStop.setText(R.string.stopdown);
+                    mTvNetDowningStop.setText(R.string.start_down);
                     downNet(NOTETWORK);
 //                    T.showToast(mContext, getStringWithId(R.string.net_error));
 //                Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
@@ -530,13 +532,17 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         }
         String net = MyAppliction.getInstance().getSelectNet();
         String trim = mTvNetDowningStop.getText().toString().trim();
-        if (!trim.equals(getStringWithId(R.string.stopdown)))
+        if (trim.equals(getStringWithId(R.string.start_down)))
             return;
         if (NoDonw == 0) {//下载数
             return;
         }
         if (type.equals(NOTETWORK)) {//没有网络
             mListAdapter.pauseAll();
+            return;
+        }
+        if (type.equals(TETYWIFI)) {
+            mListAdapter.downloadAll();
             return;
         }
         if (StringUtil.isEmpty(net)) {
