@@ -1,6 +1,9 @@
 package com.xuechuan.xcedu.utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +16,7 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Author     wildma
@@ -27,6 +31,13 @@ public class ShareUtils {
     public static void shareWeb(final Activity activity, String WebUrl, String title, String description, String imageUrl, int imageID, SHARE_MEDIA platform) {
         UMWeb web = new UMWeb(WebUrl);//连接地址
         web.setTitle(title);//标题
+        if (platform==SHARE_MEDIA.SINA){
+            boolean wbInstall = isWBInstall(activity);
+            if (!wbInstall){
+                T.showToast(activity,"请先安装微新浪博软件");
+                return;
+            }
+        }
         web.setDescription(StringUtil.isEmpty(description)?"学川教育":description);//描述
         if (TextUtils.isEmpty(imageUrl)) {
             web.setThumb(new UMImage(activity, imageID));  //本地缩略图
@@ -92,6 +103,13 @@ public class ShareUtils {
     public static void shareImg(final Activity activity, String title, final String imp, SHARE_MEDIA platform) {
       final   File file = new File(imp);
         UMImage umImage = new UMImage(activity, file);
+        if (platform==SHARE_MEDIA.SINA){
+            boolean wbInstall = isWBInstall(activity);
+            if (!wbInstall){
+                T.showToast(activity,"请先安装微新浪博软件");
+                return;
+            }
+        }
         new ShareAction(activity)
                 .setPlatform(platform)
                 .withText(title)
@@ -142,5 +160,24 @@ public class ShareUtils {
                     }
                 })
                 .share();
+    }
+    /**
+     * 检测是否安装微信
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isWBInstall(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.sina.weibo")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

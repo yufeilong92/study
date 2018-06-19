@@ -33,6 +33,7 @@ import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
 import com.lzy.okgo.model.Response;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.R;
@@ -639,6 +640,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 weibo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
                         ShareUtils.shareWeb(InfomDetailActivity.this,mUrl, mTitle
                                 , "","", R.mipmap.appicon
@@ -714,5 +716,10 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void EvalueDetailErr(String con) {
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
     }
 }

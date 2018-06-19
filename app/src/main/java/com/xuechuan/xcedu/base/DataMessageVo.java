@@ -114,6 +114,10 @@ public class DataMessageVo {
     public static String QQAPP_ID = "1106864981";
     //qq key
     public static String QQAPP_KEY = "rthjDUujg74JKfsq";
+    //WEIBO key
+    public static String WEI_KEY= "1739335166";
+    //WEIBO Servcie
+    public static String WEIKEY_SECRET = "8efea2ca3decb2c4173ae44b9942287e";
     //APP_SECRET
     public static String WEIXINAPP_SECRET = "19a5f96dc807032fcb7f9d2a289ec0a1";
     //协议网址

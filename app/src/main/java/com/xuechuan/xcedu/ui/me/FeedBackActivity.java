@@ -97,7 +97,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
             finish();
             mEtMFeedSuggest.setText(null);
             mEtMFeedPhone.setText(null);
-            T.showToast(mContext, getStringWithId(R.string.submit_success));
+            T.showToast(mContext, getStringWithId(R.string.feedback_success));
         } else {
             T.showToast(mContext, getString(R.string.submit_error));
             L.e(vo.getStatus().getMessage());

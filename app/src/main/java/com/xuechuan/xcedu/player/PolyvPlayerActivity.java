@@ -135,15 +135,15 @@ public class PolyvPlayerActivity extends FragmentActivity {
         videoView.setPlayerBufferingIndicator(loadingProgress);
         // 设置跑马灯
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
-                .setStyle(PolyvMarqueeItem.STYLE_ROLL) //样式
-                .setDuration(3000000) //时长
+                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
+                .setDuration(10000) //时长
                 .setText("POLYV Android SDK") //文本
                 .setSize(16) //字体大小
                 .setColor(Color.RED) //字体颜色
                 .setTextAlpha(70) //字体透明度
-                .setInterval(60000) //隐藏时间
+                .setInterval(10000) //隐藏时间
                 .setLifeTime(10000) //显示时间
-                .setTweenTime(10000) //渐隐渐现时间
+                .setTweenTime(300000) //渐隐渐现时间
                 .setHasStroke(true) //是否有描边
                 .setBlurStroke(true) //是否模糊描边
                 .setStrokeWidth(3) //描边宽度

@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.Event.EvalueTwoEvent;
 import com.xuechuan.xcedu.Event.FreeDataEvent;
@@ -3867,6 +3868,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
     }
 }
 

@@ -111,12 +111,12 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
      * @param submittype 提交类型
      * @return
      */
-    public static Intent newInstance(Context context, String targetid, String commonid, String type,String submittype) {
+    public static Intent newInstance(Context context, String targetid, String commonid, String type, String submittype) {
         Intent intent = new Intent(context, EvalueTwoActivity.class);
         intent.putExtra(TARGETID, targetid);
         intent.putExtra(COMMONID, commonid);
         intent.putExtra(TESTYPE, type);
-        intent.putExtra(SUBMITTYPE,submittype);
+        intent.putExtra(SUBMITTYPE, submittype);
         return intent;
     }
 
@@ -149,6 +149,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void initHearView(View view, final TargetcommentBeanVo bean) {
         mCommonid = String.valueOf(bean.getId());
+        mTargetid = String.valueOf(bean.getTargetid());
         mLlEdLayout.setVisibility(View.VISIBLE);
         ImageView mIvEvaluateHear = (ImageView) view.findViewById(R.id.iv_evaluate_hear);
         TextView mTvEvalueUserName = (TextView) view.findViewById(R.id.tv_evalue_user_name);
@@ -161,7 +162,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         line.setVisibility(View.VISIBLE);
         mTvEvalueUserName.setText(bean.getNickname());
         mChbEvaluaIssupper.setClickable(false);
-        mChbEvaluaIssupper.setText(String.valueOf(bean.getSupportcount())+ "");
+        mChbEvaluaIssupper.setText(String.valueOf(bean.getSupportcount()) + "");
         mChbEvaluaIssupper.setChecked(bean.isIssupport());
         mTvEvalueContent.setText(bean.getContent());
         String ymdt = TimeUtil.getYMDT(bean.getCreatetime());

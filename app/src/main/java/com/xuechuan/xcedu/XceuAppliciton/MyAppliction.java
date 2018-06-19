@@ -184,7 +184,7 @@ public class MyAppliction extends MultiDexApplication {
         PlatformConfig.setWeixin(DataMessageVo.APP_ID, DataMessageVo.WEIXINAPP_SECRET);
         PlatformConfig.setQQZone(DataMessageVo.QQAPP_ID, DataMessageVo.QQAPP_KEY);
         //新浪微博(第三个参数为回调地址)
-//        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setSinaWeibo(DataMessageVo.WEI_KEY, DataMessageVo.WEIKEY_SECRET,"http://sns.whalecloud.com/sina2/callback");
     }
 
     private void initImagerLoader() {
