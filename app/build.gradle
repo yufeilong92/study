@@ -21,11 +21,27 @@ android {
 
     buildTypes {
         release {
-
+//            minifyEnabled true
+//            zipAlignEnabled true  // Zipalign优化
+//            shrinkResources true // 移除无用的resource文件,必须和minifyEnabled 一起使用
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release // 签名配置
         }
     }
+/*    //签名
+    signingConfigs {
+        debug {
+
+        }
+        release {// 自己的签名文件
+            storeFile file("key.jks")
+            storePassword "xuechuan"
+            keyAlias "xuechuan"
+            keyPassword "xuechaun"
+        }
+    }*/
+
     dexOptions {
         preDexLibraries = false;
     }

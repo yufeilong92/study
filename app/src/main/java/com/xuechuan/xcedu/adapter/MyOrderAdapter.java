@@ -98,7 +98,10 @@ public class MyOrderAdapter extends BaseRecyclerAdapter<MyOrderAdapter.ViewHodle
         if (vo.getState() == -1) {
             holder.mIvMyOrderStatus.setImageResource(R.mipmap.m_order_de);
             showBtn(holder, true, true, false);
-        } else {
+        } else if (vo.getState()==-10){
+            holder.mIvMyOrderStatus.setImageResource(R.mipmap.m_order_yitui);
+            showBtn(holder, false, false, true);
+        }else {
             holder.mIvMyOrderStatus.setImageResource(R.mipmap.m_order_yi);
             showBtn(holder, false, false, true);
         }

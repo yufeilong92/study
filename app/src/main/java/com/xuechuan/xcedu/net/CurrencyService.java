@@ -138,11 +138,11 @@ public class CurrencyService extends BaseHttpServcie {
         listParamVo.add(paramVo2);
         listParamVo.add(paramVo1);
         String url="";
-        if (type.equals(DataMessageVo.ARTICLE)) {
+        if (type.equals(DataMessageVo.USERTYPEAC)) {
             url= getUrl(mContext,R.string.http_homecommentcomment);
-        }else if (type.equals(DataMessageVo.QUESTION)){
+        }else if (type.equals(DataMessageVo.USERTYPEQC)){
             url = getUrl(mContext, R.string.http_commentcomment);
-        }else if (type.equals(DataMessageVo.VIDEO)){
+        }else if (type.equals(DataMessageVo.USERTYPEVC)){
             url = getUrl(mContext, R.string.http_getvideocommentcomment);
         }
         requestHttpServiceGet(mContext, url, listParamVo, true, view);

@@ -16,6 +16,7 @@ import com.easefun.polyvsdk.PolyvSDKClient;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -264,6 +265,9 @@ public class MyAppliction extends MultiDexApplication {
         builder.writeTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 //全局的连接超时时间
         builder.connectTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+
+        HttpsUtils.SSLParams sslParams1 = HttpsUtils.getSslSocketFactory();
+        builder.sslSocketFactory(sslParams1.sSLSocketFactory, sslParams1.trustManager);
 //        NO_CACHE：不使用缓存，该模式下cacheKey、cacheTime 参数均无效
 //        DEFAULT：按照HTTP协议的默认缓存规则，例如有304响应头时缓存。
 //        REQUEST_FAILED_READ_CACHE：先请求网络，如果请求网络失败，则读取缓存，如果读取缓存失败，本次请求失败。

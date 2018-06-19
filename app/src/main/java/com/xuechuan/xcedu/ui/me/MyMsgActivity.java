@@ -109,7 +109,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
             return;
         }
         isRefresh = true;
-        mPresenter.requestMyMsg(mContext, getNowPage() + 1);
+        mPresenter.requestMyMsgMore(mContext, getNowPage() + 1);
     }
 
     private void loadNewData() {
@@ -121,10 +121,10 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
     }
 
     private void bindAdapterData() {
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        GridLayoutManager layoutManager = new GridLayoutManager(mContext, 1);
+        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         adapter = new MyMsgAdapter(mContext, mArrary);
-        mRlvMyMsg.setLayoutManager(gridLayoutManager);
+        mRlvMyMsg.setLayoutManager(layoutManager);
         mRlvMyMsg.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvMyMsg.setAdapter(adapter);
         adapter.setLangClickListener(new MyMsgAdapter.onItemLangClickListener() {

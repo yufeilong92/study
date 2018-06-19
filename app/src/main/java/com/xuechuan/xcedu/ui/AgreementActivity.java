@@ -57,11 +57,14 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
     private static String typeMark = "mark";
     public static String SHAREMARK = "share";
     public static String NOSHAREMARK = "noshaor";
+    public static String MTITLE = "title";
 
-    public static Intent newInstance(Context context, String urldata, String mark) {
+
+    public static Intent newInstance(Context context, String urldata, String mark,String title) {
         Intent intent = new Intent(context, AgreementActivity.class);
         intent.putExtra(URLDATA, urldata);
         intent.putExtra(typeMark, mark);
+        intent.putExtra(MTITLE,title);
         return intent;
     }
 
@@ -73,6 +76,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
         if (getIntent() != null) {
             mUrl = getIntent().getStringExtra(URLDATA);
             String mType = getIntent().getStringExtra(typeMark);
+            mViewTitle = getIntent().getStringExtra(MTITLE);
             if (mType.equals(SHAREMARK)) {
                 mIvTitleMore.setVisibility(View.VISIBLE);
             } else {
@@ -125,7 +129,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                mViewTitle = view.getTitle();
+//                mViewTitle = view.getTitle();
                 mWebAgreenement.setVisibility(View.GONE);
                 mIvAgreenmentImg.setVisibility(View.VISIBLE);
                 drawable.start();
@@ -178,56 +182,61 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
-                                , "", mUrl, R.mipmap.m_setting_about_xcimg
+                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                                , "", "", R.mipmap.appicon
                                 , SHARE_MEDIA.QQ);
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.QQ);
+                        getPopupWindow().dismiss();
                     }
                 });
                 qqzon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
-                                , "", mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
+                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                                , "", "", R.mipmap.appicon, SHARE_MEDIA.QZONE
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.QZONE);
+                        getPopupWindow().dismiss();
                     }
                 });
                 weibo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
-                                , "", mUrl, R.mipmap.m_setting_about_xcimg
+                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                                , "", "", R.mipmap.appicon
                                 , SHARE_MEDIA.SINA
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.SINA);
+                        getPopupWindow().dismiss();
                     }
                 });
                 weixin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
-                                , "", mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                        ShareUtils.shareWeb(AgreementActivity.this, mUrl, mViewTitle
+                                , "", "", R.mipmap.appicon, SHARE_MEDIA.WEIXIN
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.WEIXIN);
+                        getPopupWindow().dismiss();
                     }
                 });
                 circle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this, Defaultcontent.url, mViewTitle
-                                , "", mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                                , "", "", R.mipmap.appicon, SHARE_MEDIA.WEIXIN_CIRCLE
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.WEIXIN_CIRCLE);
+                        getPopupWindow().dismiss();
                     }
                 });
             }

@@ -712,7 +712,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             public void onClick(View v) {
                 mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
                 DialogUtil dialogUtil = DialogUtil.getInstance();
-                if (mStopAlertDialog == null ||!mStopAlertDialog.isShowing())
+                if (mStopAlertDialog == null || !mStopAlertDialog.isShowing())
                     mStopAlertDialog = dialogUtil.showStopDialog(mContext);
                 mTimeUitl.pause();
                 dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
@@ -826,7 +826,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             isExamHine = true;
         }
         dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-
         mEtBSubmit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -874,7 +873,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
                 EventBus.getDefault().postSticky(new EvalueTwoEvent(bean));
                 Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(bean.getTargetid()),
-                        String.valueOf(bean.getId()), DataMessageVo.QUESTION);
+                        String.valueOf(bean.getId()), DataMessageVo.USERTYPEQC,
+                        DataMessageVo.QUESTION);
                 startActivity(intent);
             }
         });
@@ -1054,6 +1054,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mIvBSubmitSend.setOnClickListener(this);
         mLlBSubmitEvalue = (LinearLayout) findViewById(R.id.ll_b_submit_evalue);
         mLlBSubmitEvalue.setOnClickListener(this);
+
         mIvTitleBack = (ImageView) findViewById(R.id.iv_title_back);
         mIvTitleBack.setOnClickListener(this);
         mActivityTitleText = (TextView) findViewById(R.id.activity_title_text);
@@ -1879,6 +1880,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             T.showToast(mContext, getStringWithId(R.string.content_is_empty));
             return;
         }
+        doHineInput();
         mSubmitDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
         mEvaluePresenter.submitContent(mContext, String.valueOf(mResultData.getId()), str, null, DataMessageVo.QUESTION);
         Utils.hideInputMethod(mContext, mEtBSubmit);
@@ -2679,6 +2681,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 //                                , SHARE_MEDIA.QQ);
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
                                 pic, SHARE_MEDIA.QQ);
+                        getPopupWindow().dismiss();
                     }
                 });
                 qqzon.setOnClickListener(new View.OnClickListener() {
@@ -2690,6 +2693,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
                                 pic, SHARE_MEDIA.QZONE);
+                        getPopupWindow().dismiss();
                     }
                 });
                 weibo.setOnClickListener(new View.OnClickListener() {
@@ -2702,6 +2706,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
                                 pic, SHARE_MEDIA.SINA);
+                        getPopupWindow().dismiss();
                     }
                 });
                 weixin.setOnClickListener(new View.OnClickListener() {
@@ -2713,6 +2718,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
                                 pic, SHARE_MEDIA.WEIXIN);
+                        getPopupWindow().dismiss();
                     }
                 });
                 circle.setOnClickListener(new View.OnClickListener() {
@@ -2724,6 +2730,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                         );*/
                         ShareUtils.shareImg(AnswerActivity.this, mResultData.getQuestion(),
                                 pic, SHARE_MEDIA.WEIXIN_CIRCLE);
+                        getPopupWindow().dismiss();
                     }
                 });
             }
@@ -3745,7 +3752,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                doHineInput();
+//                doHineInput();
                 xStant = ev.getX();
                 yStart = ev.getY();
                 break;
@@ -3785,6 +3792,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void doHineInput() {
         if (mLlBSubmitEvalue.getVisibility() == View.VISIBLE) {
             mLiXia.setVisibility(View.VISIBLE);
+            mEtBSubmit.setText(null);
             mLlBSubmitEvalue.setVisibility(View.GONE);
             Utils.hideInputMethod(mContext, mEtBSubmit);
         }

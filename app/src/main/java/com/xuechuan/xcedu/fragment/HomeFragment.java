@@ -313,7 +313,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 AdvisoryBean vo = (AdvisoryBean) obj;
               /*  Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
-                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),AgreementActivity.SHAREMARK);
+                Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),
+                        AgreementActivity.SHAREMARK,vo.getTitle());
                 mContext.startActivity(intent);
             }
         });

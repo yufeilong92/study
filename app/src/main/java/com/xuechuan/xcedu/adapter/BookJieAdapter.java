@@ -82,7 +82,8 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
                 if (isend) {
                   /*  Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                             String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
-                    Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),AgreementActivity.NOSHAREMARK);
+                    Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),
+                            AgreementActivity.NOSHAREMARK,"");
                     intent.putExtra(InfomDetailActivity.CSTR_EXTRA_TITLE_STR, vo.getTitle());
                     mContext.startActivity(intent);
                     return;
@@ -129,7 +130,7 @@ public class BookJieAdapter extends RecyclerView.Adapter<BookJieAdapter.ViewHold
      /*           Intent intent = InfomDetailActivity.startInstance(mContext, gourl,
                         String.valueOf(vo.getId()),
                         DataMessageVo.USERTYPEA);*/
-                Intent intent = AgreementActivity.newInstance(mContext, gourl,AgreementActivity.NOSHAREMARK);
+                Intent intent = AgreementActivity.newInstance(mContext, gourl,AgreementActivity.NOSHAREMARK,"");
                 mContext.startActivity(intent);
             }
         });

@@ -12,10 +12,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
+import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.vo.MyMsgVo;
@@ -39,7 +41,6 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
     private Context mContext;
     private List mData;
     private final LayoutInflater mInflater;
-    private CommonPopupWindow layoutGravity;
     private CommonPopupWindow.LayoutGravity layoutGravity1;
     private CommonPopupWindow showDel;
     private Button btnDel;
@@ -95,22 +96,54 @@ public class MyMsgAdapter extends BaseRecyclerAdapter<MyMsgAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 String type = "";
+                String submittype="";
                 if (datas.getSourcetype() == 1 || datas.getSourcetype() == 2) {
-                    type = DataMessageVo.ARTICLE;
+                    type = DataMessageVo.USERTYPEAC;
+                    submittype=DataMessageVo.ARTICLE;
                 } else if (datas.getSourcetype() == 3 || datas.getSourcetype() == 4) {
-                    type = DataMessageVo.QUESTION;
+                    type = DataMessageVo.USERTYPEQC;
+                    submittype=DataMessageVo.QUESTION;
                 } else if (datas.getSourcetype() == 5 || datas.getSourcetype() == 6) {
-                    type = DataMessageVo.VIDEO;
+                    type = DataMessageVo.USERTYPEVC;
+                    submittype= DataMessageVo.VIDEO;
                 }
-                Intent intent = EvalueTwoActivity.newInstance(mContext, "", String.valueOf(datas.getTargetid()), type);
+                Intent intent = EvalueTwoActivity.newInstance(mContext, "",
+                        String.valueOf(datas.getTargetid()),
+                        type,
+                        submittype);
                 mContext.startActivity(intent);
             }
         });
+
+/*        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+//                showShareLayout(holder.itemView, datas, mPostion);
+//                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
+                return false;
+            }
+        });*/
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showShareLayout(holder.itemView, datas, mPostion);
-                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
+                DialogUtil dialogUtil = DialogUtil.getInstance();
+                dialogUtil.showTitleDialog(mContext,"是否删除","确定","取消",true);
+                dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        clickLangListener.onClickLangListener(datas, mPostion);
+//                        clickLangListener.onClickLangListener(vo, position);
+                    }
+
+                    @Override
+                    public void onCancelClickListener() {
+
+                    }
+                });
+
+//                showShareLayout(holder.itemView, vo, position);
+//                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.input_bg));
                 return false;
             }
         });

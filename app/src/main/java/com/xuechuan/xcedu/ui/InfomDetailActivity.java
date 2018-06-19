@@ -313,7 +313,10 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 EvalueVo.DatasBean bean = (EvalueVo.DatasBean) obj;
                 EventBus.getDefault().postSticky(new EvalueTwoEvent(bean));
                 Intent intent = EvalueTwoActivity.newInstance(mContext,
-                        String.valueOf(bean.getTargetid()), String.valueOf(bean.getId()), DataMessageVo.ARTICLE);
+                        String.valueOf(bean.getTargetid()),
+                        String.valueOf(bean.getId()),
+                        DataMessageVo.USERTYPEAC
+                        ,DataMessageVo.ARTICLE);
                 startActivity(intent);
             }
         });
@@ -611,57 +614,63 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 qq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mTitle
-                                , "",mUrl, R.mipmap.m_setting_about_xcimg
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl,mTitle
+                                , "","", R.mipmap.appicon
                                 , SHARE_MEDIA.QQ);
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.QQ);
+                        getPopupWindow().dismiss();
                     }
                 });
                 qqzon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mTitle
-                                , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.QZONE
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl,mTitle
+                                , "","", R.mipmap.appicon, SHARE_MEDIA.QZONE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.QZONE);
+                        getPopupWindow().dismiss();
                     }
                 });
                 weibo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mTitle
-                                , "",mUrl, R.mipmap.m_setting_about_xcimg
+                        ShareUtils.shareWeb(InfomDetailActivity.this,mUrl, mTitle
+                                , "","", R.mipmap.appicon
                                 , SHARE_MEDIA.SINA
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.SINA);
+                        getPopupWindow().dismiss();
                     }
                 });
                 weixin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url, mTitle
-                                , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl, mTitle
+                                , "","", R.mipmap.appicon, SHARE_MEDIA.WEIXIN
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.WEIXIN);
+                        getPopupWindow().dismiss();
                     }
                 });
                 circle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, Defaultcontent.url,mTitle
-                                , "",mUrl, R.mipmap.m_setting_about_xcimg, SHARE_MEDIA.WEIXIN_CIRCLE
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl,mTitle
+                                , "","", R.mipmap.appicon, SHARE_MEDIA.WEIXIN_CIRCLE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.WEIXIN_CIRCLE);
+                        getPopupWindow().dismiss();
                     }
                 });
             }

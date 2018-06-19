@@ -168,7 +168,9 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
             @Override
             public void onClickListener(EvalueVo.DatasBean vo, int position) {
                 Intent intent = EvalueTwoActivity.newInstance(mContext, String.valueOf(vo.getTargetid()),
-                        String.valueOf(vo.getId()), DataMessageVo.VIDEO);
+                        String.valueOf(vo.getId()),
+                        DataMessageVo.USERTYPEVC,
+                        DataMessageVo.VIDEO);
                 startActivity(intent);
             }
         });

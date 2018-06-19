@@ -62,6 +62,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
      * 评价类型类型
      */
     private static final String TESTYPE = "type";
+    private static final String SUBMITTYPE = "summittype";
     private RecyclerView mRlvInfomtwoContent;
     private XRefreshView mXfvContentTwoDetail;
     private EditText mEtInfomTwoContent;
@@ -99,15 +100,25 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     private String mType;
     private EvalueInterfacePresenter mInfomPresenter;
     private LinearLayout mLlEdLayout;
+    private String mSubmitType;
 
-    public static Intent newInstance(Context context, String targetid, String commonid, String type) {
+    /***
+     *
+     * @param context
+     * @param targetid 文章di
+     * @param commonid id
+     * @param type 点赞类型
+     * @param submittype 提交类型
+     * @return
+     */
+    public static Intent newInstance(Context context, String targetid, String commonid, String type,String submittype) {
         Intent intent = new Intent(context, EvalueTwoActivity.class);
         intent.putExtra(TARGETID, targetid);
         intent.putExtra(COMMONID, commonid);
         intent.putExtra(TESTYPE, type);
+        intent.putExtra(SUBMITTYPE,submittype);
         return intent;
     }
-
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +135,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
             mTargetid = getIntent().getStringExtra(TARGETID);
             mCommonid = getIntent().getStringExtra(COMMONID);
             mType = getIntent().getStringExtra(TESTYPE);
+            mSubmitType = getIntent().getStringExtra(SUBMITTYPE);
 
         }
         initView();
@@ -277,8 +289,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
 
     private void submitEvalut(String str) {
         mEtInfomTwoContent.setText("");
-
-        mInfomPresenter.SubmitContent(mContext, mTargetid, str, mCommonid, mType);
+        mInfomPresenter.SubmitContent(mContext, mTargetid, str, mCommonid, mSubmitType);
     }
 
     @Override

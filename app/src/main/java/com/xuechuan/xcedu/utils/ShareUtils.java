@@ -27,7 +27,7 @@ public class ShareUtils {
     public static void shareWeb(final Activity activity, String WebUrl, String title, String description, String imageUrl, int imageID, SHARE_MEDIA platform) {
         UMWeb web = new UMWeb(WebUrl);//连接地址
         web.setTitle(title);//标题
-        web.setDescription(description);//描述
+        web.setDescription(StringUtil.isEmpty(description)?"学川教育":description);//描述
         if (TextUtils.isEmpty(imageUrl)) {
             web.setThumb(new UMImage(activity, imageID));  //本地缩略图
         } else {
@@ -41,7 +41,6 @@ public class ShareUtils {
                     public void onStart(SHARE_MEDIA share_media) {
 
                     }
-
                     @Override
                     public void onResult(final SHARE_MEDIA share_media) {
                         activity.runOnUiThread(new Runnable() {
