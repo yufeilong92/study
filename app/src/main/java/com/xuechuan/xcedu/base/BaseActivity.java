@@ -43,6 +43,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+
         Intent intent = getIntent();
         mBaseTitle = intent.getStringExtra(CSTR_EXTRA_TITLE_STR);
         MyAppliction.getInstance().addActivity(this);
