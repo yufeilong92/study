@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.Event;
+package com.xuechuan.xcedu.event;
 
 import com.xuechuan.xcedu.vo.EvalueVo;
 

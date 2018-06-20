@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.Event;
+package com.xuechuan.xcedu.event;
 
 /**
  * @version V 1.0 xxxxxxxx

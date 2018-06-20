@@ -9,13 +9,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
-import com.xuechuan.xcedu.Event.SearchEvenText;
-import com.xuechuan.xcedu.Event.SearchEventWen;
+import com.xuechuan.xcedu.event.SearchEventWen;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.ArticleListAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;

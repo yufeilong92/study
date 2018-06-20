@@ -1,50 +1,33 @@
 package com.xuechuan.xcedu.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
-import com.xuechuan.xcedu.Event.BookTableEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.MyOrderAdapter;
-import com.xuechuan.xcedu.adapter.NetMyTableAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.contract.PerOrderContract;
-import com.xuechuan.xcedu.mvp.model.NetBookInfomModelImpl;
-import com.xuechuan.xcedu.mvp.model.PayModelImpl;
 import com.xuechuan.xcedu.mvp.model.PerOrderModel;
-import com.xuechuan.xcedu.mvp.presenter.NetBookInfomPresenter;
 import com.xuechuan.xcedu.mvp.presenter.PayPresenter;
 import com.xuechuan.xcedu.mvp.presenter.PerOrderPresenter;
 import com.xuechuan.xcedu.mvp.view.PayUtilView;
-import com.xuechuan.xcedu.mvp.view.PayView;
 import com.xuechuan.xcedu.ui.me.DelectSuceessActivity;
-import com.xuechuan.xcedu.ui.me.MyOrderInfomActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PayUtil;
-import com.xuechuan.xcedu.utils.StringUtil;
-import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.MyOrderVo;
-import com.xuechuan.xcedu.vo.NetBookTableVo;
 import com.xuechuan.xcedu.vo.OrderDetailVo;
 import com.xuechuan.xcedu.vo.ResultVo;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;

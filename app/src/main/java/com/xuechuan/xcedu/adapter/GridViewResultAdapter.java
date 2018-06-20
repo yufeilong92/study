@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
+import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.QuestionAllVo;
 import com.xuechuan.xcedu.vo.UseSelectItemInfomVo;
 
@@ -93,7 +94,10 @@ public class GridViewResultAdapter extends BaseAdapter {
 //            判断是否做过
             if (id.equalsIgnoreCase(String.valueOf(vo.getId()))) {//做过
                 String status = vo.getItemStatus();
-                if (status.equals("0")) {//正确
+                if (StringUtil.isEmpty(status)) {
+                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                } else if (status.equals("0")) {//正确
                     holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
                     holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
                 } else if (status.equals("1")) {//错误
@@ -117,7 +121,10 @@ public class GridViewResultAdapter extends BaseAdapter {
             if (id.equalsIgnoreCase(String.valueOf(vo.getId()))) {//做过
                 String status = vo.getItemStatus();
                 mSelectitem.put(position, true);
-                if (status.equals("0")) {//正确
+                if (StringUtil.isEmpty(status)) {
+                    holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_ss);
+                    holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
+                } else if (status.equals("0")) {//正确
                     holder.mTvPopGrdviewSelect.setBackgroundResource(R.drawable.bg_select_answer_btn_n);
                     holder.mTvPopGrdviewSelect.setTextColor(mContext.getResources().getColor(R.color.text_tab_right));
                 } else if (status.equals("1")) {//错误

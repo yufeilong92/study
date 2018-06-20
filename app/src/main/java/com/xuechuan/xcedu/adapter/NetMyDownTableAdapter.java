@@ -6,22 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
-import com.easefun.polyvsdk.vo.PolyvVideoVO;
-import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
-import com.xuechuan.xcedu.vo.ItemSelectVo;
-import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**

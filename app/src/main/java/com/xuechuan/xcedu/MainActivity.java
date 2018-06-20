@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.player.PolyvPlayerActivity;
@@ -96,6 +97,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 L.e("===========", getStr());
                 break;
             case R.id.btn_play_get:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CrashReport.testJavaCrash();
+                    }
+                }).start();
+
                 break;
             case R.id.btn_play_post:
                 break;

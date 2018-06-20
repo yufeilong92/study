@@ -12,10 +12,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.andview.refreshview.callback.IFooterCallBack;
 import com.google.gson.Gson;
 import com.multilevel.treelist.Node;
-import com.xuechuan.xcedu.Event.FreeDataEvent;
+import com.xuechuan.xcedu.event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.mvp.model.AllQuestionModelImpl;

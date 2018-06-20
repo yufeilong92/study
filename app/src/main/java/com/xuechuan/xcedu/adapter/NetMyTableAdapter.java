@@ -11,14 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
-import com.xuechuan.xcedu.Event.NetMyPlayEvent;
-import com.xuechuan.xcedu.Event.NetMyPlayTrySeeEvent;
-import com.xuechuan.xcedu.Event.NetPlayTrySeeEvent;
+import com.xuechuan.xcedu.event.NetMyPlayEvent;
+import com.xuechuan.xcedu.event.NetMyPlayTrySeeEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
-import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
-import com.xuechuan.xcedu.vo.Db.UserLookVideoVo;
 import com.xuechuan.xcedu.vo.ItemSelectVo;
 import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
@@ -26,7 +22,6 @@ import com.xuechuan.xcedu.vo.VideosBeanVo;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

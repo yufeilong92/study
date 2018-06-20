@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xuechuan.xcedu.Event.SearchEvenText;
-import com.xuechuan.xcedu.Event.SearchEventWen;
+import com.xuechuan.xcedu.event.SearchEvenText;
+import com.xuechuan.xcedu.event.SearchEventWen;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.MyNetBookIndicatorAdapter;
 import com.xuechuan.xcedu.adapter.MyTagPagerAdapter;

@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.xuechuan.xcedu.Event.RefreshPlayIconEvent;
+import com.xuechuan.xcedu.event.RefreshPlayIconEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.NetMyTableAdapter;
 import com.xuechuan.xcedu.base.BaseFragment;

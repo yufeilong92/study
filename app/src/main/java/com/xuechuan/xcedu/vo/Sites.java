@@ -1,7 +1,5 @@
 package com.xuechuan.xcedu.vo;
 
-import com.xuechuan.xcedu.Event.VideoIdEvent;
-
 /**
  * @version V 1.0 xxxxxxxx
  * @Title: xcedu

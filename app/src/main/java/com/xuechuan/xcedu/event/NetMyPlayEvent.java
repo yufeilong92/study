@@ -1,4 +1,4 @@
-package com.xuechuan.xcedu.Event;
+package com.xuechuan.xcedu.event;
 
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
@@ -12,10 +12,10 @@ import com.xuechuan.xcedu.vo.VideosBeanVo;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class NetPlayTrySeeEvent {
+public class NetMyPlayEvent {
     private VideosBeanVo vo;
 
-    public NetPlayTrySeeEvent(VideosBeanVo vo) {
+    public NetMyPlayEvent(VideosBeanVo vo) {
         this.vo = vo;
     }
 

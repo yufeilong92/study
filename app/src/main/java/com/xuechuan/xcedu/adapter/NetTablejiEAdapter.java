@@ -1,7 +1,6 @@
 package com.xuechuan.xcedu.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
-import com.xuechuan.xcedu.Event.NetPlayEvent;
 import com.xuechuan.xcedu.R;
-import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.ItemSelectVo;
 import com.xuechuan.xcedu.vo.SelectVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

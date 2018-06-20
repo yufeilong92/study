@@ -1,7 +1,6 @@
-package com.xuechuan.xcedu.Event;
+package com.xuechuan.xcedu.event;
 
 import com.xuechuan.xcedu.db.DownVideoDb;
-import com.xuechuan.xcedu.vo.NetBookTableVo;
 
 /**
  * @version V 1.0 xxxxxxxx

@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.xuechuan.xcedu.R;
@@ -42,7 +43,10 @@ import com.xuechuan.xcedu.vo.PerInfomVo;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 import com.xuechuan.xcedu.vo.VideoSettingVo;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -174,7 +178,48 @@ public class MyAppliction extends MultiDexApplication {
         SaveUUidUtil.initSharedPreference(this);
         SaveIsDoneUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
+        initBug();
 
+    }
+
+    private void initBug() {
+        Context context = getApplicationContext();
+// 获取当前包名
+        String packageName = context.getPackageName();
+// 获取当前进程名
+        String processName = getProcessName(android.os.Process.myPid());
+// 设置是否为上报进程
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
+        strategy.setUploadProcess(processName == null || processName.equals(packageName));
+        CrashReport.initCrashReport(getApplicationContext(), "20b66083e6",  true);
+    }
+    /**
+     * 获取进程号对应的进程名
+     *
+     * @param pid 进程号
+     * @return 进程名
+     */
+    private static String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private void initUM() {

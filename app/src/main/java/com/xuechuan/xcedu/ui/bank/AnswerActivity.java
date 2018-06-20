@@ -34,8 +34,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.xuechuan.xcedu.Event.EvalueTwoEvent;
-import com.xuechuan.xcedu.Event.FreeDataEvent;
+import com.xuechuan.xcedu.event.EvalueTwoEvent;
+import com.xuechuan.xcedu.event.FreeDataEvent;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.AnswerEvaluateAdapter;
 import com.xuechuan.xcedu.adapter.GridViewAdapter;
@@ -63,7 +63,6 @@ import com.xuechuan.xcedu.mvp.view.TimeShowView;
 import com.xuechuan.xcedu.ui.EvalueTwoActivity;
 import com.xuechuan.xcedu.utils.AnswerCardUtil;
 import com.xuechuan.xcedu.utils.ArithUtil;
-import com.xuechuan.xcedu.utils.Defaultcontent;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.MyTimeUitl;
@@ -73,7 +72,6 @@ import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
-import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ErrOrColListVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
@@ -91,7 +89,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -1293,7 +1290,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mRightItem = mResultData.getChoiceanswer();
         Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
 //        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
-        mTvLookAnswerWen.setText(fromHtml);
+        if (isBuy)
+            mTvLookAnswerWen.setText(fromHtml);
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
     }
@@ -1544,6 +1542,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mTvBEContent.setVisibility(View.VISIBLE);
             mTvBEContent.setText(mResultData.getE());
         }
+        Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
+        if (isBuy)
+            mTvLookAnswerWen.setText(fromHtml);
     }
 
     private void setShowLayout() {
@@ -1936,6 +1937,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (mTextDetialNew == null)
             return;
         SharedSeletResultListUtil sp = SharedSeletResultListUtil.getInstance();
+
         int id = mTextDetialNew.getData().getId();
         //保存用户选中结果
         if (mSeletList == null) {
@@ -1966,6 +1968,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
             }
         }
+//        }else {
+//            ArrayList<UseSelectItemInfomVo> vos = new ArrayList<>();
+//            sp.putListAdd(vos);
+//        }
 //            问题id
         vo.setId(id);
         if (!StringUtil.isEmpty(mSelectOnlyitem)) {//单选保存正确
@@ -2393,7 +2399,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     mBtnSubmit.setVisibility(View.VISIBLE);
                 }
-
+                mBtnSubmit.getParent().requestDisallowInterceptTouchEvent(true);
                 mBtnSubmit.setOnClickListener(new View.OnClickListener() {//交卷
                     @Override
                     public void onClick(View v) {
@@ -2561,7 +2567,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 int right = 0;
                 for (int i = 0; i < size; i++) {
                     UseSelectItemInfomVo vo = user.get(i);
-                    if (vo.getItemStatus().equals("0")) {
+                    if (vo.getItemStatus() != null && vo.getItemStatus().equals("0")) {
                         right += 1;
                     }
                 }
@@ -2578,7 +2584,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mBtnAnswerAgain.setOnClickListener(new View.OnClickListener() {//重新做题
                     @Override
                     public void onClick(View v) {
-                        SharedSeletResultListUtil.getInstance().DeleteUser();
                         if (mSeletList != null && !mSeletList.isEmpty()) {
                             mSeletList.clear();
                         }
@@ -3869,10 +3874,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }
 

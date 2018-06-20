@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDelegate;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,40 +19,31 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.xuechuan.xcedu.Event.ShowItemEvent;
+import com.xuechuan.xcedu.event.ShowItemEvent;
 import com.xuechuan.xcedu.HomeActivity;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
-import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperAssist;
-import com.xuechuan.xcedu.db.UserInfomDb;
 import com.xuechuan.xcedu.jg.RegisterTag;
 import com.xuechuan.xcedu.mvp.model.LoginModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.LoginPresenter;
 import com.xuechuan.xcedu.mvp.view.LoginView;
 import com.xuechuan.xcedu.net.LoginService;
-import com.xuechuan.xcedu.net.WeiXinLoginSercvice;
-import com.xuechuan.xcedu.net.view.StringCallBackView;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.Md5;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
-import com.xuechuan.xcedu.utils.SharedUserUtils;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.UserInfomVo;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
-
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * @version V 1.0 xxxxxxxx
