@@ -27,14 +27,14 @@
             android:layout_marginTop="@dimen/space_8"
             android:gravity="center"
             android:textColor="@color/black"
-            android:text="已暂停计时"
+            android:text="@string/stop_time"
             android:textSize="@dimen/text_size_14" />
 
   <Button
       android:gravity="center"
       android:id="@+id/btn_stop_next"
       android:textColor="@color/white"
-      android:text="继续答题"
+      android:text="@string/next_do_text"
       android:layout_marginTop="@dimen/space_8"
       android:background="@drawable/btn_dialog_sure_bg"
       android:layout_gravity="center"

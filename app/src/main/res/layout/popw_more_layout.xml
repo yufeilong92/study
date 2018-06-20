@@ -20,7 +20,7 @@
         android:drawableLeft="@mipmap/ic_b_setting"
         android:drawablePadding="@dimen/space_10"
         android:gravity="center_vertical"
-        android:text="设置" />
+        android:text="@string/setting" />
 
     <View style="@style/view_line" />
 
@@ -34,5 +34,5 @@
         android:drawableLeft="@mipmap/ic_b_share"
         android:drawablePadding="@dimen/space_10"
         android:gravity="center_vertical"
-        android:text="分享" />
+        android:text="@string/share" />
 </LinearLayout>

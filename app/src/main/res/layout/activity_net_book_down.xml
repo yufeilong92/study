@@ -18,7 +18,7 @@
 
         <TextView
             style="@style/TitleBarText"
-            android:text="我的缓存" />
+            android:text="@string/my_down" />
 
         <TextView
             android:id="@+id/tv_net_book_down_make"
@@ -58,7 +58,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
-                    android:text="正在缓存"
+                    android:text="@string/downing"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_18" />
@@ -88,7 +88,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/space_16"
                     android:paddingRight="@dimen/space_16"
-                    android:text="已缓存"
+                    android:text="@string/over_down"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_18" />
@@ -123,7 +123,7 @@
                 android:id="@+id/chb_net_book_down_all"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="全选"
+                android:text="@string/all"
                 android:paddingLeft="@dimen/space_10"
                 android:textColor="@color/hint_text"
                 android:textSize="@dimen/text_size_14" />

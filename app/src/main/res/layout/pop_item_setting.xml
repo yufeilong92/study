@@ -20,7 +20,7 @@
             android:button="@null"
             android:drawableTop="@drawable/select_b_set_night"
             android:gravity="center_horizontal"
-            android:text="夜间模式" />
+            android:text="@string/night_type" />
 
         <CheckBox
             android:id="@+id/rdb_setting_eye"
@@ -30,7 +30,7 @@
             android:button="@null"
             android:drawableTop="@drawable/select_b_set_eye"
             android:gravity="center_horizontal"
-            android:text="护眼模式" />
+            android:text="@string/eye_type" />
     </LinearLayout>
 
     <View style="@style/view_line_1_gray" />
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="答对自动跳转下一题"
+            android:text="@string/right_go_next"
             android:textColor="@color/black" />
 
         <CheckBox
@@ -61,7 +61,7 @@
         android:layout_height="@dimen/space_48"
         android:layout_marginLeft="@dimen/space_16"
         android:gravity="center_vertical"
-        android:text="错题移除正确次数"
+        android:text="@string/delect_right_number"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_14" />
 

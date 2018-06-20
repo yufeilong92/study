@@ -87,21 +87,6 @@ public class SpecsOrderAdapter extends BaseRecyclerAdapter<SpecsOrderAdapter.Vie
     public void onBindViewHolder(final ViewHolder holder,  int position, boolean isItem) {
         final int mPostion=position;
         final DatasBeanVo vo = mData.get(mPostion);
-
-        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-//                        manager.scrollToPositionWithOffset(mPostion, 0);
-                        break;
-                    default:
-
-                }
-                return false;
-            }
-        });
-
         if (mClickSelect.contains(mPostion)) {
             holder.mRlvItemSpecasContent.setVisibility(View.VISIBLE);
             reqeustData(holder, vo);

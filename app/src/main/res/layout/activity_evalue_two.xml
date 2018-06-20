@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_home_search_bg"
                     android:gravity="center_vertical"
-                    android:hint="我来说两句..."
+                    android:hint="@string/et_hint"
                     android:maxLines="4"
                     android:minLines="2"
                     android:maxLength="200"

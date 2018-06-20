@@ -27,7 +27,7 @@
             android:layout_marginTop="@dimen/space_8"
             android:gravity="center"
             android:textColor="@color/black"
-            android:text="还有题目没有做，确认交卷"
+            android:text="@string/sure_submit_text"
             android:textSize="@dimen/text_size_14" />
 
         <LinearLayout
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/space_32"
                 android:background="@drawable/btn_dialog_canle_bg"
-                android:text="取消" />
+                android:text="@string/cancel" />
 
             <Space style="@style/space_16_width" />
 
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/space_32"
                 android:background="@drawable/btn_dialog_sure_bg"
-                android:text="交卷"
+                android:text="@string/submit_text"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>

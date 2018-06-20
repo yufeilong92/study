@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_select_answer_evalue"
-        android:text="立即使用"
+        android:text="@string/start_using"
         android:layout_marginBottom="@dimen/space_32"
         android:layout_centerInParent="true"
         android:textColor="@color/red_text" />

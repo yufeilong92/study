@@ -35,7 +35,7 @@
         android:id="@+id/et_m_g_code"
         android:paddingLeft="@dimen/space_20"
         android:paddingRight="@dimen/space_20"
-        android:hint="请输入验证码"
+        android:hint="@string/please_input_code"
         android:textSize="@dimen/text_size_14"
         android:layout_marginLeft="@dimen/space_30"
         android:layout_marginRight="@dimen/space_30"
@@ -44,7 +44,7 @@
         android:layout_height="@dimen/spance_50" />
     <Button
         android:id="@+id/btn_m_g_value"
-        android:text="点击验证"
+        android:text="@string/do_test"
         android:textSize="@dimen/text_size_18"
         android:textColor="@color/white"
         android:background="@mipmap/ic_m_identify_"

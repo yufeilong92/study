@@ -46,7 +46,7 @@
         android:textColor="@color/black"
         android:gravity="start"
         android:textSize="@dimen/text_size_14"
-        android:hint="描述您在APP使用中遇到的问题或建议"
+        android:hint="@string/add_fack"
         android:padding="@dimen/space_6" />
 
     <TextView

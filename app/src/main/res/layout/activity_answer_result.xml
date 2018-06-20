@@ -147,7 +147,7 @@
             android:layout_marginRight="@dimen/space_8"
             android:layout_weight="1"
             android:background="@mipmap/ic_tab_line_n"
-            android:text="重新做题" />
+            android:text="@string/again_do" />
 
         <Button
             android:id="@+id/btn_answer_jiexi"
@@ -157,7 +157,7 @@
             android:layout_marginRight="@dimen/space_16"
             android:layout_weight="1"
             android:background="@mipmap/ic_tab_line_s"
-            android:text="查看解析"
+            android:text="@string/look_analyze"
             android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

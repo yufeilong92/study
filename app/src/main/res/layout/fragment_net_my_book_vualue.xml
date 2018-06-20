@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="暂无评价内容" />
+                android:text="@string/no_evalue" />
 
         </com.andview.refreshview.XRefreshView>
 
@@ -51,7 +51,7 @@
                     android:layout_marginTop="@dimen/space_8"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:hint="我来说两句..."
+                    android:hint="@string/et_hint"
                     android:textSize="@dimen/text_size_12"
                     android:minLines="2"
                     android:maxLines="4"

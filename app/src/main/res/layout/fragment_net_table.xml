@@ -15,7 +15,7 @@
             android:visibility="gone"
             android:gravity="center"
             android:id="@+id/tv_net_empty_content"
-            android:text="暂无课程表"
+            android:text="@string/no_book_order"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -27,7 +27,7 @@
 
                 android:gravity="center"
                 android:padding="@dimen/space_4"
-                android:text="超清"
+                android:text="@string/Super_clear"
                 android:textColor="@drawable/select_net_pop_rdb_textcolor"
                 android:textSize="@dimen/text_size_16" />
 
@@ -41,7 +41,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:padding="@dimen/space_4"
-                android:text="高清"
+                android:text="@string/high_definition"
                 android:checked="true"
                 android:textColor="@drawable/select_net_pop_rdb_textcolor"
                 android:textSize="@dimen/text_size_16" />
@@ -53,7 +53,7 @@
                 android:background="@drawable/select_net_pop_clarity_btn"
                 android:button="@null"
                 android:gravity="center"
-                android:text="流畅"
+                android:text="@string/easy_chang"
                 android:textColor="@drawable/select_net_pop_rdb_textcolor"
                 android:textSize="@dimen/text_size_16" />
         </RadioGroup>
@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="暂无课程"
+            android:text="@string/no_book"
             android:textSize="@dimen/text_size_14"
             android:visibility="gone" />
 
@@ -108,7 +108,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/white"
-                    android:text="取消"
+                    android:text="@string/cancel"
                     android:textColor="@color/text_title_color"
                     android:textSize="@dimen/text_size_16"
                     android:visibility="gone" />
@@ -119,7 +119,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/white"
-                    android:text="全选"
+                    android:text="@string/all"
                     android:textColor="@color/text_title_color"
                     android:textSize="@dimen/text_size_16" />
 
@@ -136,7 +136,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/white"
-                    android:text="查看缓存"
+                    android:text="@string/look_my_down"
                     android:textColor="@color/text_title_color"
                     android:textSize="@dimen/text_size_16" />
 
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
-                    android:text="正在缓存"
+                    android:text="@string/downing"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_16"
                     android:visibility="gone" />
@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
-                    android:text="全部缓存"
+                    android:text="@string/all_down"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_16"
                     android:visibility="gone" />

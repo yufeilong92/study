@@ -15,7 +15,7 @@
            android:drawableTop="@mipmap/ic_b_share_wechat"
            android:layout_width="0dp"
            android:layout_weight="1"
-           android:text="微信"
+           android:text="@string/weixin"
            android:drawablePadding="@dimen/space_8"
            android:gravity="center"
            android:layout_height="wrap_content" />
@@ -24,7 +24,7 @@
             android:drawableTop="@mipmap/ic_b_share_circle"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="朋友圈"
+            android:text="@string/friendsCircle"
             android:drawablePadding="@dimen/space_8"
             android:gravity="center"
             android:layout_height="wrap_content" />
@@ -33,7 +33,7 @@
             android:drawableTop="@mipmap/ic_b_share_weibo"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="微博"
+            android:text="@string/weibo"
             android:drawablePadding="@dimen/space_8"
             android:gravity="center"
             android:layout_height="wrap_content" />
@@ -48,7 +48,7 @@
             android:id="@+id/tv_pop_qq_share"
             android:drawableTop="@mipmap/ic_b_share_qq"
             android:layout_width="0dp"
-            android:text="QQ"
+            android:text="@string/qq"
             android:layout_weight="1"
             android:drawablePadding="@dimen/space_8"
             android:gravity="center"
@@ -58,7 +58,7 @@
             android:drawableTop="@mipmap/ic_b_share_qzone"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="QQ空间"
+            android:text="@string/qq_cirlce"
             android:drawablePadding="@dimen/space_8"
             android:gravity="center"
             android:layout_height="wrap_content" />

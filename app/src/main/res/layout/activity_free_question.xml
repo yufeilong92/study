@@ -142,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_48"
                 android:gravity="center_vertical"
-                android:text="范围"
+                android:text="@string/scope"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16" />
 
@@ -160,7 +160,7 @@
                 <Button
                     android:textColor="@color/white"
                     android:id="@+id/btn_create_question"
-                    android:text="生成组卷"
+                    android:text="@string/create_volume"
                     android:background="@drawable/btn_free_createqution_bg_s"
                     android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"

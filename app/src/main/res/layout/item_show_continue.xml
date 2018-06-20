@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="上次答到第"
+                android:text="@string/last_next"
                 android:textColor="@color/black" />
 
             <TextView
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="题，是否继续"
+                android:text="@string/next_last"
                 android:textColor="@color/black" />
         </LinearLayout>
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_8"
             android:gravity="center"
-            android:text="继续将转到上次进度"
+            android:text="@string/next_prgress"
             android:textSize="@dimen/text_size_12" />
 
         <LinearLayout
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/space_32"
                 android:background="@drawable/btn_dialog_sure_bg"
-                android:text="继续"
+                android:text="@string/next"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>

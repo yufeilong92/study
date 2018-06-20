@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/tv_listEmpty"
-            android:text="获取内容为空，请刷新"
+            android:text="@string/no_xg_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

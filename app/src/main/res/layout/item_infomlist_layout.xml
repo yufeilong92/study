@@ -19,7 +19,6 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="2"
-            android:minLines="2"
             android:text="测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题测试标题"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_size_16" />

@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
 
                 android:layout_marginLeft="@dimen/spance_36"
-                android:text="手机号验证"
+                android:text="@string/phone_text"
                 android:textSize="@dimen/text_size_14" />
 
             <Space style="@style/space_20_height" />
@@ -66,7 +66,7 @@
                     <EditText
                         android:id="@+id/et_register_phone"
                         style="@style/et_style"
-                        android:hint="手机号码"
+                        android:hint="@string/phone"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="11" />
@@ -107,7 +107,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
-                        android:text="发送验证码"
+                        android:text="@string/send_code"
                         android:textColor="@color/red_text" />
                 </LinearLayout>
 
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spance_36"
-                android:text="密码设置"
+                android:text="@string/paw_setting"
                 android:textSize="@dimen/text_size_14" />
 
             <Space style="@style/space_20_height" />
@@ -197,13 +197,13 @@
                     android:layout_marginLeft="@dimen/space_8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我已阅读并同意" />
+                    android:text="@string/reading_consent" />
 
                 <TextView
                     android:id="@+id/tv_regiths_agreem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="《用户注册协议》"
+                    android:text="@string/protocol"
                     android:textColor="@color/red_text" />
 
             </LinearLayout>

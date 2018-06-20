@@ -15,7 +15,7 @@
 
         <TextView
             style="@style/TitleBarText"
-            android:text="网课" />
+            android:text="@string/net_book" />
 
         <ImageView
             android:id="@+id/iv_net_mydown"

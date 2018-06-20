@@ -59,8 +59,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
-                android:maxLines="2"
                 android:text="评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容" />
 
             <Space style="@style/space_16_height" />
@@ -164,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="评价内容为空"
+            android:text="@string/no_evalue"
             android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>

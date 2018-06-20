@@ -81,7 +81,7 @@
                 android:id="@+id/et_m_p_name"
                 style="@style/m_name"
                 android:paddingLeft="@dimen/space_16"
-                android:text="" />
+                />
 
             <ImageView
                 android:visibility="gone"

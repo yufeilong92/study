@@ -109,7 +109,6 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/text_size_16"
         android:paddingRight="@dimen/text_size_16"
-        android:text="2222"
         android:textColor="@color/text_title_color"
         android:textSize="@dimen/text_size_18" />
 

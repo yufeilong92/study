@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="暂无下载内容"
+        android:text="@string/no_down_data"
         android:textColor="@color/text_title_color"
         android:textSize="@dimen/text_size_14"
         android:visibility="gone" />
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="个视频"
+                    android:text="@string/number_video"
                     android:textColor="@color/hint_text"
                     android:textSize="@dimen/text_size_14" />
 

@@ -16,7 +16,7 @@
 
         <TextView
             style="@style/TitleBarText"
-            android:text="我的订单" />
+            android:text="@string/myorder" />
 
         <ImageView style="@style/TitleBarAction" />
 

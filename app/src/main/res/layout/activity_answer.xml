@@ -77,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="该篇没有练习，请重新选择"
+        android:text="@string/p_is_empty"
         android:visibility="gone" />
 
     <RelativeLayout
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/space_16"
-                    android:text="选题类型"
+                    android:text="@string/q_type"
                     android:textColor="@color/text_fu_color"
                     android:textSize="@dimen/text_size_14" />
 
@@ -128,7 +128,7 @@
                     android:layout_marginRight="@dimen/space_48"
                     android:layout_marginTop="@dimen/space_48"
                     android:background="@drawable/btn_look_answer_bg"
-                    android:text="查看解析"
+                    android:text="@string/look_analyze"
                     android:textSize="@dimen/text_size_16"
                     android:visibility="gone" />
 
@@ -150,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/text_size_16"
                         android:paddingRight="@dimen/text_size_16"
-                        android:text="参考答案"
+                        android:text="@string/answer"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16" />
 
@@ -197,7 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/space_48"
                         android:paddingLeft="@dimen/space_8"
-                        android:text="加载更多"
+                        android:text="@string/loading_more"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/text_size_14" />
 
@@ -241,6 +241,7 @@
                 android:imeOptions="actionSend"
                 android:background="@drawable/et_answer_bg"
                 android:maxLines="4"
+                android:hint="@string/et_hint"
                 android:paddingBottom="@dimen/space_8"
                 android:paddingLeft="@dimen/space_16"
                 android:paddingRight="@dimen/space_16"
@@ -292,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="上一题" />
+                        android:text="@string/Last_q" />
                 </LinearLayout>
 
                 <Space style="@style/space_8_width" />
@@ -309,7 +310,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="下一题" />
+                        android:text="@string/next_q" />
 
                     <ImageView
                         android:layout_width="@dimen/space_18"
@@ -337,14 +338,13 @@
                     android:id="@+id/tv_b_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_14" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="/"
+                    android:text="@string/sprit"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_14" />
 

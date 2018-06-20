@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_30"
-                android:text="订单信息"
+                android:text="@string/order_infom"
                 android:textColor="@color/text_title_color"
                 android:textSize="@dimen/text_size_18" />
 
@@ -111,7 +111,7 @@
                     android:layout_height="@dimen/spance_50"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="总计"
+                    android:text="@string/amount"
                     android:textColor="@color/red_text"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />

@@ -526,8 +526,9 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 imgDialgo.dismiss();
             if (mPath != null) {
                 Log.e("压缩图片==", mPath);
-                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
-                mIvMPImg.setImageBitmap(bitmap);
+//                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
+//                mIvMPImg.setImageBitmap(bitmap);
+                MyAppliction.getInstance().displayImages(mIvMPImg,"file://"+mPath,true);
                 mPathlist = new ArrayList<>();
                 mPathlist.add(mPath);
             }

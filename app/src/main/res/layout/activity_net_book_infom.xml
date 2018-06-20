@@ -173,7 +173,7 @@
                 android:drawableLeft="@mipmap/c_n_p_icon_service"
                 android:drawablePadding="@dimen/space_8"
                 android:gravity="center_vertical"
-                android:text="联系客服"
+                android:text="@string/custom_service"
                 android:textColor="@color/text_fu_color"
                 android:textSize="@dimen/text_size_12" />
 
@@ -193,7 +193,7 @@
                 android:layout_height="32dp"
                 android:background="@drawable/btn_login_bg_normal"
                 android:paddingLeft="@dimen/space_8"
-                android:text="立即购买"
+                android:text="@string/do_pay"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_18" />
         </LinearLayout>
@@ -205,7 +205,7 @@
         android:gravity="center"
         android:id="@+id/tv_empty"
         android:visibility="gone"
-        android:text="暂无相关内容"
+        android:text="@string/no_xg_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

@@ -16,7 +16,7 @@
         android:textColor="@color/black"
         android:gravity="center"
         android:id="@+id/tv_empty"
-        android:text="搜索内容为空"
+        android:text="@string/search_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </com.andview.refreshview.XRefreshView>

@@ -31,7 +31,7 @@
                 android:minLines="5"
                 android:maxLines="9"
                 android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
-                android:hint="请输入评价内容"
+                android:hint="@string/et_hint"
                 android:imeOptions="actionSend"
                 android:padding="@dimen/space_8"
                 android:textColor="@color/black"
