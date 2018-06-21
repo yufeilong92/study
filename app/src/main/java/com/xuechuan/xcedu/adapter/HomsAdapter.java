@@ -172,8 +172,8 @@ public class HomsAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 String str = null;
                 str = PushXmlUtil.getInstance().getLocationProvice(mContext, code);
-                Intent intent1 = AdvisoryListActivity.newInstance(mContext, code);
-                intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
+                Intent intent1 = AdvisoryListActivity.newInstance(mContext, code,str);
+//                intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
                 mContext.startActivity(intent1);
             }
         });

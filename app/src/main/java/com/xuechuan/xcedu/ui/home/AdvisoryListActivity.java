@@ -73,9 +73,10 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
      * @param context
      * @param proviceCode 省份
      */
-    public static Intent newInstance(Context context, String proviceCode) {
+    public static Intent newInstance(Context context, String proviceCode,String city) {
         Intent intent = new Intent(context, AdvisoryListActivity.class);
         intent.putExtra(PROVICECODE, proviceCode);
+        intent.putExtra(CSTR_EXTREA_TITLE, city);
         return intent;
     }
 

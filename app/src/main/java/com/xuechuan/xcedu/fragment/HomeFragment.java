@@ -422,8 +422,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     str = PushXmlUtil.getInstance().getLocationProvice(mContext, code);
                 }
-                Intent intent1 = AdvisoryListActivity.newInstance(mContext, code);
-                intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
+                Intent intent1 = AdvisoryListActivity.newInstance(mContext, code,str);
+//                intent1.putExtra(AdvisoryListActivity.CSTR_EXTREA_TITLE, str);
                 startActivity(intent1);
                 break;
             case R.id.tv_article_more://文章更多
