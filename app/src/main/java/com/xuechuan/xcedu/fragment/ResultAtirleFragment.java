@@ -170,7 +170,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
             return;
         }
         isRefresh = true;
-        mPresenter.requestReusltCont(mContext, getPager() + 1, mSearchkey, mType);
+        mPresenter.requestMoreReusltCont(mContext, getPager() + 1, mSearchkey, mType);
     }
 
     private void reqestData() {

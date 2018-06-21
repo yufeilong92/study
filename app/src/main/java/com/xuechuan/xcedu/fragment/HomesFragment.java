@@ -136,7 +136,8 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
         initData();
         initAdapter();
         initXrfresh();
-        mXfvHomeContent.startRefresh();
+//        mXfvHomeContent.startRefresh();
+        requestData();
         initBaiduLocation();
     }
 
@@ -217,8 +218,6 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
     private void requestData() {
         mPresenter.requestHomePager(mContext, code);
     }
-
-
     private void initView(View view) {
         mContext = getActivity();
         mTvAddress = (AddressTextView) view.findViewById(R.id.tv_address);

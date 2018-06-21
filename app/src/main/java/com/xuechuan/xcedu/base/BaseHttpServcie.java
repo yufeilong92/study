@@ -262,6 +262,30 @@ public class BaseHttpServcie {
                         L.e(response.message());
                         callBackView.onError(response);
                     }
+                    @Override
+                    public void onCacheSuccess(Response<String> response) {
+                        super.onCacheSuccess(response);
+                        if (isShow) {
+                            if (dialog != null) {
+                                dialog.dismiss();
+                            }
+                        }
+                        try {
+                            String com = response.body().toString();
+                            new JsonParser().parse(com);
+                            Gson gson = new Gson();
+                            TongVo vo = gson.fromJson(com, TongVo.class);
+                            if (vo.getStatus().getCode() == 200) {
+                                callBackView.onSuccess(response);
+                            } else if (vo.getStatus().getCode() ==406){
+                                T.showToast(context, "登录超时，请重新登陆");
+                                MyAppliction.getInstance().startLogin(context);
+                            }
+                        } catch (JsonParseException e) {
+                            L.e("数据异常");
+                            e.printStackTrace();
+                        }
+                    }
                 });
 
     }
@@ -314,6 +338,31 @@ public class BaseHttpServcie {
                         L.e("数据异常");
                         L.e(response.message());
                         callBackView.onError(response);
+                    }
+
+                    @Override
+                    public void onCacheSuccess(Response<String> response) {
+                        super.onCacheSuccess(response);
+                        if (isShow) {
+                            if (dialog != null) {
+                                dialog.dismiss();
+                            }
+                        }
+                        try {
+                            String com = response.body().toString();
+                            new JsonParser().parse(com);
+                            Gson gson = new Gson();
+                            TongVo vo = gson.fromJson(com, TongVo.class);
+                            if (vo.getStatus().getCode() == 200) {
+                                callBackView.onSuccess(response);
+                            } else if (vo.getStatus().getCode() ==406){
+                                T.showToast(context, "登录超时，请重新登陆");
+                                MyAppliction.getInstance().startLogin(context);
+                            }
+                        } catch (JsonParseException e) {
+                            L.e("数据异常");
+                            e.printStackTrace();
+                        }
                     }
                 });
     }

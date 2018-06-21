@@ -303,7 +303,6 @@ public class MyAppliction extends MultiDexApplication {
         loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);        //log打印级别，决定了log显示的详细程度
         loggingInterceptor.setColorLevel(Level.INFO);                               //log颜色级别，决定了log在控制台显示的颜色
         builder.addInterceptor(loggingInterceptor);
-
         //全局的读取超时时间
         builder.readTimeout(isTime ? READTIME : OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 //全局的写入超时时间
