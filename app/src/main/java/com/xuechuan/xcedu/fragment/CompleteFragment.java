@@ -42,7 +42,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/26
  */
-public class CompleteFragment extends BaseFragment implements PerOrderContract.View  {
+public class CompleteFragment extends BaseFragment implements PerOrderContract.View {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -58,7 +58,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
     private long lastRefreshTime;
     private boolean isRefresh;
     private PerOrderPresenter mPresenter;
-    private int mDelPositon=-1;
+    private int mDelPositon = -1;
 
     public CompleteFragment() {
     }
@@ -149,14 +149,15 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
 
     private void showData(final MyOrderVo.DatasBean obj, final int position) {
         DialogUtil dialogUtil = DialogUtil.getInstance();
-        dialogUtil.showTitleDialog(mContext,"确定删除订单",getStrWithId(R.string.sure)
-        ,getStrWithId(R.string.cancel),true);
+        dialogUtil.showTitleDialog(mContext, "确定删除订单", getStrWithId(R.string.sure)
+                , getStrWithId(R.string.cancel), true);
         dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
             @Override
             public void onSureClickListener() {
                 mDelPositon = position;
                 mPresenter.submitDelOrd(mContext, obj.getOrdernum(), DataMessageVo.DELETEORDER);
             }
+
             @Override
             public void onCancelClickListener() {
 
@@ -255,12 +256,12 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+            if (mArrary.size() == orderVo.getTotal().getTotal()) {
                 mXfvContentOrderCom.setPullLoadEnable(true);
                 mXfvContentOrderCom.setLoadComplete(true);
             } else {
-                mXfvContentOrderCom.setPullLoadEnable(true);
-                mXfvContentOrderCom.setLoadComplete(false);
+            mXfvContentOrderCom.setPullLoadEnable(true);
+            mXfvContentOrderCom.setLoadComplete(false);
             }
             adapter.notifyDataSetChanged();
         } else {
@@ -314,15 +315,15 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
     public void submitSuccess(String con) {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
-        if (vo.getStatus().getCode()==200){
+        if (vo.getStatus().getCode() == 200) {
             if (mDelPositon != -1 && mDelPositon >= 0) {
                 mArrary.remove(mDelPositon);
                 mRlvMyOrderContentCom.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 mDelPositon = -1;
-                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
+                DelectSuceessActivity.newInstance(mContext, DelectSuceessActivity.DELECTSUCCESS);
             }
-        }else {
+        } else {
             T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
             L.e(vo.getStatus().getMessage());
         }

@@ -294,9 +294,9 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
                 mXfvContentOrderOb.setPullLoadEnable(true);
-                mXfvContentOrderOb.setLoadComplete(true);
+                mXfvContentOrderOb.setLoadComplete(false);
             } else {
                 mXfvContentOrderOb.setPullLoadEnable(true);
                 mXfvContentOrderOb.setLoadComplete(false);

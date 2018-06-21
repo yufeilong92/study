@@ -24,6 +24,15 @@ public class AdvisoryVo {
     private String title;
     private int  type;
     private int viewcount;
+    private String shareurl;
+
+    public String getShareurl() {
+        return shareurl;
+    }
+
+    public void setShareurl(String shareurl) {
+        this.shareurl = shareurl;
+    }
 
     public String getGourl() {
         return gourl;

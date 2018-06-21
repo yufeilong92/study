@@ -197,7 +197,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
                     }
-                    if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
+                    if (mArray.size() == vo.getTotal().getTotal()) {
                         mXrvContent.setLoadComplete(true);
                     } else {
                         mXrvContent.setPullLoadEnable(true);
@@ -247,7 +247,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
       /*          Intent intent = InfomDetailActivity.startInstance(mContext, gourl,
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
                 Intent intent = AgreementActivity.newInstance(mContext, gourl,AgreementActivity.SHAREMARK,
-                        vo.getTitle());
+                        vo.getTitle(),vo.getShareurl());
                 mContext.startActivity(intent);
             }
         });

@@ -112,7 +112,7 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvReasultContent.setLayoutManager(gridLayoutManager);
-        mRlvReasultContent.addItemDecoration(new android.support.v7.widget.DividerItemDecoration(mContext,2));
+        mRlvReasultContent.addItemDecoration(new android.support.v7.widget.DividerItemDecoration(mContext, 2));
         mRlvReasultContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.BOTH_SET, R.drawable.recyclerline));
         mRlvReasultContent.setAdapter(adapter);
         adapter.setClickListener(new ArticleListAdapter.onItemClickListener() {
@@ -122,7 +122,7 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,
                         vo.getSupportcount()
-                        ,vo.getTitle());
+                        , vo.getTitle());
 //                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }
@@ -210,11 +210,11 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             }
-            if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
+            if ( mArray.size() == vo.getTotal().getTotal()) {
                 mXrfResultContent.setLoadComplete(true);
             } else {
-                mXrfResultContent.setPullLoadEnable(true);
-                mXrfResultContent.setLoadComplete(false);
+            mXrfResultContent.setPullLoadEnable(true);
+            mXrfResultContent.setLoadComplete(false);
             }
             adapter.notifyDataSetChanged();
         } else {

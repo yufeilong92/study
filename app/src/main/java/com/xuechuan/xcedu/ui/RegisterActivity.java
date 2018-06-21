@@ -187,7 +187,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.tv_regiths_agreem:
                 Intent intent = AgreementActivity.newInstance(mContext, DataMessageVo.AGREEMENT,
-                        AgreementActivity.NOSHAREMARK,"");
+                        AgreementActivity.NOSHAREMARK,"","");
                 intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR, "注册协议");
                 startActivity(intent);
                 break;

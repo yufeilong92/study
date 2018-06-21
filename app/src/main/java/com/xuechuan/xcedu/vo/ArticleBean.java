@@ -32,7 +32,7 @@ public class ArticleBean extends HomePageVo {
      */
     private String publishdate;
     /**
-     *  赞数
+     * 赞数
      */
     private int supportcount;
     /***
@@ -51,6 +51,19 @@ public class ArticleBean extends HomePageVo {
      * 浏览量
      */
     private int viewcount;
+    /**
+     * 分享url
+     */
+    private String shareurl;
+
+    public String getShareurl() {
+        return shareurl;
+    }
+
+    public void setShareurl(String shareurl) {
+        this.shareurl = shareurl;
+    }
+
 
     public String getGourl() {
         return gourl;

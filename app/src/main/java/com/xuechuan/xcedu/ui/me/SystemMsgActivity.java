@@ -131,7 +131,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
             @Override
             public void onClickListener(SystemVo.DatasBean obj, int position) {
                 Intent intent = AgreementActivity.newInstance(mContext,
-                        obj.getGourl(),AgreementActivity.NOSHAREMARK,"");
+                        obj.getGourl(),AgreementActivity.NOSHAREMARK,"","");
                 intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR, obj.getTitle());
                 startActivity(intent);
             }

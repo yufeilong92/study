@@ -59,13 +59,16 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
     public static final String SHAREMARK = "share";
     public static final String NOSHAREMARK = "noshaor";
     public static final String MTITLE = "title";
+    public static final String SHAREURL = "shareurl";
+    private String mShareUrl;
 
 
-    public static Intent newInstance(Context context, String urldata, String mark,String title) {
+    public static Intent newInstance(Context context, String urldata, String mark,String title,String ShareUrl) {
         Intent intent = new Intent(context, AgreementActivity.class);
         intent.putExtra(URLDATA, urldata);
         intent.putExtra(typeMark, mark);
         intent.putExtra(MTITLE,title);
+        intent.putExtra(SHAREURL,ShareUrl);
         return intent;
     }
 
@@ -78,6 +81,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
             mUrl = getIntent().getStringExtra(URLDATA);
             String mType = getIntent().getStringExtra(typeMark);
             mViewTitle = getIntent().getStringExtra(MTITLE);
+            mShareUrl = getIntent().getStringExtra(SHAREURL);
             if (mType.equals(SHAREMARK)) {
                 mIvTitleMore.setVisibility(View.VISIBLE);
             } else {
@@ -183,7 +187,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                        ShareUtils.shareWeb(AgreementActivity.this,mShareUrl, mViewTitle
                                 , "", "", R.mipmap.appicon
                                 , SHARE_MEDIA.QQ);
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
@@ -195,7 +199,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                        ShareUtils.shareWeb(AgreementActivity.this,mShareUrl, mViewTitle
                                 , "", "", R.mipmap.appicon, SHARE_MEDIA.QZONE
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
@@ -207,7 +211,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                        ShareUtils.shareWeb(AgreementActivity.this,mShareUrl, mViewTitle
                                 , "", "", R.mipmap.appicon
                                 , SHARE_MEDIA.SINA
                         );
@@ -220,7 +224,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this, mUrl, mViewTitle
+                        ShareUtils.shareWeb(AgreementActivity.this, mShareUrl, mViewTitle
                                 , "", "", R.mipmap.appicon, SHARE_MEDIA.WEIXIN
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),
@@ -232,7 +236,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(AgreementActivity.this,mUrl, mViewTitle
+                        ShareUtils.shareWeb(AgreementActivity.this,mShareUrl, mViewTitle
                                 , "", "", R.mipmap.appicon, SHARE_MEDIA.WEIXIN_CIRCLE
                         );
 //                        ShareUtils.shareImg(AgreementActivity.this, mResultData.getQuestion(),

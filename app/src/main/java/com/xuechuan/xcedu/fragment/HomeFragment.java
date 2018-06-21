@@ -314,7 +314,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
               /*  Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
                 Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),
-                        AgreementActivity.SHAREMARK,vo.getTitle());
+                        AgreementActivity.SHAREMARK,vo.getTitle(),vo.getShareurl());
                 mContext.startActivity(intent);
             }
         });

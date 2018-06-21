@@ -315,9 +315,9 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
                 mXfvContentOrderAll.setPullRefreshEnable(true);
-                mXfvContentOrderAll.setLoadComplete(true);
+                mXfvContentOrderAll.setLoadComplete(false);
             } else {
                 mXfvContentOrderAll.setPullLoadEnable(true);
                 mXfvContentOrderAll.setLoadComplete(false);

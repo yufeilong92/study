@@ -47,6 +47,18 @@ public class AdvisoryBean extends HomePageVo {
      * 视图数
      */
     private int viewcount;
+    /**
+     * 分享url
+     */
+    private String shareurl;
+
+    public String getShareurl() {
+        return shareurl;
+    }
+
+    public void setShareurl(String shareurl) {
+        this.shareurl = shareurl;
+    }
 
     public String getGourl() {
         return gourl;
