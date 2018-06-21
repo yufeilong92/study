@@ -230,7 +230,7 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             }
-            if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
+            if ( mArray.size() == vo.getTotal().getTotal()) {
                 mXfvContent.setLoadComplete(true);
             } else {
                 mXfvContent.setPullLoadEnable(true);

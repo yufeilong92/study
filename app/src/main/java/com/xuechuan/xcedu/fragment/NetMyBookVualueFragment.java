@@ -308,7 +308,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
                 return;
             }
 
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == vo.getTotal().getTotal()) {
+            if (mArrary.size() == vo.getTotal().getTotal()) {
                 mXrfvSpecaRefresh.setLoadComplete(true);
             } else {
                 mXrfvSpecaRefresh.setPullLoadEnable(true);
