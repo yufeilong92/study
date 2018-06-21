@@ -40,6 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:text=""
                 android:textSize="@dimen/text_size_14" />
         </RelativeLayout>

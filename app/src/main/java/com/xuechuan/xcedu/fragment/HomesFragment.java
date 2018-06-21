@@ -183,9 +183,9 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
             code = PushXmlUtil.getInstance().getLocationCode(mContext, province);
             if (!StringUtil.isEmpty(code)) {
                 if (mXfvHomeContent != null) {
-                    mXfvHomeContent.startRefresh();
-                    requestData();
+//                    mXfvHomeContent.startRefresh();
                 }
+                requestData();
             }
         }
     };
@@ -217,6 +217,7 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
     private void requestData() {
         mPresenter.requestHomePager(mContext, code);
     }
+
     private void initView(View view) {
         mContext = getActivity();
         mTvAddress = (AddressTextView) view.findViewById(R.id.tv_address);

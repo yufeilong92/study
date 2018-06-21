@@ -131,6 +131,45 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    private void refreshData(){
+        //记录那些没有缓存完成的
+        List<DownVideoDb> dbs = mDao.queryUserDownInfom();
+        if (dbs == null || dbs.isEmpty()) {
+            mScroviewLayout.setVisibility(View.GONE);
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mTvNetBookDownMake.setVisibility(View.GONE);
+            return;
+        }
+        List<DownVideoDb> downVideoDbs = new ArrayList<>();
+        List<DownVideoDb> downIngVideoDbs = new ArrayList<>();
+        List<DownVideoVo> downVideos = new ArrayList<>();
+        List<DownVideoVo> downIngVideos = new ArrayList<>();
+        for (int i = 0; i < dbs.size(); i++) {
+            DownVideoDb db = dbs.get(i);
+            List<DownVideoVo> downlist = db.getDownlist();
+            if (downlist != null && !downlist.isEmpty()) {
+                for (int j = 0; j < downlist.size(); j++) {
+                    DownVideoVo vo = downlist.get(j);
+                    if (vo.getStatus().equals("0")) {
+                        downVideos.add(vo);
+                    } else {
+                        downIngVideos.add(vo);
+                    }
+                }
+            }
+            //未完成
+//            copeList(downIngVideoDbs, db, downIngVideos);
+            //已完成
+//            copeList(downVideoDbs, db, downVideos);
+        }
+        if (downIngVideos.isEmpty()&&downVideos.isEmpty()){
+            mScroviewLayout.setVisibility(View.GONE);
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mTvNetBookDownMake.setVisibility(View.GONE);
+            mLlNetDownAll.setVisibility(View.GONE);
+            return;
+        }
+    }
     private void initData(boolean isShow, boolean isSelect) {
         computeStorage();
         //记录那些没有缓存完成的
@@ -147,6 +186,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         List<DownVideoVo> downVideos = new ArrayList<>();
         List<DownVideoVo> downIngVideos = new ArrayList<>();
 
+
         for (int i = 0; i < dbs.size(); i++) {
             DownVideoDb db = dbs.get(i);
             List<DownVideoVo> downlist = db.getDownlist();
@@ -160,6 +200,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                     }
                 }
             }
+
             //未完成
             copeList(downIngVideoDbs, db, downIngVideos);
             //已完成
@@ -414,7 +455,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
 
                                 }
                             }
-//                        initData(true, false);
+                        refreshData();
                         mNoDoneAdapter.notifyDataSetChanged();
                         mOverAdapter.notifyDataSetChanged();
                     }
@@ -462,6 +503,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                             net.setShow(false);
                         }
                     }
+
                     mNoDoneAdapter.notifyDataSetChanged();
                     mOverAdapter.notifyDataSetChanged();
                 }

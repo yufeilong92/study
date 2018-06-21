@@ -75,14 +75,14 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
             if (StringUtil.isEmpty(titleName)) {
                 return;
             }
-            int first = titleName.indexOf("第");
-            String substring;
-            if (first == -1) {
-                substring = titleName.substring(0, 6);
-            } else {
-                substring = titleName.substring(first, first + 6);
-            }
-            holder.mTvNetMyhomePricle.setText("上次看到 " + substring);
+//            int first = titleName.indexOf("第");
+//            String substring;
+//            if (first == -1) {
+//                substring = titleName.substring(0, 6);
+//            } else {
+//                substring = titleName.substring(0, 6);
+//            }
+            holder.mTvNetMyhomePricle.setText("上次看到 " + titleName);
         }
 
     }

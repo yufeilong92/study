@@ -245,9 +245,9 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
      * @return
      */
     private List<Fragment> creartFragment(boolean isall, String description, List<ChaptersBeanVo> list) {
-        if (list.size() < 2) {
-            mNetMagicIndicator.setVisibility(View.GONE);
-        }
+//        if (list.size() < 2) {
+//            mNetMagicIndicator.setVisibility(View.GONE);
+//        }
         List<Fragment> fragments = new ArrayList<>();
         NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance(description);
         fragments.add(bookinfomFragment);
@@ -813,10 +813,13 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         mTvNetBookTitle.setText(bookInfom.getName());
         if (bookInfom.isIsall()) {
             mIvNetBookPlay.setVisibility(View.GONE);
+            mNetMagicIndicator.setVisibility(View.GONE);
             list = new ArrayList<>();
             list.add("详情");
-        } else
+        } else {
+            mNetMagicIndicator.setVisibility(View.VISIBLE);
             list = ArrayToListUtil.arraytoList(mContext, R.array.net_book_title);
+        }
         mNetMagicIndicator.setBackgroundColor(Color.parseColor("#ffffff"));
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setScrollPivotX(0.25f);
@@ -913,7 +916,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 //                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                 } else {
 //                    pausePlay();
-                    T.showToast(mContext,getStringWithId(R.string.no_net));
+                    T.showToast(mContext, getStringWithId(R.string.no_net));
 //                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -937,7 +940,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
 //                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
                 } else {
 //                    pausePlay();
-                    T.showToast(mContext,getStringWithId(R.string.no_net));
+                    T.showToast(mContext, getStringWithId(R.string.no_net));
 //                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
                 }
             }
