@@ -38,9 +38,6 @@ public class NetMyTableAdapter extends BaseRecyclerAdapter<NetMyTableAdapter.Vie
     private Context mContext;
     private List<ChaptersBeanVo> mData;
     private LayoutInflater mInflater;
-    private CheckBox mChbNetPlay;
-    private TextView mTvNetTitle;
-    private ImageView mIvNetGoorbuy;
     //    用户选中集合
     public static List<SelectVo> mSelect = new ArrayList<>();
 

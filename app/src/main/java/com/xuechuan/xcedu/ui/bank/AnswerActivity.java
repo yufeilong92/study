@@ -349,9 +349,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      */
     private String mTagType;
     //错题
-    public static String ERRTYPE = "err";
+    public static final String ERRTYPE = "err";
     //收藏
-    public static String FAVTYPE = "fav";
+    public static final String FAVTYPE = "fav";
     private String mCouresidUser;
     //用户收藏或者错题集合
     private String mUserTagid;
@@ -3804,25 +3804,15 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e(TAG, "onRestart: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
         if (mTimeUitl != null && !StringUtil.isEmpty(mStyleCase) &&
                 mTvRootEmpty.getVisibility() == View.GONE) {
-
             mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
             DialogUtil dialogUtil = DialogUtil.getInstance();
             if (mStopdialog == null || !mStopdialog.isShowing())
                 mStopdialog = dialogUtil.showStopDialog(mContext);
-
-            mTimeUitl.pause();
             dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
                 @Override
                 public void onNextClickListener() {
@@ -3831,8 +3821,28 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
             });
         }
+    }
 
-        Log.e(TAG, "onPause: ");
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mTimeUitl != null && !StringUtil.isEmpty(mStyleCase) &&
+                mTvRootEmpty.getVisibility() == View.GONE) {
+//            mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_pau);
+//            DialogUtil dialogUtil = DialogUtil.getInstance();
+//            if (mStopdialog == null || !mStopdialog.isShowing())
+//                mStopdialog = dialogUtil.showStopDialog(mContext);
+            mTimeUitl.pause();
+//            dialogUtil.setStopClickListener(new DialogUtil.onStopClickListener() {
+//                @Override
+//                public void onNextClickListener() {
+//                    mIvTimePlay.setImageResource(R.mipmap.qbank_answer_icon_cont);
+//                    mTimeUitl.resume();
+//                }
+//            });
+        }
+
     }
 
     //保存章节记录
@@ -3879,6 +3889,34 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_UP) {
+            if (!isExamHine) {
+                DialogUtil instance = DialogUtil.getInstance();
+                instance.showTitleDialog(mContext, "确定退出答题", "退出答题"
+                        , "取消", true);
+                instance.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+                    @Override
+                    public void onSureClickListener() {
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelClickListener() {
+                    }
+                });
+
+            } else {
+                this.finish();
+
+            }
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 }
 

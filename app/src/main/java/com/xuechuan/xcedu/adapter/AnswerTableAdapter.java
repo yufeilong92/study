@@ -36,7 +36,6 @@ public class AnswerTableAdapter extends RecyclerView.Adapter<AnswerTableAdapter.
     private final LayoutInflater mInflater;
     private onItemClickListener clickListener;
     private int selectItem = -1;
-    private ArrayList<Integer> mSelectList = new ArrayList<Integer>();
     private boolean isSubmit = false;
 
     public interface onItemClickListener {

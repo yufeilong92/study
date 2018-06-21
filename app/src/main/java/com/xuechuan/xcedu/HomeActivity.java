@@ -67,15 +67,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private int mFragmentLayout = R.id.fl_content;
     private static String PARAMS = "Params";
     private static String TYPE = "type";
-    public static String BOOK = "1";
-    public static String VIDEO = "2";
+    public final static String BOOK = "1";
+    public final static String VIDEO = "2";
     private String mType;
     private NoScrollViewPager mViewpageContetn;
     private MagicIndicator mMagicindicatorHome;
-    public static String LOGIN_HOME = "loginhome";
+    public final static String LOGIN_HOME = "loginhome";
     private String mLoginType;
-    public static String mHomeMeType = "4";
-    public static String Type = "4";
+    public final static String mHomeMeType = "4";
+    public final static String Type = "4";
 
     @Override
     protected void onDestroy() {
@@ -333,20 +333,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         FragmentTransaction transaction = mSfm.beginTransaction();
         transaction.show(homeFragment).commit();
-    }
-
-
-    private void selectTab(int pager) {
-        switch (pager) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-        }
     }
 
     @Override

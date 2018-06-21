@@ -206,10 +206,8 @@ public class HomsAdapter extends RecyclerView.Adapter {
             return;
         final List<BannerBean> beanList = mData.getData().getBanner();
         ArrayList<String> list = new ArrayList<>();
-        ArrayList<String> url = new ArrayList<>();
         for (int i = 0; i < beanList.size(); i++) {
             list.add(beanList.get(i).getImageurl());
-            url.add(beanList.get(i).getGourl());
         }
         banner.mBanHome.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         banner.mBanHome.setIndicatorGravity(BannerConfig.CENTER);

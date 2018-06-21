@@ -50,7 +50,6 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     private static final String ARG_PARAM2 = "param2";
 
     private String mStatus;
-    private String mParam2;
     private RecyclerView mRlvMyOrderContentAll;
     private XRefreshView mXfvContentOrderAll;
 
@@ -61,7 +60,6 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     private MyOrderAdapter adapter;
     private boolean isRefresh;
     private PerOrderPresenter mPresenter;
-    private PayPresenter mPayPresenter;
     private PayUtil payUtil;
     private AlertDialog mPayDialog;
     /**
@@ -90,7 +88,6 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mStatus = getArguments().getString(STATUS);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -203,14 +200,13 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     }
 
     private void showDialog(final MyOrderVo.DatasBean data, int position) {
-        double discounts = data.getDiscounts();
-        double totalprice = data.getTotalprice();
-        final double v = totalprice - discounts;
-        final ArrayList<Integer> list = new ArrayList<>();
-        final List<OrderDetailVo> details = data.getDetails();
-        for (int i = 0; i < details.size(); i++) {
-            list.add(details.get(i).getProductid());
-        }
+//        double discounts = data.getDiscounts();
+//        double totalprice = data.getTotalprice();
+//        final ArrayList<Integer> list = new ArrayList<>();
+//        final List<OrderDetailVo> details = data.getDetails();
+//        for (int i = 0; i < details.size(); i++) {
+//            list.add(details.get(i).getProductid());
+//        }
         DialogUtil instance = DialogUtil.getInstance();
         instance.showPayDialog(mContext);
         instance.setPayDialogClickListener(new DialogUtil.onItemPayDialogClickListener() {
@@ -285,7 +281,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
             return;
         }
         isRefresh = true;
-        mPresenter.requestOrder(mContext, getNowPage() + 1, mStatus);
+        mPresenter.requestOrderMore(mContext, getNowPage() + 1, mStatus);
     }
 
     /**

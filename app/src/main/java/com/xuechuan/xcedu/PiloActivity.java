@@ -47,11 +47,7 @@ import pub.devrel.easypermissions.PermissionRequest;
 
 public class PiloActivity extends BaseActivity implements RefreshTokenView, EasyPermissions.PermissionCallbacks {
 
-    private ImageView mIvPilo;
     private Context mContext;
-    private static final int RC_CAMERA_PERM = 488;
-    private EasyPermissionsUtils mPermissionsUtilss;
-    private AppSettingsDialog dialog;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +61,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
         setContentView(R.layout.activity_pilo);
         initView();
 //        startActivity(new Intent(PiloActivity.this, MainActivity.class));
-        mPermissionsUtilss = EasyPermissionsUtils.getInstance(PiloActivity.this);
         requesPermission();
     }
 
@@ -170,7 +165,6 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
 
     private void initView() {
         mContext = this;
-        mIvPilo = (ImageView) findViewById(R.id.iv_pilo);
         // TODO: 2018/5/30 激光
 //        JPushInterface.stopPush(getApplicationContext());
     }

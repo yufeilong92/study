@@ -107,7 +107,8 @@ public class InfomDetailAdapter extends BaseRecyclerAdapter<InfomDetailAdapter.V
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SuppertUtil util = SuppertUtil.getInstance(mContext);
-                int number = Integer.valueOf((String) holder.mChbEvaluaIssupper.getText().toString());
+//                int number = Integer.valueOf((String) holder.mChbEvaluaIssupper.getText().toString());
+                int number=Integer.parseInt(holder.mChbEvaluaIssupper.getText().toString());
                 if (isChecked) {
                     holder.mChbEvaluaIssupper.setText((number + 1) + "");
                     util.submitSupport(String.valueOf(bean.getId()), "true", DataMessageVo.USERTYPEAC);

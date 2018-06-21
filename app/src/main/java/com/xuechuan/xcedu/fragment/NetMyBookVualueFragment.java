@@ -268,7 +268,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_net_book_evalue://发送
-                if (StringUtil.isEmpty(mVideoId)) {
+                if (StringUtil.isEmpty(mVideoId)||mVideoId.equals("-1")) {
                     T.showToast(mContext, "请选择播放视频，再来评价");
                     return;
                 }
@@ -279,6 +279,10 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
         }
     }
     private void submitEvalue(String str) {
+        if (StringUtil.isEmpty(mVideoId)||mVideoId.equals("-1")){
+            T.showToast(mContext, "请选择播放视频，再来评价");
+            return;
+        }
         if (StringUtil.isEmpty(str)) {
             T.showToast(mContext, getStrWithId(R.string.content_is_empty));
             return;

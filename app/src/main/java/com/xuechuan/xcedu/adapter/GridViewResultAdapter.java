@@ -30,8 +30,6 @@ import java.util.List;
 public class GridViewResultAdapter extends BaseAdapter {
     private Context mContext;
     private List<QuestionAllVo.DatasBean> mData;
-    private int selectItem = -1;
-    private boolean isSubmit = false;
     private HashMap<Integer, Boolean> mSelectitem;
 
     public GridViewResultAdapter(Context mContext, List<QuestionAllVo.DatasBean> mData) {

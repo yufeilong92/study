@@ -156,7 +156,7 @@ public class NetBookEvalueInfomActivity extends BaseActivity implements View.OnC
             return;
         }
         isRefresh = true;
-        mPresenter.requestVideoEvalue(mContext, mVideoID, String.valueOf(mEvalueInfom.getCommentid()), getNowPage() + 1);
+        mPresenter.requestMoreVideoEvalue(mContext, mVideoID, String.valueOf(mEvalueInfom.getCommentid()), getNowPage() + 1);
     }
 
     private void loadNewData() {

@@ -46,9 +46,6 @@ import okhttp3.RequestBody;
  * @Copyright: 2018
  */
 public class BaseHttpServcie {
-    private Context mContext;
-    private String title;
-    private String cont;
     private boolean isShow = false;
     private AlertDialog dialog;
 
@@ -66,8 +63,6 @@ public class BaseHttpServcie {
     }
 
     public void setDialogContext(Context context, String title, String cont) {
-        this.title = title;
-        this.cont = cont;
         if (isShow) {
             if (dialog == null) {
                 dialog = DialogUtil.showDialog(context, title, cont);

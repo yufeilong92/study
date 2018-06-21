@@ -179,14 +179,14 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
 
 
     private void showDialog(final MyOrderVo.DatasBean data, int position) {
-        double discounts = data.getDiscounts();
-        double totalprice = data.getTotalprice();
-        final double v = totalprice - discounts;
-        final ArrayList<Integer> list = new ArrayList<>();
-        final List<OrderDetailVo> details = data.getDetails();
-        for (int i = 0; i < details.size(); i++) {
-            list.add(details.get(i).getProductid());
-        }
+//        double discounts = data.getDiscounts();
+//        double totalprice = data.getTotalprice();
+//        final double v = totalprice - discounts;
+//        final ArrayList<Integer> list = new ArrayList<>();
+//        final List<OrderDetailVo> details = data.getDetails();
+//        for (int i = 0; i < details.size(); i++) {
+//            list.add(details.get(i).getProductid());
+//        }
         DialogUtil instance = DialogUtil.getInstance();
         instance.showPayDialog(mContext);
         instance.setPayDialogClickListener(new DialogUtil.onItemPayDialogClickListener() {
@@ -260,7 +260,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
             return;
         }
         isRefresh = true;
-        mPresenter.requestOrder(mContext, getNowPage() + 1, mStatus);
+        mPresenter.requestOrderMore(mContext, getNowPage() + 1, mStatus);
     }
 
     /**

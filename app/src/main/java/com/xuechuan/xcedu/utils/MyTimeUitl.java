@@ -19,7 +19,6 @@ import com.xuechuan.xcedu.mvp.view.TimeShowView;
  */
 public class MyTimeUitl {
     private Context context;
-    private long time;
     private long curTime = 0;
     private boolean isPause = false;
     private TextView mTimeView;

@@ -30,7 +30,6 @@ public class AddressAdapter extends BaseRecyclerAdapter<AddressAdapter.ViewHolde
     private Context mContext;
     private final LayoutInflater mInflater;
     private int mSelectPositon = -1;
-
     public AddressOnClickListener onClickListener;
     private String mAddress = null;
 

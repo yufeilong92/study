@@ -32,11 +32,6 @@ public class AnswerTableResultAdapter extends RecyclerView.Adapter<AnswerTableRe
     private List<QuestionAllVo.DatasBean> mData;
     private final LayoutInflater mInflater;
     private onItemClickListener clickListener;
-    private int submit;
-    private boolean isSubmit;
-    private int select = -1;
-    private ArrayList<Integer> mSelect = new ArrayList<Integer>();
-
     public interface onItemClickListener {
         public void onClickListener(Object obj, int position);
     }

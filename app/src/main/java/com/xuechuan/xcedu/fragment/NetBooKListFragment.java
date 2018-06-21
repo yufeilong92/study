@@ -41,7 +41,6 @@ import java.util.List;
  */
 public class NetBooKListFragment extends BaseFragment implements NetBookInfomView {
     private static final String CLASSID = "classid";
-    private static final String ARG_PARAM2 = "param2";
 
     private String mCalssId;
     /***
@@ -53,10 +52,6 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
     private NetBookTableTreeAdapter adapter;
     private ListView mLvNetBookContent;
     /**
-     * 加载更多布局
-     */
-    private LinearLayout li_more_loading;
-    /**
      * 是否加载更多
      */
     boolean isLoading;
@@ -64,7 +59,6 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
      * 记录数据
      */
     private List<ChaptersBeanVo> mArrayData;
-    private View footview;
 
     public NetBooKListFragment() {
     }
@@ -237,7 +231,6 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
 
     @Override
     public void VideoInfomMoreSuccess(String result) {
-        footview.setVisibility(View.GONE);
         Gson gson = new Gson();
         NetBookTableVo tableVo = gson.fromJson(result, NetBookTableVo.class);
         if (tableVo.getStatus().getCode() == 200) {

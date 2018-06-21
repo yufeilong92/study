@@ -45,7 +45,6 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
     private String mParam2;
     private AddressTextView mTvAddress;
     private LinearLayout mLiSearch;
-    private LinearLayout mLlHomeRoot;
     private RecyclerView mRlvContentContent;
     private XRefreshViewLayout mXfvHomeContent;
     private Context mContext;
@@ -57,11 +56,11 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
     /**
      * 请求回调码
      */
-    public static int REQUESTRESULT = 1002;
+    public static final int REQUESTRESULT = 1002;
     /**
      * 省份
      */
-    public static String STR_INT_PROVINCE = "province";
+    public static final String STR_INT_PROVINCE = "province";
     /**
      * code码
      */
@@ -223,7 +222,6 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
         mTvAddress = (AddressTextView) view.findViewById(R.id.tv_address);
         mTvAddress.setOnClickListener(this);
         mLiSearch = (LinearLayout) view.findViewById(R.id.li_search);
-        mLlHomeRoot = (LinearLayout) view.findViewById(R.id.ll_home_root);
         mLiSearch.setOnClickListener(this);
         mRlvContentContent = (RecyclerView) view.findViewById(R.id.rlv_content_content);
         mXfvHomeContent = (XRefreshViewLayout) view.findViewById(R.id.xfv_home_content);

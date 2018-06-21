@@ -39,7 +39,6 @@ public class NetMyBokTableFragment extends BaseFragment {
     private List<ChaptersBeanVo> mBookList;
     private Context mContext;
     private NetMyTableAdapter adapter;
-    private List<SelectVo> mSelect;
 
     public NetMyBokTableFragment() {
     }

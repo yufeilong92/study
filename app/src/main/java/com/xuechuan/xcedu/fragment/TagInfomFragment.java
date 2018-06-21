@@ -173,7 +173,7 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
             return;
         }
         isRefresh = true;
-        mPresenter.requestTagNewCont(mContext, getPager() + 1, mTagId);
+        mPresenter.requestTagMoreCont(mContext, getPager() + 1, mTagId);
     }
 
     private void loadNewData() {

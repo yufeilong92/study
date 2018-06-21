@@ -80,15 +80,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     /**
      * 注册
      */
-    public static String CEX_INT_TYPE_REG = "reg";
+    public static final String CEX_INT_TYPE_REG = "reg";
     /**
      * 找回密码
      */
-    public static String CEX_INT_TYPE_PAW = "retrieve";
+    public static final String CEX_INT_TYPE_PAW = "retrieve";
     /**
      * 绑定手机
      */
-    public static String CEX_INT_TYPE_BIND = "bindreg";
+    public static final String CEX_INT_TYPE_BIND = "bindreg";
 
     /**
      * @param context 上下文

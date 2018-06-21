@@ -202,7 +202,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
      * 保利视频请求
      */
     private PolyvVlmsHelper helper;
-    private int mVideoid;
+    private int mVideoid = -1;
     private ImageView mIvBack;
     private DbHelperDownAssist mDao;
     private int mPid;
@@ -257,7 +257,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         int position = videoView.getCurrentPosition();
-        if (position != 0) {
+        if (position != 0 && mVideoid != -1) {
             SubmitProgressService.startActionFoo(mContext, String.valueOf(position), String.valueOf(bookInfmo.getId()), String.valueOf(mVideoid));
         }
         videoView.destroy();
@@ -802,7 +802,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             case R.id.iv_net_book_back:
                 int position = videoView.getCurrentPosition();
 //                String s = PolyvTimeUtils.generateTime(position);
-                if (position != 0) {
+                if (position != 0&&mVideoid!=-1) {
                     SubmitProgressService.startActionFoo(mContext, String.valueOf(position),
                             String.valueOf(bookInfmo.getId()), String.valueOf(mVideoid));
                 }
@@ -956,9 +956,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             private boolean isRuning = true;
             int downnumber = 0;
             int downnumberOver = 0;
-            private Thread thread;
             private ExecutorService executorService;
-            private LinearLayout mLlPopDownDown;
             private Button mBtnPopDownRun;
             private Button mBtnPopDownLook;
             private Button mBtnPopDownAll;
@@ -1007,7 +1005,6 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             protected void initView() {
                 View view = getContentView();
                 mBtnPopDownLook = view.findViewById(R.id.btn_pop_down_look);
-                mLlPopDownDown = view.findViewById(R.id.ll_pop_down_down);
                 mBtnPopDownAll = view.findViewById(R.id.btn_pop_down_all);
                 mBtnPopDownSureAll = view.findViewById(R.id.btn_pop_down_sure_all);
                 mBtnPopDownCancel = view.findViewById(R.id.btn_pop_down_cancel);

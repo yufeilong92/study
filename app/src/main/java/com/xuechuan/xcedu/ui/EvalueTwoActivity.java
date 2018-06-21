@@ -73,15 +73,15 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
     /**
      * 问题id
      */
-    public static String TARGETID = "questtion";
+    public static final String TARGETID = "questtion";
     /**
      * 评价id
      */
-    public static String COMMONID = "commonid";
+    public static final String COMMONID = "commonid";
     /**
      * 评价内容
      */
-    public static String EVALUEDATA = "evaluedata";
+    public static final String EVALUEDATA = "evaluedata";
     /**
      * 刷新时间
      */

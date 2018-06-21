@@ -94,7 +94,7 @@ public class AtricleTreeAdapter extends TreeRecyclerAdapter {
                                 SkillTextVo.DatasBean bean = mData.get(k);
                                 for (int h = 0; h < bean.getChildren().size(); h++) {
                                     ChildrenBeanVo beanVo = bean.getChildren().get(h);
-                                    if (!StringUtil.isEmpty(vo.getCount()) && beanVo.getId() == Integer.valueOf(vo.getChapterId())) {
+                                    if (!StringUtil.isEmpty(vo.getCount()) && beanVo.getId() == Integer.parseInt(vo.getChapterId())) {
                                         isSameZ = true;
                                         qbun = beanVo.getQnum();
 

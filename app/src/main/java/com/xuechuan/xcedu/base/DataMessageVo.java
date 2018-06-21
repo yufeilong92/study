@@ -57,77 +57,77 @@ public class DataMessageVo {
     //默认请求记录数
     public static final int CINT_PANGE_SIZE = 10;
     //ac文章评论
-    public static String USERTYPEAC = "ac";
+    public static final String USERTYPEAC = "ac";
     //a文章
-    public static String USERTYPEA = "a";
+    public static  final String USERTYPEA = "a";
     //qc问题评论
-    public static String USERTYPEQC = "qc";
+    public static final String USERTYPEQC = "qc";
     //vc视频评论
-    public static String USERTYPEVC = "vc";
+    public static final String USERTYPEVC = "vc";
     //文章
-    public static String USERTYOEARTICLE = "article";
+    public static final String USERTYOEARTICLE = "article";
     //视频
-    public static String USERTYOEVIDEO = "question video";
+    public static  final String USERTYOEVIDEO = "question video";
     //问题
-    public static String QUESTION = "question";
+    public static final String QUESTION = "question";
     //文章
-    public static String ARTICLE = "article";
+    public static final String ARTICLE = "article";
     //视频
-    public static String VIDEO = "video";
+    public static final String VIDEO = "video";
     //案例
-    public static String MARKTYPECASE = "typecase";
+    public static final String MARKTYPECASE = "typecase";
     //技术
-    public static String MARKTYPESKILL = "typeskill";
+    public static final  String MARKTYPESKILL = "typeskill";
     //综合
-    public static String MARKTYPECOLLORT = "typecoloct";
+    public static final String MARKTYPECOLLORT = "typecoloct";
     //文章标识
-    public static String MARKTYPEORDER = "typeorder";
+    public static final String MARKTYPEORDER = "typeorder";
     //需要的权限
-    public static String[] Persmission = {
+    public static final String[] Persmission = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.CAMERA};
     //微信支付
-    public static int PAYTYPE_WEIXIN = 2;
+    public static final int PAYTYPE_WEIXIN = 2;
     //支付包
-    public static int PAYTYPE_ZFB = 3;
+    public static final int PAYTYPE_ZFB = 3;
     //余额
-    public static int PAYTYPE_YUER = 1;
+    public static final int PAYTYPE_YUER = 1;
     //兑换码
-    public static int PAYTYPE_DUHAUN = 5;
+    public static final int PAYTYPE_DUHAUN = 5;
     //微信id
-    public static String WEIXINVID = "wx0c71e64b9e151c84";
+    public static final String WEIXINVID = "wx0c71e64b9e151c84";
     //取消订单
-    public static String CANCELORDER = "cancel";
+    public static final String CANCELORDER = "cancel";
     //删除订单
-    public static String DELETEORDER = "delete";
+    public static final String DELETEORDER = "delete";
     //全部订单
-    public static String ORDERALL = "0";
+    public static final String ORDERALL = "0";
     //未完成
     public static String ORDERAOB = "-1";
     //已完成
-    public static String ORDERACOM = "10";
+    public static final String ORDERACOM = "10";
     //友盟key
-    public static String YOUMENGKID = "5b067baaf43e483f20000093";
+    public static final String YOUMENGKID = "5b067baaf43e483f20000093";
     //qq id
-    public static String QQAPP_ID = "1106864981";
+    public static final String QQAPP_ID = "1106864981";
     //qq key
-    public static String QQAPP_KEY = "rthjDUujg74JKfsq";
+    public static final  String QQAPP_KEY = "rthjDUujg74JKfsq";
     //WEIBO key
-    public static String WEI_KEY= "1739335166";
+    public static final  String WEI_KEY= "1739335166";
     //WEIBO Servcie
-    public static String WEIKEY_SECRET = "8efea2ca3decb2c4173ae44b9942287e";
+    public static final String WEIKEY_SECRET = "8efea2ca3decb2c4173ae44b9942287e";
     //APP_SECRET
-    public static String WEIXINAPP_SECRET = "19a5f96dc807032fcb7f9d2a289ec0a1";
+    public static final  String WEIXINAPP_SECRET = "19a5f96dc807032fcb7f9d2a289ec0a1";
     //协议网址
-    public static String AGREEMENT = "http://www.xuechuanedu.cn/agreement-policy/fuwuxieyi.html";
+    public static final String AGREEMENT = "http://www.xuechuanedu.cn/agreement-policy/fuwuxieyi.html";
     //wifi
-    public static String WIFI="wifi";
+    public static final String WIFI="wifi";
     //移动
-    public static String MONET ="monet";
+    public static final String MONET ="monet";
     //没网
-    public static String NONETWORK="nonetwork";
+    public static final String NONETWORK="nonetwork";
 
 
 

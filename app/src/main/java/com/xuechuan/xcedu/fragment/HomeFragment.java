@@ -87,19 +87,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     /**
      * 请求回调码
      */
-    public static int REQUESTRESULT = 1002;
+    public static final int REQUESTRESULT = 1002;
     /**
      * 省份
      */
-    public static String STR_INT_PROVINCE = "province";
+    public static final String STR_INT_PROVINCE = "province";
     /**
      * code码
      */
-    public static String STR_INT_CODE = "code";
+    public static final String STR_INT_CODE = "code";
     /**
      * 位标
      */
-    public static String STR_INT_POSITION = "position";
+    public static final  String STR_INT_POSITION = "position";
     /**
      * 地址
      */
@@ -234,7 +234,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     bindBanner(banner);
 
                 } else {//失败
-                    if (mDialog == null)
+                    if (mDialog!= null)
                         mDialog.dismiss();
                     L.e(status.getMessage());
                 }

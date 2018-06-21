@@ -10,7 +10,8 @@ package com.xuechuan.xcedu.vo;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018
  */
-public class DatasBeanVo {  private String cover;
+public class DatasBeanVo {
+    private String cover;
     private int id;
     private String name;
     public boolean isSelect;

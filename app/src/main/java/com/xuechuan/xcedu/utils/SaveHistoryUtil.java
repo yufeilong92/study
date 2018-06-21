@@ -22,7 +22,6 @@ public class SaveHistoryUtil {
     private String key = "history";
     private String fileName = "fileName";
     private SharedPreferences sp = null;
-    private ArrayList<String> list;
     /**
      * 截取标示
      */

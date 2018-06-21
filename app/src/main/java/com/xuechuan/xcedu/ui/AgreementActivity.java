@@ -56,9 +56,9 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
     private Context mContext;
     private CommonPopupWindow popShare;
     private static String typeMark = "mark";
-    public static String SHAREMARK = "share";
-    public static String NOSHAREMARK = "noshaor";
-    public static String MTITLE = "title";
+    public static final String SHAREMARK = "share";
+    public static final String NOSHAREMARK = "noshaor";
+    public static final String MTITLE = "title";
 
 
     public static Intent newInstance(Context context, String urldata, String mark,String title) {

@@ -30,8 +30,6 @@ import java.util.List;
 public class NetService extends BaseHttpServcie {
     private Context mContext;
     private static NetService service;
-    private ArrayList<GetParamVo> vos;
-
     public NetService(Context mContext) {
         this.mContext = mContext;
     }

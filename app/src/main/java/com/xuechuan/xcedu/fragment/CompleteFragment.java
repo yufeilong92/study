@@ -221,7 +221,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
             return;
         }
         isRefresh = true;
-        mPresenter.requestOrder(mContext, getNowPage() + 1, mStatus);
+        mPresenter.requestOrderMore(mContext, getNowPage() + 1, mStatus);
     }
 
     /**
