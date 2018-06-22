@@ -41,11 +41,10 @@ public class RegisterTag {
    public void registJG(){
        JPushInterface.init(mContext);
        JPushInterface.resumePush(mContext);
-
    }
 
     public  void setTagAndAlias(String  id) {
-        Log.e("tag", "别名==== "+id );
+
         /**
          *这里设置了别名，在这里获取的用户登录的信息
          *并且此时已经获取了用户的userId,然后就可以用用户的userId来设置别名了
@@ -61,6 +60,7 @@ public class RegisterTag {
         JPushInterface.setAliasAndTags(mContext, id, tags,
                 mAliasCallback);
         // }
+//        JPushInterface.setAlias(mContext,String.valueOf(id),mAliasCallback);
 
     }
 

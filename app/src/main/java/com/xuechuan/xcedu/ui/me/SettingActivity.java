@@ -202,9 +202,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         MyAppliction.getInstance().setUserInfom(null);
         SaveUUidUtil.getInstance().delectUUid();
         startActivity(new Intent(SettingActivity.this, LoginActivity.class));
-        //注册激光
-        RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
-        tag.cancleTagAndAlias();
+        // TODO: 2018/6/22  注册激光
+//        RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
+//        tag.cancleTagAndAlias();
         this.finish();
     }
 

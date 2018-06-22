@@ -417,6 +417,7 @@
     <string name="analyze">解析</string>
     <!--<string name="difficulty">难度</string>-->
     <string name="add_evalue">添加评论</string>
+    <string name="del_text">该练习题已经删除</string>
     <!--<string name="no_down_data">暂无下载内容</string>-->
     <!--<string name="phone">手机号码</string>-->
 

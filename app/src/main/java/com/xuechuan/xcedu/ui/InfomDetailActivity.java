@@ -95,7 +95,6 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private XRefreshView mXfvContent;
     private String mUrl;
     private String mTargetid;
-    private String mType;
     private String mSupperNumber;
     private Context mContext;
     private InfomDetailAdapter adapter;
@@ -116,33 +115,31 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     private CommonPopupWindow popShare;
     private String mViewTitle;
     private String mTitle;
+    private String mShareUrl;
 
     /***
      *
      * @param context
      * @param url 网址
      * @param id  targid
-     * @param usertype 类型
-     * @param supper 点赞数
+
      * @return
      */
-    public static Intent startInstance(Context context, String url, String id, String usertype, String supper,String title ) {
+    public static Intent startInstance(Context context, String url, String id, String title ) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
         intent.putExtra(URLPARAM, url);
         intent.putExtra(MOID, id);
-        intent.putExtra(MTYPE, usertype);
-        intent.putExtra(SUPPER, supper);
         intent.putExtra(TITLE, title);
         return intent;
     }
 
-    public static Intent startInstance(Context context, String id, String url, String usertype) {
+/*    public static Intent startInstance(Context context, String id, String url, String usertype) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
         intent.putExtra(URLPARAM, url);
         intent.putExtra(MOID, id);
         intent.putExtra(MTYPE, usertype);
         return intent;
-    }
+    }*/
 
 
 /*    @Override
@@ -158,7 +155,6 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         if (getIntent() != null) {
             mUrl = getIntent().getStringExtra(URLPARAM);
             mTargetid = getIntent().getStringExtra(MOID);
-            mType = getIntent().getStringExtra(MTYPE);
             mSupperNumber = getIntent().getStringExtra(SUPPER);
             mTitle = getIntent().getStringExtra(TITLE);
 
@@ -221,6 +217,12 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                         mXfvContent.setLoadComplete(true);
                         adapter.notifyDataSetChanged();
                         return;
+                    }
+                    if ( mArray.size() == vo.getTotal().getTotal()) {
+                        mXfvContent.setLoadComplete(true);
+                    } else {
+                        mXfvContent.setPullLoadEnable(true);
+                        mXfvContent.setLoadComplete(false);
                     }
                     adapter.notifyDataSetChanged();
                 } else {
@@ -373,7 +375,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         tvHearNumber.setVisibility(View.VISIBLE);
         tvHearNumber.setText("评论(" + mArray.size() + ")");
         mliSupper.setVisibility(View.VISIBLE);
-        integer = Integer.parseInt(mSupperNumber);
+//        integer = integer;
         chb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -390,7 +392,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
-        chb_select.setText(mSupperNumber);
+        chb_select.setText(String.valueOf(integer));
     }
 
     /**
@@ -486,7 +488,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 Gson gson = new Gson();
                 ResultVo vo = gson.fromJson(s, ResultVo.class);
                 if (vo.getStatus().getCode() == 200) {
-                    T.showToast(mContext, getString(R.string.suppr_suc));
+//                    T.showToast(mContext, getString(R.string.suppr_suc));
                 } else {
                     L.e(s);
                     T.showToast(mContext, getStringWithId(R.string.net_error));
@@ -580,6 +582,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             mDialog.dismiss();
         }
         integer = data.getSupportcount();
+        mShareUrl = data.getShareurl();
         chb_select.setChecked(data.isIssupport());
         bindHearData();
     }
@@ -613,7 +616,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     public void onClick(View v) {
 
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl,mTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl,mTitle
                                 , "","", R.mipmap.appicon
                                 , SHARE_MEDIA.QQ);
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -625,7 +628,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl,mTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl,mTitle
                                 , "","", R.mipmap.appicon, SHARE_MEDIA.QZONE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -638,7 +641,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     public void onClick(View v) {
 
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this,mUrl, mTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this,mShareUrl, mTitle
                                 , "","", R.mipmap.appicon
                                 , SHARE_MEDIA.SINA
                         );
@@ -651,7 +654,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl, mTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl, mTitle
                                 , "","", R.mipmap.appicon, SHARE_MEDIA.WEIXIN
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -663,7 +666,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mUrl,mTitle
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl,mTitle
                                 , "","", R.mipmap.appicon, SHARE_MEDIA.WEIXIN_CIRCLE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),

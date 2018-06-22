@@ -33,7 +33,7 @@
 
     </LinearLayout>
 
-    <View style="@style/view_line_tab_line" />
+    <View style="@style/view_line_titel_line" />
     <include layout="@layout/net_layout_buy" />
     <LinearLayout
         android:visibility="gone"

@@ -187,7 +187,7 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+            if (mArrary.size() == orderVo.getTotal().getTotal()) {
                 mXfvContentMsg.setLoadComplete(true);
             } else {
                 mXfvContentMsg.setPullLoadEnable(true);

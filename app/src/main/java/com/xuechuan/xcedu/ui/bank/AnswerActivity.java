@@ -396,6 +396,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private boolean isBtnClickDel = false;
     private AlertDialog mStopdialog;
     private AlertDialog mStopAlertDialog;
+    private TextView mTvNoTextEmpty;
 
 
     @Override
@@ -962,6 +963,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mIvJianPan = (ImageView) findViewById(R.id.iv_ban_jianpan);
         mIvJianPan.setOnClickListener(this);
         mTvNam = (TextView) findViewById(R.id.tv_nandu);
+        mTvNoTextEmpty = (TextView) findViewById(R.id.tv_no_text_empty);
         mRlRootLayout = (RelativeLayout) findViewById(R.id.rl_root_layout);
         mIvBMore = (ImageView) findViewById(R.id.iv_b_more);
         mIvBMore.setOnClickListener(this);
@@ -1098,8 +1100,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param vo
      */
     private void bindViewData(TextDetailVo vo) {
+        if (StringUtil.isEmpty(vo.getData().getQuestion())) {
+            mTvNoTextEmpty.setVisibility(View.VISIBLE);
+            mIvBMore.setVisibility(View.GONE);
+        } else {
+            mTvNoTextEmpty.setVisibility(View.GONE);
+            mIvBMore.setVisibility(View.VISIBLE);
+        }
         DbHelperAssist helperAssist = DbHelperAssist.getInstance();
-
         setShowLayout();
         //设置布局颜色
         setLayoutBg();
@@ -1109,6 +1117,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         UseSelectItemInfomVo item = null;
         this.mTextDetialNew = vo;
         mResultData = vo.getData();
+
         //赋值
         if (isBuy) {// 已购买显示解析
             mLiBResolveBuy.setVisibility(View.GONE);
@@ -1200,7 +1209,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mRlLookEvalue.setVisibility(View.VISIBLE);
         mLlSelectRootLayout.setVisibility(View.VISIBLE);
         mRlvEualeContent.setVisibility(View.VISIBLE);
-        if (mTitleType.equals(mTitleTypeOnly)) {//单选模式
+        if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeOnly)) {//单选模式
             mBtnLookWenAnswer.setVisibility(View.GONE);
             mLlLookWenDa.setVisibility(View.GONE);
             mLlSelectRootLayout.setVisibility(View.VISIBLE);
@@ -1210,7 +1219,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 setResultItemBG(item.getItem(), mResultData.getChoiceanswer(), mSelectViewBgZC);
             }
 
-        } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+        } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {//多选模式
             mBtnLookWenAnswer.setVisibility(View.GONE);
             mLlLookWenDa.setVisibility(View.GONE);
             mLlSelectRootLayout.setVisibility(View.VISIBLE);
@@ -1231,16 +1240,21 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
             }
 
-        } else if (mTitleType.equals(mTitleTypeWrite)) {//问答
+        } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeWrite)) {//问答
             mLlSelectRootLayout.setVisibility(View.GONE);
             mBtnLookWenAnswer.setVisibility(View.GONE);
             mLlLookWenDa.setVisibility(View.VISIBLE);
         }
 
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
-        Spanned html = Html.fromHtml(mResultData.getQuestion());
+        if (StringUtil.isEmpty(mResultData.getQuestion())) {
+            mTvBMatter.setText(null);
+        } else {
+            Spanned html = Html.fromHtml(mResultData.getQuestion());
 //        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
-        mTvBMatter.setText(html);
+            mTvBMatter.setText(html);
+        }
+
         if (!StringUtil.isEmpty(mResultData.getA())) {
             mTvBAContent.setText(mResultData.getA());
         } else {
@@ -1281,14 +1295,24 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
         mTvBAnswer.setText(mResultData.getChoiceanswer());
-        Spanned spanned1 = Html.fromHtml(mResultData.getAnalysis());
-        mTvBRosoleContent.setText(spanned1);
+        if (StringUtil.isEmpty(mResultData.getAnalysis())) {
+            mTvBRosoleContent.setText(null);
+        } else {
+            Spanned spanned1 = Html.fromHtml(mResultData.getAnalysis());
+            mTvBRosoleContent.setText(spanned1);
+        }
+
 //        mTvBRosoleContent.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
         mTvBAccuracy.setText(mResultData.getAccuracy());
         mChbBCollect.setChecked(mResultData.isIsfav());
         //正确答案
         mRightItem = mResultData.getChoiceanswer();
-        Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
+        Spanned fromHtml = null;
+        if (StringUtil.isEmpty(mResultData.getAnalysis())) {
+            fromHtml = null;
+        } else {
+            fromHtml = Html.fromHtml(mResultData.getAnalysis());
+        }
 //        mTvLookAnswerWen.setText(new HtmlSpanner().fromHtml(mResultData.getAnalysis()));
         if (isBuy)
             mTvLookAnswerWen.setText(fromHtml);
@@ -1303,6 +1327,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
      * @param item
      */
     private void bindResultData(boolean isdo, UseSelectItemInfomVo item) {
+
         if (isdo) {//用户做过 未做不处理
             mLlBAnswerKey.setVisibility(View.VISIBLE);
             mLlBJiexi.setVisibility(View.VISIBLE);
@@ -1310,14 +1335,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mRlLookEvalue.setVisibility(View.VISIBLE);
             mLlSelectRootLayout.setVisibility(View.VISIBLE);
             mRlvEualeContent.setVisibility(View.VISIBLE);
-            if (mTitleType.equals(mTitleTypeOnly)) {//单选模式
+            if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeOnly)) {//单选模式
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.GONE);
                 mLlSelectRootLayout.setVisibility(View.VISIBLE);
                 String onlyitme = item.getItem();
                 setIsClick(false);
                 setResultItemBG(onlyitme, mResultData.getChoiceanswer(), mSelectViewBgZC);
-            } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+            } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {//多选模式
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.GONE);
                 mLlSelectRootLayout.setVisibility(View.VISIBLE);
@@ -1329,13 +1354,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 setIsClick(false);
                 setResultItemBG(a, b, c, d, e, mResultData.getChoiceanswer(), mSelectViewBgZC);
 
-            } else if (mTitleType.equals(mTitleTypeWrite)) {//问答
+            } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeWrite)) {//问答
                 mLlSelectRootLayout.setVisibility(View.GONE);
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.VISIBLE);
             }
         } else {
-            if (mTitleType.equals(mTitleTypeWrite)) {
+            if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeWrite)) {
                 mLlLookWenDa.setVisibility(View.GONE);
                 mBtnLookWenAnswer.setVisibility(View.VISIBLE);
                 mLlBAnswerKey.setVisibility(View.GONE);
@@ -1358,9 +1383,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
-        Spanned html = Html.fromHtml(mResultData.getQuestion());
+        if (StringUtil.isEmpty(mResultData.getQuestion())) {
+            mTvBMatter.setText("");
+        } else {
+            Spanned html = Html.fromHtml(mResultData.getQuestion());
 //        mTvBMatter.setText(mResultData.getQuestion());
-        mTvBMatter.setText(html);
+            mTvBMatter.setText(html);
+        }
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1375,14 +1404,22 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
         mTvBAnswer.setText(mResultData.getChoiceanswer());
-        Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
-        mTvBRosoleContent.setText(spanned);
+        if (StringUtil.isEmpty(mResultData.getAnalysis())) {
+            mTvBRosoleContent.setText(null);
+        } else {
+            Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
+            mTvBRosoleContent.setText(spanned);
+        }
         mTvBAccuracy.setText(mResultData.getAccuracy());
         mChbBCollect.setChecked(mResultData.isIsfav());
         //正确答案
         mRightItem = mResultData.getChoiceanswer();
-        Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
-        mTvLookAnswerWen.setText(fromHtml);
+        if (StringUtil.isEmpty(mResultData.getAnalysis())) {
+            mTvLookAnswerWen.setText(null);
+        } else {
+            Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
+            mTvLookAnswerWen.setText(fromHtml);
+        }
         int i = mResultData.getDifficultydegreee();
         setStarNumber(i);
     }
@@ -1396,14 +1433,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void bindNoResultData(boolean isdo, UseSelectItemInfomVo item) {
         if (isdo) {//用户做过 未做不处理
             mLlBAnswerKey.setVisibility(View.VISIBLE);
-            if (mTitleType.equals(mTitleTypeOnly)) {//单选模式
+            if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeOnly)) {//单选模式
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.GONE);
                 mLlSelectRootLayout.setVisibility(View.VISIBLE);
                 String onlyitme = item.getItem();
                 setIsClick(false);
                 setResultItemBG(onlyitme, mResultData.getChoiceanswer(), mSelectViewBgZC);
-            } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+            } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {//多选模式
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.GONE);
                 mLlSelectRootLayout.setVisibility(View.VISIBLE);
@@ -1415,13 +1452,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 setIsClick(false);
                 setResultItemBG(a, b, c, d, e, mResultData.getChoiceanswer(), mSelectViewBgZC);
 
-            } else if (mTitleType.equals(mTitleTypeWrite)) {//问答
+            } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeWrite)) {//问答
                 mLlSelectRootLayout.setVisibility(View.GONE);
                 mBtnLookWenAnswer.setVisibility(View.GONE);
                 mLlLookWenDa.setVisibility(View.GONE);
             }
         } else {
-            if (mTitleType.equals(mTitleTypeWrite)) {
+            if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeWrite)) {
                 mLlLookWenDa.setVisibility(View.GONE);
                 mBtnLookWenAnswer.setVisibility(View.VISIBLE);
                 mLlBAnswerKey.setVisibility(View.GONE);
@@ -1444,10 +1481,13 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
 
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
-        Spanned html = Html.fromHtml(mResultData.getQuestion());
+        if (StringUtil.isEmpty(mResultData.getQuestion())) {
+            mTvBMatter.setText(null);
+        } else {
+            Spanned html = Html.fromHtml(mResultData.getQuestion());
 //        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
-        mTvBMatter.setText(html);
-
+            mTvBMatter.setText(html);
+        }
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
         mTvBCContent.setText(mResultData.getC());
@@ -1463,9 +1503,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         //正确答案
         mTvBAnswer.setText(mResultData.getChoiceanswer());
         mChbBCollect.setChecked(mResultData.isIsfav());
-        Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
-        mTvBRosoleContent.setText(spanned);
-
+        if (StringUtil.isEmpty(mResultData.getAnalysis())) {
+            mTvBRosoleContent.setText(null);
+        } else {
+            Spanned spanned = Html.fromHtml(mResultData.getAnalysis());
+            mTvBRosoleContent.setText(spanned);
+        }
     }
 
     /**
@@ -1527,8 +1570,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
         }
         mTvBType.setText(AnswerCardUtil.getTextType(mResultData.getQuestiontype()));
-        Spanned html = Html.fromHtml(mResultData.getQuestion());
-        mTvBMatter.setText(html);
+        if (StringUtil.isEmpty(mResultData.getQuestion())) {
+            mTvBMatter.setText(null);
+        } else {
+            Spanned html = Html.fromHtml(mResultData.getQuestion());
+            mTvBMatter.setText(html);
+        }
 //        mTvBMatter.setText(new HtmlSpanner().fromHtml(mResultData.getQuestion()));
         mTvBAContent.setText(mResultData.getA());
         mTvBBContent.setText(mResultData.getB());
@@ -1542,7 +1589,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mTvBEContent.setVisibility(View.VISIBLE);
             mTvBEContent.setText(mResultData.getE());
         }
-        Spanned fromHtml = Html.fromHtml(mResultData.getAnalysis());
+        Spanned fromHtml = null;
+        if (StringUtil.isEmpty(mResultData.getAnalysis())) {
+            fromHtml = null;
+        } else
+            fromHtml = Html.fromHtml(mResultData.getAnalysis());
         if (isBuy)
             mTvLookAnswerWen.setText(fromHtml);
     }
@@ -1572,6 +1623,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.ll_b_a_select://选择a
                 //单选/多选
+                if (StringUtil.isEmpty(mTitleType))
+                    return;
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = A;
                     setSelectOnlyItemBG(true, false, false, false, false);
@@ -1591,6 +1644,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
                 break;
             case R.id.ll_b_b_select://选择b
+                if (StringUtil.isEmpty(mTitleType))
+                    return;
                 if (mTitleType.equals(mTitleTypeOnly)) {             //单选
                     mSelectOnlyitem = B;
                     setSelectOnlyItemBG(false, true, false, false, false);
@@ -1609,6 +1664,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.ll_b_cselect://选择c
+                if (StringUtil.isEmpty(mTitleType))
+                    return;
                 if (mTitleType.equals(mTitleTypeOnly)) {     //单选
                     mSelectOnlyitem = C;
                     setSelectOnlyItemBG(false, false, true, false, false);
@@ -1627,6 +1684,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.ll_b_d_select://选择d
+                if (StringUtil.isEmpty(mTitleType))
+                    return;
                 if (mTitleType.equals(mTitleTypeOnly)) {//单选
                     mSelectOnlyitem = D;
                     setSelectOnlyItemBG(false, false, false, true, false);
@@ -1648,6 +1707,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.ll_b_e_select://选择e
+                if (StringUtil.isEmpty(mTitleType))
+                    return;
                 if (mTitleType.equals(mTitleTypeOnly)) {        //单选
                     mSelectOnlyitem = E;
                     setSelectOnlyItemBG(false, false, false, false, true);
@@ -1718,8 +1779,6 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     mLiBResolveBuy.setVisibility(View.VISIBLE);
                     mLlLookWenDa.setVisibility(View.GONE);
                 }
-
-
                 break;
 
             case R.id.iv_bar_delect:
@@ -1747,13 +1806,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void NextGo() {
-        if (mTitleType.equals(mTitleTypeMore)) {//多选
-            if (!isSure) {
-                T.showToast(mContext, "请点击确认");
-                return;
-            }
-        }
-        saveBeforeDate();
+        if (mTextDetial == null || mTextDetial.isEmpty())
+            return;
         if (mMark <= mTextDetial.size() - 2) {
             ++mMark;
         } else {//没有题了
@@ -1765,13 +1819,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
             return;
         }
-        clearbg();
-        //清空选项
-        clearSeletItem();
-        bindTextNumberData();
-    }
-
-    private void goBefore() {
+        if (StringUtil.isEmpty(mTitleType)) {
+            return;
+        }
         if (mTitleType.equals(mTitleTypeMore)) {//多选
             if (!isSure) {
                 T.showToast(mContext, "请点击确认");
@@ -1779,12 +1829,30 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             }
         }
         saveBeforeDate();
+        clearbg();
+        //清空选项
+        clearSeletItem();
+        bindTextNumberData();
+    }
+
+    private void goBefore() {
+        if (mTextDetial == null || mTextDetial.isEmpty())
+            return;
         if (mMark != 0) {
             --mMark;
         } else if (mMark == 0) {
             T.showToast(mContext, "已经是第一题");
             return;
         }
+        if (StringUtil.isEmpty(mTitleType))
+            return;
+        if (mTitleType.equals(mTitleTypeMore)) {//多选
+            if (!isSure) {
+                T.showToast(mContext, "请点击确认");
+                return;
+            }
+        }
+        saveBeforeDate();
         clearbg();
         //清空选项
         clearSeletItem();
@@ -1797,14 +1865,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void setGoNextDan() {
         saveBeforeDate();
         //正确自动
-        if (mTitleType.equals(mTitleTypeOnly)) {//单选模式
+        if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeOnly)) {//单选模式
             if (mResultData.getChoiceanswer().equalsIgnoreCase(mSelectOnlyitem)) {//正确
                 bindViewData(mTextDetialNew);
                 goNext();
             } else {//错误
                 bindViewData(mTextDetialNew);
             }
-        } else if (mTitleType.equals(mTitleTypeMore)) {//多选模式
+        } else if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {//多选模式
             mBtnBSureKey.setVisibility(View.VISIBLE);
             String cont = null;
             List<String> list = getAnswerKeyList(mResultData.getChoiceanswer());
@@ -1827,7 +1895,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             if (!StringUtil.isEmpty(mSelectMorItemE)) {
                 mResult.add(mSelectMorItemE);
             }
-            if (mTitleType.equals(mTitleTypeMore)) {
+            if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {
                 if (mResult.size() > list.size()) {
                     cont = "1";
                 } else if (mResult.size() == list.size()) {
@@ -1914,6 +1982,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void saveBeforeDate() {
 
         if (isUserLookResultJieXi) {
+            return;
+        }
+        if (StringUtil.isEmpty(mTitleType)) {
             return;
         }
         //用户是否选中 没有选中不保存
@@ -2012,7 +2083,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             vo.setSelectItemE(mSelectMorItemE);
             mResult.add(mSelectMorItemE);
         }
-        if (mTitleType.equals(mTitleTypeMore)) {//多选 保存正确
+        if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {//多选 保存正确
             if (mResult.size() > list.size()) {
                 vo.setItemStatus("1");
                 submitQuestionResult(false);
@@ -3270,6 +3341,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         Gson gson = new Gson();
         TextDetailVo vo = gson.fromJson(message, TextDetailVo.class);
         if (vo.getStatus().getCode() == 200) {
+            if (vo.getData() == null || StringUtil.isEmpty(vo.getData().getQuestion())) {
+                setShowEmptyLayout();
+                return;
+            }
             bindViewData(vo);
         } else {
             T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
@@ -3379,6 +3454,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         T.showToast(mContext, getStringWithId(R.string.evelua_sucee));
         mLiXia.setVisibility(View.VISIBLE);
+
         mLlBSubmitEvalue.setVisibility(View.GONE);
     }
 
@@ -3918,5 +3994,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         }
         return super.dispatchKeyEvent(event);
     }
+
+    private void setShowEmptyLayout() {
+        mLiXia.setVisibility(View.VISIBLE);
+        mTvNoTextEmpty.setText(R.string.del_text);
+        mIvBMore.setVisibility(View.GONE);
+        mSloViewShow.setVisibility(View.GONE);
+
+    }
+
 }
 

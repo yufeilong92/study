@@ -362,8 +362,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
                 adapter.notifyDataSetChanged();
                 return;
             }
-
-            if (mArray.size() < DataMessageVo.CINT_PANGE_SIZE || mArray.size() == vo.getTotal().getTotal()) {
+            if ( mArray.size() == vo.getTotal().getTotal()) {
                 mXfvContentTwoDetail.setLoadComplete(true);
             } else {
                 mXfvContentTwoDetail.setPullLoadEnable(true);

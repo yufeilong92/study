@@ -128,7 +128,15 @@ public class DataMessageVo {
     public static final String MONET ="monet";
     //没网
     public static final String NONETWORK="nonetwork";
-
+//        title,
+//                articleid,
+//                url,
+//                shareurl,
+//                isarticle
+//
+//
+//        isarticle=1,文章
+//        isarticle=0,资讯
 
 
 }

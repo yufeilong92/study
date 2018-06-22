@@ -129,9 +129,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
             public void onClickListener(Object obj, int position) {
                 ArticleBean vo = (ArticleBean) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
-                        String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,
-                        String.valueOf(vo.getSupportcount())
-                        ,vo.getTitle());
+                        String.valueOf(vo.getId()),vo.getTitle());
                 mContext.startActivity(intent);
             }
 

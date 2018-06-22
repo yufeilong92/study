@@ -283,9 +283,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             public void onClickListener(Object obj, int position) {
                 ArticleBean vo = (ArticleBean) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext,
-                        vo.getGourl(), String.valueOf(vo.getId()),
-                        DataMessageVo.USERTYPEA,
-                        String.valueOf(vo.getSupportcount())
+                        vo.getGourl(), String.valueOf(vo.getId())
                         ,vo.getTitle());
 //                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);

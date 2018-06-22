@@ -85,7 +85,12 @@
         android:id="@+id/rl_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_no_text_empty"
+            android:layout_marginBottom="@dimen/space_56"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
         <com.xuechuan.xcedu.weight.SmartScrollView
             android:id="@+id/slv_view_show"
             android:layout_width="match_parent"

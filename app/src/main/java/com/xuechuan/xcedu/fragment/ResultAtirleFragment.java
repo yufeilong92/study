@@ -134,8 +134,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
-                        String.valueOf(vo.getId()), DataMessageVo.USERTYPEA,
-                        vo.getSupportcount()
+                        String.valueOf(vo.getId())
                         ,vo.getTitle());
 //                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);

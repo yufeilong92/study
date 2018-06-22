@@ -278,7 +278,7 @@ public class NetBookEvalueInfomActivity extends BaseActivity implements View.OnC
                 return;
             }
 
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == vo.getTotal().getTotal()) {
+            if ( mArrary.size() == vo.getTotal().getTotal()) {
                 mXfvContentTwoDetail.setLoadComplete(true);
             } else {
                 mXfvContentTwoDetail.setPullLoadEnable(true);

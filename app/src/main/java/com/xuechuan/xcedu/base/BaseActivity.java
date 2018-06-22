@@ -1,16 +1,11 @@
 package com.xuechuan.xcedu.base;
 
-import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,10 +13,11 @@ import android.widget.TextView;
 import com.lzy.okgo.OkGo;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.XceuAppliciton.MyAppliction;
-import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.ui.AgreementActivity;
+import com.xuechuan.xcedu.ui.InfomDetailActivity;
+import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.StringUtil;
-
-import org.greenrobot.eventbus.EventBus;
+import com.xuechuan.xcedu.vo.UserInfomVo;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -39,15 +35,32 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public static final String CSTR_EXTRA_TITLE_STR = "title";
     private String mBaseTitle;
+    private String title;
+    private String isarticle;
+    private String url;
+    private String shareurl;
+    private String articleid;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (this.getIntent() != null) {
+            Uri data = this.getIntent().getData();
+            if (data != null) {
+                title = data.getQueryParameter("title");
+                isarticle = data.getQueryParameter("isarticle");
+                url = data.getQueryParameter("url");
+                shareurl = data.getQueryParameter("shareurl");
+                articleid = data.getQueryParameter("articleid");
+
+            }
+        }
+
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
         }
-
         Intent intent = getIntent();
         mBaseTitle = intent.getStringExtra(CSTR_EXTRA_TITLE_STR);
         MyAppliction.getInstance().addActivity(this);
@@ -55,8 +68,40 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!StringUtil.isEmpty(mBaseTitle)) {
             setTitle(mBaseTitle);
         }
+        doShareActivity();
+    }
 
+    public void delectShare() {
+        isarticle = null;
+    }
 
+    public ShareParems getShareParems() {
+        ShareParems parems = new ShareParems();
+        parems.url = url;
+        parems.articleid = articleid;
+        parems.title = title;
+        parems.shareurl = shareurl;
+        return parems;
+    }
+
+    public String getIsarticle() {
+        return isarticle;
+    }
+    private class ShareParems {
+        private String title;
+        private String url;
+        private String shareurl;
+        private String articleid;
+    }
+    private void doShareActivity() {
+        if (isarticle == null) {
+            return;
+        }
+        if (isarticle.equals("0")) {
+            doIntentAct(new Infom(), getShareParems());
+        } else if (isarticle.equals("1")) {
+            doIntentAct(new WenZhang(), getShareParems());
+        }
     }
 
     protected abstract void initContentView(Bundle savedInstanceState);
@@ -97,9 +142,47 @@ public abstract class BaseActivity extends AppCompatActivity {
         OkGo.getInstance().cancelTag(this);
         MyAppliction.getInstance().finishActivity(this);
     }
-    protected void finishAll(){
+
+    protected void finishAll() {
         MyAppliction.getInstance().exit();
     }
 
 
+    public interface ShareActivity {
+        public void startAct(ShareParems shareParems);
+    }
+    public class Infom implements ShareActivity {
+        @Override
+        public void startAct(ShareParems shareParems) {
+            UserInfomVo infom = MyAppliction.getInstance().getUserInfom();
+            if (infom == null) {
+                Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+                startActivity(intent);
+            } else {
+                delectShare();
+                Intent intent = AgreementActivity.newInstance(BaseActivity.this,   shareParems. url, AgreementActivity.SHAREMARK,
+                        shareParems.title,   shareParems. shareurl);
+                BaseActivity.this.startActivity(intent);
+            }
+        }
+    }
+    public class WenZhang implements ShareActivity {
+        @Override
+        public void startAct(ShareParems shareParems) {
+            UserInfomVo infom = MyAppliction.getInstance().getUserInfom();
+            if (infom == null || infom.getData().getUser() == null) {
+                Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+                startActivity(intent);
+            } else {
+                delectShare();
+                Intent intent = InfomDetailActivity.startInstance(BaseActivity.this, shareParems.url,
+                        String.valueOf(shareParems.articleid),shareParems.title);
+                BaseActivity.this.startActivity(intent);
+            }
+        }
+    }
+
+    public void doIntentAct(ShareActivity activity, ShareParems shareParems) {
+        activity.startAct(shareParems);
+    }
 }

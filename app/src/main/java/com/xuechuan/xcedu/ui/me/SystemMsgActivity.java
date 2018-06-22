@@ -208,7 +208,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() < DataMessageVo.CINT_PANGE_SIZE || mArrary.size() == orderVo.getTotal().getTotal()) {
+            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
                 mXfvContentSystem.setPullRefreshEnable(true);
                 mXfvContentSystem.setLoadComplete(true);
             } else {

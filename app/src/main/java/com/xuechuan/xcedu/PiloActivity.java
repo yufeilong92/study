@@ -2,8 +2,10 @@ package com.xuechuan.xcedu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -59,6 +61,7 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_pilo);
+
         initView();
 //        startActivity(new Intent(PiloActivity.this, MainActivity.class));
         requesPermission();
@@ -155,7 +158,7 @@ public class PiloActivity extends BaseActivity implements RefreshTokenView, Easy
         user.setToken(token.getSigntoken());
         user.setTokenexpire(token.getExpiretime());
         DbHelperAssist.getInstance().saveUserInfom(userInfom);
-        HomeActivity.newInstance(mContext,  HomeActivity.LOGIN_HOME);
+        HomeActivity.newInstance(mContext, HomeActivity.LOGIN_HOME);
         //注册激光
         RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
         tag.registJG();

@@ -109,6 +109,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
+        if (!StringUtil.isEmpty(getIsarticle())) {
+            if (getIsarticle().equals("0")) {
+                doIntentAct(new Infom(), getShareParems());
+            } else if (getIsarticle().equals("1")) {
+                doIntentAct(new WenZhang(), getShareParems());
+            }
+            return;
+        }
         if (getIntent() != null) {
             mType = getIntent().getStringExtra(TYPE);
             mLoginType = getIntent().getStringExtra(PARAMS);
@@ -352,4 +360,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         list.add(persionalFragment);
         return list;
     }
+
+
 }
