@@ -219,12 +219,12 @@ public class ResultQuestionFragment extends BaseFragment implements SearchView {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             }
-            if ( mArray.size() == vo.getTotal().getTotal()) {
-                mXrfResultContent.setLoadComplete(true);
-            } else {
-                mXrfResultContent.setPullLoadEnable(true);
-                mXrfResultContent.setLoadComplete(false);
-            }
+//            if ( mArray.size() == vo.getTotal().getTotal()) {
+//                mXrfResultContent.setLoadComplete(true);
+//            } else {
+            mXrfResultContent.setPullLoadEnable(true);
+            mXrfResultContent.setLoadComplete(false);
+//            }
             adapter.notifyDataSetChanged();
         } else {
             T.showToast(mContext, mContext.getResources().getString(R.string.net_error));

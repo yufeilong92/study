@@ -111,6 +111,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
         mXfvContentOrderOb.startRefresh();
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -294,13 +295,13 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
-                mXfvContentOrderOb.setPullLoadEnable(true);
-                mXfvContentOrderOb.setLoadComplete(false);
-            } else {
-                mXfvContentOrderOb.setPullLoadEnable(true);
-                mXfvContentOrderOb.setLoadComplete(false);
-            }
+//            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
+//                mXfvContentOrderOb.setPullLoadEnable(true);
+//                mXfvContentOrderOb.setLoadComplete(false);
+//            } else {
+            mXfvContentOrderOb.setPullLoadEnable(true);
+            mXfvContentOrderOb.setLoadComplete(false);
+//            }
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
@@ -358,7 +359,7 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
                 mArrary.remove(mCancelPostion);
                 adapter.notifyDataSetChanged();
                 mCancelPostion = -1;
-                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.CANCELSUCCESS);
+                DelectSuceessActivity.newInstance(mContext, DelectSuceessActivity.CANCELSUCCESS);
             }
 //            T.showToast(mContext, getStrWithId(R.string.submit_success));
         } else {

@@ -110,7 +110,7 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
 
     private void initData() {
         mPresenter = new TagInfomPresenter(new TagInfomModelImpl(), this);
-        mPresenter.requestTagNewCont(mContext,1,mTagId);
+        mPresenter.requestTagNewCont(mContext, 1, mTagId);
     }
 
 
@@ -127,17 +127,17 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
         adapter = new TagListAdapter(mContext, mArray);
         GridLayoutManager manager = new GridLayoutManager(mContext, 1);
         manager.setOrientation(GridLayoutManager.VERTICAL);
-        mRlvInfomList.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
+        mRlvInfomList.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvInfomList.setLayoutManager(manager);
         mRlvInfomList.setAdapter(adapter);
         adapter.setClickListener(new TagListAdapter.onItemClickListener() {
             @Override
             public void onClickListener(Object obj, int position) {
                 ArticleVo vo = (ArticleVo) obj;
-                Log.e("====", "onClickListener: " );
+                Log.e("====", "onClickListener: ");
                 Intent intent = InfomDetailActivity.startInstance(mContext,
                         vo.getGourl(), String.valueOf(vo.getId())
-                        ,vo.getTitle());
+                        , vo.getTitle());
 //                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }
@@ -229,22 +229,22 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             }
-            if ( mArray.size() == vo.getTotal().getTotal()) {
-                mXfvContent.setLoadComplete(true);
-            } else {
-                mXfvContent.setPullLoadEnable(true);
-                mXfvContent.setLoadComplete(false);
-            }
+//            if ( mArray.size() == vo.getTotal().getTotal()) {
+//                mXfvContent.setLoadComplete(true);
+//            } else {
+            mXfvContent.setPullLoadEnable(true);
+            mXfvContent.setLoadComplete(false);
+//            }
             adapter.notifyDataSetChanged();
         } else {
-            T.showToast(mContext,"请求失败");
-            L.e( status.getMessage());
+            T.showToast(mContext, "请求失败");
+            L.e(status.getMessage());
         }
     }
 
     @Override
     public void ArticleTagOneConError(String con) {
-        isRefresh=false;
+        isRefresh = false;
     }
 
     @Override
@@ -273,13 +273,13 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
             }
             adapter.notifyDataSetChanged();
         } else {
-            T.showToast(mContext,"请求失败");
+            T.showToast(mContext, "请求失败");
             L.e(status.getMessage());
         }
     }
 
     @Override
     public void ArticleTagMoreConError(String con) {
-       isRefresh=false;
+        isRefresh = false;
     }
 }

@@ -18,7 +18,10 @@
             style="@style/TitleBarText"
             android:text="" />
 
-        <ImageView style="@style/TitleBarAction" />
+        <ImageView
+            android:id="@+id/iv_del_all"
+            android:src="@mipmap/q_nav_delect_gray"
+            style="@style/TitleBarAction" />
 
     </LinearLayout>
 

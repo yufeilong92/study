@@ -268,7 +268,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_net_book_evalue://发送
-                if (StringUtil.isEmpty(mVideoId)||mVideoId.equals("-1")) {
+                if (StringUtil.isEmpty(mVideoId) || mVideoId.equals("-1")) {
                     T.showToast(mContext, "请选择播放视频，再来评价");
                     return;
                 }
@@ -278,8 +278,9 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
         }
     }
+
     private void submitEvalue(String str) {
-        if (StringUtil.isEmpty(mVideoId)||mVideoId.equals("-1")){
+        if (StringUtil.isEmpty(mVideoId) || mVideoId.equals("-1")) {
             T.showToast(mContext, "请选择播放视频，再来评价");
             return;
         }
@@ -307,13 +308,8 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
                 adapter.notifyDataSetChanged();
                 return;
             }
-
-            if (mArrary.size() == vo.getTotal().getTotal()) {
-                mXrfvSpecaRefresh.setLoadComplete(true);
-            } else {
-                mXrfvSpecaRefresh.setPullLoadEnable(true);
-                mXrfvSpecaRefresh.setLoadComplete(false);
-            }
+            mXrfvSpecaRefresh.setPullLoadEnable(true);
+            mXrfvSpecaRefresh.setLoadComplete(false);
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
@@ -386,7 +382,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
 
     private void showAnswerCardResultLayout() {
 
-        inputEvaluePop = new CommonPopupWindow(mContext, R.layout.item_input_layout, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT) {
+        inputEvaluePop = new CommonPopupWindow(mContext, R.layout.item_input_layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
             private Button mBtnSubmit;
             private EditText mEtSubmitEvalue;
 
@@ -396,6 +392,7 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
                 mEtSubmitEvalue = view.findViewById(R.id.et_submit_evalue);
                 mBtnSubmit = view.findViewById(R.id.btn_submit);
             }
+
             @Override
             protected void initEvent() {
                 Utils.showSoftInputFromWindow(getActivity(), mEtSubmitEvalue);

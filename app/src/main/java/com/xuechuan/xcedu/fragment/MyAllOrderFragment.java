@@ -113,6 +113,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
         initXrfresh();
 //        mXfvContentOrderAll.startRefresh();
     }
+
     private void initData() {
         mPresenter = new PerOrderPresenter();
         mPresenter.BasePresenter(new PerOrderModel(), this);
@@ -315,13 +316,13 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
-                mXfvContentOrderAll.setPullRefreshEnable(true);
-                mXfvContentOrderAll.setLoadComplete(false);
-            } else {
-                mXfvContentOrderAll.setPullLoadEnable(true);
-                mXfvContentOrderAll.setLoadComplete(false);
-            }
+//            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
+//                mXfvContentOrderAll.setPullRefreshEnable(true);
+//                mXfvContentOrderAll.setLoadComplete(false);
+//            } else {
+            mXfvContentOrderAll.setPullLoadEnable(true);
+            mXfvContentOrderAll.setLoadComplete(false);
+//            }
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
@@ -379,14 +380,14 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 mDelPostion = -1;
-                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.DELECTSUCCESS);
+                DelectSuceessActivity.newInstance(mContext, DelectSuceessActivity.DELECTSUCCESS);
             }
             if (mCancelpostion != -1 && mCancelpostion >= 0) {
                 mArrary.remove(mCancelpostion);
                 mRlvMyOrderContentAll.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 mCancelpostion = -1;
-                DelectSuceessActivity.newInstance(mContext,DelectSuceessActivity.CANCELSUCCESS);
+                DelectSuceessActivity.newInstance(mContext, DelectSuceessActivity.CANCELSUCCESS);
             }
         } else {
             L.e(vo.getStatus().getMessage());

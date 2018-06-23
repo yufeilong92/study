@@ -209,12 +209,8 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             }
-            if ( mArray.size() == vo.getTotal().getTotal()) {
-                mXrfResultContent.setLoadComplete(true);
-            } else {
             mXrfResultContent.setPullLoadEnable(true);
             mXrfResultContent.setLoadComplete(false);
-            }
             adapter.notifyDataSetChanged();
         } else {
             T.showToast(mContext, status.getMessage());

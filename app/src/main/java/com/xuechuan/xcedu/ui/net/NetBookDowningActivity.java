@@ -135,9 +135,11 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         if (mDataBean == null || mDataBean.getDownlist() == null || mDataBean.getDownlist().isEmpty()) {
             mTvNetDownEmpty.setVisibility(View.VISIBLE);
             mTvNetDowningMake.setText(getStringWithId(R.string.edit));
+            mTvNetDowningMake.setVisibility(View.INVISIBLE);
             return;
         }
         mTvNetDownEmpty.setVisibility(View.GONE);
+        mTvNetDowningMake.setVisibility(View.VISIBLE);
         int number = 0;
         if (mDataBean.getDownlist() != null && !mDataBean.getDownlist().isEmpty())
             for (DownVideoVo vo : mDataBean.getDownlist()) {
@@ -159,6 +161,12 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
 
     private void initData() {
         doComputeView();
+        if (mDataBean == null || mDataBean.getDownlist() == null || mDataBean.getDownlist().isEmpty()) {
+            mTvNetDownEmpty.setVisibility(View.VISIBLE);
+            mTvNetDowningMake.setText(getStringWithId(R.string.edit));
+            mTvNetDowningMake.setVisibility(View.INVISIBLE);
+            return;
+        }
         mDataSelectList = new ArrayList<>();
         for (DownVideoVo vo : mDataBean.getDownlist()) {
             DownInfomSelectVo selectVo = new DownInfomSelectVo();

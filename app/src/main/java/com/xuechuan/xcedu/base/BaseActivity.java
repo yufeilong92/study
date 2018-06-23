@@ -59,7 +59,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 doShareActivity();
             }
         }
-
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;

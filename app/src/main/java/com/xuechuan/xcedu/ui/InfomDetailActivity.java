@@ -222,12 +222,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                         adapter.notifyDataSetChanged();
                         return;
                     }
-                    if (mArray.size() == vo.getTotal().getTotal()) {
-                        mXfvContent.setLoadComplete(true);
-                    } else {
-                        mXfvContent.setPullLoadEnable(true);
-                        mXfvContent.setLoadComplete(false);
-                    }
+                    mXfvContent.setPullLoadEnable(true);
+                    mXfvContent.setLoadComplete(false);
                     adapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, vo.getStatus().getMessage());
@@ -415,7 +411,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         //设置自适应屏幕，两者合用
         settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
         settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小

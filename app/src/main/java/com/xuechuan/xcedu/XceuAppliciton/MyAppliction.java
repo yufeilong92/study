@@ -193,7 +193,7 @@ public class MyAppliction extends MultiDexApplication {
 // 设置是否为上报进程
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
-        CrashReport.initCrashReport(getApplicationContext(), "20b66083e6", true);
+        CrashReport.initCrashReport(getApplicationContext(), "20b66083e6", false);
     }
 
     /**

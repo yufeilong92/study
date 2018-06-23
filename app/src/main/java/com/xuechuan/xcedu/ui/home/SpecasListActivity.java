@@ -36,7 +36,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/4/19
  */
-public class  SpecasListActivity extends BaseActivity {
+public class SpecasListActivity extends BaseActivity {
 
     private RecyclerView mRlvSpecaContent;
 
@@ -112,16 +112,16 @@ public class  SpecasListActivity extends BaseActivity {
                         return;
                     }
 
-                    if ( mArrary.size() == vo.getTotal().getTotal()) {
-                        mXrfvSpecaRefresh.setLoadComplete(true);
-                    } else {
-                        mXrfvSpecaRefresh.setPullLoadEnable(true);
-                        mXrfvSpecaRefresh.setLoadComplete(false);
-                    }
+//                    if ( mArrary.size() == vo.getTotal().getTotal()) {
+//                        mXrfvSpecaRefresh.setLoadComplete(true);
+//                    } else {
+                    mXrfvSpecaRefresh.setPullLoadEnable(true);
+                    mXrfvSpecaRefresh.setLoadComplete(false);
+//                    }
                     adapter.notifyDataSetChanged();
                 } else {
                     isRefresh = false;
-                    L.e( vo.getStatus().getMessage());
+                    L.e(vo.getStatus().getMessage());
                 }
 
             }
@@ -169,7 +169,7 @@ public class  SpecasListActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
                 } else {
                     isRefresh = false;
-                    L.e( vo.getStatus().getMessage());
+                    L.e(vo.getStatus().getMessage());
                 }
 
             }

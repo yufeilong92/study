@@ -12,8 +12,6 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rlv_my_order_content_com"
-            android:paddingLeft="@dimen/space_16"
-            android:paddingRight="@dimen/space_16"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageView

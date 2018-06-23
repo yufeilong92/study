@@ -108,6 +108,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
         if (mXrfResultContent != null)
             mXrfResultContent.startRefresh();
     }
+
     @Override
     protected int initInflateView() {
         return R.layout.fragment_result;
@@ -127,7 +128,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRlvReasultContent.setLayoutManager(gridLayoutManager);
-        mRlvReasultContent.addItemDecoration(new DividerItemDecoration(mContext,GridLayoutManager.VERTICAL));
+        mRlvReasultContent.addItemDecoration(new DividerItemDecoration(mContext, GridLayoutManager.VERTICAL));
         mRlvReasultContent.setAdapter(adapter);
         adapter.setClickListener(new ArticleListAdapter.onItemClickListener() {
             @Override
@@ -135,7 +136,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
                 ArticleVo vo = (ArticleVo) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId())
-                        ,vo.getTitle());
+                        , vo.getTitle());
 //                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }
@@ -148,7 +149,7 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
         mXrfResultContent.setAutoRefresh(true);
         mXrfResultContent.setAutoLoadMore(true);
         adapter.setCustomLoadMoreView(new XRefreshViewFooter(mContext));
-       mXrfResultContent.setEmptyView(mTvEmpty);
+        mXrfResultContent.setEmptyView(mTvEmpty);
         mXrfResultContent.restoreLastRefreshTime(lastRefreshtime);
         mXrfResultContent.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
             @Override
@@ -223,12 +224,12 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
             }
-            if (mArray.size() == vo.getTotal().getTotal()) {
-                mXrfResultContent.setLoadComplete(true);
-            } else {
-                mXrfResultContent.setPullLoadEnable(true);
-                mXrfResultContent.setLoadComplete(false);
-            }
+//            if (mArray.size() == vo.getTotal().getTotal()) {
+//                mXrfResultContent.setLoadComplete(true);
+//            } else {
+            mXrfResultContent.setPullLoadEnable(true);
+            mXrfResultContent.setLoadComplete(false);
+//            }
             adapter.notifyDataSetChanged();
         } else {
             T.showToast(mContext, mContext.getResources().getString(R.string.net_error));

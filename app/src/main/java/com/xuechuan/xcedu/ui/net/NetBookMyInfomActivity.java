@@ -802,7 +802,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             case R.id.iv_net_book_back:
                 int position = videoView.getCurrentPosition();
 //                String s = PolyvTimeUtils.generateTime(position);
-                if (position != 0&&mVideoid!=-1) {
+                if (position != 0 && mVideoid != -1) {
                     SubmitProgressService.startActionFoo(mContext, String.valueOf(position),
                             String.valueOf(bookInfmo.getId()), String.valueOf(mVideoid));
                 }
@@ -982,6 +982,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
 //                      DbHelperDownAssist.getInstance().addDownItem(vo);
                         if (dialog != null) {
                             dialog.dismiss();
+                            dialog = null;
                             isRuning = false;
                             executorService.shutdown();
                             isShow(false, true, false, true, false);
@@ -1087,6 +1088,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         if (isNoCantdownnetwork(true, null, -1)) return;
+
                         dowmStatus(true, null, -1);
 //                        downAll();
                     }
@@ -1139,6 +1141,11 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClickListener(ChaptersBeanVo obj, int position) {
                         downnumber += 1;
+                        if (mBtnPopDownCancel.getVisibility() == View.VISIBLE) {
+                            downnumberOver = 0;
+                            vo = null;
+                            isShow(true, false, true, false, false);
+                        }
                         if (isNoCantdownnetwork(false, obj, position)) return;
                         dowmStatus(false, obj, position);
 

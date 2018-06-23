@@ -136,12 +136,12 @@ public class ArticleListActivity extends BaseActivity {
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
                     }
-                    if (mArray.size() == vo.getTotal().getTotal()) {
-                        mXfvContent.setLoadComplete(true);
-                    } else {
-                        mXfvContent.setPullLoadEnable(true);
-                        mXfvContent.setLoadComplete(false);
-                    }
+//                    if (mArray.size() == vo.getTotal().getTotal()) {
+//                        mXfvContent.setLoadComplete(true);
+//                    } else {
+                    mXfvContent.setPullLoadEnable(true);
+                    mXfvContent.setLoadComplete(false);
+//                    }
                     adapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
@@ -205,6 +205,7 @@ public class ArticleListActivity extends BaseActivity {
             }
         });
     }
+
     private void bindAdapterData() {
         adapter = new ArticleListAdapter(mContext, mArray);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1);
@@ -218,7 +219,7 @@ public class ArticleListActivity extends BaseActivity {
                 ArticleVo vo = (ArticleVo) obj;
                 Intent intent = InfomDetailActivity.startInstance(mContext,
                         vo.getGourl(), String.valueOf(vo.getId())
-                        ,vo.getTitle());
+                        , vo.getTitle());
 //                Intent intent = InfomDetailActivity.startInstance(mContext, String.valueOf(vo.getId()), vo.getGourl(),DataMessageVo.USERTYPEA );
                 mContext.startActivity(intent);
             }

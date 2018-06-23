@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment.NetBookinfomFragment">
     <WebView
-        android:layout_marginLeft="@dimen/space_16"
-        android:layout_marginRight="@dimen/space_16"
         android:id="@+id/web_agreenement"
         android:visibility="gone"
         android:layout_width="match_parent"

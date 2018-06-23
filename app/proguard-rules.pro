@@ -315,6 +315,9 @@
 -keep class com.xuechuan.xcedu.vo.** {*;}
 -keep class com.xuechuan.xcedu.** {*;}
 
+-keep class com.luck.picture.lib.** {*;}
+-keep class com.yalantis.ucrop.** {*;}
+-keep class com.vector.update_app.** {*;}
 
 -keep class  com.easefun.polyv.** {*;}
 -keep class com.chinanetcenter.wcs.**{*;}

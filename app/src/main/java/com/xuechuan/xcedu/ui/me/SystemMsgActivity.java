@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.andview.refreshview.XRefreshView;
@@ -18,8 +19,10 @@ import com.xuechuan.xcedu.mvp.contract.MySystemContract;
 import com.xuechuan.xcedu.mvp.model.MySystemModel;
 import com.xuechuan.xcedu.mvp.presenter.MySystemPresenter;
 import com.xuechuan.xcedu.ui.AgreementActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.vo.MyMsgVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 import com.xuechuan.xcedu.vo.SystemVo;
 
@@ -36,7 +39,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/30
  */
-public class SystemMsgActivity extends BaseActivity implements MySystemContract.View {
+public class SystemMsgActivity extends BaseActivity implements MySystemContract.View, View.OnClickListener {
 
     private RecyclerView mRlvMySystem;
     private ImageView mIvContentEmpty;
@@ -47,13 +50,15 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
     private boolean isRefresh;
     private MySystemPresenter mPresenter;
     private MySystemAdapter adapter;
+    private ImageView mIvDelAllSystem;
 
-/*    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_system_msg);
-        initView();
-    }*/
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_system_msg);
+//        initView();
+//    }
+
     /**
      * 删除
      */
@@ -81,6 +86,8 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
         mRlvMySystem = (RecyclerView) findViewById(R.id.rlv_my_system);
         mIvContentEmpty = (ImageView) findViewById(R.id.iv_content_empty);
         mXfvContentSystem = (XRefreshView) findViewById(R.id.xfv_content_system);
+        mIvDelAllSystem = (ImageView) findViewById(R.id.iv_del_all_system);
+        mIvDelAllSystem.setOnClickListener(this);
     }
 
     private void initXrfresh() {
@@ -131,7 +138,7 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
             @Override
             public void onClickListener(SystemVo.DatasBean obj, int position) {
                 Intent intent = AgreementActivity.newInstance(mContext,
-                        obj.getGourl(),AgreementActivity.NOSHAREMARK,"","");
+                        obj.getGourl(), AgreementActivity.NOSHAREMARK, "", "");
                 intent.putExtra(AgreementActivity.CSTR_EXTRA_TITLE_STR, obj.getTitle());
                 startActivity(intent);
             }
@@ -208,12 +215,13 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
-                mXfvContentSystem.setPullRefreshEnable(true);
-                mXfvContentSystem.setLoadComplete(true);
-            } else {
-                mXfvContentSystem.setLoadComplete(false);
-            }
+//            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
+//                mXfvContentSystem.setPullRefreshEnable(true);
+//                mXfvContentSystem.setLoadComplete(true);
+//            } else {
+            mXfvContentSystem.setPullRefreshEnable(true);
+            mXfvContentSystem.setLoadComplete(false);
+//            }
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
@@ -270,7 +278,10 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            mArrary.remove(mDelPosition);
+            if (mDelPosition != -1)
+                mArrary.remove(mDelPosition);
+            else
+                mXfvContentSystem.startRefresh();
             adapter.notifyDataSetChanged();
             T.showToast(mContext, getStringWithId(R.string.delect_Success));
         } else {
@@ -285,4 +296,39 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
         T.showToast(mContext, getStringWithId(R.string.delect_error));
     }
 
+    private void doDelAll() {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, "是否删除当前消息", getStringWithId(R.string.cancel),
+                getStringWithId(R.string.sure), true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                List<SystemVo.DatasBean> data = (List<SystemVo.DatasBean>) mArrary;
+                List<Integer> list = new ArrayList<>();
+                for (int i = 0; i < data.size(); i++) {
+                    SystemVo.DatasBean bean = data.get(i);
+                    list.add(bean.getId());
+                }
+
+                mPresenter.submitDelSystemMsg(mContext, list);
+            }
+
+            @Override
+            public void onCancelClickListener() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_del_all_system:
+                doDelAll();
+                break;
+
+
+        }
+
+    }
 }

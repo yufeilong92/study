@@ -266,4 +266,5 @@ public class PersionalFragment extends BaseFragment implements View.OnClickListe
         super.onResume();
         mPresenter.reqeustMInfo(mContext);
     }
+
 }

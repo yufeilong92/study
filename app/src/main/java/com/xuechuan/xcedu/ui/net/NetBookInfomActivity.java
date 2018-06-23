@@ -252,6 +252,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
         NetBookinfomFragment bookinfomFragment = NetBookinfomFragment.newInstance(description);
         fragments.add(bookinfomFragment);
         if (isall) {
+
         } else {
 //        NetBooKListFragment booKListFragment = NetBooKListFragment.newInstance(String.valueOf(dataVo.getId()));
             NetTableFragment booKListFragment = NetTableFragment.newInstance(list);

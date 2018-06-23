@@ -6,24 +6,23 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.andview.refreshview.XRefreshView;
 import com.andview.refreshview.XRefreshViewFooter;
 import com.google.gson.Gson;
-import com.umeng.debug.log.D;
 import com.xuechuan.xcedu.R;
 import com.xuechuan.xcedu.adapter.MyMsgAdapter;
-import com.xuechuan.xcedu.adapter.MyOrderAdapter;
 import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.mvp.contract.MyMsgContract;
 import com.xuechuan.xcedu.mvp.model.MyMsgModel;
 import com.xuechuan.xcedu.mvp.presenter.MyMsgPresenter;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.MyMsgVo;
-import com.xuechuan.xcedu.vo.MyOrderVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ import java.util.List;
  * @verdescript 版本号 修改时间  修改人 修改的概要说明
  * @Copyright: 2018/5/22
  */
-public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
+public class MyMsgActivity extends BaseActivity implements MyMsgContract.View, View.OnClickListener {
 
     private RecyclerView mRlvMyMsg;
     private ImageView mIvContentEmpty;
@@ -50,16 +49,20 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
     private MyMsgPresenter mPresenter;
     private MyMsgAdapter adapter;
     private boolean isRefresh;
-    /*    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_msg);
-        initView();
-    }*/
+    private ImageView mIvDelAll;
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_my_msg);
+//        initView();
+//    }
+
     /**
      * 删除数据
      */
-    private int mDelPostion=-1;
+    private int mDelPostion = -1;
+
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_my_msg);
@@ -81,6 +84,8 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         mRlvMyMsg = (RecyclerView) findViewById(R.id.rlv_my_msg);
         mIvContentEmpty = (ImageView) findViewById(R.id.iv_content_empty);
         mXfvContentMsg = (XRefreshView) findViewById(R.id.xfv_content_msg);
+        mIvDelAll = (ImageView) findViewById(R.id.iv_del_all);
+        mIvDelAll.setOnClickListener(this);
     }
 
     private void initXrfresh() {
@@ -245,8 +250,12 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
-            mArrary.remove(mDelPostion);
+            if (mDelPostion != -1)
+                mArrary.remove(mDelPostion);
+            else
+                mXfvContentMsg.startRefresh();
             adapter.notifyDataSetChanged();
+
             T.showToast(mContext, getStringWithId(R.string.delect_Success));
         } else {
             T.showToast(mContext, getStringWithId(R.string.delect_error));
@@ -258,5 +267,38 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View {
     @Override
     public void DelMyError(String con) {
         T.showToast(mContext, getStringWithId(R.string.delect_error));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_del_all:
+                doDelAll();
+                break;
+        }
+
+    }
+
+    private void doDelAll() {
+        DialogUtil dialogUtil = DialogUtil.getInstance();
+        dialogUtil.showTitleDialog(mContext, "是否删除当前列表消息",
+                getStringWithId(R.string.sure), getStringWithId(R.string.cancel), true);
+        dialogUtil.setTitleClickListener(new DialogUtil.onTitleClickListener() {
+            @Override
+            public void onSureClickListener() {
+                List<MyMsgVo.DatasBean> data = (List<MyMsgVo.DatasBean>) mArrary;
+                List<Integer> list = new ArrayList<>();
+                for (int i = 0; i < data.size(); i++) {
+                    MyMsgVo.DatasBean datasBean = data.get(i);
+                    list.add(datasBean.getId());
+                }
+                mPresenter.submitDelMyMsg(mContext, list);
+            }
+
+            @Override
+            public void onCancelClickListener() {
+
+            }
+        });
     }
 }

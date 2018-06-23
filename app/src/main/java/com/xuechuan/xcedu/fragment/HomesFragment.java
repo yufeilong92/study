@@ -289,4 +289,9 @@ public class HomesFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestData();
+    }
 }

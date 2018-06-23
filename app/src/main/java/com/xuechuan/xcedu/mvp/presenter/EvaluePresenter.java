@@ -125,12 +125,12 @@ public class EvaluePresenter {
         model.reqeustOneEvalueContent(context, page, questonid, new RequestResulteView() {
             @Override
             public void success(String result) {
-                view.GetOneEvalueSuccess(result);
+                view.GetOneMoreEvalueSuccess(result);
             }
 
             @Override
             public void error(String result) {
-                view.GetOneEvalueError(result);
+                view.GetOneMoreEvalueError(result);
             }
         });
     }

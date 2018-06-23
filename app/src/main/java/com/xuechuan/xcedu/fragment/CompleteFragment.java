@@ -256,13 +256,13 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() == orderVo.getTotal().getTotal()) {
-                mXfvContentOrderCom.setPullLoadEnable(true);
-                mXfvContentOrderCom.setLoadComplete(true);
-            } else {
+//            if (mArrary.size() == orderVo.getTotal().getTotal()) {
+//                mXfvContentOrderCom.setPullLoadEnable(true);
+//                mXfvContentOrderCom.setLoadComplete(true);
+//            } else {
             mXfvContentOrderCom.setPullLoadEnable(true);
             mXfvContentOrderCom.setLoadComplete(false);
-            }
+//            }
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;

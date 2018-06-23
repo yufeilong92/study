@@ -73,7 +73,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
      * @param context
      * @param proviceCode 省份
      */
-    public static Intent newInstance(Context context, String proviceCode,String city) {
+    public static Intent newInstance(Context context, String proviceCode, String city) {
         Intent intent = new Intent(context, AdvisoryListActivity.class);
         intent.putExtra(PROVICECODE, proviceCode);
         intent.putExtra(CSTR_EXTREA_TITLE, city);
@@ -197,12 +197,12 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
                     }
-                    if (mArray.size() == vo.getTotal().getTotal()) {
-                        mXrvContent.setLoadComplete(true);
-                    } else {
-                        mXrvContent.setPullLoadEnable(true);
-                        mXrvContent.setLoadComplete(false);
-                    }
+//                    if (mArray.size() == vo.getTotal().getTotal()) {
+//                        mXrvContent.setLoadComplete(true);
+//                    } else {
+                    mXrvContent.setPullLoadEnable(true);
+                    mXrvContent.setLoadComplete(false);
+//                    }
                     adapter.notifyDataSetChanged();
                 } else {
                     T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
@@ -246,8 +246,8 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                 String gourl = vo.getGourl();
       /*          Intent intent = InfomDetailActivity.startInstance(mContext, gourl,
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
-                Intent intent = AgreementActivity.newInstance(mContext, gourl,AgreementActivity.SHAREMARK,
-                        vo.getTitle(),vo.getShareurl());
+                Intent intent = AgreementActivity.newInstance(mContext, gourl, AgreementActivity.SHAREMARK,
+                        vo.getTitle(), vo.getShareurl());
                 mContext.startActivity(intent);
             }
         });

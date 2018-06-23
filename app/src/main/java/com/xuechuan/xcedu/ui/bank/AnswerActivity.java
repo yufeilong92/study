@@ -2059,29 +2059,30 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             vo.setItem(mSelectOnlyitem);
         }
         List<String> list = getAnswerKeyList(mResultData.getChoiceanswer());
+        //用户选中结果
         ArrayList<String> mResult = new ArrayList<>();
 
         if (!StringUtil.isEmpty(mSelectMorItemA)) {//单选
             vo.setSelectItemA(mSelectMorItemA);
-            mResult.add(mSelectMorItemA);
+            mResult.add(mSelectMorItemA.toUpperCase());
         }
         if (!StringUtil.isEmpty(mSelectMorItemB)) {
             vo.setSelectItemB(mSelectMorItemB);
-            mResult.add(mSelectMorItemB);
+            mResult.add(mSelectMorItemB.toUpperCase());
         }
 
         if (!StringUtil.isEmpty(mSelectMorItemC)) {
             vo.setSelectItemC(mSelectMorItemC);
-            mResult.add(mSelectMorItemC);
+            mResult.add(mSelectMorItemC.toUpperCase());
         }
         if (!StringUtil.isEmpty(mSelectMorItemD)) {
             vo.setSelectItemD(mSelectMorItemD);
-            mResult.add(mSelectMorItemD);
+            mResult.add(mSelectMorItemD.toUpperCase());
         }
 
         if (!StringUtil.isEmpty(mSelectMorItemE)) {
             vo.setSelectItemE(mSelectMorItemE);
-            mResult.add(mSelectMorItemE);
+            mResult.add(mSelectMorItemE.toUpperCase());
         }
         if (!StringUtil.isEmpty(mTitleType) && mTitleType.equals(mTitleTypeMore)) {//多选 保存正确
             if (mResult.size() > list.size()) {
@@ -2100,7 +2101,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                     submitQuestionResult(false);
                 }
             } else if (mResult.size() < list.size()) {
-                if (list.containsAll(mResult)) {
+                ArrayList<String> strings = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    strings.add(list.get(i).toUpperCase());
+                }
+                if (strings.containsAll(mResult)) {
                     vo.setItemStatus("2");
                 } else {
                     vo.setItemStatus("1");
@@ -2219,6 +2224,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             isUserLookResultJieXi = false;
         }
         clearClick();
+        clearStarNumber();
     }
 
     /**
@@ -3433,6 +3439,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     //设置难度星星
     private void setStarNumber(int number) {
+
         ArrayList<ImageView> list = new ArrayList<>();
         list.add(mIvBStar1);
         list.add(mIvBStar2);
@@ -3446,6 +3453,19 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    private void clearStarNumber() {
+        ArrayList<ImageView> list = new ArrayList<>();
+        list.add(mIvBStar1);
+        list.add(mIvBStar2);
+        list.add(mIvBStar3);
+        list.add(mIvBStar4);
+        list.add(mIvBStar5);
+        for (int i = 0; i < list.size(); i++) {
+            ImageView imageView = list.get(i);
+            imageView.setImageResource(R.mipmap.ic_b_difficulty_n);
+        }
+
+    }
 
     @Override
     public void submitEvalueSuccess(String con) {

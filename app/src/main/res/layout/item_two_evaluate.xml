@@ -85,8 +85,5 @@
 
     <View
         style="@style/view_line_1"
-        android:layout_marginLeft="@dimen/space_16"
-        android:layout_marginRight="@dimen/space_16" />
-
-
+        />
 </LinearLayout>

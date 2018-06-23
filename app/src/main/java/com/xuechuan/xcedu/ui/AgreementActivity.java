@@ -85,7 +85,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
             if (mType.equals(SHAREMARK)) {
                 mIvTitleMore.setVisibility(View.VISIBLE);
             } else {
-                mIvTitleMore.setVisibility(View.GONE);
+                mIvTitleMore.setVisibility(View.INVISIBLE);
             }
         }
         initData();
@@ -99,7 +99,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
         settings.setJavaScriptEnabled(true);
         // 设置可以支持缩放
         settings.setSupportZoom(true);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // 设置出现缩放工具
         settings.setBuiltInZoomControls(true);
         //自适应屏幕

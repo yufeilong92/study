@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/c_np_icon_try" />
+                android:src="@mipmap/c_n_p_icon_play" />
 
         </RelativeLayout>
     </RelativeLayout>
