@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,7 +126,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
 
      * @return
      */
-    public static Intent startInstance(Context context, String url, String id, String title ) {
+    public static Intent startInstance(Context context, String url, String id, String title) {
         Intent intent = new Intent(context, InfomDetailActivity.class);
         intent.putExtra(URLPARAM, url);
         intent.putExtra(MOID, id);
@@ -196,14 +197,17 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         if (StringUtil.isEmpty(mTargetid)) {
             return;
         }
-        mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+        if (mDialog == null)
+            mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
         HomeService bankService = new HomeService(mContext);
         bankService.requestArticleCommentList(mTargetid, 1, new StringCallBackView() {
             @Override
             public void onSuccess(Response<String> response) {
                 mRlInfomLayout.setVisibility(View.VISIBLE);
                 mLlInfomSend.setVisibility(View.VISIBLE);
-
                 String message = response.body().toString();
                 L.w(message);
                 Gson gson = new Gson();
@@ -218,7 +222,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                         adapter.notifyDataSetChanged();
                         return;
                     }
-                    if ( mArray.size() == vo.getTotal().getTotal()) {
+                    if (mArray.size() == vo.getTotal().getTotal()) {
                         mXfvContent.setLoadComplete(true);
                     } else {
                         mXfvContent.setPullLoadEnable(true);
@@ -315,7 +319,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                         String.valueOf(bean.getTargetid()),
                         String.valueOf(bean.getId()),
                         DataMessageVo.USERTYPEAC
-                        ,DataMessageVo.ARTICLE);
+                        , DataMessageVo.ARTICLE);
                 startActivity(intent);
             }
         });
@@ -411,6 +415,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         //设置自适应屏幕，两者合用
         settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
         settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
@@ -616,8 +621,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     public void onClick(View v) {
 
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl,mTitle
-                                , "","", R.mipmap.appicon
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl, mTitle
+                                , "", "", R.mipmap.appicon
                                 , SHARE_MEDIA.QQ);
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.QQ);
@@ -628,8 +633,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl,mTitle
-                                , "","", R.mipmap.appicon, SHARE_MEDIA.QZONE
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl, mTitle
+                                , "", "", R.mipmap.appicon, SHARE_MEDIA.QZONE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.QZONE);
@@ -641,8 +646,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     public void onClick(View v) {
 
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this,mShareUrl, mTitle
-                                , "","", R.mipmap.appicon
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl, mTitle
+                                , "", "", R.mipmap.appicon
                                 , SHARE_MEDIA.SINA
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
@@ -655,7 +660,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
                         ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl, mTitle
-                                , "","", R.mipmap.appicon, SHARE_MEDIA.WEIXIN
+                                , "", "", R.mipmap.appicon, SHARE_MEDIA.WEIXIN
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.WEIXIN);
@@ -666,8 +671,8 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                        String pic = ScreenShot.savePic(ScreenShot.getBitmapByView(mSloViewShow));
-                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl,mTitle
-                                , "","", R.mipmap.appicon, SHARE_MEDIA.WEIXIN_CIRCLE
+                        ShareUtils.shareWeb(InfomDetailActivity.this, mShareUrl, mTitle
+                                , "", "", R.mipmap.appicon, SHARE_MEDIA.WEIXIN_CIRCLE
                         );
 //                        ShareUtils.shareImg(InfomDetailActivity.this, mResultData.getQuestion(),
 //                                pic, SHARE_MEDIA.WEIXIN_CIRCLE);
@@ -716,9 +721,10 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
     public void EvalueDetailErr(String con) {
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -31,6 +31,7 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.xuechuan.xcedu.R;
+import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.base.DataMessageVo;
 import com.xuechuan.xcedu.db.DbHelp.DBHelper;
 import com.xuechuan.xcedu.db.DbHelp.DbHelperDownAssist;
@@ -83,6 +84,7 @@ public class MyAppliction extends MultiDexApplication {
     private boolean isTime = true;
     private PerInfomVo mPerInfom;
     private DbHelperDownAssist instance;
+    private BaseActivity.ShareParems parems;
 
     public static MyAppliction getInstance() {
         if (application == null)
@@ -191,8 +193,9 @@ public class MyAppliction extends MultiDexApplication {
 // 设置是否为上报进程
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
-        CrashReport.initCrashReport(getApplicationContext(), "20b66083e6",  true);
+        CrashReport.initCrashReport(getApplicationContext(), "20b66083e6", true);
     }
+
     /**
      * 获取进程号对应的进程名
      *
@@ -229,7 +232,7 @@ public class MyAppliction extends MultiDexApplication {
         PlatformConfig.setWeixin(DataMessageVo.APP_ID, DataMessageVo.WEIXINAPP_SECRET);
         PlatformConfig.setQQZone(DataMessageVo.QQAPP_ID, DataMessageVo.QQAPP_KEY);
         //新浪微博(第三个参数为回调地址)
-        PlatformConfig.setSinaWeibo(DataMessageVo.WEI_KEY, DataMessageVo.WEIKEY_SECRET,"http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setSinaWeibo(DataMessageVo.WEI_KEY, DataMessageVo.WEIKEY_SECRET, "http://sns.whalecloud.com/sina2/callback");
     }
 
     private void initImagerLoader() {
@@ -466,5 +469,31 @@ public class MyAppliction extends MultiDexApplication {
 
     public VideoSettingVo.DataBean getVideoSet() {
         return vo;
+    }
+
+    private String isAtricle;
+
+    public String getIsAtricle() {
+        return isAtricle;
+    }
+
+    public void setIsAtricle(String isAtricle) {
+        this.isAtricle = isAtricle;
+    }
+
+    public void setShareParems(String url, String articleid, String title, String shareurl) {
+        parems = new BaseActivity.ShareParems();
+        parems.url = url;
+        parems.articleid = articleid;
+        parems.title = title;
+        parems.shareurl = shareurl;
+
+    }
+
+    public BaseActivity.ShareParems getShareParems() {
+        return parems;
+    }
+    public void delectShareParems(){
+        parems=null;
     }
 }

@@ -1,10 +1,12 @@
 package com.xuechuan.xcedu.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,9 @@ import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.ui.LoginActivity;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.vo.UserInfomVo;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -35,12 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public static final String CSTR_EXTRA_TITLE_STR = "title";
     private String mBaseTitle;
-    private String title;
-    private String isarticle;
-    private String url;
-    private String shareurl;
-    private String articleid;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +47,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (this.getIntent() != null) {
             Uri data = this.getIntent().getData();
             if (data != null) {
-                title = data.getQueryParameter("title");
-                isarticle = data.getQueryParameter("isarticle");
-                url = data.getQueryParameter("url");
-                shareurl = data.getQueryParameter("shareurl");
-                articleid = data.getQueryParameter("articleid");
-
+                String title = data.getQueryParameter("title");
+                String isarticle = data.getQueryParameter("isarticle");
+                String url = data.getQueryParameter("url");
+                String shareurl = data.getQueryParameter("shareurl");
+                String articleid = data.getQueryParameter("articleid");
+                Log.e("第三方调取===", "onCreate: " + title + "//"
+                        + isarticle + "//" + url + "//" + shareurl + "//" + articleid);
+                MyAppliction.getInstance().setIsAtricle(isarticle);
+                MyAppliction.getInstance().setShareParems(url, articleid, title, shareurl);
+                doShareActivity();
             }
         }
 
@@ -68,39 +71,32 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!StringUtil.isEmpty(mBaseTitle)) {
             setTitle(mBaseTitle);
         }
-        doShareActivity();
+
     }
 
     public void delectShare() {
-        isarticle = null;
+        MyAppliction.getInstance().setIsAtricle(null);
+        MyAppliction.getInstance().delectShareParems();
     }
 
-    public ShareParems getShareParems() {
-        ShareParems parems = new ShareParems();
-        parems.url = url;
-        parems.articleid = articleid;
-        parems.title = title;
-        parems.shareurl = shareurl;
-        return parems;
+
+    public static class ShareParems {
+        public String title;
+        public String url;
+        public String shareurl;
+        public String articleid;
     }
 
-    public String getIsarticle() {
-        return isarticle;
-    }
-    private class ShareParems {
-        private String title;
-        private String url;
-        private String shareurl;
-        private String articleid;
-    }
     private void doShareActivity() {
-        if (isarticle == null) {
+        if (StringUtil.isEmpty(MyAppliction.getInstance().getIsAtricle())) {
             return;
         }
-        if (isarticle.equals("0")) {
-            doIntentAct(new Infom(), getShareParems());
-        } else if (isarticle.equals("1")) {
-            doIntentAct(new WenZhang(), getShareParems());
+        if (MyAppliction.getInstance().getIsAtricle().equals("0")) {
+            doIntentAct(new Infom(), MyAppliction.getInstance().getShareParems());
+            return;
+        }
+        if (MyAppliction.getInstance().getIsAtricle().equals("1")) {
+            doIntentAct(new WenZhang(), MyAppliction.getInstance().getShareParems());
         }
     }
 
@@ -151,6 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public interface ShareActivity {
         public void startAct(ShareParems shareParems);
     }
+
     public class Infom implements ShareActivity {
         @Override
         public void startAct(ShareParems shareParems) {
@@ -158,14 +155,22 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (infom == null) {
                 Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
                 startActivity(intent);
-            } else {
-                delectShare();
-                Intent intent = AgreementActivity.newInstance(BaseActivity.this,   shareParems. url, AgreementActivity.SHAREMARK,
-                        shareParems.title,   shareParems. shareurl);
-                BaseActivity.this.startActivity(intent);
+                return;
             }
+            delectShare();
+           final Intent intent = AgreementActivity.newInstance(BaseActivity.this, shareParems.url, AgreementActivity.SHAREMARK,
+                    shareParems.title, shareParems.shareurl);
+//            startActivity(intent);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    startActivity(intent);
+                }
+            }, 300);
         }
     }
+
     public class WenZhang implements ShareActivity {
         @Override
         public void startAct(ShareParems shareParems) {
@@ -173,14 +178,22 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (infom == null || infom.getData().getUser() == null) {
                 Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
                 startActivity(intent);
-            } else {
-                delectShare();
-                Intent intent = InfomDetailActivity.startInstance(BaseActivity.this, shareParems.url,
-                        String.valueOf(shareParems.articleid),shareParems.title);
-                BaseActivity.this.startActivity(intent);
+                return;
             }
+            delectShare();
+            final Intent intent = InfomDetailActivity.startInstance(BaseActivity.this, shareParems.url,
+                    String.valueOf(shareParems.articleid), shareParems.title);
+//            startActivity(intent);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    startActivity(intent);
+                }
+            }, 300);
         }
     }
+
 
     public void doIntentAct(ShareActivity activity, ShareParems shareParems) {
         activity.startAct(shareParems);

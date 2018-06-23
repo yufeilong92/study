@@ -25,6 +25,8 @@ import com.xuechuan.xcedu.fragment.BankFragment;
 import com.xuechuan.xcedu.fragment.HomesFragment;
 import com.xuechuan.xcedu.fragment.NetFragment;
 import com.xuechuan.xcedu.fragment.PersionalFragment;
+import com.xuechuan.xcedu.ui.AgreementActivity;
+import com.xuechuan.xcedu.ui.InfomDetailActivity;
 import com.xuechuan.xcedu.utils.ArrayToListUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.StringUtil;
@@ -45,6 +47,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @version V 1.0 xxxxxxxx
@@ -109,14 +113,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_home);
-        if (!StringUtil.isEmpty(getIsarticle())) {
-            if (getIsarticle().equals("0")) {
-                doIntentAct(new Infom(), getShareParems());
-            } else if (getIsarticle().equals("1")) {
-                doIntentAct(new WenZhang(), getShareParems());
-            }
-            return;
-        }
         if (getIntent() != null) {
             mType = getIntent().getStringExtra(TYPE);
             mLoginType = getIntent().getStringExtra(PARAMS);
@@ -132,8 +128,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mViewpageContetn.setCurrentItem(2);
             }
         }*/
-
-
+        doShareActivity();
     }
 
     @Override
@@ -146,7 +141,47 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void MianSelectShowItem(ShowItemEvent event) {
-        mViewpageContetn.setCurrentItem(0);
+        if (mViewpageContetn != null)
+            mViewpageContetn.setCurrentItem(0);
+        doShareActivity();
+
+    }
+
+    private void doShareActivity() {
+        if (!StringUtil.isEmpty(MyAppliction.getInstance().getIsAtricle())) {
+            if (MyAppliction.getInstance().getIsAtricle().equals("0")) {
+//                ShareParems shareParems = MyAppliction.getInstance().getShareParems();
+//                delectShare();
+//                final Intent intent = AgreementActivity.newInstance(HomeActivity.this, shareParems.url, AgreementActivity.SHAREMARK,
+//                        shareParems.title, shareParems.shareurl);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                Timer timer = new Timer();
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(intent);
+//                    }
+//                }, 300);
+                doIntentAct(new Infom(), MyAppliction.getInstance().getShareParems());
+                return;
+            }
+            if (MyAppliction.getInstance().getIsAtricle().equals("1")) {
+                doIntentAct(new WenZhang(), MyAppliction.getInstance().getShareParems());
+//                ShareParems shareParems = MyAppliction.getInstance().getShareParems();
+//                delectShare();
+//                final Intent intent = InfomDetailActivity.startInstance(HomeActivity.this, shareParems.url,
+//                        String.valueOf(shareParems.articleid), shareParems.title);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                Timer timer = new Timer();
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(intent);
+//                    }
+//                }, 300);
+
+            }
+        }
     }
 
     @Override

@@ -122,6 +122,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
     private void initData() {
         String versionCode = Utils.getVersionName(mContext);
         mTvMSettingCode.setText(versionCode);

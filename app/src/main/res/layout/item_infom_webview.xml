@@ -8,8 +8,8 @@
         android:id="@+id/web_infom_detail"
         android:layout_width="match_parent"
         android:minHeight="200dp"
-        android:layout_marginLeft="@dimen/space_16"
-        android:layout_marginRight="@dimen/space_16"
+        android:paddingLeft="@dimen/space_8"
+        android:paddingRight="@dimen/space_8"
         android:layout_height="wrap_content">
     </WebView>
 <LinearLayout

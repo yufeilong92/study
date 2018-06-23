@@ -119,9 +119,7 @@ public class MyReceiver extends BroadcastReceiver {
                     msgIntent.putExtra(TestActivity.KEY_EXTRAS, extras);
                 }
             } catch (JSONException e) {
-
             }
-
         }
         context.sendBroadcast(msgIntent);
     }

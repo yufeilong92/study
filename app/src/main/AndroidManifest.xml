@@ -374,7 +374,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:host="android"
-                    android:scheme="wushang"/>
+                    android:scheme="xuechuanedu"/>
             </intent-filter>
         </activity>
         <activity
