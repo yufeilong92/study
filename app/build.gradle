@@ -28,10 +28,10 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            zipAlignEnabled true  // Zipalign优化
-            shrinkResources true // 移除无用的resource文件,必须和minifyEnabled 一起使用
-//            minifyEnabled false
+//            minifyEnabled true
+//            zipAlignEnabled true  // Zipalign优化
+//            shrinkResources true // 移除无用的resource文件,必须和minifyEnabled 一起使用
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }

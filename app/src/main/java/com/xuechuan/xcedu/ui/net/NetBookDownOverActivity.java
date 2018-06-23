@@ -105,7 +105,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         if (mVideoDb == null) {
             mTvInfomEmpty.setVisibility(View.VISIBLE);
             mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
-            mTvNetDownInfomMake.setVisibility(View.GONE);
+            mTvNetDownInfomMake.setVisibility(View.INVISIBLE);
             return;
         }
         List<DownVideoVo> dbDownlist = mVideoDb.getDownlist();
@@ -131,7 +131,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         if (vos == null || vos.isEmpty()) {
             mTvInfomEmpty.setVisibility(View.VISIBLE);
             mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
-            mTvNetDownInfomMake.setVisibility(View.GONE);
+            mTvNetDownInfomMake.setVisibility(View.INVISIBLE);
             return;
         }
         mTvDownBookInfomeName.setText(mVideoDb.getKName());
@@ -144,7 +144,7 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         if (mVideoDb == null) {
             mTvInfomEmpty.setVisibility(View.VISIBLE);
             mTvNetDownInfomMake.setText(getStringWithId(R.string.edit));
-            mTvNetDownInfomMake.setVisibility(View.GONE);
+            mTvNetDownInfomMake.setVisibility(View.INVISIBLE);
             return;
         }
         List<DownVideoVo> downlist = mVideoDb.getDownlist();

@@ -137,7 +137,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         if (dbs == null || dbs.isEmpty()) {
             mScroviewLayout.setVisibility(View.GONE);
             mTvEmpty.setVisibility(View.VISIBLE);
-            mTvNetBookDownMake.setVisibility(View.GONE);
+            mTvNetBookDownMake.setVisibility(View.INVISIBLE);
             return;
         }
         List<DownVideoDb> downVideoDbs = new ArrayList<>();
@@ -165,7 +165,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         if (downIngVideos.isEmpty()&&downVideos.isEmpty()){
             mScroviewLayout.setVisibility(View.GONE);
             mTvEmpty.setVisibility(View.VISIBLE);
-            mTvNetBookDownMake.setVisibility(View.GONE);
+            mTvNetBookDownMake.setVisibility(View.INVISIBLE);
             mLlNetDownAll.setVisibility(View.GONE);
             return;
         }
@@ -177,7 +177,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
         if (dbs == null || dbs.isEmpty()) {
             mScroviewLayout.setVisibility(View.GONE);
             mTvEmpty.setVisibility(View.VISIBLE);
-            mTvNetBookDownMake.setVisibility(View.GONE);
+            mTvNetBookDownMake.setVisibility(View.INVISIBLE);
             return;
         }
         List<DownVideoDb> downVideoDbs = new ArrayList<>();

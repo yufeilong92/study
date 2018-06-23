@@ -67,7 +67,7 @@ public class ScreenShot {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        int options = 100;
+        int options = 50;
         // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
         while (baos.toByteArray().length / 1024 > 100) {
             // 重置baos
