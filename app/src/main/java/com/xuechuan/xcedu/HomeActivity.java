@@ -150,36 +150,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private void doShareActivity() {
         if (!StringUtil.isEmpty(MyAppliction.getInstance().getIsAtricle())) {
             if (MyAppliction.getInstance().getIsAtricle().equals("0")) {
-//                ShareParems shareParems = MyAppliction.getInstance().getShareParems();
-//                delectShare();
-//                final Intent intent = AgreementActivity.newInstance(HomeActivity.this, shareParems.url, AgreementActivity.SHAREMARK,
-//                        shareParems.title, shareParems.shareurl);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                Timer timer = new Timer();
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        startActivity(intent);
-//                    }
-//                }, 300);
                 doIntentAct(new Infom(), MyAppliction.getInstance().getShareParems());
                 return;
             }
             if (MyAppliction.getInstance().getIsAtricle().equals("1")) {
                 doIntentAct(new WenZhang(), MyAppliction.getInstance().getShareParems());
-//                ShareParems shareParems = MyAppliction.getInstance().getShareParems();
-//                delectShare();
-//                final Intent intent = InfomDetailActivity.startInstance(HomeActivity.this, shareParems.url,
-//                        String.valueOf(shareParems.articleid), shareParems.title);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                Timer timer = new Timer();
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        startActivity(intent);
-//                    }
-//                }, 300);
-
             }
         }
     }
