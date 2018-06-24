@@ -123,7 +123,7 @@ public class AnswerEvaluateAdapter extends BaseRecyclerAdapter<AnswerEvaluateAda
                 holder.mTvEvalueTime.setTextColor(getLayoutColor(R.color.text_fu_color));
                 holder.mTvEvalueSuppernumber.setTextColor(getLayoutColor(R.color.text_fu_color));
                 holder.mTvEvalueEvalue.setTextColor(getLayoutColor(R.color.text_fu_color));
-                holder.mViewLine.setBackgroundColor(getLayoutColor(R.color.white));
+                holder.mViewLine.setBackgroundColor(getLayoutColor(R.color.input_bg));
             }
         }
 

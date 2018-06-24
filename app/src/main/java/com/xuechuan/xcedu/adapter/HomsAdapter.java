@@ -161,7 +161,7 @@ public class HomsAdapter extends RecyclerView.Adapter {
               /*  Intent intent = InfomDetailActivity.startInstance(mContext, vo.getGourl(),
                         String.valueOf(vo.getId()), DataMessageVo.USERTYPEA);*/
                 Intent intent = AgreementActivity.newInstance(mContext, vo.getGourl(),
-                        AgreementActivity.SHAREMARK,vo.getTitle(),vo.getGourl());
+                        AgreementActivity.SHAREMARK,vo.getTitle(),vo.getShareurl());
                 mContext.startActivity(intent);
             }
         });

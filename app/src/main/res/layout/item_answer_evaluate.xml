@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/space_16">
+        android:padding="@dimen/space_8">
 
         <ImageView
             android:id="@+id/iv_evaluate_hear"
@@ -67,8 +67,8 @@
                 <Space style="@style/space_16_width" />
 
                 <CheckBox
-                    android:paddingTop="@dimen/space_16"
-                    android:paddingBottom="@dimen/space_16"
+                    android:paddingTop="@dimen/space_8"
+                    android:paddingBottom="@dimen/space_8"
                     android:paddingLeft="@dimen/space_8"
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"
