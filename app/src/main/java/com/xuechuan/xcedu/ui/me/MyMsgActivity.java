@@ -192,11 +192,12 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View, V
                 adapter.notifyDataSetChanged();
                 return;
             }
-            if (mArrary.size() == orderVo.getTotal().getTotal()) {
-                mXfvContentMsg.setLoadComplete(true);
-            } else {
-                mXfvContentMsg.setPullLoadEnable(true);
+            //判断是否能整除
+            if (!mArrary.isEmpty() && mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
                 mXfvContentMsg.setLoadComplete(false);
+                mXfvContentMsg.setPullLoadEnable(true);
+            } else {
+                mXfvContentMsg.setLoadComplete(true);
             }
             adapter.notifyDataSetChanged();
         } else {
@@ -280,6 +281,10 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View, V
     }
 
     private void doDelAll() {
+        if (mArrary==null||mArrary.isEmpty()){
+            T.showToast(mContext,getString(R.string.my_msg));
+            return;
+        }
         DialogUtil dialogUtil = DialogUtil.getInstance();
         dialogUtil.showTitleDialog(mContext, "是否删除当前列表消息",
                 getStringWithId(R.string.sure), getStringWithId(R.string.cancel), true);

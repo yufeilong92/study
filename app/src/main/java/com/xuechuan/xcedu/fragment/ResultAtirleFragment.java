@@ -223,12 +223,23 @@ public class ResultAtirleFragment extends BaseFragment implements SearchView {
             clearData();
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
+            }else {
+                adapter.notifyDataSetChanged();
+                mXrfResultContent.setLoadComplete(true);
+                return;
             }
 //            if (mArray.size() == vo.getTotal().getTotal()) {
 //                mXrfResultContent.setLoadComplete(true);
 //            } else {
-            mXrfResultContent.setPullLoadEnable(true);
-            mXrfResultContent.setLoadComplete(false);
+            if(!mArray.isEmpty()&&mArray.size()%DataMessageVo.CINT_PANGE_SIZE==0) {
+                // 设置是否可以上拉加载
+                mXrfResultContent.setPullLoadEnable(true);
+                mXrfResultContent.setLoadComplete(false);
+            }
+            else
+                mXrfResultContent.setLoadComplete(true);
+//            mXrfResultContent.setPullLoadEnable(true);
+//            mXrfResultContent.setLoadComplete(false);
 //            }
             adapter.notifyDataSetChanged();
         } else {

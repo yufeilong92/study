@@ -208,9 +208,20 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
             clearData();
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
+            }else {
+                adapter.notifyDataSetChanged();
+                mXrfResultContent.setLoadComplete(true);
+                return;
             }
-            mXrfResultContent.setPullLoadEnable(true);
-            mXrfResultContent.setLoadComplete(false);
+            if(!mArray.isEmpty()&&mArray.size()%DataMessageVo.CINT_PANGE_SIZE==0) {
+                // 设置是否可以上拉加载
+                mXrfResultContent.setPullLoadEnable(true);
+                mXrfResultContent.setLoadComplete(false);
+            }
+            else
+                mXrfResultContent.setLoadComplete(true);
+//            mXrfResultContent.setPullLoadEnable(true);
+//            mXrfResultContent.setLoadComplete(false);
             adapter.notifyDataSetChanged();
         } else {
             T.showToast(mContext, status.getMessage());

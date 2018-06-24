@@ -445,7 +445,7 @@ public class NetBookDownActivity extends BaseActivity implements View.OnClickLis
                         if (mSelectNOVos != null && !mSelectNOVos.isEmpty())
                             for (NetDownSelectVo vo : mSelectNOVos) {
                                 if (vo.isSelect()) {
-                                    mSelectDoneVos.remove(vo);
+                                    mSelectNOVos.remove(vo);
                                     DownVideoDb db = mDao.queryUserDownInfomWithKid(vo.getId());
                                     delectVideo(db.getDownlist());
                                     List<String> zips = vo.getZips();

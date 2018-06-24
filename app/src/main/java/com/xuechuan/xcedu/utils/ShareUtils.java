@@ -31,13 +31,13 @@ public class ShareUtils {
     public static void shareWeb(final Activity activity, String WebUrl, String title, String description, String imageUrl, int imageID, SHARE_MEDIA platform) {
         UMWeb web = new UMWeb(WebUrl);//连接地址
         web.setTitle(title);//标题
-        if (platform==SHARE_MEDIA.SINA){
-            boolean wbInstall = isWBInstall(activity);
-            if (!wbInstall){
-                T.showToast(activity,"请先安装微新浪博软件");
-                return;
-            }
-        }
+//        if (platform==SHARE_MEDIA.SINA){
+//            boolean wbInstall = isWBInstall(activity);
+//            if (!wbInstall){
+//                T.showToast(activity,"请先安装微新浪博软件");
+//                return;
+//            }
+//        }
         web.setDescription(StringUtil.isEmpty(description)?"学川教育":description);//描述
         if (TextUtils.isEmpty(imageUrl)) {
             web.setThumb(new UMImage(activity, imageID));  //本地缩略图
@@ -103,13 +103,13 @@ public class ShareUtils {
     public static void shareImg(final Activity activity, String title, final String imp, SHARE_MEDIA platform) {
       final   File file = new File(imp);
         UMImage umImage = new UMImage(activity, file);
-        if (platform==SHARE_MEDIA.SINA){
-            boolean wbInstall = isWBInstall(activity);
-            if (!wbInstall){
-                T.showToast(activity,"请先安装微新浪博软件");
-                return;
-            }
-        }
+//        if (platform==SHARE_MEDIA.SINA){
+//            boolean wbInstall = isWBInstall(activity);
+//            if (!wbInstall){
+//                T.showToast(activity,"请先安装微新浪博软件");
+//                return;
+//            }
+//        }
         new ShareAction(activity)
                 .setPlatform(platform)
                 .withText(title)

@@ -316,12 +316,19 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
                 adapter.notifyDataSetChanged();
                 return;
             }
+            if(!mArrary.isEmpty()&&mArrary.size()%DataMessageVo.CINT_PANGE_SIZE==0) {
+                // 设置是否可以上拉加载
+                mXfvContentOrderAll.setPullLoadEnable(true);
+                mXfvContentOrderAll.setLoadComplete(false);
+            }
+            else
+                mXfvContentOrderAll.setLoadComplete(true);
 //            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
 //                mXfvContentOrderAll.setPullRefreshEnable(true);
 //                mXfvContentOrderAll.setLoadComplete(false);
 //            } else {
-            mXfvContentOrderAll.setPullLoadEnable(true);
-            mXfvContentOrderAll.setLoadComplete(false);
+//            mXfvContentOrderAll.setPullLoadEnable(true);
+//            mXfvContentOrderAll.setLoadComplete(false);
 //            }
             adapter.notifyDataSetChanged();
         } else {

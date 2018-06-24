@@ -362,8 +362,13 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
                 adapter.notifyDataSetChanged();
                 return;
             }
-            mXfvContentTwoDetail.setPullLoadEnable(true);
-            mXfvContentTwoDetail.setLoadComplete(false);
+            //判断是否能整除
+            if (!mArray.isEmpty() && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                mXfvContentTwoDetail.setLoadComplete(false);
+                mXfvContentTwoDetail.setPullLoadEnable(true);
+            } else {
+                mXfvContentTwoDetail.setLoadComplete(true);
+            }
             adapter.notifyDataSetChanged();
         } else {
             T.showToast(mContext, vo.getStatus().getMessage());

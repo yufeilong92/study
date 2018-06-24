@@ -308,8 +308,15 @@ public class NetMyBookVualueFragment extends BaseFragment implements View.OnClic
                 adapter.notifyDataSetChanged();
                 return;
             }
-            mXrfvSpecaRefresh.setPullLoadEnable(true);
-            mXrfvSpecaRefresh.setLoadComplete(false);
+            if(!mArrary.isEmpty()&&mArrary.size()%DataMessageVo.CINT_PANGE_SIZE==0) {
+                // 设置是否可以上拉加载
+                mXrfvSpecaRefresh.setPullLoadEnable(true);
+                mXrfvSpecaRefresh.setLoadComplete(false);
+            }
+            else
+                mXrfvSpecaRefresh.setLoadComplete(true);
+//            mXrfvSpecaRefresh.setPullLoadEnable(true);
+//            mXrfvSpecaRefresh.setLoadComplete(false);
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;

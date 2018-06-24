@@ -561,7 +561,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         if (vo.getStatus().getCode() == 200) {
             File file = new File(mPath);
             file.delete();
-            T.showToast(mContext,"头像上传，等待管理员审核");
+            T.showToast(mContext,"头像上传成功，等待管理员审核");
             SubmitHearService.startActionBaz(mContext, 10000, "上传完成");
 
         } else {

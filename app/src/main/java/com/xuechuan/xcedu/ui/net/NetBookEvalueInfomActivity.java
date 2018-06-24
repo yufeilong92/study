@@ -277,12 +277,12 @@ public class NetBookEvalueInfomActivity extends BaseActivity implements View.OnC
                 adapter.notifyDataSetChanged();
                 return;
             }
-
-            if ( mArrary.size() == vo.getTotal().getTotal()) {
-                mXfvContentTwoDetail.setLoadComplete(true);
-            } else {
-                mXfvContentTwoDetail.setPullLoadEnable(true);
+            //判断是否能整除
+            if (!mArrary.isEmpty() && mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
                 mXfvContentTwoDetail.setLoadComplete(false);
+                mXfvContentTwoDetail.setPullLoadEnable(true);
+            } else {
+                mXfvContentTwoDetail.setLoadComplete(true);
             }
             adapter.notifyDataSetChanged();
         } else {

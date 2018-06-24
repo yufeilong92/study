@@ -228,12 +228,20 @@ public class TagInfomFragment extends BaseFragment implements TagInfomView {
             clearData();
             if (datas != null && !datas.isEmpty()) {
                 addListData(datas);
+            }else {
+                adapter.notifyDataSetChanged();
+                mXfvContent.setLoadComplete(true);
+                return;
             }
 //            if ( mArray.size() == vo.getTotal().getTotal()) {
 //                mXfvContent.setLoadComplete(true);
 //            } else {
-            mXfvContent.setPullLoadEnable(true);
-            mXfvContent.setLoadComplete(false);
+            if (mArray != null && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                mXfvContent.setPullLoadEnable(true);
+                mXfvContent.setLoadComplete(false);
+            } else {
+                mXfvContent.setLoadComplete(true);
+            }
 //            }
             adapter.notifyDataSetChanged();
         } else {

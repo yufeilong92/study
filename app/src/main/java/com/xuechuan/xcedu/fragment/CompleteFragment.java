@@ -256,12 +256,19 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
                 adapter.notifyDataSetChanged();
                 return;
             }
+            if(!mArrary.isEmpty()&&mArrary.size()%DataMessageVo.CINT_PANGE_SIZE==0) {
+                // 设置是否可以上拉加载
+                mXfvContentOrderCom.setPullLoadEnable(true);
+                mXfvContentOrderCom.setLoadComplete(false);
+            }
+            else
+                mXfvContentOrderCom.setLoadComplete(true);
 //            if (mArrary.size() == orderVo.getTotal().getTotal()) {
 //                mXfvContentOrderCom.setPullLoadEnable(true);
 //                mXfvContentOrderCom.setLoadComplete(true);
 //            } else {
-            mXfvContentOrderCom.setPullLoadEnable(true);
-            mXfvContentOrderCom.setLoadComplete(false);
+//            mXfvContentOrderCom.setPullLoadEnable(true);
+//            mXfvContentOrderCom.setLoadComplete(false);
 //            }
             adapter.notifyDataSetChanged();
         } else {

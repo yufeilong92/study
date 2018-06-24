@@ -215,13 +215,13 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
                 adapter.notifyDataSetChanged();
                 return;
             }
-//            if ( mArrary.size() == orderVo.getTotal().getTotal()) {
-//                mXfvContentSystem.setPullRefreshEnable(true);
-//                mXfvContentSystem.setLoadComplete(true);
-//            } else {
-            mXfvContentSystem.setPullRefreshEnable(true);
-            mXfvContentSystem.setLoadComplete(false);
-//            }
+            //判断是否能整除
+            if (!mArrary.isEmpty() && mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                mXfvContentSystem.setLoadComplete(false);
+                mXfvContentSystem.setPullLoadEnable(true);
+            } else {
+                mXfvContentSystem.setLoadComplete(true);
+            }
             adapter.notifyDataSetChanged();
         } else {
             isRefresh = false;
@@ -297,6 +297,10 @@ public class SystemMsgActivity extends BaseActivity implements MySystemContract.
     }
 
     private void doDelAll() {
+        if (mArrary==null||mArrary.isEmpty()){
+            T.showToast(mContext,getString(R.string.system_msg));
+            return;
+        }
         DialogUtil dialogUtil = DialogUtil.getInstance();
         dialogUtil.showTitleDialog(mContext, "是否删除当前消息", getStringWithId(R.string.cancel),
                 getStringWithId(R.string.sure), true);

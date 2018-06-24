@@ -115,8 +115,13 @@ public class SpecasListActivity extends BaseActivity {
 //                    if ( mArrary.size() == vo.getTotal().getTotal()) {
 //                        mXrfvSpecaRefresh.setLoadComplete(true);
 //                    } else {
-                    mXrfvSpecaRefresh.setPullLoadEnable(true);
-                    mXrfvSpecaRefresh.setLoadComplete(false);
+                    //判断是否能整除
+                    if (!mArrary.isEmpty() && mArrary.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                        mXrfvSpecaRefresh.setLoadComplete(false);
+                        mXrfvSpecaRefresh.setPullLoadEnable(true);
+                    } else {
+                        mXrfvSpecaRefresh.setLoadComplete(true);
+                    }
 //                    }
                     adapter.notifyDataSetChanged();
                 } else {

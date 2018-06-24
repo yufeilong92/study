@@ -299,8 +299,15 @@ public class ObligationFragment extends BaseFragment implements PerOrderContract
 //                mXfvContentOrderOb.setPullLoadEnable(true);
 //                mXfvContentOrderOb.setLoadComplete(false);
 //            } else {
-            mXfvContentOrderOb.setPullLoadEnable(true);
-            mXfvContentOrderOb.setLoadComplete(false);
+            if(!mArrary.isEmpty()&&mArrary.size()%DataMessageVo.CINT_PANGE_SIZE==0) {
+                // 设置是否可以上拉加载
+                mXfvContentOrderOb.setPullLoadEnable(true);
+                mXfvContentOrderOb.setLoadComplete(false);
+            }
+            else
+                mXfvContentOrderOb.setLoadComplete(true);
+//            mXfvContentOrderOb.setPullLoadEnable(true);
+//            mXfvContentOrderOb.setLoadComplete(false);
 //            }
             adapter.notifyDataSetChanged();
         } else {

@@ -74,7 +74,7 @@
                     android:text="2222"
                     android:textSize="@dimen/text_size_12"
                     android:textColor="@color/text_fu_color"
-                    android:paddingTop="@dimen/space_16"
+                    android:paddingTop="@dimen/space_8"
                     android:paddingLeft="@dimen/space_8"
                     android:id="@+id/chb_evalua_issupper"
                     android:layout_width="wrap_content"

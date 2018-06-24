@@ -196,12 +196,20 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
                     clearData();
                     if (datas != null && !datas.isEmpty()) {
                         addListData(datas);
+                    }else {
+                        adapter.notifyDataSetChanged();
+                        mXrvContent.setLoadComplete(true);
+                        return;
                     }
 //                    if (mArray.size() == vo.getTotal().getTotal()) {
 //                        mXrvContent.setLoadComplete(true);
 //                    } else {
-                    mXrvContent.setPullLoadEnable(true);
-                    mXrvContent.setLoadComplete(false);
+                    if (!mArray.isEmpty() && mArray.size() % DataMessageVo.CINT_PANGE_SIZE == 0) {
+                        mXrvContent.setLoadComplete(false);
+                        mXrvContent.setPullLoadEnable(true);
+                    } else {
+                        mXrvContent.setLoadComplete(true);
+                    }
 //                    }
                     adapter.notifyDataSetChanged();
                 } else {
