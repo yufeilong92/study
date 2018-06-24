@@ -3300,33 +3300,34 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void ResolveQuestionData(String msg) {
         Gson gson = new Gson();
         QuestionAllVo vo = gson.fromJson(msg, QuestionAllVo.class);
-        if (vo.getStatus().getCode() == 200) {
+        if (vo != null &&vo.getDatas() != null)
+            if (vo.getStatus().getCode() == 200) {
 //            mRlRootLayout.setVisibility(View.VISIBLE);
-            if (vo.getDatas() == null || vo.getDatas().size() == 0) {
-                mRlRootLayout.setVisibility(View.GONE);
-                dialog.dismiss();
-                mTvRootEmpty.setVisibility(View.VISIBLE);
-                if (mTimeUitl != null) {
-                    mTimeUitl.cancel();
+                if (vo.getDatas() == null || vo.getDatas().size() == 0) {
+                    mRlRootLayout.setVisibility(View.GONE);
+                    dialog.dismiss();
+                    mTvRootEmpty.setVisibility(View.VISIBLE);
+                    if (mTimeUitl != null) {
+                        mTimeUitl.cancel();
+                    }
+                    mActivityTitleText.setText(null);
+                    mIvTimePlay.setVisibility(View.GONE);
+
+                    return;
+                } else {
+                    mTvRootEmpty.setVisibility(View.GONE);
+                    mRlRootLayout.setVisibility(View.VISIBLE);
                 }
-                mActivityTitleText.setText(null);
-                mIvTimePlay.setVisibility(View.GONE);
+                mTextDetial = vo.getDatas();
+                mTvBCount.setText(String.valueOf(mTextDetial.size()));
 
-                return;
+                bindTextNumberData();
+
             } else {
-                mTvRootEmpty.setVisibility(View.GONE);
-                mRlRootLayout.setVisibility(View.VISIBLE);
-            }
-            mTextDetial = vo.getDatas();
-            mTvBCount.setText(String.valueOf(mTextDetial.size()));
-
-            bindTextNumberData();
-
-        } else {
-            T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
-            L.e(vo.getStatus().getMessage());
+                T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
+                L.e(vo.getStatus().getMessage());
 //            T.showToast(mContext, vo.getStatus().getMessage());
-        }
+            }
     }
 
     @Override
@@ -3375,6 +3376,9 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void SumbitCollectError(String con) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         L.e("收藏" + con);
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
@@ -3386,6 +3390,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void DoResultError(String con) {
+
         L.e("做题结果" + con);
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
     }
@@ -3432,6 +3437,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void WoringError(String con) {
+
         L.e("错题移除" + con);
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
 
@@ -3697,6 +3703,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         if (dialog != null) {
             dialog.dismiss();
         }
+        T.showToast(mContext, getStringWithId(R.string.net_error));
         Log.e("yfl", "QuestionIdAllError: " + con);
     }
 
@@ -3714,6 +3721,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     public void ErrorSpecatilDetail(String con) {
         if (dialog != null)
             dialog.dismiss();
+        T.showToast(mContext, getStringWithId(R.string.net_error));
         L.e("yfl", con + "ErrorSpecatilDetail");
     }
 
@@ -3778,7 +3786,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void ErrOrColListError(String con) {
-        if (dialog != null)
+        if (dialog != null && dialog.isShowing())
             dialog.dismiss();
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.w(con);

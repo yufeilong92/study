@@ -294,15 +294,16 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
         Gson gson = new Gson();
         clearData();
         QuestionAllVo vo = gson.fromJson(con, QuestionAllVo.class);
-        if (vo.getStatus().getCode() == 200) {
-            List<QuestionAllVo.DatasBean> mQuestionAlldatas = vo.getDatas();
-            outLinePager(mQuestionAlldatas);
-            CreateText();
+        if (vo != null && vo.getDatas() != null)
+            if (vo.getStatus().getCode() == 200) {
+                List<QuestionAllVo.DatasBean> mQuestionAlldatas = vo.getDatas();
+                outLinePager(mQuestionAlldatas);
+                CreateText();
 
-        } else {
-            T.showToast(mContext, getStringWithId(R.string.net_error));
+            } else {
+                T.showToast(mContext, getStringWithId(R.string.net_error));
 //            T.showToast(mContext, vo.getStatus().getMessage());
-        }
+            }
 
     }
 
@@ -427,7 +428,6 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
         mDialog = DialogUtil.showDialog(mContext, "", "正在生成试卷...");
 
 
-
     }
 
     /**
@@ -461,7 +461,7 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
         if (mDialog != null) {
             mDialog.dismiss();
         }
-        T.showToast(mContext,getStringWithId(R.string.net_error));
+        T.showToast(mContext, getStringWithId(R.string.net_error));
     }
 
 }

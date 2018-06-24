@@ -486,9 +486,9 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             TweenTime = set.getTweentime();
 
         }
-        String phone="学川教育";
-        if (MyAppliction.getInstance().getUserData().getData()!=null){
-            phone=  MyAppliction.getInstance().getUserData().getData().getPhone();
+        String phone = "学川教育";
+        if (MyAppliction.getInstance().getUserData().getData() != null) {
+            phone = MyAppliction.getInstance().getUserData().getData().getPhone();
         }
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
                 .setStyle(style) //样式
@@ -856,15 +856,16 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         }
         Gson gson = new Gson();
         NetBookTableVo tableVo = gson.fromJson(com, NetBookTableVo.class);
-        if (tableVo.getStatus().getCode() == 200) {
-            NetBookTableVo.DataBean bean = tableVo.getData();
-            bookInfmo = bean.getClassX();
-            mBookList = bean.getChapters();
-            bindViewData(bookInfmo, mBookList, bookInfmo.isIsall());
-        } else {
+        if (tableVo != null && tableVo.getData() != null)
+            if (tableVo.getStatus().getCode() == 200) {
+                NetBookTableVo.DataBean bean = tableVo.getData();
+                bookInfmo = bean.getClassX();
+                mBookList = bean.getChapters();
+                bindViewData(bookInfmo, mBookList, bookInfmo.isIsall());
+            } else {
 
-            L.e(tableVo.getStatus().getMessage());
-        }
+                L.e(tableVo.getStatus().getMessage());
+            }
     }
 
     private void bindViewData(ClassBeanVideoVo bookInfmo, List<ChaptersBeanVo> bookList, boolean isall) {
@@ -902,7 +903,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         if (mShowDialog != null && mShowDialog.isShowing()) {
             mShowDialog.dismiss();
         }
-        T.showToast(mContext,getStringWithId(R.string.net_error));
+        T.showToast(mContext, getStringWithId(R.string.net_error));
     }
 
 

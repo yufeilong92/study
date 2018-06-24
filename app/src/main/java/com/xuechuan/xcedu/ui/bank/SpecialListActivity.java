@@ -74,10 +74,10 @@ public class SpecialListActivity extends BaseActivity implements SpecailView {
 
     @Override
     public void RequestionWithtagsError(String con) {
-        if (mDialog != null&&mDialog.isShowing()) {
+        if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
         }
-        T.showToast(mContext,getStringWithId(R.string.net_error));
+        T.showToast(mContext, getStringWithId(R.string.net_error));
     }
 
     @Override
@@ -87,7 +87,8 @@ public class SpecialListActivity extends BaseActivity implements SpecailView {
         }
         Gson gson = new Gson();
         SpecialDataVo vo = gson.fromJson(con, SpecialDataVo.class);
-        initAdapter(vo);
+        if (vo!=null&&vo.getDatas() != null && !vo.getDatas().isEmpty())
+            initAdapter(vo);
 
     }
 
@@ -102,8 +103,8 @@ public class SpecialListActivity extends BaseActivity implements SpecailView {
             @Override
             public void onClickListener(Object obj, int position) {
                 SpecialDataVo.DatasBean bean = (SpecialDataVo.DatasBean) obj;
-                Intent intent = AnswerActivity.newInstance(mContext,mTypeOid ,
-                        String.valueOf(bean.getId()),0);
+                Intent intent = AnswerActivity.newInstance(mContext, mTypeOid,
+                        String.valueOf(bean.getId()), 0);
                 startActivity(intent);
             }
         });
