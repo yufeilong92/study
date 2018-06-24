@@ -59,7 +59,7 @@
                 style="@style/space_8_width" />
 
             <TextView
-                android:visibility="gone"
+                android:textColor="@color/text_fu_color"
                 android:layout_gravity="center"
                 android:id="@+id/tv_item_home_laud_all"
                 android:layout_width="wrap_content"

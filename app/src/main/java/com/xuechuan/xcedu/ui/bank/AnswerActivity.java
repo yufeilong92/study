@@ -3712,6 +3712,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void ErrorSpecatilDetail(String con) {
+        if (dialog != null)
+            dialog.dismiss();
         L.e("yfl", con + "ErrorSpecatilDetail");
     }
 
@@ -3776,6 +3778,8 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void ErrOrColListError(String con) {
+        if (dialog != null)
+            dialog.dismiss();
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
         L.w(con);
     }

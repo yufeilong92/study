@@ -107,7 +107,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
                     startActivity(intent);
                 } else {
                     List children = node.getChildren();
-                    if (children == null || children.isEmpty()){
+                    if (children == null || children.isEmpty()) {
                         Intent intent = AnswerActivity.newInstance(AtricleListActivity.this, String.valueOf(node.getpId()),
                                 mOid);
                         startActivity(intent);
@@ -169,7 +169,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
         if (mAlertDialog != null) {
             mAlertDialog.dismiss();
         }
-        L.e(content);
+        T.showToast(mContext, getStringWithId(R.string.net_error));
     }
 
     private void clearData() {

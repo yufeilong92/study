@@ -157,6 +157,8 @@ public class BankFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onError(Response<String> response) {
                 L.w(response.message());
+                T.showToast(mContext,getStrWithId(R.string.net_error));
+
             }
         });
     }

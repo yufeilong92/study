@@ -461,7 +461,7 @@ public class FreeQuestionActivity extends BaseActivity implements View.OnClickLi
         if (mDialog != null) {
             mDialog.dismiss();
         }
-
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
 }

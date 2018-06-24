@@ -109,6 +109,10 @@ public class BookInfomActivity extends BaseActivity {
 
             @Override
             public void onError(Response<String> response) {
+                if (mDialog != null&&mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
+                T.showToast(mContext,getStringWithId(R.string.net_error));
                 L.e("教材章节", response.message());
             }
         });

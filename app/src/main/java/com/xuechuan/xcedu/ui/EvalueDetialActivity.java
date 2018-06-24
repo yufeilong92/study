@@ -240,6 +240,7 @@ public class EvalueDetialActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onError(Response<String> response) {
                 isRefresh = false;
+                T.showToast(mContext,getStringWithId(R.string.net_error));
                 T.showToast(mContext, response.message());
             }
         });

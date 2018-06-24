@@ -115,6 +115,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
     private ArrayList<String> mPathlist;
     private String mPath;
     private AlertDialog imgDialgo;
+    private AlertDialog dialog;
 
     /*@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +210,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
         String brithday = getTextStr(mTvMPBirthday);
         if (mPathlist != null && !mPathlist.isEmpty())
             mPresenter.submitPersionHear(mContext, mPathlist);
+        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
         mPresenter.submitPersionInfom(mContext, name, gender, brithday, mProvince, mCity);
     }
 
@@ -528,7 +530,7 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
                 Log.e("压缩图片==", mPath);
 //                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
 //                mIvMPImg.setImageBitmap(bitmap);
-                MyAppliction.getInstance().displayImages(mIvMPImg,"file://"+mPath,true);
+                MyAppliction.getInstance().displayImages(mIvMPImg, "file://" + mPath, true);
                 mPathlist = new ArrayList<>();
                 mPathlist.add(mPath);
             }
@@ -537,6 +539,9 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void SubmitPersionSuccess(String con) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -550,18 +555,23 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void SubmitPersionError(String con) {
-
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         T.showToast(mContext, getString(R.string.save_errror));
     }
 
     @Override
     public void SubmitPersionHearScu(String con) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(con, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
             File file = new File(mPath);
             file.delete();
-            T.showToast(mContext,"头像上传成功，等待管理员审核");
+            T.showToast(mContext, "头像上传成功，等待管理员审核");
             SubmitHearService.startActionBaz(mContext, 10000, "上传完成");
 
         } else {
@@ -571,6 +581,10 @@ public class PersionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void SubmitPersionHearErr(String con) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
         L.d(con);
     }
 

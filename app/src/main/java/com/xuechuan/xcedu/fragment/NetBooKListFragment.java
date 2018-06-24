@@ -22,6 +22,7 @@ import com.xuechuan.xcedu.mvp.model.NetBookInfomModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.NetBookInfomPresenter;
 import com.xuechuan.xcedu.mvp.view.NetBookInfomView;
 import com.xuechuan.xcedu.utils.L;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ChaptersBeanVo;
 import com.xuechuan.xcedu.vo.NetBookTableVo;
 import com.xuechuan.xcedu.vo.VideosBeanVo;
@@ -227,6 +228,8 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
     @Override
     public void VideoInfomError(String msg) {
         L.e(msg);
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
     @Override
@@ -259,6 +262,7 @@ public class NetBooKListFragment extends BaseFragment implements NetBookInfomVie
 
     @Override
     public void VideoInfomMoreError(String msg) {
+        T.showToast(mContext,getStrWithId(R.string.net_error));
 
     }
 }

@@ -25,6 +25,7 @@ import com.xuechuan.xcedu.ui.me.DelectSuceessActivity;
 import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.PayUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.MyOrderVo;
 import com.xuechuan.xcedu.vo.OrderDetailVo;
 import com.xuechuan.xcedu.vo.ResultVo;
@@ -341,6 +342,8 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     @Override
     public void OrderError(String con) {
         isRefresh = false;
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
     @Override
@@ -375,6 +378,8 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
     @Override
     public void OrderErrorMore(String con) {
         isRefresh = false;
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
     @Override
@@ -404,6 +409,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
 
     @Override
     public void submitError(String con) {
+        T.showToast(mContext,getStrWithId(R.string.net_error));
 
     }
 
@@ -417,6 +423,7 @@ public class MyAllOrderFragment extends BaseFragment implements PerOrderContract
 
     @Override
     public void PayError(String type) {
+//        T.showToast(mContext,getStrWithId(R.string.net_error));
 
     }
 

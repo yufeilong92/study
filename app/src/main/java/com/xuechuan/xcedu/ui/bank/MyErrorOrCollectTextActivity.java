@@ -161,9 +161,10 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
 
     @Override
     public void ErrorError(String con) {
-        if (mDialog != null) {
+        if (mDialog != null&&mDialog.isShowing()) {
             mDialog.dismiss();
         }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
     @Override
@@ -208,7 +209,10 @@ public class MyErrorOrCollectTextActivity extends BaseActivity implements ErrorT
 
     @Override
     public void ErrOrColNumberError(String con) {
-
+        if (mDialog != null&&mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
     private void initView() {

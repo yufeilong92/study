@@ -22,7 +22,7 @@ public class L {
     public static final int ERROR = 5;
     public static final int NOTHING = 6;
     //修改其等级不打log
-    public static final int LEVEL = VERBOSE;
+    public static final int LEVEL = NOTHING;
     public static final String SEPARATOR = ",";
 
     public static void v(String message) {

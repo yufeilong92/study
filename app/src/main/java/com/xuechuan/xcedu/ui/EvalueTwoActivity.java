@@ -306,6 +306,7 @@ public class EvalueTwoActivity extends BaseActivity implements View.OnClickListe
         if (mDialog1 != null) {
             mDialog1.dismiss();
         }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
     /**

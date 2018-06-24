@@ -902,6 +902,7 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
         if (mShowDialog != null && mShowDialog.isShowing()) {
             mShowDialog.dismiss();
         }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
 

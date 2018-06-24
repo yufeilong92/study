@@ -3,6 +3,7 @@ package com.xuechuan.xcedu.ui.me;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.xuechuan.xcedu.mvp.contract.ChangPawContract;
 import com.xuechuan.xcedu.mvp.model.ChangPawModel;
 import com.xuechuan.xcedu.mvp.presenter.ChangPawPresenter;
 import com.xuechuan.xcedu.ui.LoginActivity;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.Md5;
 import com.xuechuan.xcedu.utils.SaveUUidUtil;
 import com.xuechuan.xcedu.utils.T;
@@ -41,6 +43,7 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
     private Button mBtnMPCpSubmit;
     private Context mContext;
     private ChangPawPresenter mPresenter;
+    private AlertDialog dialog;
 
 /*
     @Override
@@ -101,11 +104,15 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
             T.showToast(mContext, getString(R.string.paw_no_same));
             return;
         }
+        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
         mPresenter.submitChangerPaw(mContext, Md5.getMD5String(paw), Md5.getMD5String(newPaw));
     }
 
     @Override
     public void submitSuccess(String con) {
+        if (dialog!=null&&dialog.isShowing()) {
+            dialog.dismiss();
+        }
         Gson gson = new Gson();
         ChangerPawVo vo = gson.fromJson(con, ChangerPawVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -126,6 +133,9 @@ public class PawChangerActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void submitError(String con) {
+        if (dialog!=null&&dialog.isShowing()) {
+            dialog.dismiss();
+        }
         T.showToast(mContext, getString(R.string.net_error));
     }
 }

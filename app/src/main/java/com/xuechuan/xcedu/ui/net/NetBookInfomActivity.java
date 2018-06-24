@@ -849,6 +849,7 @@ public class NetBookInfomActivity extends BaseActivity implements View.OnClickLi
     public void BookInfomError(String msgt) {
         if (mShowDialog != null && mShowDialog.isShowing())
             mShowDialog.dismiss();
+        T.showToast(mContext,getStringWithId(R.string.net_error));
         mLiContent.setVisibility(View.GONE);
         mTvEmpty.setVisibility(View.VISIBLE);
     }

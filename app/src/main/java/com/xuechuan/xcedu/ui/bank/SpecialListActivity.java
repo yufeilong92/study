@@ -20,6 +20,7 @@ import com.xuechuan.xcedu.mvp.model.SpecaliModellmpl;
 import com.xuechuan.xcedu.mvp.presenter.SpecailPresenter;
 import com.xuechuan.xcedu.mvp.view.SpecailView;
 import com.xuechuan.xcedu.utils.DialogUtil;
+import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.SpecialDataVo;
 
 public class SpecialListActivity extends BaseActivity implements SpecailView {
@@ -73,6 +74,10 @@ public class SpecialListActivity extends BaseActivity implements SpecailView {
 
     @Override
     public void RequestionWithtagsError(String con) {
+        if (mDialog != null&&mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
     @Override

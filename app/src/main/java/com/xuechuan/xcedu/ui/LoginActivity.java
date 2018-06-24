@@ -300,7 +300,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void WeiXinLoginError(String error) {
-        T.showToast(mContext, error);
+        if (mDialog != null&&mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
+//        T.showToast(mContext, error);
     }
 
     @Override

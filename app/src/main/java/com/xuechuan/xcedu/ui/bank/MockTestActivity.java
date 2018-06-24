@@ -168,6 +168,10 @@ public class MockTestActivity extends BaseActivity implements ExamView {
 
     @Override
     public void ExamError(String con) {
+        if (mDialog!=null){
+            mDialog.dismiss();
+        }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
         L.e("真题/迷题2" + con);
     }
 

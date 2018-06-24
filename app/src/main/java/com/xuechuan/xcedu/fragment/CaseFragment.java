@@ -208,6 +208,7 @@ public class CaseFragment extends BaseFragment implements CaseView, View.OnClick
 
     @Override
     public void ErrorOrCollortNumberError(String con) {
+        T.showToast(mContext,getStrWithId(R.string.net_error));
 
     }
 

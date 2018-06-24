@@ -346,7 +346,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onError(Response<String> response) {
-                dialog.dismiss();
+                if (dialog != null&&dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+                T.showToast(mContext,getStringWithId(R.string.net_error));
                 L.e(response.message());
             }
         });

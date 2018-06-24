@@ -281,6 +281,8 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
     @Override
     public void OrderError(String con) {
         isRefresh = false;
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
     @Override
@@ -315,6 +317,8 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
     @Override
     public void OrderErrorMore(String con) {
         isRefresh = false;
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
 
@@ -340,6 +344,7 @@ public class CompleteFragment extends BaseFragment implements PerOrderContract.V
 
     @Override
     public void submitError(String con) {
+        T.showToast(mContext,getStrWithId(R.string.net_error));
 
     }
 }

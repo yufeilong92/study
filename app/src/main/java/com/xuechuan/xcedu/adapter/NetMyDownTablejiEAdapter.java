@@ -81,9 +81,9 @@ public class NetMyDownTablejiEAdapter extends BaseRecyclerAdapter<NetMyDownTable
                     if (status.equals("0")) {
                         holder.mTvPoPDownStatus.setText("已下载");
                     } else if (status.equals("1")) {
-                        holder.mTvPoPDownStatus.setText("正在缓存");
+                        holder.mTvPoPDownStatus.setText("等待缓存");
                     } else if (status.equals("2")) {
-                        holder.mTvPoPDownStatus.setText("正在缓存");
+                        holder.mTvPoPDownStatus.setText("等待缓存");
                     }
                     holder.mTvNetTitle.setTextColor(mContext.getResources().getColor(R.color.hint_text));
                 }

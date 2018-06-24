@@ -100,8 +100,9 @@ public class AddVauleActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void AddVauleError(String com) {
-        dialog.dismiss();
+        if (dialog != null&&dialog.isShowing()) {
+            dialog.dismiss();
+        }
         T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
-        L.e(com);
     }
 }

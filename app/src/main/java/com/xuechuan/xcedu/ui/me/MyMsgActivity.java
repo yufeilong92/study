@@ -210,6 +210,8 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View, V
     public void MyMsgError(String con) {
         mXfvContentMsg.stopRefresh();
         isRefresh = false;
+
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
     @Override
@@ -242,8 +244,11 @@ public class MyMsgActivity extends BaseActivity implements MyMsgContract.View, V
     }
 
     @Override
-    public void MyMsgMoreError(String con) {
+    public void MyMsgMoreError(String con)
+    {
         isRefresh = false;
+
+        T.showToast(mContext,getStringWithId(R.string.net_error));
     }
 
     @Override

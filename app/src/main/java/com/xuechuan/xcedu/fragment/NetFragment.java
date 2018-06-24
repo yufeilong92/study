@@ -165,6 +165,8 @@ public class NetFragment extends BaseFragment implements NetHomeView, View.OnCli
     @Override
     public void ClassListContError(String msg) {
         L.e("Class" + msg);
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
     @Override

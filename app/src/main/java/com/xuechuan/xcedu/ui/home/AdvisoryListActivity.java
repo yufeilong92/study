@@ -213,6 +213,7 @@ public class AdvisoryListActivity extends BaseActivity implements View.OnClickLi
 //                    }
                     adapter.notifyDataSetChanged();
                 } else {
+
                     T.showToast(mContext, mContext.getResources().getString(R.string.net_error));
 //                    T.showToast(mContext, status.getMessage());
                 }

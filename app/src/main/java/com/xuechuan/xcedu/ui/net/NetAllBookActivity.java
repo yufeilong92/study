@@ -107,6 +107,7 @@ public class NetAllBookActivity extends BaseActivity implements NetAllView {
         if (dialog != null) {
             dialog.dismiss();
         }
+        T.showToast(mContext,getStringWithId(R.string.net_error));
         L.e(con);
     }
 }

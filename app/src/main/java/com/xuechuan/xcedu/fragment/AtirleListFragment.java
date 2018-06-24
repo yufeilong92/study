@@ -234,6 +234,7 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
         if (mAlertDialog != null) {
             mAlertDialog.dismiss();
         }
+        T.showToast(mContext,getStrWithId(R.string.net_error));
 
     }
 
@@ -271,6 +272,8 @@ public class AtirleListFragment extends BaseFragment implements SearchView {
     public void ResultMoreError(String cont) {
         isRefresh = false;
         L.e(cont);
+        T.showToast(mContext,getStrWithId(R.string.net_error));
+
     }
 
     private void clearData() {

@@ -2,6 +2,7 @@ package com.xuechuan.xcedu.ui.me;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.xuechuan.xcedu.base.BaseActivity;
 import com.xuechuan.xcedu.mvp.model.ExchangeModelImpl;
 import com.xuechuan.xcedu.mvp.presenter.ExchangePresenter;
 import com.xuechuan.xcedu.mvp.view.ExchangeView;
+import com.xuechuan.xcedu.utils.DialogUtil;
 import com.xuechuan.xcedu.utils.L;
 import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.vo.ResultVo;
@@ -33,6 +35,7 @@ public class GenuineActivity extends BaseActivity implements View.OnClickListene
     private Button mBtnMGValue;
     private Context mContext;
     private ExchangePresenter mPresenter;
+    private AlertDialog dialog;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,7 @@ public class GenuineActivity extends BaseActivity implements View.OnClickListene
             T.showToast(mContext, R.string.code_empty1);
             return;
         }
+        dialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.submit_loading));
         mPresenter.requestExchangeWithCode(mContext, code);
 
 
@@ -83,6 +87,8 @@ public class GenuineActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void ExchangeSuccess(String com) {
+        if (dialog!=null&&dialog.isShowing())
+            dialog.dismiss();
         Gson gson = new Gson();
         ResultVo vo = gson.fromJson(com, ResultVo.class);
         if (vo.getStatus().getCode() == 200) {
@@ -95,6 +101,9 @@ public class GenuineActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void ExchangeError(String com) {
+        if (dialog!=null&&dialog.isShowing())
+            dialog.dismiss();
+        T.showToast(mContext,getStringWithId(R.string.net_error));
         L.e(com);
     }
 }

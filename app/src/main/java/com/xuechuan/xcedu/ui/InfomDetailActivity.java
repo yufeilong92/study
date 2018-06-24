@@ -235,6 +235,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 if (mDialog != null) {
                     mDialog.dismiss();
                 }
+                T.showToast(mContext,getStringWithId(R.string.net_error));
                 T.showToast(mContext, response.message());
             }
         });
