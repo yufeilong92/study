@@ -486,10 +486,14 @@ public class NetBookMyInfomActivity extends BaseActivity implements View.OnClick
             TweenTime = set.getTweentime();
 
         }
+        String phone="学川教育";
+        if (MyAppliction.getInstance().getUserData().getData()!=null){
+            phone=  MyAppliction.getInstance().getUserData().getData().getPhone();
+        }
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
                 .setStyle(style) //样式
                 .setDuration(Duration) //时长
-                .setText(MyAppliction.getInstance().getUserData().getData().getPhone()) //文本
+                .setText(phone) //文本
                 .setSize(textSize) //字体大小
                 .setColor(Color.parseColor(textColor)) //字体颜色
                 .setTextAlpha(TextAlpha) //字体透明度
