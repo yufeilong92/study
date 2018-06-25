@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/space_16">
+    android:padding="@dimen/space_8">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,8 +96,6 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <Space style="@style/space_16_height" />
 
     <View style="@style/view_line_1" />
 </LinearLayout>

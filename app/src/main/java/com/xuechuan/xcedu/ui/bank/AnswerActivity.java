@@ -2176,9 +2176,10 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             return;
         }
         if (StringUtil.isEmpty(delectQuestion)) {
-            for (UserLookVo userLookVo : skill) {
+            for (int i = 0; i < skill.size(); i++) {
+                UserLookVo userLookVo = skill.get(i);
                 String count = userLookVo.getNextId();
-                if (count.equals("3")) {//发送移除
+                if (!StringUtil.isEmpty(count)&&count.equals("3")) {//发送移除
                     mPresnter.submitWoringQeustinDelect(mContext, userLookVo.getChapterId());
                     DbHelperAssist.getInstance().delectDBWring(userLookVo.getChapterId(), mCouresidUser);
                 }

@@ -33,27 +33,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:textColor="@color/text_fu_color"
-                android:layout_gravity="center"
                 android:id="@+id/tv_item_home_look_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_pageview"
-                android:drawablePadding="@dimen/space_6"
-               />
+                style="@style/list_show_look" />
 
             <Space style="@style/space_16_width" />
 
             <CheckBox
-                android:background="@color/transparent"
-                android:paddingLeft="@dimen/space_8"
-                android:layout_gravity="center"
-                android:clickable="false"
                 android:id="@+id/chb_isSupper"
-                android:textColor="@color/text_fu_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/select_issupper_home" />
+                style="@style/list_show_chb" />
             <Space
                 android:visibility="gone"
                 style="@style/space_8_width" />

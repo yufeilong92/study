@@ -83,6 +83,8 @@ public class NetHomeAdapter extends RecyclerView.Adapter<NetHomeAdapter.ViewHole
 //                substring = titleName.substring(0, 6);
 //            }
             holder.mTvNetMyhomePricle.setText("上次看到 " + titleName);
+            holder.mTvNetMyhomePricle.setTextSize(12);
+            holder.mTvNetMyhomePricle.setTextColor(mContext.getResources().getColor(R.color.text_fu_color));
         }
 
     }

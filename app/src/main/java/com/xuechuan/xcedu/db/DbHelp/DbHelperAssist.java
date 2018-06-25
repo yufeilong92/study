@@ -432,6 +432,7 @@ public class DbHelperAssist {
         }
 
         infomDb.setWrongDataSkill(skillData);
+        DBHelper.getDaoSession().clear();
         dao.update(infomDb);
     }
 
