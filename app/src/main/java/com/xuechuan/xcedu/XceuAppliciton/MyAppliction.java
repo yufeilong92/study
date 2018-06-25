@@ -168,7 +168,6 @@ public class MyAppliction extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
         mContext = getApplicationContext();
         //初始化播放器
         initPolyCilent();
@@ -181,7 +180,6 @@ public class MyAppliction extends MultiDexApplication {
         SaveIsDoneUtil.initSharedPreference(this);
         SharedSeletResultListUtil.initSharedPreference(this);
         initBug();
-
     }
 
     private void initBug() {
@@ -193,7 +191,7 @@ public class MyAppliction extends MultiDexApplication {
 // 设置是否为上报进程
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
-        CrashReport.initCrashReport(getApplicationContext(), "20b66083e6", false);
+        CrashReport.initCrashReport(getApplicationContext(),"20b66083e6", false);
     }
 
     /**
@@ -496,7 +494,8 @@ public class MyAppliction extends MultiDexApplication {
     public BaseActivity.ShareParems getShareParems() {
         return parems;
     }
-    public void delectShareParems(){
-        parems=null;
+
+    public void delectShareParems() {
+        parems = null;
     }
 }

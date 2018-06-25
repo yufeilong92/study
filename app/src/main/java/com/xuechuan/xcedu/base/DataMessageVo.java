@@ -137,6 +137,8 @@ public class DataMessageVo {
 //
 //        isarticle=1,文章
 //        isarticle=0,资讯
-
+    public static final String BUGLYAPPID="20b66083e6";
+    public static final boolean BUGLYAPPID_UP=false;
+    public static final String BUGLYAPPIDKEY="d959ecd6-9225-4689-afeb-0c8dff63fb3d";
 
 }

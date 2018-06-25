@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'bugly'
+bugly {
+    appId = '20b66083e6'
+    appKey = 'd959ecd6-9225-4689-afeb-0c8dff63fb3d'
+}
 android {
     signingConfigs {
         config {
@@ -20,6 +25,7 @@ android {
         multiDexEnabled true
         //依赖的包可能支持很多类型的ABI
         //为了避免打包了我们没有支持的ABI，指定需要打包的ABI目录
+
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a', 'armeabi', 'x86_64', 'x86'
         }
@@ -116,8 +122,8 @@ dependencies {
     implementation project(':update-app')
     implementation project(':picture_library')
     implementation files('libs/umeng-share-sina-simplify-6.9.2.jar')
-    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation 'com.tencent.bugly:crashreport:latest.release'
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
-    implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 }

@@ -165,7 +165,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         bindAdapter();
         initxfvView();
         initData();
-        reqesstEvaleData();
+//        reqesstEvaleData();
     }
 
     private void initData() {
@@ -199,9 +199,6 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
         }
         if (mDialog == null)
             mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
         HomeService bankService = new HomeService(mContext);
         bankService.requestArticleCommentList(mTargetid, 1, new StringCallBackView() {
             @Override
@@ -235,7 +232,7 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
                 if (mDialog != null) {
                     mDialog.dismiss();
                 }
-                T.showToast(mContext,getStringWithId(R.string.net_error));
+                T.showToast(mContext, getStringWithId(R.string.net_error));
                 T.showToast(mContext, response.message());
             }
         });
@@ -442,16 +439,21 @@ public class InfomDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-
+                if (mDialog == null)
+                    mDialog = DialogUtil.showDialog(mContext, "", getStringWithId(R.string.loading));
                 li.setVisibility(View.GONE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if (mDialog != null && mDialog.isShowing())
+                    mDialog.dismiss();
                 li.setVisibility(View.VISIBLE);
                 mPresenter.requestGetDetail(mContext, mTargetid);
+                reqesstEvaleData();
             }
+
         });
     }
 
