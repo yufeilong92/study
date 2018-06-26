@@ -20,9 +20,10 @@ import com.xuechuan.xcedu.mvp.view.TimeShowView;
 public class MyTimeUitl {
     private Context context;
     private long curTime = 0;
+    private static int number = 0;
     private boolean isPause = false;
     private TextView mTimeView;
-    private long MAX_TIME = 0;
+    private static long MAX_TIME = 0;
     private static MyTimeUitl timeUitl;
     private TimeShowView TimeShow;
 
@@ -36,30 +37,53 @@ public class MyTimeUitl {
         return timeUitl;
     }
 
+    /**
+     * 开始
+     *
+     * @param tv
+     * @param hour
+     * @param min
+     * @param ss
+     * @param view
+     */
     public void start(TextView tv, long hour, long min, long ss, TimeShowView view) {
         this.mTimeView = tv;
         this.TimeShow = view;
+        number = 0;
         MAX_TIME = getTime(hour, min, ss);
         restart();
     }
 
+    public static long getNubmer() {
+        if (number * 1000 >= MAX_TIME)
+            return MAX_TIME;
+        return number * 1000;
+    }
+
+    /**
+     * 重新开始
+     */
     public void restart() {
         curTime = MAX_TIME;
+        number = 0;
         mHandler.removeCallbacks(runnable);
         mHandler.postDelayed(runnable, 1000);
     }
 
-    private long getTime(long hour, long min, long ss) {
+    public long getTime(long hour, long min, long ss) {
         if (hour == 0 && min == 0 && ss == 0)
             return 0;
         return hour * 60 * 60 * 1000 + min * 60 * 1000 + ss * 1000;
     }
+
 
     Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
             curTime -= 1000;
+
+            number += 1;
             mTimeView.setText(TimeTools.getCountTimeByLong(curTime));
             if (curTime > 0) {
                 mHandler.postDelayed(this, 1000);
@@ -70,17 +94,27 @@ public class MyTimeUitl {
         }
     };
 
+    /**
+     * 取消
+     */
     public void cancel() {
+        number = 0;
         mTimeView.setText("00:00:00");
         mHandler.removeCallbacks(runnable);
     }
 
+    /**
+     * 暂停
+     */
     public void pause() {
         if (!isPause) {
             mHandler.removeCallbacks(runnable);
         }
     }
 
+    /**
+     * 继续
+     */
     public void resume() {
         mHandler.removeCallbacks(runnable);
         mHandler.postDelayed(runnable, 1000);

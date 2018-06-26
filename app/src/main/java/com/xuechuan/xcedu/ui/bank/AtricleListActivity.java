@@ -145,7 +145,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     private void addListData(List<SkillTextVo.DatasBean> datas) {
         for (int i = 0; i < datas.size(); i++) {
             SkillTextVo.DatasBean bean = datas.get(i);
-            mNodeLists.add(new Node(bean.getId(), bean.getParentid(), bean.getTitle(), bean));
+            mNodeLists.add(new Node(bean.getId()+"", bean.getParentid()+"", bean.getTitle(), bean));
             if (!bean.isIsend()) {
                 List<ChildrenBeanVo> vos = bean.getChildren();
                 bindData(vos);
@@ -157,7 +157,7 @@ public class AtricleListActivity extends BaseActivity implements AtricleView {
     private void bindData(List<ChildrenBeanVo> vos) {
         for (int i = 0; i < vos.size(); i++) {
             ChildrenBeanVo vo = vos.get(i);
-            mNodeLists.add(new Node(vo.getId(), vo.getParentid(), vo.getTitle(), vo));
+            mNodeLists.add(new Node(vo.getId()+"", vo.getParentid()+"", vo.getTitle(), vo));
             if (!vo.isIsend()) {
                 bindData(vo.getChildren());
             }

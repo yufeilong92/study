@@ -72,6 +72,8 @@ import com.xuechuan.xcedu.utils.SharedSeletResultListUtil;
 import com.xuechuan.xcedu.utils.StringUtil;
 import com.xuechuan.xcedu.utils.SuppertUtil;
 import com.xuechuan.xcedu.utils.T;
+import com.xuechuan.xcedu.utils.TimeTools;
+import com.xuechuan.xcedu.utils.TimeUtil;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.ErrOrColListVo;
 import com.xuechuan.xcedu.vo.EvalueVo;
@@ -89,6 +91,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -397,6 +400,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private AlertDialog mStopdialog;
     private AlertDialog mStopAlertDialog;
     private TextView mTvNoTextEmpty;
+    private long mCoundDate;
 
 
     @Override
@@ -690,12 +694,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             mIvTimePlay.setVisibility(View.VISIBLE);
             mTimeUitl = MyTimeUitl.getInstance(mContext);
             if (mStyleCase.equals(DataMessageVo.MARKTYPECASE)) {//案例
-
                 mTimeUitl.start(mActivityTitleText, 3, 0, 0, this);
+                mCoundDate = mTimeUitl.getTime(3, 0, 0);
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPESKILL)) {//技术
                 mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
+                mCoundDate = mTimeUitl.getTime(2, 30, 0);
             } else if (mStyleCase.equals(DataMessageVo.MARKTYPECOLLORT)) {//综合
                 mTimeUitl.start(mActivityTitleText, 2, 30, 0, this);
+                mCoundDate = mTimeUitl.getTime(2, 30, 0);
             }
             mPresnter.getTextContent(mContext, mOid);
             tabBarSetListener();
@@ -2179,7 +2185,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             for (int i = 0; i < skill.size(); i++) {
                 UserLookVo userLookVo = skill.get(i);
                 String count = userLookVo.getNextId();
-                if (!StringUtil.isEmpty(count)&&count.equals("3")) {//发送移除
+                if (!StringUtil.isEmpty(count) && count.equals("3")) {//发送移除
                     mPresnter.submitWoringQeustinDelect(mContext, userLookVo.getChapterId());
                     DbHelperAssist.getInstance().delectDBWring(userLookVo.getChapterId(), mCouresidUser);
                 }
@@ -2493,6 +2499,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                                 @Override
                                 public void oSubmitClickListener() {
                                     mDoTime = getTextStr(mActivityTitleText);
+                                    if (mTimeUitl != null) {
+                                        long time = mTimeUitl.getNubmer();
+                                        if (time != 0) {
+                                            mDoTime = TimeTools.getCountTimeByLong(time);
+                                        }
+                                    }
                                     isSubmit = true;
                                     saveBeforeDate();
                                     showAnswerCardResultLayout();
@@ -3301,7 +3313,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private void ResolveQuestionData(String msg) {
         Gson gson = new Gson();
         QuestionAllVo vo = gson.fromJson(msg, QuestionAllVo.class);
-        if (vo != null &&vo.getDatas() != null)
+        if (vo != null && vo.getDatas() != null)
             if (vo.getStatus().getCode() == 200) {
 //            mRlRootLayout.setVisibility(View.VISIBLE);
                 if (vo.getDatas() == null || vo.getDatas().size() == 0) {
@@ -3808,6 +3820,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onSureClickListener() {
                 mDoTime = getTextStr(mActivityTitleText);
+                if (mTimeUitl != null) {
+                    long time = mTimeUitl.getNubmer();
+                    if (time != 0) {
+                        mDoTime = TimeTools.getCountTimeByLong(time);
+                    }
+                }
                 isSubmit = true;
                 saveBeforeDate();
                 showAnswerCardResultLayout();
