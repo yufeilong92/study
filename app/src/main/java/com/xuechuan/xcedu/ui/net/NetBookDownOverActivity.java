@@ -160,12 +160,19 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         mVideoDb.setDownlist(vos);
         if (downlist != null && !downlist.isEmpty()) {
             long count = 0;
-            for (DownVideoVo vo : downlist) {
+            for (int i = 0; i < dbDownlist.size(); i++) {
+                DownVideoVo vo = dbDownlist.get(i);
                 if (vo.getStatus().equals("0")) {
                     long fileSize = vo.getFileSize();
                     count += fileSize;
                 }
             }
+//            for (DownVideoVo vo : downlist) {
+//                if (vo.getStatus().equals("0")) {
+//                    long fileSize = vo.getFileSize();
+//                    count += fileSize;
+//                }
+//            }
             mCount = Utils.convertFileSizeB(count);
             mNumber = downlist.size();
         }
@@ -173,7 +180,8 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
         mTvNetDownInfomeCout.setText(mCount);
         mTvNetDownInfomeNumber.setText(mNumber + "");
         mDataSelectList = new ArrayList<>();
-        for (DownVideoVo vo : mVideoDb.getDownlist()) {
+        for (int i = 0; i < mVideoDb.getDownlist().size(); i++) {
+            DownVideoVo vo = mVideoDb.getDownlist().get(i);
             DownInfomSelectVo selectVo = new DownInfomSelectVo();
             selectVo.setPid(vo.getPid());
             selectVo.setZid(vo.getZid());
@@ -185,6 +193,18 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             selectVo.setPlaySelect(false);
             mDataSelectList.add(selectVo);
         }
+//        for (DownVideoVo vo : mVideoDb.getDownlist()) {
+//            DownInfomSelectVo selectVo = new DownInfomSelectVo();
+//            selectVo.setPid(vo.getPid());
+//            selectVo.setZid(vo.getZid());
+//            selectVo.setVid(vo.getVid());
+//            selectVo.setBitrate(vo.getBitRate());
+//            selectVo.setChbSelect(false);
+//            selectVo.setShowChb(false);
+//            selectVo.setShowPlay(true);
+//            selectVo.setPlaySelect(false);
+//            mDataSelectList.add(selectVo);
+//        }
         MyAppliction.getInstance().displayImages(mIvNetDownInfomImg, mVideoDb.getUrlImg(), false);
         mChbNetDownInfomeAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -219,15 +239,25 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
                     return;
                 }
                 if (isCheck) {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
+                    for (int i = 0; i < mDataSelectList.size(); i++) {
+                        DownInfomSelectVo vo = mDataSelectList.get(i);
                         if (db.getZid().equals(vo.getZid()))
                             vo.setChbSelect(true);
                     }
+//                    for (DownInfomSelectVo vo : mDataSelectList) {
+//                        if (db.getZid().equals(vo.getZid()))
+//                            vo.setChbSelect(true);
+//                    }
                 } else {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
+                    for (int i = 0; i < mDataSelectList.size(); i++) {
+                        DownInfomSelectVo vo = mDataSelectList.get(i);
                         if (db.getZid().equals(vo.getZid()))
                             vo.setChbSelect(false);
                     }
+//                    for (DownInfomSelectVo vo : mDataSelectList) {
+//                        if (db.getZid().equals(vo.getZid()))
+//                            vo.setChbSelect(false);
+//                    }
                 }
                 if (mInfomAdapter != null)
                     mInfomAdapter.notifyDataSetChanged();
@@ -271,11 +301,17 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
             case R.id.btn_net_down_infome_delect:
                 boolean isSelect = false;
                 if (mDataSelectList != null && !mDataSelectList.isEmpty()) {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
+                    for (int i = 0; i < mDataSelectList.size(); i++) {
+                        DownInfomSelectVo vo = mDataSelectList.get(i);
                         if (vo.isChbSelect()) {
                             isSelect = true;
                         }
                     }
+//                    for (DownInfomSelectVo vo : mDataSelectList) {
+//                        if (vo.isChbSelect()) {
+//                            isSelect = true;
+//                        }
+//                    }
                 }
                 if (!isSelect) {
                     T.showToast(mContext, getString(R.string.please_del_video));
@@ -343,12 +379,19 @@ public class NetBookDownOverActivity extends BaseActivity implements View.OnClic
      * @param selelctchb 是否选中
      */
     private void initShow(boolean paly, boolean selectplay, boolean chb, boolean selelctchb) {
-        for (DownInfomSelectVo vo : mDataSelectList) {
+        for (int i = 0; i < mDataSelectList.size(); i++) {
+            DownInfomSelectVo vo = mDataSelectList.get(i);
             vo.setShowPlay(paly);
             vo.setPlaySelect(selectplay);
             vo.setShowChb(chb);
             vo.setChbSelect(selelctchb);
         }
+ /*       for (DownInfomSelectVo vo : mDataSelectList) {
+            vo.setShowPlay(paly);
+            vo.setPlaySelect(selectplay);
+            vo.setShowChb(chb);
+            vo.setChbSelect(selelctchb);
+        }*/
     }
 //    static int	BITRATE_ERROR
 //    码率（清晰度）错误

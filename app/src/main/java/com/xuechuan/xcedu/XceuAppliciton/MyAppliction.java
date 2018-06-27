@@ -498,4 +498,5 @@ public class MyAppliction extends MultiDexApplication {
     public void delectShareParems() {
         parems = null;
     }
+
 }

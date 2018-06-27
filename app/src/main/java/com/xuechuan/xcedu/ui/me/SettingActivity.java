@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easefun.polyvsdk.PolyvDownloaderManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -55,6 +56,8 @@ import com.xuechuan.xcedu.utils.T;
 import com.xuechuan.xcedu.utils.Utils;
 import com.xuechuan.xcedu.vo.AppUpDataVo;
 import com.xuechuan.xcedu.vo.BindWeiXinVo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
@@ -208,6 +211,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         MyAppliction.getInstance().setUserInfom(null);
         SaveUUidUtil.getInstance().delectUUid();
         startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+        PolyvDownloaderManager.stopAll();
         // TODO: 2018/6/22  注册激光
 //        RegisterTag tag = RegisterTag.getInstance(getApplicationContext());
 //        tag.cancleTagAndAlias();

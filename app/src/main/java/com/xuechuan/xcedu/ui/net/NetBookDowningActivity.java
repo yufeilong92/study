@@ -45,6 +45,10 @@ import com.xuechuan.xcedu.vo.Db.DownVideoVo;
 import com.xuechuan.xcedu.vo.DownInfomSelectVo;
 import com.xuechuan.xcedu.vo.ResultVo;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,17 +142,23 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             mTvNetDowningMake.setVisibility(View.INVISIBLE);
             return;
         }
+
         mTvNetDownEmpty.setVisibility(View.GONE);
         mTvNetDowningMake.setVisibility(View.VISIBLE);
         int number = 0;
         if (mDataBean.getDownlist() != null && !mDataBean.getDownlist().isEmpty())
-            for (DownVideoVo vo : mDataBean.getDownlist()) {
+            for (int i = 0; i < mDataBean.getDownlist().size(); i++) {
+                DownVideoVo vo = mDataBean.getDownlist().get(i);
                 if (vo.getStatus().equals("0")) {
                     number += 1;
-                } else {
-
                 }
             }
+//            for (DownVideoVo vo  mDataBean.getDownlist()) {
+//                if (vo.getStatus().equals("0")) {
+//                    number += 1;
+//                } else {
+//                }
+//            }
         else {
             mTvNetDownEmpty.setVisibility(View.VISIBLE);
             mTvNetDowningMake.setText(getStringWithId(R.string.edit));
@@ -168,7 +178,9 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             return;
         }
         mDataSelectList = new ArrayList<>();
-        for (DownVideoVo vo : mDataBean.getDownlist()) {
+
+        for (int i = 0; i < mDataBean.getDownlist().size(); i++) {
+            DownVideoVo vo = mDataBean.getDownlist().get(i);
             DownInfomSelectVo selectVo = new DownInfomSelectVo();
             selectVo.setPid(vo.getPid());
             selectVo.setZid(vo.getZid());
@@ -180,6 +192,18 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
             selectVo.setPlaySelect(false);
             mDataSelectList.add(selectVo);
         }
+      /*  for (DownVideoVo vo : mDataBean.getDownlist()) {
+            DownInfomSelectVo selectVo = new DownInfomSelectVo();
+            selectVo.setPid(vo.getPid());
+            selectVo.setZid(vo.getZid());
+            selectVo.setVid(vo.getVid());
+            selectVo.setBitrate(vo.getBitRate());
+            selectVo.setChbSelect(false);
+            selectVo.setShowChb(false);
+            selectVo.setShowPlay(true);
+            selectVo.setPlaySelect(false);
+            mDataSelectList.add(selectVo);
+        }*/
         bindAdapter();
         mChbNetDownAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -195,20 +219,29 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         });
         int number = 0;
         boolean isfale = false;
-        for (DownVideoVo vo : mDataBean.getDownlist()) {
+        for (int i = 0; i < mDataBean.getDownlist().size(); i++) {
+            DownVideoVo vo = mDataBean.getDownlist().get(i);
             if (vo.getStatus().equals("0")) {
                 number += 1;
             } else if (vo.getStatus().equals("1") || vo.getStatus().equals("2")) {
                 isfale = true;
             }
         }
+//        for (DownVideoVo vo : mDataBean.getDownlist()) {
+//            if (vo.getStatus().equals("0")) {
+//                number += 1;
+//            } else if (vo.getStatus().equals("1") || vo.getStatus().equals("2")) {
+//                isfale = true;
+//            }
+//        }
         mTvNetDowningDo.setText(number + "");
         startDownAll(isfale);
     }
 
     private void bindAdapter() {
 //        DownloadListViewAdapter adapter = new DownloadListViewAdapter(mDataBean, mContext, mRlvNetDowningList);
-        mListAdapter = new DownNetBookAdapter(mContext, mDataBean, mRlvNetDowningList, mDataSelectList);
+
+        mListAdapter = new DownNetBookAdapter(mContext, copyData(mDataBean), mRlvNetDowningList, mDataSelectList);
         mRlvNetDowningList.setAdapter(mListAdapter);
         mListAdapter.setChbClickListener(new DownNetBookAdapter.onItemChbClickListener() {
             @Override
@@ -217,18 +250,31 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if (isCheck) {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
+                    for (int i = 0; i < mDataSelectList.size(); i++) {
+                        DownInfomSelectVo vo = mDataSelectList.get(i);
                         if (vo.getZid().equals(db.getZid())) {
                             vo.setChbSelect(true);
                         }
                     }
+//                    for (DownInfomSelectVo vo : mDataSelectList) {
+//                        if (vo.getZid().equals(db.getZid())) {
+//                            vo.setChbSelect(true);
+//                        }
+//                    }
                 } else {
-                    for (DownInfomSelectVo vo : mDataSelectList) {
+                    for (int i = 0; i < mDataSelectList.size(); i++) {
+                        DownInfomSelectVo vo = mDataSelectList.get(i);
                         if (vo.getZid().equals(db.getZid())) {
                             vo.setChbSelect(false
                             );
                         }
                     }
+//                    for (DownInfomSelectVo vo : mDataSelectList) {
+//                        if (vo.getZid().equals(db.getZid())) {
+//                            vo.setChbSelect(false
+//                            );
+//                        }
+//                    }
                 }
                 if (mListAdapter != null)
                     mListAdapter.notifyDataSetChanged();
@@ -245,7 +291,8 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                     boolean isOver = false;
                     int number = 0;
                     if (downlist != null && !downlist.isEmpty()) {
-                        for (DownVideoVo vo : downlist) {
+                        for (int i = 0; i < downlist.size(); i++) {
+                            DownVideoVo vo = downlist.get(i);
                             if (vo.getStatus().equals("0")) {
                                 number += 1;
                             } else {
@@ -253,6 +300,14 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
                                 isOver = true;
                             }
                         }
+//                        for (DownVideoVo vo : downlist) {
+//                            if (vo.getStatus().equals("0")) {
+//                                number += 1;
+//                            } else {
+//                                NoDonw += 0;
+//                                isOver = true;
+//                            }
+//                        }
                     }
                     if (isOver) {
                         mTvNetDowningStop.setText(R.string.stopdown);
@@ -278,12 +333,19 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         boolean isDownAll = false;
         if (mDataBean != null && mDataBean.getDownlist() != null && !mDataBean.getDownlist().isEmpty()) {
             List<DownVideoVo> downlist = mDataBean.getDownlist();
-            for (DownVideoVo videoVo : downlist) {
+            for (int i = 0; i < downlist.size(); i++) {
+                DownVideoVo videoVo = downlist.get(i);
                 if (!videoVo.getStatus().equals("0")) {
                     isDownAll = true;
                     break;
                 }
             }
+         /*   for (DownVideoVo videoVo : downlist) {
+                if (!videoVo.getStatus().equals("0")) {
+                    isDownAll = true;
+                    break;
+                }
+            }*/
             if (isDownAll) {//有还有没有下载的
                 mListAdapter.downloadAll();
                 mTvNetDowningStop.setText(R.string.stopdown);
@@ -337,11 +399,17 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.btn_net_down_delect://删除
                 boolean isSelect = false;
-                for (DownInfomSelectVo vo : mDataSelectList) {
+                for (int i = 0; i < mDataSelectList.size(); i++) {
+                    DownInfomSelectVo vo = mDataSelectList.get(i);
                     if (vo.isChbSelect()) {
                         isSelect = true;
                     }
                 }
+//                for (DownInfomSelectVo vo : mDataSelectList) {
+//                    if (vo.isChbSelect()) {
+//                        isSelect = true;
+//                    }
+//                }
                 if (!isSelect) {
                     T.showToast(mContext, getString(R.string.please_del_video));
                     return;
@@ -444,12 +512,19 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
      * @param selelctchb 是否选中
      */
     private void initShow(boolean paly, boolean selectplay, boolean chb, boolean selelctchb) {
-        for (DownInfomSelectVo vo : mDataSelectList) {
+        for (int i = 0; i < mDataSelectList.size(); i++) {
+            DownInfomSelectVo vo = mDataSelectList.get(i);
             vo.setShowPlay(paly);
             vo.setPlaySelect(selectplay);
             vo.setShowChb(chb);
             vo.setChbSelect(selelctchb);
         }
+//        for (DownInfomSelectVo vo : mDataSelectList) {
+//            vo.setShowPlay(paly);
+//            vo.setPlaySelect(selectplay);
+//            vo.setShowChb(chb);
+//            vo.setChbSelect(selelctchb);
+//        }
     }
 
     @Override
@@ -606,5 +681,45 @@ public class NetBookDowningActivity extends BaseActivity implements View.OnClick
 
             }
         });
+    }
+
+    /**
+     * 过滤一下子的内容
+     *
+     * @param db
+     * @return
+     */
+    public DownVideoDb copyData(DownVideoDb db) {
+        DownVideoDb videoDb = new DownVideoDb();
+        videoDb.setKid(db.getKid());
+        videoDb.setId(db.getId());
+        videoDb.setKName(db.getKName());
+        videoDb.setStaffid(db.getStaffid());
+        videoDb.setUrlImg(db.getUrlImg());
+        videoDb.setTime(db.getTime());
+        videoDb.setVid(db.getVid());
+        if (db.getDownlist() != null && !db.getDownlist().isEmpty()) {
+            ArrayList<DownVideoVo> videoLists = new ArrayList<>();
+            for (int i = 0; i < db.getDownlist().size(); i++) {
+                DownVideoVo videoVo = new DownVideoVo();
+                DownVideoVo vo = db.getDownlist().get(i);
+                if (!vo.getStatus().equals("0")) {
+                    videoVo.setBitRate(vo.getBitRate());
+                    videoVo.setDuration(vo.getDuration());
+                    videoVo.setFileSize(vo.getFileSize());
+                    videoVo.setPercent(vo.getPercent());
+                    videoVo.setPid(vo.getPid());
+                    videoVo.setStatus(vo.getStatus());
+                    videoVo.setTitle(vo.getTitle());
+                    videoVo.setTotal(vo.getTotal());
+                    videoVo.setVid(vo.getVid());
+                    videoVo.setVideoOid(vo.getVideoOid());
+                    videoVo.setZid(vo.getZid());
+                    videoLists.add(videoVo);
+                }
+            }
+            videoDb.setDownlist(videoLists);
+        }
+        return videoDb;
     }
 }
